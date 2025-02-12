@@ -1,0 +1,12 @@
+node_modules/
+dist/
+tests/screenshots
+
+logs
+*.log
+npm-debug.log*
+
+.nyc_output
+.eslintcache
+
+.env
