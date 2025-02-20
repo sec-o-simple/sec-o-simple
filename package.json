@@ -11,6 +11,14 @@
     "format": "eslint --fix ."
   },
   "dependencies": {
+    "@fortawesome/free-regular-svg-icons": "^6.7.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
+    "@fortawesome/react-fontawesome": "^0.2.2",
+    "@heroui/button": "^2.2.13",
+    "@heroui/react": "^2.7.2",
+    "@heroui/system": "^2.4.10",
+    "@heroui/theme": "^2.4.9",
+    "framer-motion": "^12.4.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-router": "^7.1.5"
@@ -32,9 +40,9 @@
     "eslint-plugin-react": "7.33.2",
     "eslint-plugin-react-hooks": "4.6.0",
     "eslint-plugin-react-refresh": "0.4.4",
+    "eslint-plugin-tailwindcss": "^3.18.0",
     "postcss": "8.4.33",
     "prettier": "3.1.0",
-    "prettier-plugin-tailwindcss": "0.4.1",
     "tailwindcss": "3.4.1",
     "typescript": "5.2.2",
     "vite": "5.4.14"

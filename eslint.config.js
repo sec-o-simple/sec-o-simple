@@ -5,6 +5,7 @@ import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
 import reactRefreshPlugin from 'eslint-plugin-react-refresh'
 import importPlugin from 'eslint-plugin-import'
+import tailwind from 'eslint-plugin-tailwindcss'
 
 export default [
   {
@@ -60,4 +61,5 @@ export default [
       },
     },
   },
+  ...tailwind.configs['flat/recommended'],
 ]

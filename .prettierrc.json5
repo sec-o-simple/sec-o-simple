@@ -10,9 +10,6 @@
   arrowParens: 'always',
   jsxBracketSameLine: false,
   endOfLine: 'lf',
-  tailwindConfig: './tailwind.config.js',
-  tailwindAttributes: ['wrapperClassName', 'wrapClassName', 'rootClassName'],
-  tailwindFunctions: ['classNames', 'classnames', 'twMerge'],
   overrides: [
     {
       files: '.prettierrc',
@@ -21,5 +18,4 @@
       },
     },
   ],
-  plugins: ['prettier-plugin-tailwindcss'],
 }
