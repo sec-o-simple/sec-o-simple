@@ -14,14 +14,21 @@
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
     "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@heroui/accordion": "^2.2.11",
     "@heroui/button": "^2.2.13",
+    "@heroui/chip": "^2.2.10",
+    "@heroui/input": "^2.4.13",
     "@heroui/react": "^2.7.2",
+    "@heroui/select": "^2.4.13",
     "@heroui/system": "^2.4.10",
+    "@heroui/table": "^2.2.12",
+    "@heroui/tabs": "^2.2.11",
     "@heroui/theme": "^2.4.9",
     "framer-motion": "^12.4.4",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "react-router": "^7.1.5"
+    "react-router": "^7.1.5",
+    "uid": "^2.0.2"
   },
   "devDependencies": {
     "@nabla/vite-plugin-eslint": "2.0.4",

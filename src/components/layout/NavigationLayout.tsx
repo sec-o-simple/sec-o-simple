@@ -4,7 +4,7 @@ import { NavLink, Outlet, useLocation } from 'react-router'
 export default function NavigationLayout() {
   return (
     <div className="flex grow">
-      <div className="flex basis-80 flex-col gap-2 border-r border-slate-300 p-4">
+      <div className="flex basis-80 flex-col gap-2 border-r border-neutral-border p-4">
         <Section
           number={1}
           title="Document Information"
@@ -21,7 +21,7 @@ export default function NavigationLayout() {
         <Section number={2} title="Products" to="/products" />
         <Section number={3} title="Vulnerabilities" to="/vulnerabilities" />
       </div>
-      <div className="grow">
+      <div className="grow bg-content2">
         <Outlet />
       </div>
     </div>
