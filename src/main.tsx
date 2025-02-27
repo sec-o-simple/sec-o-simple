@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
 import './index.css'
-import { BrowserRouter, Navigate, Route, Routes } from 'react-router'
+import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import { HeroUIProvider } from '@heroui/react'
 import TopBarLayout from './components/layout/TopBarLayout'
 import NavigationLayout from './components/layout/NavigationLayout'
@@ -19,7 +19,7 @@ const root = ReactDOM.createRoot(rootElement)
 root.render(
   <StrictMode>
     <HeroUIProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Routes>
           <Route element={<TopBarLayout />}>
             <Route element={<NavigationLayout />}>
@@ -36,7 +36,7 @@ root.render(
             </Route>
           </Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </HeroUIProvider>
   </StrictMode>,
 )
