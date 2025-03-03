@@ -1,6 +1,5 @@
 import { StrictMode } from 'react'
 import ReactDOM from 'react-dom/client'
-import App from './App'
 import './index.css'
 import { HashRouter, Navigate, Route, Routes } from 'react-router'
 import { HeroUIProvider } from '@heroui/react'
@@ -12,6 +11,7 @@ import Publisher from './routes/document-information/Publisher'
 import References from './routes/document-information/References'
 import Products from './routes/products/Products'
 import Vulnerabilities from './routes/vulnerabilities/Vulnerabilities'
+import DocumentSelection from './routes/document-selection/DocumentSelection'
 
 const rootElement = document.getElementById('root') as HTMLElement
 const root = ReactDOM.createRoot(rootElement)
@@ -22,8 +22,8 @@ root.render(
       <HashRouter>
         <Routes>
           <Route element={<TopBarLayout />}>
+            <Route index element={<DocumentSelection />} />
             <Route element={<NavigationLayout />}>
-              <Route index element={<App />} />
               <Route path="document-information">
                 <Route index element={<Navigate to="general" replace />} />
                 <Route path="general" element={<General />} />
