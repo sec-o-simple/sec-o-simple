@@ -1,6 +1,6 @@
 import { motion } from 'motion/react'
 import {
-  faAdd,
+  faArrowRight,
   faFileInvoice,
   faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons'
@@ -11,6 +11,14 @@ import {
 import { Button } from '@heroui/button'
 import { Radio, RadioGroup } from '@heroui/react'
 import { useNavigate } from 'react-router'
+import { useState } from 'react'
+
+type TDocumentType = {
+  label: string
+  key: string
+  active?: boolean
+  default?: boolean
+}
 
 export default function CreateDocument() {
   const navigate = useNavigate()
@@ -29,17 +37,21 @@ export default function CreateDocument() {
       <DocumentType
         label="Security Advisory"
         icon={faShieldHalved}
-        options={['Software', 'Hardware and Software', 'Hardware and Firmware']}
+        options={[
+          { label: 'Software', key: 'software', active: true, default: true },
+          { label: 'Hardware and Software', key: 'hardware_software' },
+          { label: 'Hardware and Firmware', key: 'hardware_firmware' },
+        ]}
         onCreate={onCreate}
       />
       <DocumentType
         label="VEX Document"
         icon={faFileInvoice}
         options={[
-          'Software',
-          'Hardware and Software',
-          'Hardware and Firmware',
-          'using SBOM',
+          { label: 'Software', key: 'vex_software' },
+          { label: 'Hardware and Software', key: 'vex_hardware_software' },
+          { label: 'Hardware and Firmware', key: 'vex_hardware_firmware' },
+          { label: 'using SBOM', key: 'vex_sbom' },
         ]}
         onCreate={onCreate}
       />
@@ -54,10 +66,14 @@ function DocumentType({
   onCreate,
 }: {
   label: string
-  options: string[]
+  options: TDocumentType[]
   icon?: FontAwesomeIconProps['icon']
   onCreate?: (selectedOption: string) => void
 }) {
+  const [type, setType] = useState<TDocumentType | undefined>(
+    options.find((x) => x.default),
+  )
+
   return (
     <div className="relative flex w-96 flex-col gap-6 rounded-xl bg-content1 p-6 shadow shadow-neutral-border">
       <div className="flex items-center gap-2 text-xl font-bold">
@@ -65,17 +81,28 @@ function DocumentType({
         {label}
       </div>
       <div className="grow">
-        <RadioGroup>
+        <RadioGroup
+          value={type?.key}
+          onValueChange={(v) => setType(options.find((x) => x.key === v))}
+        >
           {options.map((option) => (
-            <Radio value={option} key={option}>
-              {option}
+            <Radio
+              value={option.key}
+              key={option.key}
+              isDisabled={!option.active}
+            >
+              {option.label}
             </Radio>
           ))}
         </RadioGroup>
       </div>
       <div className="self-end">
-        <Button color="primary" onPress={() => onCreate?.('todo')}>
-          <FontAwesomeIcon icon={faAdd} />
+        <Button
+          color="primary"
+          endContent={<FontAwesomeIcon icon={faArrowRight} />}
+          onPress={() => onCreate?.('todo')}
+          isDisabled={type === undefined}
+        >
           Create Document
         </Button>
       </div>

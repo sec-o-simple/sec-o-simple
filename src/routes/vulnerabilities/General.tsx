@@ -12,14 +12,6 @@ export default function General({
 }) {
   return (
     <VSplit>
-      <Input
-        label="Title"
-        value={vulnerability.title}
-        onValueChange={(newValue) =>
-          onChange({ ...vulnerability, title: newValue })
-        }
-        autoFocus={true}
-      />
       <HSplit>
         <Input
           label="CVE ID"
@@ -27,6 +19,7 @@ export default function General({
           onValueChange={(newValue) =>
             onChange({ ...vulnerability, cve: newValue })
           }
+          autoFocus
         />
         <Input
           label="CWE"
@@ -36,6 +29,13 @@ export default function General({
           }
         />
       </HSplit>
+      <Input
+        label="Title"
+        value={vulnerability.title}
+        onValueChange={(newValue) =>
+          onChange({ ...vulnerability, title: newValue })
+        }
+      />
     </VSplit>
   )
 }
