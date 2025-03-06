@@ -1,19 +1,25 @@
 import { useListState } from '@/utils/useListState'
-import { TProductTreeBranch } from './Products'
 import ComponentList from '@/components/forms/ComponentList'
 import BranchForm from './BranchForm'
-import { uid } from 'uid'
 import ProductnameList from './ProductnameList'
+import {
+  TProductTreeBranch,
+  getDefaultProductTreeBranch,
+} from './types/tProductTreeBranch'
+import useAppStoreUpdater from '@/utils/useAppStoreUpdater'
 
 export default function VendorList() {
   const vendorListState = useListState<TProductTreeBranch>({
-    generator: () => ({
-      id: uid(),
-      category: 'vendor',
-      name: '',
-      description: '',
-      subBranches: [],
-    }),
+    generator: () => getDefaultProductTreeBranch('vendor'),
+  })
+
+  useAppStoreUpdater({
+    localState: vendorListState.data,
+    valueField: 'products',
+    valueUpdater: 'updateProducts',
+    init: (initialData) => {
+      vendorListState.setData(Object.values(initialData))
+    },
   })
 
   return (

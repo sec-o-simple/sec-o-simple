@@ -1,7 +1,7 @@
 import VSplit from '@/components/forms/VSplit'
-import { TProductTreeBranch } from './Products'
 import { Input, Textarea } from '@heroui/input'
 import { PropsWithChildren } from 'react'
+import { TProductTreeBranch } from './types/tProductTreeBranch'
 
 export default function BranchForm({
   branch,

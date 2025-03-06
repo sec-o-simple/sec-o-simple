@@ -4,22 +4,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Input } from '@heroui/input'
 import VendorList from './VendorList'
 
-export const productTreeBranchCategories = [
-  'vendor',
-  'product_name',
-  'product_version',
-] as const
-export type TProductTreeBranchCategory =
-  (typeof productTreeBranchCategories)[number]
-
-export type TProductTreeBranch = {
-  id: string
-  category: TProductTreeBranchCategory
-  name: string
-  description: string
-  subBranches: TProductTreeBranch[]
-}
-
 export default function Products() {
   return (
     <WizardStep

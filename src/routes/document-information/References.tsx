@@ -1,23 +1,28 @@
 import WizardStep from '@/components/WizardStep'
 import ComponentList from '@/components/forms/ComponentList'
 import VSplit from '@/components/forms/VSplit'
+import useAppStoreUpdater from '@/utils/useAppStoreUpdater'
 import { useListState } from '@/utils/useListState'
 import { Input, Textarea } from '@heroui/input'
-import { uid } from 'uid'
-
-export type TDocumentReference = {
-  id: string
-  url: string
-  summary: string
-}
+import { TDocumentInformation } from './types/tDocumentInformation'
+import {
+  TDocumentReference,
+  getDefaultDocumentReference,
+} from './types/tDocumentReference'
 
 export default function References() {
   const referencesListState = useListState<TDocumentReference>({
-    generator: () => ({
-      id: uid(),
-      url: '',
-      summary: '',
-    }),
+    generator: getDefaultDocumentReference,
+  })
+
+  useAppStoreUpdater<TDocumentInformation>({
+    localState: [
+      referencesListState.data,
+      () => ({ references: referencesListState.data }),
+    ],
+    valueField: 'documentInformation',
+    valueUpdater: 'updateDocumentInformation',
+    init: (initialData) => referencesListState.setData(initialData.references),
   })
 
   return (

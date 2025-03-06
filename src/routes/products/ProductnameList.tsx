@@ -1,10 +1,12 @@
 import { useListState } from '@/utils/useListState'
-import { TProductTreeBranch } from './Products'
 import ComponentList from '@/components/forms/ComponentList'
 import BranchForm from './BranchForm'
-import { uid } from 'uid'
 import { useEffect } from 'react'
 import VersionList from './VersionList'
+import {
+  TProductTreeBranch,
+  getDefaultProductTreeBranch,
+} from './types/tProductTreeBranch'
 
 export default function ProductnameList({
   productNames,
@@ -15,13 +17,7 @@ export default function ProductnameList({
 }) {
   const productnameListState = useListState<TProductTreeBranch>({
     initialData: productNames,
-    generator: () => ({
-      id: uid(),
-      category: 'product_name',
-      name: '',
-      description: '',
-      subBranches: [],
-    }),
+    generator: () => getDefaultProductTreeBranch('product_name'),
   })
 
   useEffect(

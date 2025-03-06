@@ -3,33 +3,28 @@ import ComponentList from '@/components/forms/ComponentList'
 import VSplit from '@/components/forms/VSplit'
 import { useListState } from '@/utils/useListState'
 import { Tab, Tabs } from '@heroui/tabs'
-import { uid } from 'uid'
 import General from './General'
 import Notes from './Notes'
-import { TNote } from '../shared/NotesList'
 import { Chip } from '@heroui/chip'
 import Products from './Products'
 import { Input } from '@heroui/input'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
-
-export type TVulnerability = {
-  id: string
-  cve: string
-  cwe: string
-  title: string
-  notes: TNote[]
-}
+import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
+import useAppStoreUpdater from '@/utils/useAppStoreUpdater'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
-    generator: () => ({
-      id: uid(),
-      cve: '',
-      cwe: '',
-      title: '',
-      notes: [],
-    }),
+    generator: getDefaultVulnerability,
+  })
+
+  useAppStoreUpdater({
+    localState: vulnerabilitiesListState.data,
+    valueField: 'vulnerabilities',
+    valueUpdater: 'updateVulnerabilities',
+    init: (initialData) => {
+      vulnerabilitiesListState.setData(Object.values(initialData))
+    },
   })
 
   return (

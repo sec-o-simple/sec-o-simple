@@ -1,7 +1,7 @@
 import { useListState } from '@/utils/useListState'
-import { TVulnerability } from './Vulnerabilities'
 import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
 import { useEffect } from 'react'
+import { TVulnerability } from './types/tVulnerability'
 
 export default function Notes({
   vulnerability,
