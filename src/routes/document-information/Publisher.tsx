@@ -21,6 +21,7 @@ export default function Publisher() {
       onBack={'/document-information/notes'}
       onContinue={'/document-information/references'}
     >
+      <Input label="Name of publisher" />
       <HSplit>
         <Select label="Category of Publisher">
           {publisherCategories.map((key) => (
@@ -29,10 +30,9 @@ export default function Publisher() {
         </Select>
         <Input
           label="Namespace of Publisher"
-          placeholder="e.g., org.example.publisher"
+          placeholder="e.g., https://publisher.example.org/"
         />
       </HSplit>
-      <Input label="Name of publisher" />
       <Textarea label="Contact Details" />
       <Textarea label="Issuing Authority" />
     </WizardStep>
