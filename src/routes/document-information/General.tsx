@@ -2,7 +2,7 @@ import WizardStep from '@/components/WizardStep'
 import HSplit from '@/components/forms/HSplit'
 import { Input } from '@heroui/input'
 import { Select, SelectItem } from '@heroui/select'
-import useAppStoreUpdater from '@/utils/useAppStoreUpdater'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import { useState } from 'react'
 import {
@@ -15,7 +15,7 @@ export default function General() {
     getDefaultGeneralDocumentInformation(),
   )
 
-  useAppStoreUpdater<TDocumentInformation>({
+  useDocumentStoreUpdater<TDocumentInformation>({
     localState,
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',

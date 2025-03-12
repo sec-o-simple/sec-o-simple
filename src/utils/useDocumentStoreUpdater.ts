@@ -1,49 +1,54 @@
 import { useEffect } from 'react'
-import useAppStore, { TAppStore } from './useAppStore'
+import useDocumentStore, { TDocumentStore } from './useDocumentStore'
 
-type TAppStoreFunction<T> = {
-  [K in keyof TAppStore]: TAppStore[K] extends (update: T) => void ? K : never
-}[keyof TAppStore]
+type TDocumentStoreFunction<T> = {
+  [K in keyof TDocumentStore]: TDocumentStore[K] extends (update: T) => void
+    ? K
+    : never
+}[keyof TDocumentStore]
 
-type TAppStoreValue<T> = Exclude<keyof TAppStore, TAppStoreFunction<T>>
+type TDocumentStoreValue<T> = Exclude<
+  keyof TDocumentStore,
+  TDocumentStoreFunction<T>
+>
 
-export type UseAppStoreUpdaterProps<T> = {
+export type useDocumentStoreUpdaterProps<T> = {
   /** react state that triggers the update or tuple with state and callback for update data */
   localState: Partial<T> | [unknown, () => Partial<T>]
-  /** key of the AppStore field that should be updated */
-  valueField: TAppStoreValue<T>
-  /** key of the AppStore update function */
-  valueUpdater: TAppStoreFunction<T>
+  /** key of the DocumentStore field that should be updated */
+  valueField: TDocumentStoreValue<T>
+  /** key of the DocumentStore update function */
+  valueUpdater: TDocumentStoreFunction<T>
   /** callback function to initilize the localState */
   init: (initialData: T) => void
 }
 
-export default function useAppStoreUpdater<T>({
+export default function useDocumentStoreUpdater<T>({
   localState,
   valueField,
   valueUpdater,
   init,
-}: UseAppStoreUpdaterProps<T>) {
-  const appStoreValue = useAppStore((state) => state[valueField]) as T
-  const updateAppStoreValue = useAppStore((state) => state[valueUpdater]) as (
-    update: T,
-  ) => void
+}: useDocumentStoreUpdaterProps<T>) {
+  const documentStoreValue = useDocumentStore((state) => state[valueField]) as T
+  const updateDocumentStoreValue = useDocumentStore(
+    (state) => state[valueUpdater],
+  ) as (update: T) => void
 
   // initialize localState
   useEffect(() => {
-    init(appStoreValue)
+    init(documentStoreValue)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   // TODO: enhance performance:
   // TODO: add debounce (and save on dismount in case component gets dismounted before save)
   useEffect(() => {
-    updateAppStoreValue({
-      ...appStoreValue,
+    updateDocumentStoreValue({
+      ...documentStoreValue,
       ...getStateObject(localState).getUpdate(),
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [getStateObject(localState).trigger, updateAppStoreValue])
+  }, [getStateObject(localState).trigger, updateDocumentStoreValue])
 }
 
 function getStateObject<T>(

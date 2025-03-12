@@ -1,7 +1,7 @@
 import WizardStep from '@/components/WizardStep'
 import { useListState } from '@/utils/useListState'
 import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
-import useAppStoreUpdater from '@/utils/useAppStoreUpdater'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { TDocumentInformation } from './types/tDocumentInformation'
 
 export default function Notes() {
@@ -9,7 +9,7 @@ export default function Notes() {
     generator: NoteGenerator,
   })
 
-  useAppStoreUpdater<TDocumentInformation>({
+  useDocumentStoreUpdater<TDocumentInformation>({
     localState: [notesListState.data, () => ({ notes: notesListState.data })],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',

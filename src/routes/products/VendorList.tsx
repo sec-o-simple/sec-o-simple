@@ -6,14 +6,14 @@ import {
   TProductTreeBranch,
   getDefaultProductTreeBranch,
 } from './types/tProductTreeBranch'
-import useAppStoreUpdater from '@/utils/useAppStoreUpdater'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 
 export default function VendorList() {
   const vendorListState = useListState<TProductTreeBranch>({
     generator: () => getDefaultProductTreeBranch('vendor'),
   })
 
-  useAppStoreUpdater({
+  useDocumentStoreUpdater({
     localState: vendorListState.data,
     valueField: 'products',
     valueUpdater: 'updateProducts',

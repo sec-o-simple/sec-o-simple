@@ -6,8 +6,7 @@ import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { create } from 'zustand'
 
-// TODO: rename to DocumentStore
-export type TAppStore = {
+export type TDocumentStore = {
   documentInformation: TDocumentInformation
   products: TProductTreeBranch[]
   vulnerabilities: TVulnerability[]
@@ -17,7 +16,7 @@ export type TAppStore = {
   updateVulnerabilities: (update: TVulnerability[]) => void
 }
 
-const useAppStore = create<TAppStore>((set) => ({
+const useDocumentStore = create<TDocumentStore>((set) => ({
   documentInformation: getDefaultDocumentInformation(),
   updateDocumentInformation: (update: TDocumentInformation) =>
     set({ documentInformation: update }),
@@ -30,4 +29,4 @@ const useAppStore = create<TAppStore>((set) => ({
     set({ vulnerabilities: update }),
 }))
 
-export default useAppStore
+export default useDocumentStore

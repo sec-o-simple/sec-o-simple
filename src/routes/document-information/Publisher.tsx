@@ -8,13 +8,13 @@ import {
   publisherCategories,
 } from './types/tDocumentPublisher'
 import { useState } from 'react'
-import useAppStoreUpdater from '@/utils/useAppStoreUpdater'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { TDocumentInformation } from './types/tDocumentInformation'
 
 export default function Publisher() {
   const [localState, setLocalState] = useState(getDefaultDocumentPublisher())
 
-  useAppStoreUpdater<TDocumentInformation>({
+  useDocumentStoreUpdater<TDocumentInformation>({
     localState,
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',

@@ -11,14 +11,14 @@ import { Input } from '@heroui/input'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
-import useAppStoreUpdater from '@/utils/useAppStoreUpdater'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
     generator: getDefaultVulnerability,
   })
 
-  useAppStoreUpdater({
+  useDocumentStoreUpdater({
     localState: vulnerabilitiesListState.data,
     valueField: 'vulnerabilities',
     valueUpdater: 'updateVulnerabilities',
