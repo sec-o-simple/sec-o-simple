@@ -1,7 +1,5 @@
-import { faAdd, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Accordion, AccordionItem } from '@heroui/accordion'
-import { Button } from '@heroui/button'
 import { ReactNode, useState } from 'react'
 import IconButton from './IconButton'
 import { Selection } from '@heroui/react'
@@ -10,6 +8,7 @@ import {
   DynamicObjectValueKey,
   getDynamicObjectValue,
 } from '@/utils/dynamicObjectValue'
+import AddItemButton from './AddItemButton'
 
 export type ComponentListProps<T> = {
   listState: ListState<T>
@@ -74,7 +73,7 @@ export default function ComponentList<T extends object>({
           </AccordionItem>
         ))}
       </Accordion>
-      <Button
+      <AddItemButton
         onPress={() => {
           const key = listState.addDataEntry()
           // expand new item
@@ -82,12 +81,7 @@ export default function ComponentList<T extends object>({
             setExpandedKeys(new Set([...expandedKeys, key]))
           }
         }}
-        variant="bordered"
-        className="border-dashed text-neutral-foreground"
-      >
-        <FontAwesomeIcon icon={faAdd} />
-        Add New Item
-      </Button>
+      />
     </div>
   )
 }
