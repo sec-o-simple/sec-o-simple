@@ -82,7 +82,7 @@ function VulnerabilityForm({
           <Notes vulnerability={vulnerability} onChange={onChange} />
         </Tab>
         <Tab title="Products">
-          <Products />
+          <Products vulnerability={vulnerability} onChange={onChange} />
         </Tab>
       </Tabs>
     </VSplit>
