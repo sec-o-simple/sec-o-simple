@@ -9,17 +9,17 @@ import {
 } from './tDocumentPublisher'
 import { TDocumentReference } from './tDocumentReference'
 
-export type TDocumentInformation = TGeneralDocumentInformation &
-  TDocumentPublisher & {
-    notes: TNote[]
-    references: TDocumentReference[]
-  }
+export type TDocumentInformation = TGeneralDocumentInformation & {
+  notes: TNote[]
+  publisher: TDocumentPublisher
+  references: TDocumentReference[]
+}
 
 export function getDefaultDocumentInformation() {
   return {
     ...getDefaultGeneralDocumentInformation(),
-    ...getDefaultDocumentPublisher(),
     notes: [],
+    publisher: getDefaultDocumentPublisher(),
     references: [],
   }
 }

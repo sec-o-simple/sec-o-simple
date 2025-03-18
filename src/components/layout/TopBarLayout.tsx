@@ -1,3 +1,4 @@
+import { useCSAFExport } from '@/utils/csafExport/csafExport'
 import {
   faAdd,
   faFileExport,
@@ -11,6 +12,7 @@ import { Outlet, useNavigate } from 'react-router'
 
 export default function TopBarLayout() {
   const navigate = useNavigate()
+  const { exportCSAFDocument } = useCSAFExport()
 
   return (
     <div className="flex h-screen flex-col">
@@ -24,7 +26,7 @@ export default function TopBarLayout() {
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button>
+          <Button isDisabled={true}>
             <FontAwesomeIcon icon={faSave} />
             Save Draft
           </Button>
@@ -32,7 +34,7 @@ export default function TopBarLayout() {
             <FontAwesomeIcon icon={faSearch} />
             Preview
           </Button>
-          <Button isDisabled={true}>
+          <Button onPress={exportCSAFDocument}>
             <FontAwesomeIcon icon={faFileExport} />
             Export
           </Button>

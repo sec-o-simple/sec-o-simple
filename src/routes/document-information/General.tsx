@@ -46,7 +46,7 @@ export default function General() {
             setLocalState({ ...localState, language: [...v][0] as string })
           }
         >
-          {['german', 'english'].map((key) => (
+          {['de', 'en'].map((key) => (
             <SelectItem key={key}>{key}</SelectItem>
           ))}
         </Select>

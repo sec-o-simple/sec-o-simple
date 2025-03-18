@@ -15,10 +15,11 @@ export default function Publisher() {
   const [localState, setLocalState] = useState(getDefaultDocumentPublisher())
 
   useDocumentStoreUpdater<TDocumentInformation>({
-    localState,
+    localState: [localState, () => ({ publisher: localState })],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
-    init: setLocalState,
+    init: (initialDocumentInformation) =>
+      setLocalState(initialDocumentInformation.publisher),
   })
 
   return (
