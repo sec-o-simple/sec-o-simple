@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import useDocumentStore, { TDocumentStore } from './useDocumentStore'
+import { useConfigStore } from './useConfigStore'
 
 type TDocumentStoreFunction<T> = {
   [K in keyof TDocumentStore]: TDocumentStore[K] extends (update: T) => void
@@ -29,16 +30,19 @@ export default function useDocumentStoreUpdater<T>({
   valueUpdater,
   init,
 }: useDocumentStoreUpdaterProps<T>) {
+  const config = useConfigStore((state) => state.config)
   const documentStoreValue = useDocumentStore((state) => state[valueField]) as T
   const updateDocumentStoreValue = useDocumentStore(
     (state) => state[valueUpdater],
   ) as (update: T) => void
 
-  // initialize localState
+  // initialize localState after config has been fetched
   useEffect(() => {
-    init(documentStoreValue)
+    if (config) {
+      init(documentStoreValue)
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [config])
 
   // TODO: enhance performance:
   // TODO: add debounce (and save on dismount in case component gets dismounted before save)
@@ -47,6 +51,7 @@ export default function useDocumentStoreUpdater<T>({
       ...documentStoreValue,
       ...getStateObject(localState).getUpdate(),
     })
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getStateObject(localState).trigger, updateDocumentStoreValue])
 }

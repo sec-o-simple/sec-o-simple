@@ -9,6 +9,7 @@ import {
   TDocumentReference,
   getDefaultDocumentReference,
 } from './types/tDocumentReference'
+import { checkReadOnly } from '@/utils/template'
 
 export default function References() {
   const referencesListState = useListState<TDocumentReference>({
@@ -62,11 +63,13 @@ function ReferenceForm({
           onChange({ ...reference, summary: newValue })
         }
         autoFocus={true}
+        isDisabled={checkReadOnly(reference, 'summary')}
       />
       <Input
         label="URL of the reference"
         value={reference.url}
         onValueChange={(newValue) => onChange({ ...reference, url: newValue })}
+        isDisabled={checkReadOnly(reference, 'url')}
       />
     </VSplit>
   )

@@ -1,3 +1,5 @@
+import { TemplateKeys } from '@/utils/template'
+
 export type TDocumentPublisher = {
   name: string
   category: TPublisherCategory
@@ -23,5 +25,15 @@ export function getDefaultDocumentPublisher(): TDocumentPublisher {
     namespace: '',
     contactDetails: '',
     issuingAuthority: '',
+  }
+}
+
+export function getDocumentPublisherTemplateKeys(): TemplateKeys<TDocumentPublisher> {
+  return {
+    name: 'document-information.publisher.name',
+    category: 'document-information.publisher.category',
+    namespace: 'document-information.publisher.namespace',
+    contactDetails: 'document-information.publisher.contactDetails',
+    issuingAuthority: 'document-information.publisher.issuingAuthority',
   }
 }

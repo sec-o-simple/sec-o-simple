@@ -2,6 +2,7 @@ import VSplit from '@/components/forms/VSplit'
 import { Input, Textarea } from '@heroui/input'
 import { PropsWithChildren } from 'react'
 import { TProductTreeBranch } from './types/tProductTreeBranch'
+import { checkReadOnly } from '@/utils/template'
 
 export default function BranchForm({
   branch,
@@ -20,6 +21,7 @@ export default function BranchForm({
         value={branch.name}
         onValueChange={(newValue) => onChange({ ...branch, name: newValue })}
         autoFocus
+        isDisabled={checkReadOnly(branch, 'name')}
       />
       <Textarea
         label="Description"
@@ -27,6 +29,7 @@ export default function BranchForm({
         onValueChange={(newValue) =>
           onChange({ ...branch, description: newValue })
         }
+        isDisabled={checkReadOnly(branch, 'description')}
       />
       {children}
     </VSplit>
