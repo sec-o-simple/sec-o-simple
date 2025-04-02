@@ -84,7 +84,7 @@ function CategoryButton({
     <motion.div
       initial={MButtonInitial}
       animate={divMotion}
-      className={`flex max-w-56 cursor-pointer flex-col items-center gap-4 text-center shadow shadow-neutral-border transition-colors ${
+      className={`flex max-w-56 cursor-pointer flex-col items-center gap-4 border-2 text-center transition-colors ${
         isActive ? 'bg-primary' : 'bg-content1'
       } ${
         state === 'selectNewOrOpen'

@@ -10,4 +10,5 @@ npm-debug.log*
 .eslintcache
 
 .env
+.vscode/
 public/.well-known/

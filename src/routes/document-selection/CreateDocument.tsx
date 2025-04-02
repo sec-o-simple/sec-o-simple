@@ -1,4 +1,3 @@
-import { motion } from 'motion/react'
 import {
   faArrowRight,
   faFileInvoice,
@@ -10,8 +9,9 @@ import {
 } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
 import { Radio, RadioGroup } from '@heroui/react'
-import { useNavigate } from 'react-router'
+import { motion } from 'motion/react'
 import { useState } from 'react'
+import { useNavigate } from 'react-router'
 
 type TDocumentType = {
   label: string
@@ -75,7 +75,7 @@ function DocumentType({
   )
 
   return (
-    <div className="relative flex w-96 flex-col gap-6 rounded-xl bg-content1 p-6 shadow shadow-neutral-border">
+    <div className="relative flex w-96 flex-col gap-6 rounded-xl border-2 bg-content1 p-6">
       <div className="flex items-center gap-2 text-xl font-bold">
         {icon && <FontAwesomeIcon className="text-primary" icon={icon} />}
         {label}

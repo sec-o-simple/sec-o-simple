@@ -1,5 +1,12 @@
 import { ReactNode } from 'react'
+import { twMerge } from 'tailwind-merge'
 
-export default function HSplit({ children }: { children: ReactNode }) {
-  return <div className="flex gap-4">{children}</div>
+export default function HSplit({
+  children,
+  className,
+}: {
+  children: ReactNode
+  className?: string
+}) {
+  return <div className={twMerge('flex gap-4', className)}>{children}</div>
 }

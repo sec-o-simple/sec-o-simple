@@ -1,9 +1,9 @@
 import { useCSAFExport } from '@/utils/csafExport/csafExport'
 import {
   faAdd,
+  faEye,
   faFileExport,
   faSave,
-  faSearch,
   faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -16,25 +16,32 @@ export default function TopBarLayout() {
 
   return (
     <div className="flex h-screen flex-col">
-      <div className="flex w-full items-center justify-between border-b border-neutral-border p-4">
+      <div className="flex w-full items-center justify-between gap-8 border-b px-6 py-4">
         <div className="flex items-center gap-3 text-2xl font-bold">
-          <FontAwesomeIcon icon={faShieldHalved} className="text-primary" />
-          Sec-o-simple
-          <Button className="ml-4" onPress={() => navigate('/')}>
+          <span className="flex items-center gap-4">
+            <FontAwesomeIcon icon={faShieldHalved} className="text-primary" />
+            <p>Sec-o-simple</p>
+          </span>
+
+          <Button
+            className="ml-4"
+            color="secondary"
+            onPress={() => navigate('/')}
+          >
             <FontAwesomeIcon icon={faAdd} />
             New Document
           </Button>
         </div>
         <div className="flex gap-3">
-          <Button isDisabled={true}>
+          <Button color="secondary" isDisabled={true}>
+            <FontAwesomeIcon icon={faEye} />
+            Preview
+          </Button>
+          <Button color="secondary" isDisabled={true}>
             <FontAwesomeIcon icon={faSave} />
             Save Draft
           </Button>
-          <Button isDisabled={true}>
-            <FontAwesomeIcon icon={faSearch} />
-            Preview
-          </Button>
-          <Button onPress={exportCSAFDocument}>
+          <Button color="primary" onPress={exportCSAFDocument}>
             <FontAwesomeIcon icon={faFileExport} />
             Export
           </Button>

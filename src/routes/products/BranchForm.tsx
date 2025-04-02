@@ -1,5 +1,5 @@
+import { Input, Textarea } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
-import { Input, Textarea } from '@heroui/input'
 import { PropsWithChildren } from 'react'
 import { TProductTreeBranch } from './types/tProductTreeBranch'
 import { checkReadOnly } from '@/utils/template'
