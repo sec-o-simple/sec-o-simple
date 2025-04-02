@@ -1,7 +1,7 @@
+import { Input } from '@/components/forms/Input'
 import WizardStep from '@/components/WizardStep'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Input } from '@heroui/input'
 import VendorList from './VendorList'
 
 export default function Products() {

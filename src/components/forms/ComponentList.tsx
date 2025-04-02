@@ -38,11 +38,12 @@ export default function ComponentList<T extends object>({
         variant="splitted"
         selectionMode="multiple"
         itemClasses={{
-          trigger: 'flex justify-between py-1',
+          trigger: 'flex justify-between py-0',
           titleWrapper: 'hidden',
           startContent: 'grow',
           indicator: 'text-neutral-foreground',
-          base: 'border border-neutral-border shadow-none px-4',
+          base: 'border border-gray shadow-none px-4 py-2',
+          content: 'py-2',
         }}
         className="px-0"
       >
@@ -51,11 +52,11 @@ export default function ComponentList<T extends object>({
             key={listState.getId(item)}
             startContent={
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-4">
                   {startContent?.(item)}
                   <div className="max-w-xl overflow-hidden text-ellipsis text-nowrap">
                     {getDynamicObjectValue(item, title) || (
-                      <span className="text-warning">Untitled</span>
+                      <span>Untitled</span>
                     )}
                   </div>
                 </div>

@@ -24,7 +24,7 @@ export default function WizardStep({
         sections={['Documents', 'Products', 'Vulnerabilities']}
         progress={progress ?? 1}
       />
-      <div className="flex flex-col gap-4 rounded-lg bg-content1 p-4 shadow shadow-neutral-border">
+      <div className="flex flex-col gap-4 rounded-lg bg-content1 p-8 shadow shadow-neutral-border">
         {title && <div className="mb-2 text-xl font-semibold">{title}</div>}
         {children}
       </div>
