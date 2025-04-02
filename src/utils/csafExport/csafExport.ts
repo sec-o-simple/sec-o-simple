@@ -1,5 +1,6 @@
 import { download } from '../download'
 import useDocumentStore from '../useDocumentStore'
+import { getFilename } from './helpers'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
 import { PidGenerator } from './pidGenerator'
@@ -78,7 +79,7 @@ export function useCSAFExport() {
     }
 
     download(
-      `${documentStore.documentInformation.id}.json`,
+      `${getFilename(documentStore.documentInformation.id)}.json`,
       JSON.stringify(csafDocument, null, 2),
     )
   }
