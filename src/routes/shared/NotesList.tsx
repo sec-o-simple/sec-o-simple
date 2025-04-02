@@ -67,7 +67,7 @@ function NoteForm({
   onChange: (note: TNote) => void
 }) {
   return (
-    <VSplit>
+    <VSplit className="pt-4">
       <HSplit>
         <Select
           label="Note category"
