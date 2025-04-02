@@ -1,0 +1,90 @@
+{
+  "template": {
+    "document-information.title": "Test Document",
+    "document-information.title.readonly": true,
+    "document-information.id": "testid",
+    "document-information.language": "en",
+
+    "document-information.notes": [
+      {
+        "id": "legaldisclaimer",
+        "category": "legal_disclaimer",
+        "title": "Legal Disclaimer",
+        "content": "This is an example legal disclaimer",
+        "readonly": true
+      },
+      {
+        "id": "description",
+        "category": "description",
+        "title": "Document Description",
+        "content": "Enter your description here",
+        "content.readonly": false
+      }
+    ],
+
+    "document-information.publisher.readonly": true,
+    "document-information.publisher.name": "Example publisher",
+    "document-information.publisher.category": "discoverer",
+    "document-information.publisher.namespace": "https://publisher.example.org/",
+    "document-information.publisher.contactDetails": "Some contact details",
+    "document-information.publisher.contactDetails.readonly": false,
+    "document-information.publisher.issuingAuthority": "Example authority",
+
+    "document-information.references": [
+      {
+        "id": "examplereference",
+        "summary": "Example Reference",
+        "url": "https://example.com"
+      }
+    ],
+
+    "products": [
+      {
+        "readonly": true,
+        "id": "vendor1",
+        "category": "vendor",
+        "name": "Example vendor",
+        "description": "",
+        "subBranches": [
+          {
+            "id": "product1",
+            "readonly": true,
+            "category": "product_name",
+            "name": "Product A",
+            "description": "",
+            "subBranches": [
+              {
+                "id": "version1",
+                "readonly": true,
+                "category": "product_version",
+                "name": "1.0.0",
+                "description": "Initial product version",
+                "subBranches": []
+              }
+            ]
+          }
+        ]
+      }
+    ],
+
+    "vulnerabilities": [
+      {
+        "id": "v1",
+        "readonly": true,
+        "cve": "CVE-2025-30073",
+        "cwe": "CWE1",
+        "title": "Vulnerability 1",
+        "notes": [
+          {
+            "readonly": true,
+            "id": "description",
+            "category": "description",
+            "title": "Vulnerability Description",
+            "content": "An issue was discovered in OPC cardsystems Webapp Aufwertung 2.1.0. The reference assigned to transactions can be reused. When completing a payment, the first or all transactions with the same reference are completed, depending on timing. This can be used to transfer more money onto employee cards than is paid."
+          }
+        ],
+        "products": []
+      }
+    ]
+  }
+}

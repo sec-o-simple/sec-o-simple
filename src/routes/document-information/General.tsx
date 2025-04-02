@@ -10,6 +10,7 @@ import {
   TGeneralDocumentInformation,
   getDefaultGeneralDocumentInformation,
 } from './types/tGeneralDocumentInformation'
+import { useTemplate } from '@/utils/template'
 
 export default function General() {
   const [localState, setLocalState] = useState<TGeneralDocumentInformation>(
@@ -23,6 +24,8 @@ export default function General() {
     init: setLocalState,
   })
 
+  const { isFieldReadonly } = useTemplate()
+
   return (
     <WizardStep
       title="Document Information - General"
@@ -33,12 +36,14 @@ export default function General() {
         label="Title"
         value={localState.title}
         onValueChange={(title) => setLocalState({ ...localState, title })}
+        isDisabled={isFieldReadonly('document-information.title')}
       />
       <HSplit>
         <Input
           label="ID"
           value={localState.id}
           onValueChange={(id) => setLocalState({ ...localState, id })}
+          isDisabled={isFieldReadonly('document-information.id')}
         />
         <Select
           label="Language"
@@ -46,6 +51,7 @@ export default function General() {
           onSelectionChange={(v) =>
             setLocalState({ ...localState, language: [...v][0] as string })
           }
+          isDisabled={isFieldReadonly('document-information.language')}
         >
           {['de', 'en'].map((key) => (
             <SelectItem key={key}>{key}</SelectItem>

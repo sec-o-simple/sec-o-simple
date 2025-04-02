@@ -11,9 +11,14 @@ import {
   getDefaultDocumentPublisher,
   publisherCategories,
 } from './types/tDocumentPublisher'
+import { useState } from 'react'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
+import { TDocumentInformation } from './types/tDocumentInformation'
+import { useTemplate } from '@/utils/template'
 
 export default function Publisher() {
   const [localState, setLocalState] = useState(getDefaultDocumentPublisher())
+  const { isFieldReadonly } = useTemplate()
 
   useDocumentStoreUpdater<TDocumentInformation>({
     localState: [localState, () => ({ publisher: localState })],
@@ -34,6 +39,7 @@ export default function Publisher() {
         label="Name of publisher"
         value={localState.name}
         onValueChange={(v) => setLocalState({ ...localState, name: v })}
+        isDisabled={isFieldReadonly('document-information.publisher.name')}
       />
       <HSplit>
         <Select
@@ -45,6 +51,9 @@ export default function Publisher() {
               category: [...selected][0] as TPublisherCategory,
             })
           }
+          isDisabled={isFieldReadonly(
+            'document-information.publisher.category',
+          )}
         >
           {publisherCategories.map((key) => (
             <SelectItem key={key}>{key}</SelectItem>
@@ -55,6 +64,9 @@ export default function Publisher() {
           placeholder="e.g., https://publisher.example.org/"
           value={localState.namespace}
           onValueChange={(v) => setLocalState({ ...localState, namespace: v })}
+          isDisabled={isFieldReadonly(
+            'document-information.publisher.namespace',
+          )}
         />
       </HSplit>
       <Textarea
@@ -63,6 +75,9 @@ export default function Publisher() {
         onValueChange={(v) =>
           setLocalState({ ...localState, contactDetails: v })
         }
+        isDisabled={isFieldReadonly(
+          'document-information.publisher.contactDetails',
+        )}
       />
       <Textarea
         label="Issuing Authority"
@@ -70,6 +85,9 @@ export default function Publisher() {
         onValueChange={(v) =>
           setLocalState({ ...localState, issuingAuthority: v })
         }
+        isDisabled={isFieldReadonly(
+          'document-information.publisher.issuingAuthority',
+        )}
       />
     </WizardStep>
   )

@@ -3,6 +3,7 @@ import HSplit from '@/components/forms/HSplit'
 import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
+import { checkReadOnly } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
 import { Chip } from '@heroui/chip'
 import { SelectItem } from '@heroui/select'
@@ -77,6 +78,7 @@ function NoteForm({
               category: [...selected][0] as TNoteCategory,
             })
           }}
+          isDisabled={checkReadOnly(note, 'category')}
         >
           {noteCategories.map((key) => (
             <SelectItem key={key}>{key}</SelectItem>
@@ -87,12 +89,14 @@ function NoteForm({
           value={note.title}
           onValueChange={(newValue) => onChange({ ...note, title: newValue })}
           autoFocus={true}
+          isDisabled={checkReadOnly(note, 'title')}
         />
       </HSplit>
       <Textarea
         label="Note Content"
         value={note.content}
         onValueChange={(newValue) => onChange({ ...note, content: newValue })}
+        isDisabled={checkReadOnly(note, 'content')}
       />
     </VSplit>
   )

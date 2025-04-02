@@ -1,5 +1,7 @@
 # Sec-O-Simple
 
+Further information can be found in the [Documentation](./docs)
+
 ## Development
 
 ### Branch policy

@@ -9,6 +9,7 @@ import {
   getDynamicObjectValue,
 } from '@/utils/dynamicObjectValue'
 import AddItemButton from './AddItemButton'
+import { checkReadOnly } from '@/utils/template'
 
 export type ComponentListProps<T> = {
   listState: ListState<T>
@@ -66,6 +67,7 @@ export default function ComponentList<T extends object>({
                       ? onDelete?.(item)
                       : listState.removeDataEntry(item)
                   }
+                  isDisabled={checkReadOnly(item)}
                 />
               </div>
             }

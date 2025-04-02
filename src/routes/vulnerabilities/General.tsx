@@ -2,6 +2,7 @@ import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
 import { TVulnerability } from './types/tVulnerability'
+import { checkReadOnly } from '@/utils/template'
 
 export default function General({
   vulnerability,
@@ -20,6 +21,7 @@ export default function General({
             onChange({ ...vulnerability, cve: newValue })
           }
           autoFocus
+          isDisabled={checkReadOnly(vulnerability, 'cve')}
         />
         <Input
           label="CWE"
@@ -27,6 +29,7 @@ export default function General({
           onValueChange={(newValue) =>
             onChange({ ...vulnerability, cwe: newValue })
           }
+          isDisabled={checkReadOnly(vulnerability, 'cwe')}
         />
       </HSplit>
       <Input
@@ -35,6 +38,7 @@ export default function General({
         onValueChange={(newValue) =>
           onChange({ ...vulnerability, title: newValue })
         }
+        isDisabled={checkReadOnly(vulnerability, 'title')}
       />
     </VSplit>
   )
