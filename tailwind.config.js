@@ -1,4 +1,4 @@
-import { colors, heroui } from '@heroui/react'
+import { heroui } from '@heroui/react'
 
 export default {
   content: [
