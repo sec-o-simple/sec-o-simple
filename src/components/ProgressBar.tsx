@@ -38,9 +38,7 @@ function ProgressBarItem({
     <div className="flex flex-col items-center justify-center gap-2">
       <div
         className={`flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground ${
-          isActive
-            ? 'border-primary bg-primary text-primary-foreground'
-            : 'border-neutral-border'
+          isActive ? 'border-primary bg-primary text-primary-foreground' : ''
         }`}
       >
         {number}

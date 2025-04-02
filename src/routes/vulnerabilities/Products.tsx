@@ -29,7 +29,7 @@ export default function Products({
   return (
     <>
       <table className="w-full [&_td]:p-2">
-        <thead className="text-neutral-foreground [&>th]:py-2 [&>th]:text-left [&>th]:font-normal [&_th]:px-2 border-b-1">
+        <thead className="border-b-1 [&>th]:py-2 [&>th]:text-left [&>th]:text-gray [&>th]:font-normal [&_th]:px-2">
           <th>Product name</th>
           <th>First affected version</th>
           <th>First fixed version</th>

@@ -8,18 +8,20 @@ export default {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: '#2563eb',
-        secondary: '#64748b',
-        'neutral-foreground': '#64748b',
+      textColor: {
+        gray: '#6B7280',
       },
       borderColor: {
-        gray: '#F3F4F6',
+        gray: '#F0F0F0',
       },
     },
   },
+  darkMode: 'class',
   plugins: [
     heroui({
+      addCommonColors: true,
+      defaultTheme: 'light',
+      defaultExtendTheme: 'light',
       themes: {
         light: {
           layout: {
@@ -34,12 +36,21 @@ export default {
               DEFAULT: '#2563eb',
               foreground: '#ffffff',
             },
-            content1: {
-              DEFAULT: '#F8FAFC',
-              foreground: '#F8FAFC',
+            secondary: {
+              DEFAULT: '#EFF6FF',
+              foreground: '#2563eb',
             },
+            content1: {
+              DEFAULT: '#ffffff',
+              foreground: '#ffffff',
+            },
+
             ['neutral-foreground']: '#64748b',
           },
+        },
+        dark: {
+          layout: {},
+          colors: {},
         },
       },
     }),

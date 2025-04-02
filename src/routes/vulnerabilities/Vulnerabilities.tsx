@@ -6,7 +6,7 @@ import { useListState } from '@/utils/useListState'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Chip } from '@heroui/chip'
-import { Input } from '@heroui/input'
+import { Input } from '@/components/forms/Input'
 import { Tab, Tabs } from '@heroui/tabs'
 import General from './General'
 import Notes from './Notes'
@@ -74,7 +74,7 @@ function VulnerabilityForm({
 }) {
   return (
     <VSplit>
-      <Tabs color="primary" radius="lg" className="bg-transparent gap-4">
+      <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
         <Tab title="General">
           <General vulnerability={vulnerability} onChange={onChange} />
         </Tab>

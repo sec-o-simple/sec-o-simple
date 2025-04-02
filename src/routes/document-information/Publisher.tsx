@@ -11,9 +11,6 @@ import {
   getDefaultDocumentPublisher,
   publisherCategories,
 } from './types/tDocumentPublisher'
-import { useState } from 'react'
-import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
-import { TDocumentInformation } from './types/tDocumentInformation'
 import { useTemplate } from '@/utils/template'
 
 export default function Publisher() {

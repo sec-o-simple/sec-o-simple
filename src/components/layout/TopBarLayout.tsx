@@ -16,7 +16,7 @@ export default function TopBarLayout() {
 
   return (
     <div className="flex h-screen flex-col">
-      <div className="flex w-full items-center justify-between border-b border-neutral-border py-4 px-6 gap-8">
+      <div className="flex w-full items-center justify-between gap-8 border-b px-6 py-4">
         <div className="flex items-center gap-3 text-2xl font-bold">
           <span className="flex items-center gap-4">
             <FontAwesomeIcon icon={faShieldHalved} className="text-primary" />
@@ -37,13 +37,13 @@ export default function TopBarLayout() {
             <FontAwesomeIcon icon={faEye} />
             Preview
           </Button>
-          <Button color="secondary" onPress={exportCSAFDocument}>
-            <FontAwesomeIcon icon={faFileExport} />
-            Export
-          </Button>
-          <Button color="primary" isDisabled={true}>
+          <Button color="secondary" isDisabled={true}>
             <FontAwesomeIcon icon={faSave} />
             Save Draft
+          </Button>
+          <Button color="primary" onPress={exportCSAFDocument}>
+            <FontAwesomeIcon icon={faFileExport} />
+            Export
           </Button>
         </div>
       </div>

@@ -10,7 +10,7 @@ export default function EditDocument() {
 
   return (
     <motion.div
-      className="flex w-96 flex-col gap-6 rounded-xl bg-content1 p-6 border-2"
+      className="flex w-96 flex-col gap-6 rounded-xl border-2 bg-content1 p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
