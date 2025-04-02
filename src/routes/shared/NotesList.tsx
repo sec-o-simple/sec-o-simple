@@ -1,11 +1,12 @@
 import ComponentList from '@/components/forms/ComponentList'
 import HSplit from '@/components/forms/HSplit'
+import { Input, Textarea } from '@/components/forms/Input'
+import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
 import { checkReadOnly } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
 import { Chip } from '@heroui/chip'
-import { Input, Textarea } from '@heroui/input'
-import { Select, SelectItem } from '@heroui/select'
+import { SelectItem } from '@heroui/select'
 import { uid } from 'uid'
 
 export const noteCategories = [
@@ -52,7 +53,7 @@ export function NotesList({
 
 function CategoryChip({ note }: { note: TNote }) {
   return (
-    <Chip color="secondary" variant="flat">
+    <Chip color="primary" variant="flat" radius="md" size="lg">
       {note.category}
     </Chip>
   )
@@ -66,7 +67,7 @@ function NoteForm({
   onChange: (note: TNote) => void
 }) {
   return (
-    <VSplit>
+    <VSplit className="pt-4">
       <HSplit>
         <Select
           label="Note category"

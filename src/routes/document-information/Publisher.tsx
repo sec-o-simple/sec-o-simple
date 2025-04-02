@@ -1,15 +1,16 @@
 import WizardStep from '@/components/WizardStep'
 import HSplit from '@/components/forms/HSplit'
-import { Input, Textarea } from '@heroui/input'
-import { Select, SelectItem } from '@heroui/select'
+import { Input, Textarea } from '@/components/forms/Input'
+import Select from '@/components/forms/Select'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
+import { SelectItem } from '@heroui/select'
+import { useState } from 'react'
+import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TPublisherCategory,
   getDefaultDocumentPublisher,
   publisherCategories,
 } from './types/tDocumentPublisher'
-import { useState } from 'react'
-import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
-import { TDocumentInformation } from './types/tDocumentInformation'
 import { useTemplate } from '@/utils/template'
 
 export default function Publisher() {

@@ -1,17 +1,17 @@
 import WizardStep from '@/components/WizardStep'
 import ComponentList from '@/components/forms/ComponentList'
 import VSplit from '@/components/forms/VSplit'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { useListState } from '@/utils/useListState'
+import { faSearch } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Chip } from '@heroui/chip'
+import { Input } from '@/components/forms/Input'
 import { Tab, Tabs } from '@heroui/tabs'
 import General from './General'
 import Notes from './Notes'
-import { Chip } from '@heroui/chip'
 import Products from './Products'
-import { Input } from '@heroui/input'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
-import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
@@ -58,7 +58,7 @@ export default function Vulnerabilities() {
 function CVEChip({ vulnerability }: { vulnerability: TVulnerability }) {
   return (
     vulnerability.cve && (
-      <Chip color="secondary" variant="flat">
+      <Chip color="primary" variant="flat">
         {vulnerability.cve}
       </Chip>
     )
@@ -74,7 +74,7 @@ function VulnerabilityForm({
 }) {
   return (
     <VSplit>
-      <Tabs color="primary">
+      <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
         <Tab title="General">
           <General vulnerability={vulnerability} onChange={onChange} />
         </Tab>
