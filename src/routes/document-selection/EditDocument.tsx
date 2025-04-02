@@ -1,8 +1,8 @@
-import { motion } from 'motion/react'
-import { faEdit } from '@fortawesome/free-solid-svg-icons'
+import { Input } from '@/components/forms/Input'
+import { faArrowRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
-import { Input } from '@heroui/input'
+import { motion } from 'motion/react'
 import { useNavigate } from 'react-router'
 
 export default function EditDocument() {
@@ -10,7 +10,7 @@ export default function EditDocument() {
 
   return (
     <motion.div
-      className="flex w-96 flex-col gap-6 rounded-xl bg-content1 p-6 shadow shadow-neutral-border"
+      className="flex w-96 flex-col gap-6 rounded-xl bg-content1 p-6 border-2"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -25,6 +25,7 @@ export default function EditDocument() {
       <div className="self-end">
         <Button
           color="primary"
+          endContent={<FontAwesomeIcon icon={faArrowRight} />}
           onPress={() => navigate('/document-information/')}
         >
           Edit Document
