@@ -1,4 +1,4 @@
-import { heroui } from '@heroui/react'
+import { colors, heroui } from '@heroui/react'
 
 export default {
   content: [
@@ -8,6 +8,9 @@ export default {
   ],
   theme: {
     extend: {
+      colors: {
+        editor: '#F8FAFC',
+      },
       textColor: {
         gray: '#6B7280',
       },
@@ -44,7 +47,6 @@ export default {
               DEFAULT: '#ffffff',
               foreground: '#ffffff',
             },
-
             ['neutral-foreground']: '#64748b',
           },
         },

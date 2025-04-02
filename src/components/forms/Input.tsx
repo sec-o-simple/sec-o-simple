@@ -13,9 +13,8 @@ export function Input(props: InputProps) {
       labelPlacement={labelPlacement ?? 'outside'}
       placeholder={placeholder ?? ' '}
       classNames={{
-        inputWrapper: 'border-1 border-[#E2E8F0] shadow-none',
+        inputWrapper: 'border-1 shadow-none',
       }}
-      className="border-[#E2E8F0]"
       {...rest}
     />
   )
@@ -29,9 +28,8 @@ export function Textarea(props: TextAreaProps) {
       labelPlacement={labelPlacement ?? 'outside'}
       placeholder={placeholder ?? ' '}
       classNames={{
-        inputWrapper: 'border-1 border-[#E2E8F0] shadow-none',
+        inputWrapper: 'border-1 shadow-none',
       }}
-      className="border-[#E2E8F0]"
       {...rest}
     />
   )

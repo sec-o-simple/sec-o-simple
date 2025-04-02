@@ -21,7 +21,7 @@ export default function NavigationLayout() {
         <Section number={2} title="Products" to="/products" />
         <Section number={3} title="Vulnerabilities" to="/vulnerabilities" />
       </div>
-      <div className="grow bg-[#F8FAFC]">
+      <div className="grow bg-editor">
         <Outlet />
       </div>
     </div>
