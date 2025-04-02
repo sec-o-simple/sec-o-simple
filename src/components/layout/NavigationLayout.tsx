@@ -21,7 +21,7 @@ export default function NavigationLayout() {
         <Section number={2} title="Products" to="/products" />
         <Section number={3} title="Vulnerabilities" to="/vulnerabilities" />
       </div>
-      <div className="grow bg-content2">
+      <div className="grow bg-[#F8FAFC]">
         <Outlet />
       </div>
     </div>
@@ -72,7 +72,7 @@ function SubSection({ title, to }: { title: string; to: string }) {
       to={to}
       className={({ isActive }) =>
         `cursor-pointer pl-12 transition-colors hover:text-primary ${
-          isActive ? 'text-primary font-bold' : ''
+          isActive ? 'text-primary' : ''
         }`
       }
     >

@@ -1,9 +1,9 @@
 import WizardStep from '@/components/WizardStep'
 import ComponentList from '@/components/forms/ComponentList'
+import { Input, Textarea } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { useListState } from '@/utils/useListState'
-import { Input, Textarea } from '@heroui/input'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TDocumentReference,

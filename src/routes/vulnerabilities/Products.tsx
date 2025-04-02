@@ -1,12 +1,12 @@
+import AddItemButton from '@/components/forms/AddItemButton'
 import { useListState } from '@/utils/useListState'
+import { useEffect } from 'react'
+import VulnerabilityProduct from './components/VulnerabilityProduct'
+import { TVulnerability } from './types/tVulnerability'
 import {
   TVulnerabilityProduct,
   getDefaultVulnerabilityProduct,
 } from './types/tVulnerabilityProduct'
-import { TVulnerability } from './types/tVulnerability'
-import { useEffect } from 'react'
-import VulnerabilityProduct from './components/VulnerabilityProduct'
-import AddItemButton from '@/components/forms/AddItemButton'
 
 export default function Products({
   vulnerability,
@@ -29,11 +29,11 @@ export default function Products({
   return (
     <>
       <table className="w-full [&_td]:p-2">
-        <thead className="text-neutral-foreground [&>th]:bg-content3 [&>th]:py-2 [&>th]:text-left [&_th]:px-2">
-          <th className="rounded-l-lg">Product name</th>
+        <thead className="text-neutral-foreground [&>th]:py-2 [&>th]:text-left [&>th]:font-normal [&_th]:px-2 border-b-1">
+          <th>Product name</th>
           <th>First affected version</th>
           <th>First fixed version</th>
-          <th className="rounded-r-lg"></th>
+          <th></th>
         </thead>
         <tbody>
           {productsListState.data.map((vulnerabilityProduct) => (

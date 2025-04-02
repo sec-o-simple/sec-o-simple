@@ -1,10 +1,11 @@
 import WizardStep from '@/components/WizardStep'
 import HSplit from '@/components/forms/HSplit'
-import { Input } from '@heroui/input'
-import { Select, SelectItem } from '@heroui/select'
+import { Input } from '@/components/forms/Input'
+import Select from '@/components/forms/Select'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
-import { TDocumentInformation } from './types/tDocumentInformation'
+import { SelectItem } from '@heroui/select'
 import { useState } from 'react'
+import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TGeneralDocumentInformation,
   getDefaultGeneralDocumentInformation,

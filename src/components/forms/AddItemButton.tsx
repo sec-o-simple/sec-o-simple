@@ -18,7 +18,7 @@ export default function AddItemButton(props: AddItemButtonProps) {
       {...buttonProps}
       variant="bordered"
       className={twMerge(
-        'border-dashed text-neutral-foreground',
+        'border-dashed text-neutral-foreground border-gray',
         buttonProps.className ?? '',
       )}
     >

@@ -1,6 +1,6 @@
 import HSplit from '@/components/forms/HSplit'
+import { Input } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
-import { Input } from '@heroui/input'
 import { TVulnerability } from './types/tVulnerability'
 
 export default function General({
