@@ -1,6 +1,8 @@
 import { useEffect } from 'react'
 import useDocumentStore, { TDocumentStore } from './useDocumentStore'
 import { useConfigStore } from './useConfigStore'
+import useValidationStore from './useValidationStore'
+import { validateDocument } from './documentValidator'
 
 type TDocumentStoreFunction<T> = {
   [K in keyof TDocumentStore]: TDocumentStore[K] extends (update: T) => void
@@ -24,6 +26,31 @@ export type useDocumentStoreUpdaterProps<T> = {
   init: (initialData: T) => void
 }
 
+export function useDocumentValidation() {
+  const documentStore = useDocumentStore()
+  const setValidationState = useValidationStore(state => state.setValidationState)
+  const setIsValidating = useValidationStore(state => state.setIsValidating)
+
+  useEffect(() => {
+    const validate = async () => {
+      try {
+        setIsValidating(true)
+        const result = await validateDocument(documentStore)
+        setValidationState({
+          isValid: result.isValid,
+          messages: result.messages,
+        })
+      } finally {
+        setIsValidating(false)
+      } 
+    }
+
+    validate()
+    // JSON.stringify is used to avoid calling the validation function
+    // if the documentStore has not changed
+  }, [JSON.stringify(documentStore), setValidationState, setIsValidating])
+}
+
 export default function useDocumentStoreUpdater<T>({
   localState,
   valueField,
@@ -35,6 +62,7 @@ export default function useDocumentStoreUpdater<T>({
   const updateDocumentStoreValue = useDocumentStore(
     (state) => state[valueUpdater],
   ) as (update: T) => void
+  useDocumentValidation()
 
   // initialize localState after config has been fetched
   useEffect(() => {
