@@ -28,7 +28,7 @@ git clone git@github.com:sec-o-simple/sec-o-simple.git
 cd sec-o-simple
 
 # Install NPM dependencies
-npm ci
+npm install
 ```
 
 ### Run server
