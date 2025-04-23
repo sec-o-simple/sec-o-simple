@@ -43,7 +43,11 @@ export default function TopBarLayout() {
             <FontAwesomeIcon icon={faSave} />
             Save Draft
           </Button>
-          <Button color="primary" onPress={exportCSAFDocument} isDisabled={!isValid || isValidating}>
+          <Button
+            color="primary"
+            onPress={exportCSAFDocument}
+            isDisabled={!isValid || isValidating}
+          >
             <FontAwesomeIcon icon={faFileExport} />
             Export
           </Button>

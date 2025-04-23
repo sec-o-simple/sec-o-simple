@@ -14,9 +14,9 @@ type ValidationStore = {
   isValidating: boolean
   isValid: boolean
 
-  setValidationState: (params: { 
-    messages: ValidationMessage[], 
-    isValid: boolean 
+  setValidationState: (params: {
+    messages: ValidationMessage[]
+    isValid: boolean
   }) => void
   setIsValidating: (isValidating: boolean) => void
   markFieldAsTouched: (path: string) => void
@@ -35,8 +35,8 @@ const useValidationStore = create<ValidationStore>((set, get) => ({
   isValidating: false,
   isValid: true,
 
-  setValidationState: ({ messages, isValid }) => 
-    set({ 
+  setValidationState: ({ messages, isValid }) =>
+    set({
       messages,
       isValid,
     }),
@@ -44,7 +44,7 @@ const useValidationStore = create<ValidationStore>((set, get) => ({
   setIsValidating: (isValidating: boolean) => set({ isValidating }),
 
   getMessagesForPath: (path: string) => {
-    return get().messages.filter(message => message.path.startsWith(path))
+    return get().messages.filter((message) => message.path.startsWith(path))
   },
 
   isFieldTouched(path: string) {
@@ -52,21 +52,21 @@ const useValidationStore = create<ValidationStore>((set, get) => ({
   },
 
   markFieldAsTouched: (path: string) =>
-    set(state => ({ 
-      touchedFields: new Set([...state.touchedFields, path]) 
+    set((state) => ({
+      touchedFields: new Set([...state.touchedFields, path]),
     })),
 
   get errors() {
-    return get().messages.filter(m => m.severity === 'error')
+    return get().messages.filter((m) => m.severity === 'error')
   },
 
   get warnings() {
-    return get().messages.filter(m => m.severity === 'warning')
+    return get().messages.filter((m) => m.severity === 'warning')
   },
 
   get infos() {
-    return get().messages.filter(m => m.severity === 'info')
-  }
+    return get().messages.filter((m) => m.severity === 'info')
+  },
 }))
 
 export default useValidationStore

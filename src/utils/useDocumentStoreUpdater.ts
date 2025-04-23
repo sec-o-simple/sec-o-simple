@@ -28,8 +28,14 @@ export type useDocumentStoreUpdaterProps<T> = {
 
 export function useDocumentValidation() {
   const documentStore = useDocumentStore()
-  const setValidationState = useValidationStore(state => state.setValidationState)
-  const setIsValidating = useValidationStore(state => state.setIsValidating)
+  const setValidationState = useValidationStore(
+    (state) => state.setValidationState,
+  )
+  const setIsValidating = useValidationStore((state) => state.setIsValidating)
+
+  // JSON.stringify is used to avoid calling the validation function
+  // if the documentStore has not changed
+  const documentStoreString = JSON.stringify(documentStore)
 
   useEffect(() => {
     const validate = async () => {
@@ -42,13 +48,13 @@ export function useDocumentValidation() {
         })
       } finally {
         setIsValidating(false)
-      } 
+      }
     }
 
     validate()
-    // JSON.stringify is used to avoid calling the validation function
-    // if the documentStore has not changed
-  }, [JSON.stringify(documentStore), setValidationState, setIsValidating])
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [documentStoreString, setValidationState, setIsValidating])
 }
 
 export default function useDocumentStoreUpdater<T>({

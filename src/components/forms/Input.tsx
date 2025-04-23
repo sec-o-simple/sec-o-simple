@@ -8,14 +8,23 @@ import {
 } from '@heroui/input'
 
 export function Input(props: InputProps & { csafPath?: string }) {
-  const { placeholder, labelPlacement, variant, csafPath, onBlur, onChange, value: propValue, ...rest } = props
+  const {
+    placeholder,
+    labelPlacement,
+    variant,
+    csafPath,
+    onBlur,
+    onChange,
+    value: propValue,
+    ...rest
+  } = props
   const validation = useFieldValidation(csafPath)
 
   const {
     value: debouncedValue,
     isDebouncing,
     handleBlur,
-    handleChange
+    handleChange,
   } = useDebounceInput({
     onChange,
     onBlur,
@@ -31,8 +40,12 @@ export function Input(props: InputProps & { csafPath?: string }) {
         inputWrapper: 'border-1 shadow-none',
       }}
       value={debouncedValue}
-      errorMessage={validation.errorMessages.map(m => m.message).join(', ')}
-      isInvalid={!isDebouncing && validation.hasErrors && (validation.isTouched || !!propValue?.length)}
+      errorMessage={validation.errorMessages.map((m) => m.message).join(', ')}
+      isInvalid={
+        !isDebouncing &&
+        validation.hasErrors &&
+        (validation.isTouched || !!propValue?.length)
+      }
       onBlur={(e) => {
         if (csafPath) {
           validation.markFieldAsTouched(csafPath)
@@ -46,13 +59,22 @@ export function Input(props: InputProps & { csafPath?: string }) {
 }
 
 export function Textarea(props: TextAreaProps & { csafPath?: string }) {
-  const { placeholder, labelPlacement, variant, csafPath, onBlur, onChange, value: propValue, ...rest } = props
+  const {
+    placeholder,
+    labelPlacement,
+    variant,
+    csafPath,
+    onBlur,
+    onChange,
+    value: propValue,
+    ...rest
+  } = props
   const validation = useFieldValidation(csafPath)
   const {
     value: debouncedValue,
     isDebouncing,
     handleBlur,
-    handleChange
+    handleChange,
   } = useDebounceInput({
     onChange,
     onBlur,
@@ -68,7 +90,7 @@ export function Textarea(props: TextAreaProps & { csafPath?: string }) {
         inputWrapper: 'border-1 shadow-none',
       }}
       value={debouncedValue}
-      errorMessage={validation.errorMessages.map(m => m.message).join(', ')}
+      errorMessage={validation.errorMessages.map((m) => m.message).join(', ')}
       isInvalid={!isDebouncing && validation.hasErrors && validation.isTouched}
       onBlur={(e) => {
         if (csafPath) {

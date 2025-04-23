@@ -1,77 +1,77 @@
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState } from 'react'
 
 type InputElement = HTMLInputElement | HTMLTextAreaElement
 type InputChangeEvent<T> = React.ChangeEvent<T>
 type InputBlurEvent<T> = React.FocusEvent<T>
 
 interface UseDebounceInputOptions<T extends InputElement> {
-    onChange?: (e: InputChangeEvent<T>) => void
-    onBlur?: (e: InputBlurEvent<T>) => void
-    value?: string
+  onChange?: (e: InputChangeEvent<T>) => void
+  onBlur?: (e: InputBlurEvent<T>) => void
+  value?: string
 }
 
 export function useDebounceInput<T extends InputElement>({
-    onChange,
-    onBlur,
-    value: propValue,
+  onChange,
+  onBlur,
+  value: propValue,
 }: UseDebounceInputOptions<T>) {
-    const [isDebouncing, setIsDebouncing] = useState(false)
-    const timeoutRef = useRef<NodeJS.Timeout>()
-    const [debouncedValue, setDebouncedValue] = useState<string>(propValue ?? '')
+  const [isDebouncing, setIsDebouncing] = useState(false)
+  const timeoutRef = useRef<NodeJS.Timeout>()
+  const [debouncedValue, setDebouncedValue] = useState<string>(propValue ?? '')
 
-    useEffect(() => {
-        if (propValue !== undefined) {
-            setDebouncedValue(propValue)
-        }
-    }, [propValue])
+  useEffect(() => {
+    if (propValue !== undefined) {
+      setDebouncedValue(propValue)
+    }
+  }, [propValue])
 
-    const triggerOnChange = (value: string) => {
-        const syntheticEvent = {
-            target: { value },
-            currentTarget: { value }
-        } as InputChangeEvent<T>
-        onChange?.(syntheticEvent)
+  const triggerOnChange = (value: string) => {
+    const syntheticEvent = {
+      target: { value },
+      currentTarget: { value },
+    } as InputChangeEvent<T>
+    onChange?.(syntheticEvent)
+  }
+
+  const clearPendingTimeout = () => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = undefined
+    }
+  }
+
+  const handleBlur = (e: InputBlurEvent<T>) => {
+    clearPendingTimeout()
+
+    if (isDebouncing) {
+      triggerOnChange(debouncedValue)
     }
 
-    const clearPendingTimeout = () => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current)
-            timeoutRef.current = undefined
-        }
-    }
+    setIsDebouncing(false)
+    onBlur?.(e)
+  }
 
-    const handleBlur = (e: InputBlurEvent<T>) => {
-        clearPendingTimeout()
+  const handleChange = (e: InputChangeEvent<T>) => {
+    const value = e.target.value
+    setDebouncedValue(value)
+    setIsDebouncing(true)
 
-        if (isDebouncing) {
-            triggerOnChange(debouncedValue)
-        }
+    clearPendingTimeout()
 
-        setIsDebouncing(false)
-        onBlur?.(e)
-    }
+    timeoutRef.current = setTimeout(() => {
+      setIsDebouncing(false)
+      triggerOnChange(value)
+    }, 400)
+  }
 
-    const handleChange = (e: InputChangeEvent<T>) => {
-        const value = e.target.value
-        setDebouncedValue(value)
-        setIsDebouncing(true)
+  useEffect(() => {
+    return clearPendingTimeout
+  }, [])
 
-        clearPendingTimeout()
-
-        timeoutRef.current = setTimeout(() => {
-            setIsDebouncing(false)
-            triggerOnChange(value)
-        }, 400)
-    }
-
-    useEffect(() => {
-        return clearPendingTimeout
-    }, [])
-
-    return {
-        value: debouncedValue,
-        isDebouncing,
-        handleBlur,
-        handleChange
-    }
+  return {
+    value: debouncedValue,
+    isDebouncing,
+    handleBlur,
+    handleChange,
+  }
 }

@@ -4,9 +4,9 @@ export function useFieldValidation(path?: string) {
   const validationStore = useValidationStore()
 
   const messages = !path ? [] : validationStore.getMessagesForPath(path)
-  const errorMessages = messages.filter(m => m.severity === 'error')
-  const warningMessages = messages.filter(m => m.severity === 'warning')
-  const infoMessages = messages.filter(m => m.severity === 'info')
+  const errorMessages = messages.filter((m) => m.severity === 'error')
+  const warningMessages = messages.filter((m) => m.severity === 'warning')
+  const infoMessages = messages.filter((m) => m.severity === 'info')
 
   return {
     messages,
