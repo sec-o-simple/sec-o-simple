@@ -1,7 +1,18 @@
+import { useFieldValidation } from '@/utils/useFieldValidation'
 import { Select as HeroUISelect, SelectProps } from '@heroui/select'
 
-export default function Select(props: SelectProps) {
-  const { placeholder, labelPlacement, variant, ...rest } = props
+export default function Select(props: SelectProps & { csafPath?: string }) {
+  const { placeholder, labelPlacement, variant, csafPath, onChange, ...rest } = props
+  const validation = useFieldValidation(csafPath)
+
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if (csafPath) {
+      // Only after touching the field, we want to show errors.
+      validation.markFieldAsTouched(csafPath)
+    }
+    onChange?.(e)
+  }
+  
   return (
     <HeroUISelect
       labelPlacement={labelPlacement ?? 'outside'}
@@ -10,6 +21,9 @@ export default function Select(props: SelectProps) {
       classNames={{
         trigger: 'border-1 shadow-none',
       }}
+      onChange={handleChange}
+      errorMessage={validation.errorMessages.map(m => m.message).join(', ')}
+      isInvalid={validation.hasErrors && validation.isTouched}
       {...rest}
     />
   )

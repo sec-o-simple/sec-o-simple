@@ -1,3 +1,5 @@
+import { useDebounceInput } from '@/utils/useDebounceInput'
+import { useFieldValidation } from '@/utils/useFieldValidation'
 import {
   Input as HeroUIInput,
   Textarea as HeroUITextarea,
@@ -5,8 +7,21 @@ import {
   TextAreaProps,
 } from '@heroui/input'
 
-export function Input(props: InputProps) {
-  const { placeholder, labelPlacement, variant, ...rest } = props
+export function Input(props: InputProps & { csafPath?: string }) {
+  const { placeholder, labelPlacement, variant, csafPath, onBlur, onChange, value: propValue, ...rest } = props
+  const validation = useFieldValidation(csafPath)
+
+  const {
+    value: debouncedValue,
+    isDebouncing,
+    handleBlur,
+    handleChange
+  } = useDebounceInput({
+    onChange,
+    onBlur,
+    value: propValue,
+  })
+
   return (
     <HeroUIInput
       variant={variant ?? 'bordered'}
@@ -15,13 +30,35 @@ export function Input(props: InputProps) {
       classNames={{
         inputWrapper: 'border-1 shadow-none',
       }}
+      value={debouncedValue}
+      errorMessage={validation.errorMessages.map(m => m.message).join(', ')}
+      isInvalid={!isDebouncing && validation.hasErrors && (validation.isTouched || !!propValue?.length)}
+      onBlur={(e) => {
+        if (csafPath) {
+          validation.markFieldAsTouched(csafPath)
+        }
+        handleBlur(e)
+      }}
+      onChange={handleChange}
       {...rest}
     />
   )
 }
 
-export function Textarea(props: TextAreaProps) {
-  const { placeholder, labelPlacement, variant, ...rest } = props
+export function Textarea(props: TextAreaProps & { csafPath?: string }) {
+  const { placeholder, labelPlacement, variant, csafPath, onBlur, onChange, value: propValue, ...rest } = props
+  const validation = useFieldValidation(csafPath)
+  const {
+    value: debouncedValue,
+    isDebouncing,
+    handleBlur,
+    handleChange
+  } = useDebounceInput({
+    onChange,
+    onBlur,
+    value: propValue,
+  })
+
   return (
     <HeroUITextarea
       variant={variant ?? 'bordered'}
@@ -30,6 +67,16 @@ export function Textarea(props: TextAreaProps) {
       classNames={{
         inputWrapper: 'border-1 shadow-none',
       }}
+      value={debouncedValue}
+      errorMessage={validation.errorMessages.map(m => m.message).join(', ')}
+      isInvalid={!isDebouncing && validation.hasErrors && validation.isTouched}
+      onBlur={(e) => {
+        if (csafPath) {
+          validation.markFieldAsTouched(csafPath)
+        }
+        handleBlur(e)
+      }}
+      onChange={handleChange}
       {...rest}
     />
   )

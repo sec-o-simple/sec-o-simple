@@ -34,6 +34,7 @@ export default function Publisher() {
     >
       <Input
         label="Name of publisher"
+        csafPath="/document/publisher/name"
         value={localState.name}
         onValueChange={(v) => setLocalState({ ...localState, name: v })}
         isDisabled={isFieldReadonly('document-information.publisher.name')}
@@ -41,6 +42,7 @@ export default function Publisher() {
       <HSplit>
         <Select
           label="Category of Publisher"
+          csafPath="/document/publisher/category"
           selectedKeys={[localState.category]}
           onSelectionChange={(selected) =>
             setLocalState({
@@ -58,6 +60,7 @@ export default function Publisher() {
         </Select>
         <Input
           label="Namespace of Publisher"
+          csafPath="/document/publisher/namespace"
           placeholder="e.g., https://publisher.example.org/"
           value={localState.namespace}
           onValueChange={(v) => setLocalState({ ...localState, namespace: v })}
@@ -68,6 +71,7 @@ export default function Publisher() {
       </HSplit>
       <Textarea
         label="Contact Details"
+        csafPath="/document/publisher/contact_details"
         value={localState.contactDetails}
         onValueChange={(v) =>
           setLocalState({ ...localState, contactDetails: v })
@@ -78,6 +82,7 @@ export default function Publisher() {
       />
       <Textarea
         label="Issuing Authority"
+        csafPath="/document/publisher/issuing_authority"
         value={localState.issuingAuthority}
         onValueChange={(v) =>
           setLocalState({ ...localState, issuingAuthority: v })

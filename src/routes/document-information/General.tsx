@@ -34,6 +34,7 @@ export default function General() {
     >
       <Input
         label="Title"
+        csafPath="/document/title"
         value={localState.title}
         onValueChange={(title) => setLocalState({ ...localState, title })}
         isDisabled={isFieldReadonly('document-information.title')}
@@ -41,12 +42,14 @@ export default function General() {
       <HSplit>
         <Input
           label="ID"
+          csafPath="/document/tracking/id"
           value={localState.id}
           onValueChange={(id) => setLocalState({ ...localState, id })}
           isDisabled={isFieldReadonly('document-information.id')}
         />
         <Select
           label="Language"
+          csafPath="/document/lang"
           selectedKeys={[localState.language]}
           onSelectionChange={(v) =>
             setLocalState({ ...localState, language: [...v][0] as string })
