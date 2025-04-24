@@ -39,7 +39,7 @@ export default function General() {
         onValueChange={(title) => setLocalState({ ...localState, title })}
         isDisabled={isFieldReadonly('document-information.title')}
       />
-      <HSplit>
+      <HSplit className="items-start">
         <Input
           label="ID"
           csafPath="/document/tracking/id"

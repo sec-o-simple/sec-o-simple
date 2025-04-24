@@ -44,7 +44,7 @@ const useValidationStore = create<ValidationStore>((set, get) => ({
   setIsValidating: (isValidating: boolean) => set({ isValidating }),
 
   getMessagesForPath: (path: string) => {
-    return get().messages.filter((message) => message.path.startsWith(path))
+    return get().messages.filter((message) => message.path === path)
   },
 
   isFieldTouched(path: string) {

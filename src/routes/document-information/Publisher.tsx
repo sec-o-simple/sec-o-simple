@@ -39,7 +39,7 @@ export default function Publisher() {
         onValueChange={(v) => setLocalState({ ...localState, name: v })}
         isDisabled={isFieldReadonly('document-information.publisher.name')}
       />
-      <HSplit>
+      <HSplit className="items-start">
         <Select
           label="Category of Publisher"
           csafPath="/document/publisher/category"

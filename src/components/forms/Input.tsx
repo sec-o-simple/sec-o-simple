@@ -15,6 +15,7 @@ export function Input(props: InputProps & { csafPath?: string }) {
     csafPath,
     onBlur,
     onChange,
+    onValueChange,
     value: propValue,
     ...rest
   } = props
@@ -26,7 +27,10 @@ export function Input(props: InputProps & { csafPath?: string }) {
     handleBlur,
     handleChange,
   } = useDebounceInput({
-    onChange,
+    onChange: (e) => {
+      onValueChange?.(e.target.value)
+      onChange?.(e)
+    },
     onBlur,
     value: propValue,
   })
@@ -66,6 +70,7 @@ export function Textarea(props: TextAreaProps & { csafPath?: string }) {
     csafPath,
     onBlur,
     onChange,
+    onValueChange,
     value: propValue,
     ...rest
   } = props
@@ -76,7 +81,10 @@ export function Textarea(props: TextAreaProps & { csafPath?: string }) {
     handleBlur,
     handleChange,
   } = useDebounceInput({
-    onChange,
+    onChange: (e) => {
+      onValueChange?.(e.target.value)
+      onChange?.(e)
+    },
     onBlur,
     value: propValue,
   })

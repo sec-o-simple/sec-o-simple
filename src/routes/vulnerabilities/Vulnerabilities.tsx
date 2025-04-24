@@ -12,6 +12,8 @@ import General from './General'
 import Notes from './Notes'
 import Products from './Products'
 import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
+import { Alert } from '@heroui/react'
+import { useListValidation } from '@/utils/useListValidation'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
@@ -27,8 +29,20 @@ export default function Vulnerabilities() {
     },
   })
 
+  const listValidation = useListValidation('/vulnerabilities', vulnerabilitiesListState.data)
+
   return (
     <WizardStep title="Vulnerabilities" progress={3} onBack={'/products'}>
+      {listValidation.isTouched && listValidation.hasErrors && (
+        <Alert color="danger">
+          {listValidation.errorMessages.map((m) => (
+            <p key={m.path}>
+              {m.message}
+            </p>
+          ))}
+        </Alert>
+      )}
+      {/* show search input */}
       <Input
         placeholder="Search vulnerabilities"
         startContent={
@@ -41,9 +55,10 @@ export default function Vulnerabilities() {
       <ComponentList
         listState={vulnerabilitiesListState}
         title="title"
-        content={(vulnerability) => (
+        content={(vulnerability, index) => (
           <VulnerabilityForm
             vulnerability={vulnerability}
+            vulnerabilityIndex={index}
             onChange={vulnerabilitiesListState.updateDataEntry}
           />
         )}
@@ -67,22 +82,30 @@ function CVEChip({ vulnerability }: { vulnerability: TVulnerability }) {
 
 function VulnerabilityForm({
   vulnerability,
+  vulnerabilityIndex,
   onChange,
 }: {
   vulnerability: TVulnerability
+  vulnerabilityIndex: number
   onChange: (vulnerability: TVulnerability) => void
 }) {
+  const tabProps = {
+    vulnerability,
+    vulnerabilityIndex,
+    onChange,
+  }
+
   return (
     <VSplit>
       <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
         <Tab title="General">
-          <General vulnerability={vulnerability} onChange={onChange} />
+          <General {...tabProps} />
         </Tab>
         <Tab title="Notes">
-          <Notes vulnerability={vulnerability} onChange={onChange} />
+          <Notes {...tabProps} />
         </Tab>
         <Tab title="Products">
-          <Products vulnerability={vulnerability} onChange={onChange} />
+          <Products {...tabProps} />
         </Tab>
       </Tabs>
     </VSplit>

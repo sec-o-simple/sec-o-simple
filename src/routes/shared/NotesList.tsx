@@ -36,15 +36,17 @@ export const NoteGenerator = (): TNote => ({
 
 export function NotesList({
   notesListState,
+  csafPath,
 }: {
-  notesListState: ListState<TNote>
+  notesListState: ListState<TNote>,
+  csafPath: string,
 }) {
   return (
     <ComponentList
       listState={notesListState}
       title="title"
-      content={(note) => (
-        <NoteForm note={note} onChange={notesListState.updateDataEntry} />
+      content={(note, index) => (
+        <NoteForm note={note} csafPath={`${csafPath}/${index}`} onChange={notesListState.updateDataEntry} />
       )}
       startContent={(note) => <CategoryChip note={note} />}
     />
@@ -61,16 +63,19 @@ function CategoryChip({ note }: { note: TNote }) {
 
 function NoteForm({
   note,
+  csafPath,
   onChange,
 }: {
   note: TNote
+  csafPath: string
   onChange: (note: TNote) => void
 }) {
   return (
     <VSplit className="pt-4">
-      <HSplit>
+      <HSplit className="items-start">
         <Select
           label="Note category"
+          csafPath={`${csafPath}/category`}
           selectedKeys={[note.category]}
           onSelectionChange={(selected) => {
             onChange({
@@ -86,6 +91,7 @@ function NoteForm({
         </Select>
         <Input
           label="Title"
+          csafPath={`${csafPath}/title`}
           value={note.title}
           onValueChange={(newValue) => onChange({ ...note, title: newValue })}
           autoFocus={true}
@@ -94,6 +100,7 @@ function NoteForm({
       </HSplit>
       <Textarea
         label="Note Content"
+        csafPath={`${csafPath}/text`}
         value={note.content}
         onValueChange={(newValue) => onChange({ ...note, content: newValue })}
         isDisabled={checkReadOnly(note, 'content')}
