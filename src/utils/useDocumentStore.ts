@@ -6,7 +6,19 @@ import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { create } from 'zustand'
 
+export type TSOSDocumentType =
+  | 'Software'
+  | 'HardwareSoftware'
+  | 'HardwareFirmware'
+  | 'VexSoftware'
+  | 'VexHardwareSoftware'
+  | 'VexHardwareFirmware'
+  | 'VexSbom'
+
 export type TDocumentStore = {
+  sosDocumentType: TSOSDocumentType
+  setSOSDocumentType: (type: TSOSDocumentType) => void
+
   documentInformation: TDocumentInformation
   products: TProductTreeBranch[]
   vulnerabilities: TVulnerability[]
@@ -17,6 +29,10 @@ export type TDocumentStore = {
 }
 
 const useDocumentStore = create<TDocumentStore>((set) => ({
+  sosDocumentType: 'Software',
+  setSOSDocumentType: (type: TSOSDocumentType) =>
+    set({ sosDocumentType: type }),
+
   documentInformation: getDefaultDocumentInformation(),
   updateDocumentInformation: (update: TDocumentInformation) =>
     set({ documentInformation: update }),

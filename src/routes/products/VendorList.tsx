@@ -1,12 +1,11 @@
 import { useListState } from '@/utils/useListState'
 import ComponentList from '@/components/forms/ComponentList'
-import BranchForm from './BranchForm'
-import ProductnameList from './ProductnameList'
 import {
   TProductTreeBranch,
   getDefaultProductTreeBranch,
 } from './types/tProductTreeBranch'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
+import ProductCard from './components/ProductCard'
 
 export default function VendorList() {
   const vendorListState = useListState<TProductTreeBranch>({
@@ -26,23 +25,20 @@ export default function VendorList() {
     <ComponentList
       listState={vendorListState}
       title="name"
-      content={(branch) => (
-        <BranchForm
-          branch={branch}
-          onChange={vendorListState.updateDataEntry}
-          nameLabel="Vendor"
-        >
-          <ProductnameList
-            productNames={branch.subBranches}
-            onChange={(updatedBranches) =>
-              vendorListState.updateDataEntry({
-                ...branch,
-                subBranches: updatedBranches,
-              })
-            }
-          />
-        </BranchForm>
+      titleProps={{ className: 'font-bold' }}
+      endContent={(item) => (
+        <div className="text-neutral-foreground">{item.description}</div>
       )}
+      content={(vendor) =>
+        vendor.subBranches.map((product) => (
+          <ProductCard
+            key={product.id}
+            className="border-t py-2"
+            product={product}
+            variant="plain"
+          />
+        ))
+      }
     />
   )
 }

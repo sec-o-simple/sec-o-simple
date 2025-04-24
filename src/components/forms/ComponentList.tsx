@@ -1,6 +1,6 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Accordion, AccordionItem } from '@heroui/accordion'
-import { ReactNode, useState } from 'react'
+import { HTMLProps, ReactNode, useState } from 'react'
 import IconButton from './IconButton'
 import { Selection } from '@heroui/react'
 import { ListState } from '@/utils/useListState'
@@ -10,6 +10,7 @@ import {
 } from '@/utils/dynamicObjectValue'
 import AddItemButton from './AddItemButton'
 import { checkReadOnly } from '@/utils/template'
+import { twMerge } from 'tailwind-merge'
 
 export type ComponentListProps<T> = {
   listState: ListState<T>
@@ -19,6 +20,8 @@ export type ComponentListProps<T> = {
   onChange?: (updatedItems: T[]) => void
   onDelete?: (item: T) => void
   startContent?: (item: T) => ReactNode
+  endContent?: (item: T) => ReactNode
+  titleProps?: HTMLProps<HTMLDivElement>
 }
 
 export default function ComponentList<T extends object>({
@@ -27,6 +30,8 @@ export default function ComponentList<T extends object>({
   content,
   onDelete,
   startContent,
+  endContent,
+  titleProps,
 }: ComponentListProps<T>) {
   const [expandedKeys, setExpandedKeys] = useState<Selection>(new Set([]))
 
@@ -54,11 +59,18 @@ export default function ComponentList<T extends object>({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   {startContent?.(item)}
-                  <div className="max-w-xl overflow-hidden text-ellipsis text-nowrap">
+                  <div
+                    {...titleProps}
+                    className={twMerge(
+                      'max-w-xl overflow-hidden text-ellipsis text-nowrap',
+                      titleProps?.className,
+                    )}
+                  >
                     {getDynamicObjectValue(item, title) || (
                       <span>Untitled</span>
                     )}
                   </div>
+                  {endContent?.(item)}
                 </div>
                 <IconButton
                   icon={faTrash}

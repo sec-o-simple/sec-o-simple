@@ -15,6 +15,7 @@ export type TProductTreeBranch = {
   name: string
   description: string
   subBranches: TProductTreeBranch[]
+  type?: string
 }
 
 export function getDefaultProductTreeBranch(

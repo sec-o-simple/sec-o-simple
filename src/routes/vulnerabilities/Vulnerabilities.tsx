@@ -28,7 +28,11 @@ export default function Vulnerabilities() {
   })
 
   return (
-    <WizardStep title="Vulnerabilities" progress={3} onBack={'/products'}>
+    <WizardStep
+      title="Vulnerabilities"
+      progress={3}
+      onBack={'/product-management'}
+    >
       <Input
         placeholder="Search vulnerabilities"
         startContent={

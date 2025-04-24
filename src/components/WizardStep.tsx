@@ -8,6 +8,7 @@ export type WizardStepProps = PropsWithChildren<{
   progress?: number
   onBack?: string | (() => void)
   onContinue?: string | (() => void)
+  noContentWrapper?: boolean
 }>
 
 export default function WizardStep({
@@ -16,6 +17,7 @@ export default function WizardStep({
   onBack,
   onContinue,
   children,
+  noContentWrapper,
 }: WizardStepProps) {
   const navigate = useNavigate()
   return (
@@ -24,10 +26,12 @@ export default function WizardStep({
         sections={['Documents', 'Products', 'Vulnerabilities']}
         progress={progress ?? 1}
       />
-      <div className="flex flex-col gap-4 rounded-lg bg-content1 p-8 shadow">
-        {title && <div className="mb-2 text-xl font-semibold">{title}</div>}
-        {children}
-      </div>
+      {(noContentWrapper && <>{children}</>) || (
+        <div className="flex flex-col gap-4 rounded-lg bg-content1 p-8 shadow">
+          {title && <div className="mb-2 text-xl font-semibold">{title}</div>}
+          {children}
+        </div>
+      )}
       <div className="flex justify-between">
         <div>
           {onBack !== undefined && (
