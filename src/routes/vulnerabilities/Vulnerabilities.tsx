@@ -12,11 +12,16 @@ import General from './General'
 import Notes from './Notes'
 import Products from './Products'
 import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
+import { Alert } from '@heroui/react'
+import { useListValidation } from '@/utils/useListValidation'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
     generator: getDefaultVulnerability,
   })
+
+  const hasVisitedPage = usePageVisit()
 
   useDocumentStoreUpdater({
     localState: vulnerabilitiesListState.data,
@@ -27,12 +32,26 @@ export default function Vulnerabilities() {
     },
   })
 
+  const listValidation = useListValidation(
+    '/vulnerabilities',
+    vulnerabilitiesListState.data,
+  )
+
   return (
     <WizardStep
       title="Vulnerabilities"
       progress={3}
       onBack={'/product-management'}
     >
+      {(hasVisitedPage || listValidation.isTouched) &&
+        listValidation.hasErrors && (
+          <Alert color="danger">
+            {listValidation.errorMessages.map((m) => (
+              <p key={m.path}>{m.message}</p>
+            ))}
+          </Alert>
+        )}
+      {/* show search input */}
       <Input
         placeholder="Search vulnerabilities"
         startContent={
@@ -45,9 +64,11 @@ export default function Vulnerabilities() {
       <ComponentList
         listState={vulnerabilitiesListState}
         title="title"
-        content={(vulnerability) => (
+        content={(vulnerability, index) => (
           <VulnerabilityForm
             vulnerability={vulnerability}
+            vulnerabilityIndex={index}
+            isTouched={hasVisitedPage}
             onChange={vulnerabilitiesListState.updateDataEntry}
           />
         )}
@@ -71,22 +92,33 @@ function CVEChip({ vulnerability }: { vulnerability: TVulnerability }) {
 
 function VulnerabilityForm({
   vulnerability,
+  vulnerabilityIndex,
   onChange,
+  isTouched = false,
 }: {
   vulnerability: TVulnerability
+  vulnerabilityIndex: number
+  isTouched?: boolean
   onChange: (vulnerability: TVulnerability) => void
 }) {
+  const tabProps = {
+    vulnerability,
+    vulnerabilityIndex,
+    isTouched,
+    onChange,
+  }
+
   return (
     <VSplit>
       <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
         <Tab title="General">
-          <General vulnerability={vulnerability} onChange={onChange} />
+          <General {...tabProps} />
         </Tab>
         <Tab title="Notes">
-          <Notes vulnerability={vulnerability} onChange={onChange} />
+          <Notes {...tabProps} />
         </Tab>
         <Tab title="Products">
-          <Products vulnerability={vulnerability} onChange={onChange} />
+          <Products {...tabProps} />
         </Tab>
       </Tabs>
     </VSplit>

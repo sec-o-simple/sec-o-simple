@@ -13,6 +13,7 @@ export default function Products({
   onChange,
 }: {
   vulnerability: TVulnerability
+  vulnerabilityIndex: number
   onChange: (vulnerability: TVulnerability) => void
 }) {
   const productsListState = useListState<TVulnerabilityProduct>({

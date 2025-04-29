@@ -8,8 +8,10 @@ import { useState } from 'react'
 import VendorList from './VendorList'
 import useDocumentStore from '@/utils/useDocumentStore'
 import ProductList from './ProductList'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function ProductManagement() {
+  usePageVisit()
   const [selectedTab, setSelectedTab] = useState<string>('Vendors')
   const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 

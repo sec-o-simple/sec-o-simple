@@ -10,11 +10,14 @@ import {
   getDefaultDocumentReference,
 } from './types/tDocumentReference'
 import { checkReadOnly } from '@/utils/template'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function References() {
   const referencesListState = useListState<TDocumentReference>({
     generator: getDefaultDocumentReference,
   })
+
+  usePageVisit()
 
   useDocumentStoreUpdater<TDocumentInformation>({
     localState: [
