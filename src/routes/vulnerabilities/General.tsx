@@ -10,10 +10,10 @@ export default function General({
   onChange,
   isTouched = false,
 }: {
-  vulnerability: TVulnerability,
-  vulnerabilityIndex: number,
+  vulnerability: TVulnerability
+  vulnerabilityIndex: number
   onChange: (vulnerability: TVulnerability) => void
-  isTouched?: boolean,
+  isTouched?: boolean
 }) {
   return (
     <VSplit>

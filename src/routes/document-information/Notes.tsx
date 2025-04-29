@@ -20,7 +20,10 @@ export default function Notes() {
   })
 
   const hasVisitedPage = usePageVisit()
-  const listValidation = useListValidation(`/document/notes`, notesListState.data)
+  const listValidation = useListValidation(
+    `/document/notes`,
+    notesListState.data,
+  )
 
   return (
     <WizardStep
@@ -29,15 +32,14 @@ export default function Notes() {
       onBack={'/document-information/general'}
       onContinue={'/document-information/publisher'}
     >
-      {(hasVisitedPage || listValidation.isTouched) && listValidation.hasErrors && (
-        <Alert color="danger">
-          {listValidation.errorMessages.map((m) => (
-            <p key={m.path}>
-              {m.message}
-            </p>
-          ))}
-        </Alert>
-      )}
+      {(hasVisitedPage || listValidation.isTouched) &&
+        listValidation.hasErrors && (
+          <Alert color="danger">
+            {listValidation.errorMessages.map((m) => (
+              <p key={m.path}>{m.message}</p>
+            ))}
+          </Alert>
+        )}
       <NotesList
         notesListState={notesListState}
         csafPath="/document/notes"

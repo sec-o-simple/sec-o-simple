@@ -39,9 +39,9 @@ export function NotesList({
   csafPath,
   isTouched = false,
 }: {
-  notesListState: ListState<TNote>,
-  csafPath: string,
-  isTouched?: boolean,
+  notesListState: ListState<TNote>
+  csafPath: string
+  isTouched?: boolean
 }) {
   return (
     <ComponentList

@@ -32,19 +32,21 @@ export default function Vulnerabilities() {
     },
   })
 
-  const listValidation = useListValidation('/vulnerabilities', vulnerabilitiesListState.data)
+  const listValidation = useListValidation(
+    '/vulnerabilities',
+    vulnerabilitiesListState.data,
+  )
 
   return (
     <WizardStep title="Vulnerabilities" progress={3} onBack={'/products'}>
-      {(hasVisitedPage || listValidation.isTouched) && listValidation.hasErrors && (
-        <Alert color="danger">
-          {listValidation.errorMessages.map((m) => (
-            <p key={m.path}>
-              {m.message}
-            </p>
-          ))}
-        </Alert>
-      )}
+      {(hasVisitedPage || listValidation.isTouched) &&
+        listValidation.hasErrors && (
+          <Alert color="danger">
+            {listValidation.errorMessages.map((m) => (
+              <p key={m.path}>{m.message}</p>
+            ))}
+          </Alert>
+        )}
       {/* show search input */}
       <Input
         placeholder="Search vulnerabilities"
@@ -91,8 +93,8 @@ function VulnerabilityForm({
   isTouched = false,
 }: {
   vulnerability: TVulnerability
-  vulnerabilityIndex: number,
-  isTouched?: boolean,
+  vulnerabilityIndex: number
+  isTouched?: boolean
   onChange: (vulnerability: TVulnerability) => void
 }) {
   const tabProps = {

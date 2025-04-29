@@ -52,12 +52,14 @@ function Section({
     <div className="flex flex-col gap-2 text-neutral-foreground">
       <NavLink
         to={to}
-        className={`flex cursor-pointer items-center gap-2 rounded-lg p-2 transition-colors hover:bg-content2 ${isActive ? 'bg-content2 font-semibold text-foreground' : ''
-          }`}
+        className={`flex cursor-pointer items-center gap-2 rounded-lg p-2 transition-colors hover:bg-content2 ${
+          isActive ? 'bg-content2 font-semibold text-foreground' : ''
+        }`}
       >
         <div
-          className={`flex size-8 items-center justify-center rounded-full bg-content3 p-4 ${isActive ? 'bg-primary text-primary-foreground' : ''
-            }`}
+          className={`flex size-8 items-center justify-center rounded-full bg-content3 p-4 ${
+            isActive ? 'bg-primary text-primary-foreground' : ''
+          }`}
         >
           {number}
         </div>
@@ -71,15 +73,25 @@ function Section({
   )
 }
 
-function StatusIndicator({ hasErrors, hasVisited }: { hasErrors: boolean, hasVisited: boolean }) {
+function StatusIndicator({
+  hasErrors,
+  hasVisited,
+}: {
+  hasErrors: boolean
+  hasVisited: boolean
+}) {
   return (
     <div
-      className={`size-2 rounded-full ${hasVisited ? hasErrors ? 'bg-red-400' : 'bg-green-500' : 'bg-neutral-300'
-        }`}
+      className={`size-2 rounded-full ${
+        hasVisited
+          ? hasErrors
+            ? 'bg-red-400'
+            : 'bg-green-500'
+          : 'bg-neutral-300'
+      }`}
     />
   )
 }
-
 
 function SubSection({ title, to }: { title: string; to: string }) {
   const pathValidation = usePathValidation(to)
@@ -88,7 +100,8 @@ function SubSection({ title, to }: { title: string; to: string }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center gap-2 cursor-pointer pl-12 transition-colors hover:text-primary ${isActive ? 'text-primary' : ''
+        `flex items-center gap-2 cursor-pointer pl-12 transition-colors hover:text-primary ${
+          isActive ? 'text-primary' : ''
         }`
       }
     >

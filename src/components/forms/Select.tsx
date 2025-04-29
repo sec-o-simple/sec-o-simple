@@ -1,9 +1,18 @@
 import { useFieldValidation } from '@/utils/useFieldValidation'
 import { Select as HeroUISelect, SelectProps } from '@heroui/select'
 
-export default function Select(props: SelectProps & { csafPath?: string, isTouched?: boolean }) {
-  const { placeholder, labelPlacement, variant, csafPath, isTouched, onChange, ...rest } =
-    props
+export default function Select(
+  props: SelectProps & { csafPath?: string; isTouched?: boolean },
+) {
+  const {
+    placeholder,
+    labelPlacement,
+    variant,
+    csafPath,
+    isTouched,
+    onChange,
+    ...rest
+  } = props
   const validation = useFieldValidation(csafPath)
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {

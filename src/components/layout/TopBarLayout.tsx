@@ -44,7 +44,10 @@ export default function TopBarLayout() {
             <FontAwesomeIcon icon={faSave} />
             Save Draft
           </Button>
-          <Tooltip content="There are some errors in the document. Please fix them before exporting." isDisabled={isValid && !isValidating}>
+          <Tooltip
+            content="There are some errors in the document. Please fix them before exporting."
+            isDisabled={isValid && !isValidating}
+          >
             <div>
               <Button
                 color="primary"

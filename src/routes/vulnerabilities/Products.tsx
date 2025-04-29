@@ -10,10 +10,9 @@ import {
 
 export default function Products({
   vulnerability,
-  vulnerabilityIndex,
   onChange,
 }: {
-  vulnerability: TVulnerability,
+  vulnerability: TVulnerability
   vulnerabilityIndex: number
   onChange: (vulnerability: TVulnerability) => void
 }) {

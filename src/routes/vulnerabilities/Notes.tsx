@@ -11,17 +11,20 @@ export default function Notes({
   onChange,
   isTouched = false,
 }: {
-  vulnerability: TVulnerability,
-  vulnerabilityIndex: number,
-  onChange: (vulnerability: TVulnerability) => void,
-  isTouched?: boolean,
+  vulnerability: TVulnerability
+  vulnerabilityIndex: number
+  onChange: (vulnerability: TVulnerability) => void
+  isTouched?: boolean
 }) {
   const notesListState = useListState<TNote>({
     initialData: vulnerability.notes,
     generator: NoteGenerator,
   })
-  
-  const listValidation = useListValidation(`/vulnerabilities/${vulnerabilityIndex}/notes`, notesListState.data)
+
+  const listValidation = useListValidation(
+    `/vulnerabilities/${vulnerabilityIndex}/notes`,
+    notesListState.data,
+  )
 
   useEffect(
     () => onChange({ ...vulnerability, notes: notesListState.data }),
@@ -34,9 +37,7 @@ export default function Notes({
       {(isTouched || listValidation.isTouched) && listValidation.hasErrors && (
         <Alert color="danger">
           {listValidation.errorMessages.map((m) => (
-            <p key={m.path}>
-              {m.message}
-            </p>
+            <p key={m.path}>{m.message}</p>
           ))}
         </Alert>
       )}

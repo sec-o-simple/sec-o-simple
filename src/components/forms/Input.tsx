@@ -7,7 +7,9 @@ import {
   TextAreaProps,
 } from '@heroui/input'
 
-export function Input(props: InputProps & { csafPath?: string, isTouched?: boolean }) {
+export function Input(
+  props: InputProps & { csafPath?: string; isTouched?: boolean },
+) {
   const {
     placeholder,
     labelPlacement,
@@ -63,7 +65,9 @@ export function Input(props: InputProps & { csafPath?: string, isTouched?: boole
   )
 }
 
-export function Textarea(props: TextAreaProps & { csafPath?: string, isTouched?: boolean }) {
+export function Textarea(
+  props: TextAreaProps & { csafPath?: string; isTouched?: boolean },
+) {
   const {
     placeholder,
     labelPlacement,
@@ -101,7 +105,11 @@ export function Textarea(props: TextAreaProps & { csafPath?: string, isTouched?:
       }}
       value={debouncedValue}
       errorMessage={validation.errorMessages.map((m) => m.message).join(', ')}
-      isInvalid={!isDebouncing && validation.hasErrors && (validation.isTouched || isTouched)}
+      isInvalid={
+        !isDebouncing &&
+        validation.hasErrors &&
+        (validation.isTouched || isTouched)
+      }
       onBlur={(e) => {
         if (csafPath) {
           validation.markFieldAsTouched(csafPath)
