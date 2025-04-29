@@ -18,6 +18,7 @@
     "@heroui/button": "^2.2.13",
     "@heroui/chip": "^2.2.10",
     "@heroui/input": "^2.4.13",
+    "@heroui/modal": "^2.2.14",
     "@heroui/radio": "^2.3.14",
     "@heroui/react": "^2.7.2",
     "@heroui/select": "^2.4.13",

@@ -1,7 +1,7 @@
 import HSplit from '@/components/forms/HSplit'
 import IconButton from '@/components/forms/IconButton'
 import VSplit from '@/components/forms/VSplit'
-import { faEllipsisVertical } from '@fortawesome/free-solid-svg-icons'
+import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
 import { HTMLProps, PropsWithChildren, ReactNode } from 'react'
 import { Link } from 'react-router'
 
@@ -12,14 +12,24 @@ export type InfoCardProps = HTMLProps<HTMLDivElement> &
     startContent?: ReactNode
     endContent?: ReactNode
     linkTo?: string
+    onEdit?: () => void
+    onDelete?: () => void
   }>
 
 export default function InfoCard(props: InfoCardProps) {
   if (props.variant === 'boxed') {
     return <BoxedInfoCard {...props} />
   } else {
-    const { title, startContent, endContent, linkTo, children, ...divProps } =
-      props
+    const {
+      title,
+      startContent,
+      endContent,
+      linkTo,
+      onEdit,
+      onDelete,
+      children,
+      ...divProps
+    } = props
     return (
       <VSplit {...divProps}>
         <HSplit className="flex items-center justify-between">
@@ -30,7 +40,10 @@ export default function InfoCard(props: InfoCardProps) {
             </div>
             {endContent}
           </div>
-          <IconButton icon={faEllipsisVertical} />
+          <div>
+            {onEdit && <IconButton icon={faEdit} onPress={onEdit} />}
+            {onDelete && <IconButton icon={faTrash} onPress={onDelete} />}
+          </div>
         </HSplit>
         {children}
       </VSplit>

@@ -11,6 +11,13 @@ import {
 import AddItemButton from './AddItemButton'
 import { checkReadOnly } from '@/utils/template'
 import { twMerge } from 'tailwind-merge'
+import { FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
+
+export type CustomAction<T> = {
+  icon: FontAwesomeIconProps['icon']
+  onClick: (item: T) => void
+  notAffectedByReadonly?: boolean
+}
 
 export type ComponentListProps<T> = {
   listState: ListState<T>
@@ -22,6 +29,7 @@ export type ComponentListProps<T> = {
   startContent?: (item: T) => ReactNode
   endContent?: (item: T) => ReactNode
   titleProps?: HTMLProps<HTMLDivElement>
+  customActions?: CustomAction<T>[]
 }
 
 export default function ComponentList<T extends object>({
@@ -32,6 +40,7 @@ export default function ComponentList<T extends object>({
   startContent,
   endContent,
   titleProps,
+  customActions,
 }: ComponentListProps<T>) {
   const [expandedKeys, setExpandedKeys] = useState<Selection>(new Set([]))
 
@@ -72,15 +81,28 @@ export default function ComponentList<T extends object>({
                   </div>
                   {endContent?.(item)}
                 </div>
-                <IconButton
-                  icon={faTrash}
-                  onPress={() =>
-                    onDelete
-                      ? onDelete?.(item)
-                      : listState.removeDataEntry(item)
-                  }
-                  isDisabled={checkReadOnly(item)}
-                />
+                <div>
+                  {customActions &&
+                    customActions.map((action, i) => (
+                      <IconButton
+                        key={i}
+                        icon={action.icon}
+                        onPress={() => action.onClick(item)}
+                        isDisabled={
+                          !action.notAffectedByReadonly && checkReadOnly(item)
+                        }
+                      />
+                    ))}
+                  <IconButton
+                    icon={faTrash}
+                    onPress={() =>
+                      onDelete
+                        ? onDelete?.(item)
+                        : listState.removeDataEntry(item)
+                    }
+                    isDisabled={checkReadOnly(item)}
+                  />
+                </div>
               </div>
             }
           >

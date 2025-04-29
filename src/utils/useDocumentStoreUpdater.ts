@@ -22,6 +22,8 @@ export type useDocumentStoreUpdaterProps<T> = {
   valueUpdater: TDocumentStoreFunction<T>
   /** callback function to initilize the localState */
   init: (initialData: T) => void
+  /** Will prevent a store update if false is returned */
+  shouldUpdate?: (update: T) => boolean
 }
 
 export default function useDocumentStoreUpdater<T>({
@@ -29,6 +31,7 @@ export default function useDocumentStoreUpdater<T>({
   valueField,
   valueUpdater,
   init,
+  shouldUpdate,
 }: useDocumentStoreUpdaterProps<T>) {
   const config = useConfigStore((state) => state.config)
   const documentStoreValue = useDocumentStore((state) => state[valueField]) as T
@@ -47,10 +50,14 @@ export default function useDocumentStoreUpdater<T>({
   // TODO: enhance performance:
   // TODO: add debounce (and save on dismount in case component gets dismounted before save)
   useEffect(() => {
-    updateDocumentStoreValue({
+    const update = {
       ...documentStoreValue,
       ...getStateObject(localState).getUpdate(),
-    })
+    }
+
+    if (!shouldUpdate || shouldUpdate?.(update)) {
+      updateDocumentStoreValue(update)
+    }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [getStateObject(localState).trigger, updateDocumentStoreValue])

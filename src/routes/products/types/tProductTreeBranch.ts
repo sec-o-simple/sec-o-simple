@@ -9,13 +9,18 @@ export const productTreeBranchCategories = [
 export type TProductTreeBranchCategory =
   (typeof productTreeBranchCategories)[number]
 
+export const productTreeBranchProductTypes = ['Software', 'Hardware'] as const
+
+export type TProductTreeBranchProductType =
+  (typeof productTreeBranchProductTypes)[number]
+
 export type TProductTreeBranch = {
   id: string
   category: TProductTreeBranchCategory
   name: string
   description: string
   subBranches: TProductTreeBranch[]
-  type?: string
+  type?: TProductTreeBranchProductType
 }
 
 export function getDefaultProductTreeBranch(
