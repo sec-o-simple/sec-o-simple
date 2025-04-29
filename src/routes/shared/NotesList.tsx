@@ -37,16 +37,23 @@ export const NoteGenerator = (): TNote => ({
 export function NotesList({
   notesListState,
   csafPath,
+  isTouched = false,
 }: {
   notesListState: ListState<TNote>,
   csafPath: string,
+  isTouched?: boolean,
 }) {
   return (
     <ComponentList
       listState={notesListState}
       title="title"
       content={(note, index) => (
-        <NoteForm note={note} csafPath={`${csafPath}/${index}`} onChange={notesListState.updateDataEntry} />
+        <NoteForm
+          note={note}
+          csafPath={`${csafPath}/${index}`}
+          isTouched={isTouched}
+          onChange={notesListState.updateDataEntry}
+        />
       )}
       startContent={(note) => <CategoryChip note={note} />}
     />
@@ -65,10 +72,12 @@ function NoteForm({
   note,
   csafPath,
   onChange,
+  isTouched = false,
 }: {
   note: TNote
   csafPath: string
   onChange: (note: TNote) => void
+  isTouched?: boolean
 }) {
   return (
     <VSplit className="pt-4">
@@ -76,6 +85,7 @@ function NoteForm({
         <Select
           label="Note category"
           csafPath={`${csafPath}/category`}
+          isTouched={isTouched}
           selectedKeys={[note.category]}
           onSelectionChange={(selected) => {
             onChange({
@@ -91,6 +101,7 @@ function NoteForm({
         </Select>
         <Input
           label="Title"
+          isTouched={isTouched}
           csafPath={`${csafPath}/title`}
           value={note.title}
           onValueChange={(newValue) => onChange({ ...note, title: newValue })}
@@ -100,6 +111,7 @@ function NoteForm({
       </HSplit>
       <Textarea
         label="Note Content"
+        isTouched={isTouched}
         csafPath={`${csafPath}/text`}
         value={note.content}
         onValueChange={(newValue) => onChange({ ...note, content: newValue })}

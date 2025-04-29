@@ -5,6 +5,7 @@ import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import { Alert } from '@heroui/react'
 import { useListValidation } from '@/utils/useListValidation'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function Notes() {
   const notesListState = useListState<TNote>({
@@ -18,6 +19,7 @@ export default function Notes() {
     init: (initialData) => notesListState.setData(initialData.notes),
   })
 
+  const hasVisitedPage = usePageVisit()
   const listValidation = useListValidation(`/document/notes`, notesListState.data)
 
   return (
@@ -27,7 +29,7 @@ export default function Notes() {
       onBack={'/document-information/general'}
       onContinue={'/document-information/publisher'}
     >
-      {listValidation.isTouched && listValidation.hasErrors && (
+      {(hasVisitedPage || listValidation.isTouched) && listValidation.hasErrors && (
         <Alert color="danger">
           {listValidation.errorMessages.map((m) => (
             <p key={m.path}>
@@ -36,7 +38,11 @@ export default function Notes() {
           ))}
         </Alert>
       )}
-      <NotesList notesListState={notesListState} csafPath="/document/notes" />
+      <NotesList
+        notesListState={notesListState}
+        csafPath="/document/notes"
+        isTouched={hasVisitedPage}
+      />
     </WizardStep>
   )
 }

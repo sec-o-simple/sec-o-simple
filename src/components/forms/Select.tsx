@@ -1,8 +1,8 @@
 import { useFieldValidation } from '@/utils/useFieldValidation'
 import { Select as HeroUISelect, SelectProps } from '@heroui/select'
 
-export default function Select(props: SelectProps & { csafPath?: string }) {
-  const { placeholder, labelPlacement, variant, csafPath, onChange, ...rest } =
+export default function Select(props: SelectProps & { csafPath?: string, isTouched?: boolean }) {
+  const { placeholder, labelPlacement, variant, csafPath, isTouched, onChange, ...rest } =
     props
   const validation = useFieldValidation(csafPath)
 
@@ -24,7 +24,7 @@ export default function Select(props: SelectProps & { csafPath?: string }) {
       }}
       onChange={handleChange}
       errorMessage={validation.errorMessages.map((m) => m.message).join(', ')}
-      isInvalid={validation.hasErrors && validation.isTouched}
+      isInvalid={validation.hasErrors && (isTouched || validation.isTouched)}
       {...rest}
     />
   )

@@ -14,11 +14,14 @@ import Products from './Products'
 import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
 import { Alert } from '@heroui/react'
 import { useListValidation } from '@/utils/useListValidation'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
     generator: getDefaultVulnerability,
   })
+
+  const hasVisitedPage = usePageVisit()
 
   useDocumentStoreUpdater({
     localState: vulnerabilitiesListState.data,
@@ -33,7 +36,7 @@ export default function Vulnerabilities() {
 
   return (
     <WizardStep title="Vulnerabilities" progress={3} onBack={'/products'}>
-      {listValidation.isTouched && listValidation.hasErrors && (
+      {(hasVisitedPage || listValidation.isTouched) && listValidation.hasErrors && (
         <Alert color="danger">
           {listValidation.errorMessages.map((m) => (
             <p key={m.path}>
@@ -59,6 +62,7 @@ export default function Vulnerabilities() {
           <VulnerabilityForm
             vulnerability={vulnerability}
             vulnerabilityIndex={index}
+            isTouched={hasVisitedPage}
             onChange={vulnerabilitiesListState.updateDataEntry}
           />
         )}
@@ -84,14 +88,17 @@ function VulnerabilityForm({
   vulnerability,
   vulnerabilityIndex,
   onChange,
+  isTouched = false,
 }: {
   vulnerability: TVulnerability
-  vulnerabilityIndex: number
+  vulnerabilityIndex: number,
+  isTouched?: boolean,
   onChange: (vulnerability: TVulnerability) => void
 }) {
   const tabProps = {
     vulnerability,
     vulnerabilityIndex,
+    isTouched,
     onChange,
   }
 

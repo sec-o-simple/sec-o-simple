@@ -9,6 +9,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
+import { Tooltip } from '@heroui/react'
 import { Outlet, useNavigate } from 'react-router'
 
 export default function TopBarLayout() {
@@ -43,14 +44,18 @@ export default function TopBarLayout() {
             <FontAwesomeIcon icon={faSave} />
             Save Draft
           </Button>
-          <Button
-            color="primary"
-            onPress={exportCSAFDocument}
-            isDisabled={!isValid || isValidating}
-          >
-            <FontAwesomeIcon icon={faFileExport} />
-            Export
-          </Button>
+          <Tooltip content="There are some errors in the document. Please fix them before exporting." isDisabled={isValid && !isValidating}>
+            <div>
+              <Button
+                color="primary"
+                onPress={exportCSAFDocument}
+                isDisabled={!isValid || isValidating}
+              >
+                <FontAwesomeIcon icon={faFileExport} />
+                Export
+              </Button>
+            </div>
+          </Tooltip>
         </div>
       </div>
       <Outlet />

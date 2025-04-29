@@ -11,6 +11,7 @@ export type ValidationMessage = {
 type ValidationStore = {
   messages: ValidationMessage[]
   touchedFields: Set<string>
+  visitedPages: Set<string>
   isValidating: boolean
   isValid: boolean
 
@@ -22,6 +23,8 @@ type ValidationStore = {
   markFieldAsTouched: (path: string) => void
   getMessagesForPath: (path: string) => ValidationMessage[]
   isFieldTouched: (path: string) => boolean
+  visitPage: (path: string) => void
+  hasVisitedPage: (path: string) => boolean
 
   errors: ValidationMessage[]
   warnings: ValidationMessage[]
@@ -49,6 +52,15 @@ const useValidationStore = create<ValidationStore>((set, get) => ({
 
   isFieldTouched(path: string) {
     return get().touchedFields.has(path)
+  },
+
+  visitPage: (path: string) =>
+    set((state) => ({
+      visitedPages: new Set([...state.visitedPages, path]),
+    })),
+
+  hasVisitedPage: (path: string) => {
+    return get().visitedPages.has(path)
   },
 
   markFieldAsTouched: (path: string) =>

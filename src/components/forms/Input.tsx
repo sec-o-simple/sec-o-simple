@@ -7,12 +7,13 @@ import {
   TextAreaProps,
 } from '@heroui/input'
 
-export function Input(props: InputProps & { csafPath?: string }) {
+export function Input(props: InputProps & { csafPath?: string, isTouched?: boolean }) {
   const {
     placeholder,
     labelPlacement,
     variant,
     csafPath,
+    isTouched,
     onBlur,
     onChange,
     onValueChange,
@@ -48,7 +49,7 @@ export function Input(props: InputProps & { csafPath?: string }) {
       isInvalid={
         !isDebouncing &&
         validation.hasErrors &&
-        (validation.isTouched || !!propValue?.length)
+        (isTouched || validation.isTouched || !!propValue?.length)
       }
       onBlur={(e) => {
         if (csafPath) {
@@ -62,12 +63,13 @@ export function Input(props: InputProps & { csafPath?: string }) {
   )
 }
 
-export function Textarea(props: TextAreaProps & { csafPath?: string }) {
+export function Textarea(props: TextAreaProps & { csafPath?: string, isTouched?: boolean }) {
   const {
     placeholder,
     labelPlacement,
     variant,
     csafPath,
+    isTouched,
     onBlur,
     onChange,
     onValueChange,
@@ -99,7 +101,7 @@ export function Textarea(props: TextAreaProps & { csafPath?: string }) {
       }}
       value={debouncedValue}
       errorMessage={validation.errorMessages.map((m) => m.message).join(', ')}
-      isInvalid={!isDebouncing && validation.hasErrors && validation.isTouched}
+      isInvalid={!isDebouncing && validation.hasErrors && (validation.isTouched || isTouched)}
       onBlur={(e) => {
         if (csafPath) {
           validation.markFieldAsTouched(csafPath)

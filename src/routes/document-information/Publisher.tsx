@@ -12,10 +12,12 @@ import {
   publisherCategories,
 } from './types/tDocumentPublisher'
 import { useTemplate } from '@/utils/template'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function Publisher() {
   const [localState, setLocalState] = useState(getDefaultDocumentPublisher())
   const { isFieldReadonly } = useTemplate()
+  const hasVisitedPage = usePageVisit()
 
   useDocumentStoreUpdater<TDocumentInformation>({
     localState: [localState, () => ({ publisher: localState })],
@@ -35,6 +37,7 @@ export default function Publisher() {
       <Input
         label="Name of publisher"
         csafPath="/document/publisher/name"
+        isTouched={hasVisitedPage}
         value={localState.name}
         onValueChange={(v) => setLocalState({ ...localState, name: v })}
         isDisabled={isFieldReadonly('document-information.publisher.name')}
@@ -43,6 +46,7 @@ export default function Publisher() {
         <Select
           label="Category of Publisher"
           csafPath="/document/publisher/category"
+          isTouched={hasVisitedPage}
           selectedKeys={[localState.category]}
           onSelectionChange={(selected) =>
             setLocalState({
@@ -61,6 +65,7 @@ export default function Publisher() {
         <Input
           label="Namespace of Publisher"
           csafPath="/document/publisher/namespace"
+          isTouched={hasVisitedPage}
           placeholder="e.g., https://publisher.example.org/"
           value={localState.namespace}
           onValueChange={(v) => setLocalState({ ...localState, namespace: v })}
@@ -72,6 +77,7 @@ export default function Publisher() {
       <Textarea
         label="Contact Details"
         csafPath="/document/publisher/contact_details"
+        isTouched={hasVisitedPage}
         value={localState.contactDetails}
         onValueChange={(v) =>
           setLocalState({ ...localState, contactDetails: v })
@@ -83,6 +89,7 @@ export default function Publisher() {
       <Textarea
         label="Issuing Authority"
         csafPath="/document/publisher/issuing_authority"
+        isTouched={hasVisitedPage}
         value={localState.issuingAuthority}
         onValueChange={(v) =>
           setLocalState({ ...localState, issuingAuthority: v })
