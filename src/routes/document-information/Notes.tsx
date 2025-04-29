@@ -3,6 +3,9 @@ import { useListState } from '@/utils/useListState'
 import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { TDocumentInformation } from './types/tDocumentInformation'
+import { Alert } from '@heroui/react'
+import { useListValidation } from '@/utils/useListValidation'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function Notes() {
   const notesListState = useListState<TNote>({
@@ -16,6 +19,12 @@ export default function Notes() {
     init: (initialData) => notesListState.setData(initialData.notes),
   })
 
+  const hasVisitedPage = usePageVisit()
+  const listValidation = useListValidation(
+    `/document/notes`,
+    notesListState.data,
+  )
+
   return (
     <WizardStep
       title="Document Information - Notes"
@@ -23,7 +32,19 @@ export default function Notes() {
       onBack={'/document-information/general'}
       onContinue={'/document-information/publisher'}
     >
-      <NotesList notesListState={notesListState} />
+      {(hasVisitedPage || listValidation.isTouched) &&
+        listValidation.hasErrors && (
+          <Alert color="danger">
+            {listValidation.errorMessages.map((m) => (
+              <p key={m.path}>{m.message}</p>
+            ))}
+          </Alert>
+        )}
+      <NotesList
+        notesListState={notesListState}
+        csafPath="/document/notes"
+        isTouched={hasVisitedPage}
+      />
     </WizardStep>
   )
 }

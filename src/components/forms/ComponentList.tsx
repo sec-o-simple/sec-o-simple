@@ -15,7 +15,7 @@ export type ComponentListProps<T> = {
   listState: ListState<T>
   title: DynamicObjectValueKey<T>
   /** Generator function for a ReactNode that will be shown when an item is expanded */
-  content: (item: T) => ReactNode
+  content: (item: T, index: number) => ReactNode
   onChange?: (updatedItems: T[]) => void
   onDelete?: (item: T) => void
   startContent?: (item: T) => ReactNode
@@ -47,7 +47,7 @@ export default function ComponentList<T extends object>({
         }}
         className="px-0"
       >
-        {listState.data.map((item) => (
+        {listState.data.map((item, index) => (
           <AccordionItem
             key={listState.getId(item)}
             startContent={
@@ -72,7 +72,7 @@ export default function ComponentList<T extends object>({
               </div>
             }
           >
-            {content(item)}
+            {content(item, index)}
           </AccordionItem>
         ))}
       </Accordion>

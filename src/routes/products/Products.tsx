@@ -3,8 +3,11 @@ import WizardStep from '@/components/WizardStep'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import VendorList from './VendorList'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function Products() {
+  usePageVisit()
+
   return (
     <WizardStep
       title="Product Management"

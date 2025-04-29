@@ -11,6 +11,7 @@ import {
   getDefaultGeneralDocumentInformation,
 } from './types/tGeneralDocumentInformation'
 import { useTemplate } from '@/utils/template'
+import usePageVisit from '@/utils/usePageVisit'
 
 export default function General() {
   const [localState, setLocalState] = useState<TGeneralDocumentInformation>(
@@ -24,6 +25,7 @@ export default function General() {
     init: setLocalState,
   })
 
+  const hasVisitedPage = usePageVisit()
   const { isFieldReadonly } = useTemplate()
 
   return (
@@ -34,19 +36,25 @@ export default function General() {
     >
       <Input
         label="Title"
+        csafPath="/document/title"
+        isTouched={hasVisitedPage}
         value={localState.title}
         onValueChange={(title) => setLocalState({ ...localState, title })}
         isDisabled={isFieldReadonly('document-information.title')}
       />
-      <HSplit>
+      <HSplit className="items-start">
         <Input
           label="ID"
+          csafPath="/document/tracking/id"
+          isTouched={hasVisitedPage}
           value={localState.id}
           onValueChange={(id) => setLocalState({ ...localState, id })}
           isDisabled={isFieldReadonly('document-information.id')}
         />
         <Select
           label="Language"
+          csafPath="/document/lang"
+          isTouched={hasVisitedPage}
           selectedKeys={[localState.language]}
           onSelectionChange={(v) =>
             setLocalState({ ...localState, language: [...v][0] as string })
