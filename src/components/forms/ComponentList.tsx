@@ -76,6 +76,7 @@ export default function ComponentList<T extends object>({
                     )}
                   >
                     {getDynamicObjectValue(item, title) || (
+                      // TODO: add item label to string
                       <span>Untitled</span>
                     )}
                   </div>

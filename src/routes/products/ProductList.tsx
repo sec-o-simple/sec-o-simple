@@ -8,15 +8,23 @@ export type ProductListProps = {
 
 export default function ProductList({ productType }: ProductListProps) {
   const { getPTBsByCategory } = useProductTreeBranch()
-  const products = getPTBsByCategory('product_name')
+  const products = getPTBsByCategory('product_name').filter(
+    (product) => product.type === productType,
+  )
 
   return (
     <div className="flex flex-col items-stretch gap-2">
-      {products
-        .filter((product) => product.type === productType)
-        .map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+      {products.length === 0 && (
+        <div className="text-center text-lg text-neutral-foreground">
+          <p>You haven&apos;t created any {productType}-Products yet.</p>
+          <p>
+            You can add one by creating a vendor and adding a product to it.
+          </p>
+        </div>
+      )}
+      {products.map((product) => (
+        <ProductCard key={product.id} product={product} />
+      ))}
       {/* Button will be added after products can be moved between vendors */}
       {/*<AddItemButton
         onPress={() => {

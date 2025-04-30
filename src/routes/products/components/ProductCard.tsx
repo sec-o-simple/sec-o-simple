@@ -1,5 +1,5 @@
 import { Chip } from '@heroui/chip'
-import { TProductTreeBranch } from '../types/tProductTreeBranch'
+import { TProductTreeBranch, getPTBName } from '../types/tProductTreeBranch'
 import InfoCard, { InfoCardProps } from './InfoCard'
 import TagList from './TagList'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
@@ -17,7 +17,7 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
   return (
     <InfoCard
       variant="boxed"
-      title={product.name}
+      title={getPTBName(product)}
       linkTo={`product/${product.id}`}
       startContent={
         <Chip color="primary" variant="flat" radius="md" size="lg">
@@ -29,7 +29,7 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
       {...props}
     >
       <TagList
-        tags={product.subBranches.map((version) => version.name || 'Untitled')}
+        tags={product.subBranches.map((version) => getPTBName(version))}
       />
       <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
         <PTBEditForm

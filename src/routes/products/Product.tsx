@@ -8,6 +8,7 @@ import { PTBEditForm } from './components/PTBEditForm'
 import {
   TProductTreeBranch,
   getDefaultProductTreeBranch,
+  getPTBName,
 } from './types/tProductTreeBranch'
 import { useState } from 'react'
 
@@ -48,7 +49,7 @@ export default function Product() {
       <div className="font-bold">Versions ({product.subBranches.length})</div>
       {product.subBranches.map((version) => (
         <InfoCard
-          title={version.name || 'Untitled'}
+          title={getPTBName(version)}
           key={version.id}
           variant="boxed"
           onEdit={() => {

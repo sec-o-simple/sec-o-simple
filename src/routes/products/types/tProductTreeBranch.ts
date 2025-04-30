@@ -32,5 +32,22 @@ export function getDefaultProductTreeBranch(
     name: '',
     description: '',
     subBranches: [] as TProductTreeBranch[],
+    type: category === 'product_name' ? 'Software' : undefined,
+  }
+}
+
+export function getPTBName(branch: TProductTreeBranch) {
+  if (branch.name) {
+    return branch.name
+  }
+  switch (branch.category) {
+    case 'vendor':
+      return 'Untitled Vendor'
+    case 'product_name':
+      return 'Untitled Product'
+    case 'product_version':
+      return 'Untitled Version'
+    default:
+      return 'Untitled'
   }
 }
