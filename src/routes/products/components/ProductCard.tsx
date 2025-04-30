@@ -31,6 +31,7 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
       endContent={
         <IconButton
           icon={faCodeFork}
+          tooltip="Manage Versions"
           onPress={() => navigate(`product/${product.id}`)}
         />
       }
