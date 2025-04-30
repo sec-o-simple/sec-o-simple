@@ -25,7 +25,7 @@ export type TProductTreeBranch = {
 
 export function getDefaultProductTreeBranch(
   category: TProductTreeBranchCategory,
-) {
+): TProductTreeBranch {
   return {
     id: uid(),
     category: category,
