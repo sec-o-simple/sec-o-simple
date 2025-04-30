@@ -63,6 +63,7 @@ export default function VendorList() {
       </Modal>
       <ComponentList
         listState={vendorListState}
+        itemLabel="Vendor"
         title="name"
         titleProps={{ className: 'font-bold' }}
         endContent={(item) => (

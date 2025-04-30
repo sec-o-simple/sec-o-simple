@@ -39,6 +39,7 @@ export default function References() {
       <ComponentList
         listState={referencesListState}
         title="summary"
+        itemLabel="Reference"
         content={(reference) => (
           <ReferenceForm
             reference={reference}

@@ -64,6 +64,7 @@ export default function Vulnerabilities() {
       <ComponentList
         listState={vulnerabilitiesListState}
         title="title"
+        itemLabel="Vulnerability"
         content={(vulnerability, index) => (
           <VulnerabilityForm
             vulnerability={vulnerability}

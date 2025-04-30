@@ -24,7 +24,8 @@ export type ComponentListProps<T> = {
   title: DynamicObjectValueKey<T>
   /** Generator function for a ReactNode that will be shown when an item is expanded */
   content: (item: T, index: number) => ReactNode
-  onChange?: (updatedItems: T[]) => void
+  /** The label of an element in the list (defaults to Item) */
+  itemLabel?: string
   onDelete?: (item: T) => void
   startContent?: (item: T) => ReactNode
   endContent?: (item: T) => ReactNode
@@ -36,6 +37,7 @@ export default function ComponentList<T extends object>({
   listState,
   title,
   content,
+  itemLabel = 'Item',
   onDelete,
   startContent,
   endContent,
@@ -77,7 +79,7 @@ export default function ComponentList<T extends object>({
                   >
                     {getDynamicObjectValue(item, title) || (
                       // TODO: add item label to string
-                      <span>Untitled</span>
+                      <span>Untitled {itemLabel}</span>
                     )}
                   </div>
                   {endContent?.(item)}
@@ -112,6 +114,7 @@ export default function ComponentList<T extends object>({
         ))}
       </Accordion>
       <AddItemButton
+        label={`Add New ${itemLabel}`}
         onPress={() => {
           const key = listState.addDataEntry()
           // expand new item
