@@ -28,9 +28,11 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
       onDelete={() => deletePTB(product.id)}
       {...props}
     >
-      <TagList
-        tags={product.subBranches.map((version) => getPTBName(version))}
-      />
+      {product.subBranches.length > 0 && (
+        <TagList
+          tags={product.subBranches.map((version) => getPTBName(version))}
+        />
+      )}
       <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
         <PTBEditForm
           ptb={product}
