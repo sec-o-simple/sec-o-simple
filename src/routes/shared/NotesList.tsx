@@ -47,6 +47,7 @@ export function NotesList({
     <ComponentList
       listState={notesListState}
       title="title"
+      itemLabel="Note"
       content={(note, index) => (
         <NoteForm
           note={note}

@@ -34,11 +34,12 @@ export default function References() {
       title="Document Information - References"
       progress={1.75}
       onBack={'/document-information/publisher'}
-      onContinue={'/products'}
+      onContinue={'/product-management'}
     >
       <ComponentList
         listState={referencesListState}
         title="summary"
+        itemLabel="Reference"
         content={(reference) => (
           <ReferenceForm
             reference={reference}

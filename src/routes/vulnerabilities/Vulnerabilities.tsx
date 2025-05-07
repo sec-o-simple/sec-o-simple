@@ -38,7 +38,11 @@ export default function Vulnerabilities() {
   )
 
   return (
-    <WizardStep title="Vulnerabilities" progress={3} onBack={'/products'}>
+    <WizardStep
+      title="Vulnerabilities"
+      progress={3}
+      onBack={'/product-management'}
+    >
       {(hasVisitedPage || listValidation.isTouched) &&
         listValidation.hasErrors && (
           <Alert color="danger">
@@ -60,6 +64,7 @@ export default function Vulnerabilities() {
       <ComponentList
         listState={vulnerabilitiesListState}
         title="title"
+        itemLabel="Vulnerability"
         content={(vulnerability, index) => (
           <VulnerabilityForm
             vulnerability={vulnerability}

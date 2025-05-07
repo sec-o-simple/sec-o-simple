@@ -6,10 +6,11 @@ import General from './routes/document-information/General'
 import Notes from './routes/document-information/Notes'
 import Publisher from './routes/document-information/Publisher'
 import References from './routes/document-information/References'
-import Products from './routes/products/Products'
 import Vulnerabilities from './routes/vulnerabilities/Vulnerabilities'
 import { useTemplateInitializer } from './utils/template'
 import { useConfigInitializer } from './utils/useConfigStore'
+import ProductManagement from './routes/products/ProductManagement'
+import Product from './routes/products/Product'
 
 export default function App() {
   useConfigInitializer()
@@ -28,7 +29,10 @@ export default function App() {
               <Route path="publisher" element={<Publisher />} />
               <Route path="references" element={<References />} />
             </Route>
-            <Route path="products" element={<Products />} />
+            <Route path="product-management">
+              <Route index element={<ProductManagement />} />
+              <Route path="product/:productId" element={<Product />} />
+            </Route>
             <Route path="vulnerabilities" element={<Vulnerabilities />} />
           </Route>
         </Route>

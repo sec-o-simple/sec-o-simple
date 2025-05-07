@@ -1,6 +1,6 @@
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Accordion, AccordionItem } from '@heroui/accordion'
-import { ReactNode, useState } from 'react'
+import { HTMLProps, ReactNode, useState } from 'react'
 import IconButton from './IconButton'
 import { Selection } from '@heroui/react'
 import { ListState } from '@/utils/useListState'
@@ -10,23 +10,39 @@ import {
 } from '@/utils/dynamicObjectValue'
 import AddItemButton from './AddItemButton'
 import { checkReadOnly } from '@/utils/template'
+import { twMerge } from 'tailwind-merge'
+import { FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
+
+export type CustomAction<T> = {
+  icon: FontAwesomeIconProps['icon']
+  onClick: (item: T) => void
+  notAffectedByReadonly?: boolean
+}
 
 export type ComponentListProps<T> = {
   listState: ListState<T>
   title: DynamicObjectValueKey<T>
   /** Generator function for a ReactNode that will be shown when an item is expanded */
   content: (item: T, index: number) => ReactNode
-  onChange?: (updatedItems: T[]) => void
+  /** The label of an element in the list (defaults to Item) */
+  itemLabel?: string
   onDelete?: (item: T) => void
   startContent?: (item: T) => ReactNode
+  endContent?: (item: T) => ReactNode
+  titleProps?: HTMLProps<HTMLDivElement>
+  customActions?: CustomAction<T>[]
 }
 
 export default function ComponentList<T extends object>({
   listState,
   title,
   content,
+  itemLabel = 'Item',
   onDelete,
   startContent,
+  endContent,
+  titleProps,
+  customActions,
 }: ComponentListProps<T>) {
   const [expandedKeys, setExpandedKeys] = useState<Selection>(new Set([]))
 
@@ -54,21 +70,42 @@ export default function ComponentList<T extends object>({
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   {startContent?.(item)}
-                  <div className="max-w-xl overflow-hidden text-ellipsis text-nowrap">
+                  <div
+                    {...titleProps}
+                    className={twMerge(
+                      'max-w-xl overflow-hidden text-ellipsis text-nowrap',
+                      titleProps?.className,
+                    )}
+                  >
                     {getDynamicObjectValue(item, title) || (
-                      <span>Untitled</span>
+                      // TODO: add item label to string
+                      <span>Untitled {itemLabel}</span>
                     )}
                   </div>
+                  {endContent?.(item)}
                 </div>
-                <IconButton
-                  icon={faTrash}
-                  onPress={() =>
-                    onDelete
-                      ? onDelete?.(item)
-                      : listState.removeDataEntry(item)
-                  }
-                  isDisabled={checkReadOnly(item)}
-                />
+                <div>
+                  {customActions &&
+                    customActions.map((action, i) => (
+                      <IconButton
+                        key={i}
+                        icon={action.icon}
+                        onPress={() => action.onClick(item)}
+                        isDisabled={
+                          !action.notAffectedByReadonly && checkReadOnly(item)
+                        }
+                      />
+                    ))}
+                  <IconButton
+                    icon={faTrash}
+                    onPress={() =>
+                      onDelete
+                        ? onDelete?.(item)
+                        : listState.removeDataEntry(item)
+                    }
+                    isDisabled={checkReadOnly(item)}
+                  />
+                </div>
               </div>
             }
           >
@@ -77,6 +114,7 @@ export default function ComponentList<T extends object>({
         ))}
       </Accordion>
       <AddItemButton
+        label={`Add New ${itemLabel}`}
         onPress={() => {
           const key = listState.addDataEntry()
           // expand new item

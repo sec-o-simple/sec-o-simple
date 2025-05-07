@@ -1,12 +1,15 @@
-import { ReactNode } from 'react'
+import { HTMLProps, ReactNode } from 'react'
 import { twMerge } from 'tailwind-merge'
 
 export default function HSplit({
   children,
-  className,
-}: {
+  ...props
+}: HTMLProps<HTMLDivElement> & {
   children: ReactNode
-  className?: string
 }) {
-  return <div className={twMerge('flex gap-4', className)}>{children}</div>
+  return (
+    <div {...props} className={twMerge('flex gap-4', props.className)}>
+      {children}
+    </div>
+  )
 }

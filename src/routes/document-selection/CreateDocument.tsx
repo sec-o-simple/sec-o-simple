@@ -1,3 +1,4 @@
+import useDocumentStore, { TSOSDocumentType } from '@/utils/useDocumentStore'
 import {
   faArrowRight,
   faFileInvoice,
@@ -15,15 +16,19 @@ import { useNavigate } from 'react-router'
 
 type TDocumentType = {
   label: string
-  key: string
+  type: TSOSDocumentType
   active?: boolean
   default?: boolean
 }
 
 export default function CreateDocument() {
   const navigate = useNavigate()
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const onCreate = (_: string) => {
+  const setSOSDocumentType = useDocumentStore(
+    (state) => state.setSOSDocumentType,
+  )
+
+  const onCreate = (type: TSOSDocumentType) => {
+    setSOSDocumentType(type)
     navigate('/document-information/')
   }
 
@@ -38,9 +43,13 @@ export default function CreateDocument() {
         label="Security Advisory"
         icon={faShieldHalved}
         options={[
-          { label: 'Software', key: 'software', active: true, default: true },
-          { label: 'Hardware and Software', key: 'hardware_software' },
-          { label: 'Hardware and Firmware', key: 'hardware_firmware' },
+          { label: 'Software', type: 'Software', active: true, default: true },
+          {
+            label: 'Hardware and Software',
+            active: true,
+            type: 'HardwareSoftware',
+          },
+          { label: 'Hardware and Firmware', type: 'HardwareFirmware' },
         ]}
         onCreate={onCreate}
       />
@@ -48,10 +57,10 @@ export default function CreateDocument() {
         label="VEX Document"
         icon={faFileInvoice}
         options={[
-          { label: 'Software', key: 'vex_software' },
-          { label: 'Hardware and Software', key: 'vex_hardware_software' },
-          { label: 'Hardware and Firmware', key: 'vex_hardware_firmware' },
-          { label: 'using SBOM', key: 'vex_sbom' },
+          { label: 'Software', type: 'VexSoftware' },
+          { label: 'Hardware and Software', type: 'VexHardwareSoftware' },
+          { label: 'Hardware and Firmware', type: 'VexHardwareFirmware' },
+          { label: 'using SBOM', type: 'VexSbom' },
         ]}
         onCreate={onCreate}
       />
@@ -68,7 +77,7 @@ function DocumentType({
   label: string
   options: TDocumentType[]
   icon?: FontAwesomeIconProps['icon']
-  onCreate?: (selectedOption: string) => void
+  onCreate?: (documentType: TSOSDocumentType) => void
 }) {
   const [type, setType] = useState<TDocumentType | undefined>(
     options.find((x) => x.default),
@@ -82,13 +91,13 @@ function DocumentType({
       </div>
       <div className="grow">
         <RadioGroup
-          value={type?.key}
-          onValueChange={(v) => setType(options.find((x) => x.key === v))}
+          value={type?.type}
+          onValueChange={(v) => setType(options.find((x) => x.type === v))}
         >
           {options.map((option) => (
             <Radio
-              value={option.key}
-              key={option.key}
+              value={option.type}
+              key={option.type}
               isDisabled={!option.active}
             >
               {option.label}
@@ -100,7 +109,7 @@ function DocumentType({
         <Button
           color="primary"
           endContent={<FontAwesomeIcon icon={faArrowRight} />}
-          onPress={() => onCreate?.('todo')}
+          onPress={() => onCreate?.(type?.type ?? 'Software')}
           isDisabled={type === undefined}
         >
           Create Document

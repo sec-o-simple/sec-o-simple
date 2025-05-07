@@ -3,20 +3,33 @@ import {
   FontAwesomeIconProps,
 } from '@fortawesome/react-fontawesome'
 import { Button, ButtonProps } from '@heroui/button'
+import { Tooltip } from '@heroui/react'
 
 export type IconButtonProps = ButtonProps & {
   icon: FontAwesomeIconProps['icon']
+  tooltip?: string
 }
 
-export default function IconButton({ icon, ...buttonProps }: IconButtonProps) {
+export default function IconButton({
+  icon,
+  tooltip,
+  ...buttonProps
+}: IconButtonProps) {
   return (
-    <Button
-      isIconOnly={true}
-      variant="light"
-      className="rounded-full text-neutral-foreground"
-      {...buttonProps}
+    <Tooltip
+      showArrow={true}
+      content={tooltip}
+      placement="bottom"
+      isDisabled={!tooltip}
     >
-      <FontAwesomeIcon icon={icon} />
-    </Button>
+      <Button
+        isIconOnly={true}
+        variant="light"
+        className="rounded-full text-neutral-foreground"
+        {...buttonProps}
+      >
+        <FontAwesomeIcon icon={icon} />
+      </Button>
+    </Tooltip>
   )
 }

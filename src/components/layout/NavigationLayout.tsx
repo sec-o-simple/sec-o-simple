@@ -20,7 +20,7 @@ export default function NavigationLayout() {
             to="/document-information/references"
           />
         </Section>
-        <Section number={2} title="Products" to="/products" />
+        <Section number={2} title="Products" to="/product-management" />
         <Section number={3} title="Vulnerabilities" to="/vulnerabilities" />
       </div>
       <div className="grow bg-editor">
