@@ -57,11 +57,12 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
       (vulnerability) => ({
         cve: vulnerability.cve,
         title: vulnerability.title,
-        cwe: {
-          // TODO: add further CWE support
-          id: 'not supported by sec-o-simple yet',
-          name: vulnerability.cwe,
-        },
+        cwe: vulnerability.cwe
+          ? {
+              id: vulnerability.cwe.id,
+              name: vulnerability.cwe.name,
+            }
+          : undefined,
         notes: vulnerability.notes.map(parseNote),
         product_status: {
           known_affected: vulnerability.products.map((p) =>

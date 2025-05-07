@@ -24,3 +24,7 @@ declare module '@secvisogram/csaf-validator-lib/validate.js' {
 }
 
 declare module '@secvisogram/csaf-validator-lib/basic.js'
+
+declare module '@secvisogram/csaf-validator-lib/cwe.js' {
+  export const weaknesses: { id: string; name: string }[]
+}
