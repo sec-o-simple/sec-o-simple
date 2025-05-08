@@ -1,6 +1,7 @@
 import {
   TProductTreeBranch,
   TProductTreeBranchCategory,
+  TProductTreeBranchWithParents,
 } from '@/routes/products/types/tProductTreeBranch'
 import useDocumentStore from './useDocumentStore'
 
@@ -17,6 +18,27 @@ export function useProductTreeBranch() {
         return product
       }
       const subTreeSearch = findProductTreeBranch(id, product.subBranches)
+      if (subTreeSearch) {
+        return subTreeSearch
+      }
+    }
+  }
+
+  const findProductTreeBranchWithParents = (
+    id: string,
+    parent?: TProductTreeBranchWithParents,
+    startingBranches?: TProductTreeBranch[],
+  ): TProductTreeBranchWithParents | undefined => {
+    for (const product of startingBranches ?? products) {
+      const currentProduct = { ...product, parent: parent ?? null }
+      if (product.id === id) {
+        return currentProduct
+      }
+      const subTreeSearch = findProductTreeBranchWithParents(
+        id,
+        currentProduct,
+        product.subBranches,
+      )
       if (subTreeSearch) {
         return subTreeSearch
       }
@@ -54,6 +76,12 @@ export function useProductTreeBranch() {
     return matchingBranches
   }
 
+  const getSelectablePTBs = (): TProductTreeBranch[] => {
+    // this function returns all ProductTreeBranches that can be referenced e.g. in Vulnerablility Scores
+    // later product groups might be added to this
+    return getPTBsByCategory('product_version')
+  }
+
   const addPTB = (ptb: TProductTreeBranch) => {
     const newProducts = [...products, ptb]
     updateProducts(newProducts)
@@ -75,8 +103,10 @@ export function useProductTreeBranch() {
   return {
     rootBranch: products,
     findProductTreeBranch,
+    findProductTreeBranchWithParents,
     getFilteredPTBs,
     getPTBsByCategory,
+    getSelectablePTBs,
     addPTB,
     updatePTB,
     deletePTB,

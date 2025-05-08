@@ -23,6 +23,10 @@ export type TProductTreeBranch = {
   type?: TProductTreeBranchProductType
 }
 
+export type TProductTreeBranchWithParents = TProductTreeBranch & {
+  parent: TProductTreeBranchWithParents | null
+}
+
 export function getDefaultProductTreeBranch(
   category: TProductTreeBranchCategory,
 ): TProductTreeBranch {
@@ -50,4 +54,14 @@ export function getPTBName(branch: TProductTreeBranch) {
     default:
       return 'Untitled'
   }
+}
+
+export function getFullPTBName(branch: TProductTreeBranchWithParents) {
+  let nameParts = []
+  let current: TProductTreeBranchWithParents | null = branch
+  while (current !== null) {
+    nameParts.push(getPTBName(current))
+    current = current.parent
+  }
+  return nameParts.reverse().join(' ')
 }

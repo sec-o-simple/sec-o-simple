@@ -15,6 +15,7 @@ import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
 import { Alert } from '@heroui/react'
 import { useListValidation } from '@/utils/useListValidation'
 import usePageVisit from '@/utils/usePageVisit'
+import Scores from './Scores'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
@@ -120,6 +121,9 @@ function VulnerabilityForm({
         </Tab>
         <Tab title="Products">
           <Products {...tabProps} />
+        </Tab>
+        <Tab title="Scores">
+          <Scores {...tabProps} />
         </Tab>
       </Tabs>
     </VSplit>
