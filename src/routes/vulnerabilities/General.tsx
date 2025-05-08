@@ -1,8 +1,12 @@
 import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
-import { TVulnerability } from './types/tVulnerability'
+import { TCwe, TVulnerability } from './types/tVulnerability'
 import { checkReadOnly } from '@/utils/template'
+import { Autocomplete } from '@/components/forms/Autocomplete'
+import { useMemo } from 'react'
+import { weaknesses } from '@secvisogram/csaf-validator-lib/cwe.js'
+import { AutocompleteItem } from '@heroui/react'
 
 export default function General({
   vulnerability,
@@ -15,6 +19,8 @@ export default function General({
   onChange: (vulnerability: TVulnerability) => void
   isTouched?: boolean
 }) {
+  const cwes = useMemo<TCwe[]>(() => weaknesses, [])
+
   return (
     <VSplit>
       <HSplit>
@@ -29,16 +35,23 @@ export default function General({
           autoFocus
           isDisabled={checkReadOnly(vulnerability, 'cve')}
         />
-        <Input
+        <Autocomplete
           label="CWE"
           csafPath={`/vulnerabilities/${vulnerabilityIndex}/cwe/name`}
           isTouched={isTouched}
-          value={vulnerability.cwe}
-          onValueChange={(newValue) =>
-            onChange({ ...vulnerability, cwe: newValue })
-          }
+          defaultSelectedKey={vulnerability.cwe?.id}
+          onSelectionChange={(selected) => {
+            onChange({
+              ...vulnerability,
+              cwe: cwes.find((x) => x.id === (selected as string)),
+            })
+          }}
           isDisabled={checkReadOnly(vulnerability, 'cwe')}
-        />
+        >
+          {cwes.map((cwe) => (
+            <AutocompleteItem key={cwe.id}>{cwe.name}</AutocompleteItem>
+          ))}
+        </Autocomplete>
       </HSplit>
       <Input
         label="Title"
