@@ -41,7 +41,7 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
     >
       {product.subBranches.length > 0 && (
         <TagList
-          tags={product.subBranches.map((version) => getPTBName(version))}
+          items={product.subBranches.map((version) => getPTBName(version))}
         />
       )}
       <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
