@@ -78,6 +78,22 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
             pidGenerator.getPid(p.firstFixedVersionId),
           ),
         },
+        remediations: vulnerability.remediations.map((remediation) => ({
+          category: remediation.category,
+          date: remediation.date,
+          details: remediation.details,
+          url: remediation.url,
+          product_ids: remediation.productIds.map((id) =>
+            pidGenerator.getPid(id),
+          ),
+        })),
+        scores: vulnerability.scores.map((score) => ({
+          ['cvss_v3']: {
+            version: '3.1',
+            vectorString: score.vectorString,
+          },
+          products: score.productIds.map((id) => pidGenerator.getPid(id)),
+        })),
       }),
     ),
   }
