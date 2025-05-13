@@ -46,6 +46,12 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         namespace: documentStore.documentInformation.publisher.namespace,
       },
       notes: documentStore.documentInformation.notes.map(parseNote),
+      references: documentStore.documentInformation.references.map(
+        (reference) => ({
+          summary: reference.summary,
+          url: reference.url,
+        }),
+      ),
     },
     product_tree: {
       branches: parseProductTreeBranches(
