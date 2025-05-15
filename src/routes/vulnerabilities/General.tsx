@@ -49,7 +49,12 @@ export default function General({
           isDisabled={checkReadOnly(vulnerability, 'cwe')}
         >
           {cwes.map((cwe) => (
-            <AutocompleteItem key={cwe.id}>{cwe.name}</AutocompleteItem>
+            <AutocompleteItem
+              key={cwe.id}
+              textValue={`${cwe.id} - ${cwe.name}`}
+            >
+              {cwe.id} - {cwe.name}
+            </AutocompleteItem>
           ))}
         </Autocomplete>
       </HSplit>
