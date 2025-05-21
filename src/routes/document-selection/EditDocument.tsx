@@ -1,12 +1,15 @@
-import { Input } from '@/components/forms/Input'
+import { useSOSImport } from '@/utils/csafExport/sosDraft'
 import { faArrowRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
 import { motion } from 'motion/react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router'
 
 export default function EditDocument() {
   const navigate = useNavigate()
+  const { isSOSDraft, importSOSDocument } = useSOSImport()
+  const [jsonObject, setJsonObject] = useState<object | undefined>()
 
   return (
     <motion.div
@@ -20,13 +23,43 @@ export default function EditDocument() {
         Edit existing document
       </div>
       <div>
-        <Input type="file" />
+        <input
+          type="file"
+          accept=".json,application/json"
+          onChange={(e) => {
+            if (e.target.files) {
+              const file = e.target.files[0]
+              const reader = new FileReader()
+              reader.onload = function (e) {
+                setJsonObject(undefined)
+                if (!e.target?.result) {
+                  return
+                }
+
+                try {
+                  const jsonData = JSON.parse(e.target.result as string)
+                  setJsonObject(jsonData)
+                } catch (err) {
+                  console.error('Error parsing JSON:', err)
+                }
+              }
+              reader.readAsText(file)
+            }
+          }}
+          className="w-full rounded-md border p-2 text-sm outline-none focus:border-black"
+        />
       </div>
       <div className="self-end">
         <Button
           color="primary"
           endContent={<FontAwesomeIcon icon={faArrowRight} />}
-          onPress={() => navigate('/document-information/')}
+          onPress={() => {
+            if (jsonObject) {
+              importSOSDocument(jsonObject)
+              navigate('/document-information/')
+            }
+          }}
+          isDisabled={!(jsonObject && isSOSDraft(jsonObject))}
         >
           Edit Document
         </Button>
