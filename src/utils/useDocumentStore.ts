@@ -3,6 +3,7 @@ import {
   getDefaultDocumentInformation,
 } from '@/routes/document-information/types/tDocumentInformation'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import { TRelationship } from '@/routes/products/types/tRelationship'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { create } from 'zustand'
 
@@ -21,10 +22,12 @@ export type TDocumentStore = {
 
   documentInformation: TDocumentInformation
   products: TProductTreeBranch[]
+  relationships: TRelationship[]
   vulnerabilities: TVulnerability[]
 
   updateDocumentInformation: (update: TDocumentInformation) => void
   updateProducts: (update: TProductTreeBranch[]) => void
+  updateRelationships: (update: TRelationship[]) => void
   updateVulnerabilities: (update: TVulnerability[]) => void
 }
 
@@ -39,6 +42,11 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
 
   products: [],
   updateProducts: (update: TProductTreeBranch[]) => set({ products: update }),
+
+  // TODO: add this in sosDraftExport/Import after that was merged
+  relationships: [],
+  updateRelationships: (update: TRelationship[]) =>
+    set({ relationships: update }),
 
   vulnerabilities: [],
   updateVulnerabilities: (update: TVulnerability[]) =>

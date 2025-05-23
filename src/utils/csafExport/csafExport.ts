@@ -1,5 +1,6 @@
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
+import generateRelationships from './generateRelationships'
 import { getFilename } from './helpers'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
@@ -56,6 +57,10 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
     product_tree: {
       branches: parseProductTreeBranches(
         Object.values(documentStore.products),
+        pidGenerator,
+      ),
+      relationships: generateRelationships(
+        documentStore.relationships,
         pidGenerator,
       ),
     },
