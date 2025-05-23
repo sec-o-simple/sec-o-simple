@@ -11,6 +11,7 @@ import { useTemplateInitializer } from './utils/template'
 import { useConfigInitializer } from './utils/useConfigStore'
 import ProductManagement from './routes/products/ProductManagement'
 import Product from './routes/products/Product'
+import Version from './routes/products/Version'
 
 export default function App() {
   useConfigInitializer()
@@ -32,6 +33,7 @@ export default function App() {
             <Route path="product-management">
               <Route index element={<ProductManagement />} />
               <Route path="product/:productId" element={<Product />} />
+              <Route path="version/:productVersionId" element={<Version />} />
             </Route>
             <Route path="vulnerabilities" element={<Vulnerabilities />} />
           </Route>

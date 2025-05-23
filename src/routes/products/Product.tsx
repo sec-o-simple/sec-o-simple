@@ -1,5 +1,5 @@
 import WizardStep from '@/components/WizardStep'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import SubMenuHeader from './components/SubMenuHeader'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import InfoCard from './components/InfoCard'
@@ -11,10 +11,13 @@ import {
   getPTBName,
 } from './types/tProductTreeBranch'
 import { useState } from 'react'
+import IconButton from '@/components/forms/IconButton'
+import { faLink } from '@fortawesome/free-solid-svg-icons'
 
 export default function Product() {
   const { productId } = useParams()
   const { findProductTreeBranch, updatePTB, deletePTB } = useProductTreeBranch()
+  const navigate = useNavigate()
 
   // modal variables
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -28,7 +31,7 @@ export default function Product() {
   return (
     <WizardStep noContentWrapper={true}>
       <SubMenuHeader
-        title={'Product ' + product.name}
+        title={'Product ' + getPTBName(product)}
         backLink={'/product-management'}
         actionTitle="Add Version"
         onAction={() => {
@@ -50,6 +53,7 @@ export default function Product() {
       {product.subBranches.map((version) => (
         <InfoCard
           title={getPTBName(version)}
+          linkTo={`/product-management/version/${version.id}`}
           key={version.id}
           variant="boxed"
           onEdit={() => {
@@ -57,6 +61,15 @@ export default function Product() {
             onOpen()
           }}
           onDelete={() => deletePTB(version.id)}
+          endContent={
+            <IconButton
+              icon={faLink}
+              tooltip="Manage Relationships"
+              onPress={() =>
+                navigate(`/product-management/version/${version.id}`)
+              }
+            />
+          }
         >
           <div>{version.description}</div>
         </InfoCard>

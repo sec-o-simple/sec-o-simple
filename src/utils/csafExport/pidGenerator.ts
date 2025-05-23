@@ -1,6 +1,7 @@
 export class PidGenerator {
   counter = 1
   previousGeneratedIds: { ptbId: string; pid: string }[] = []
+  prefix = 'CSAFPID'
 
   getPid(productTreeBranchId: string) {
     const previous = this.previousGeneratedIds.find(
@@ -9,7 +10,7 @@ export class PidGenerator {
     if (previous) {
       return previous.pid
     } else {
-      const newId = `CSAFPID-${String(this.counter).padStart(4, '0')}`
+      const newId = `${this.prefix}-${String(this.counter).padStart(4, '0')}`
       this.counter += 1
       this.previousGeneratedIds.push({
         ptbId: productTreeBranchId,
