@@ -1,4 +1,5 @@
 import { useCSAFExport } from '@/utils/csafExport/csafExport'
+import { useSOSExport } from '@/utils/csafExport/sosDraft'
 import useValidationStore from '@/utils/useValidationStore'
 import {
   faAdd,
@@ -14,6 +15,7 @@ import { Outlet, useNavigate } from 'react-router'
 
 export default function TopBarLayout() {
   const navigate = useNavigate()
+  const { exportSOSDocument } = useSOSExport()
   const { exportCSAFDocument } = useCSAFExport()
   const { isValid, isValidating } = useValidationStore()
 
@@ -40,7 +42,7 @@ export default function TopBarLayout() {
             <FontAwesomeIcon icon={faEye} />
             Preview
           </Button>
-          <Button color="secondary" isDisabled={true}>
+          <Button color="secondary" onPress={exportSOSDocument}>
             <FontAwesomeIcon icon={faSave} />
             Save Draft
           </Button>

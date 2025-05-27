@@ -7,14 +7,17 @@ import { TRelationship } from '@/routes/products/types/tRelationship'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { create } from 'zustand'
 
-export type TSOSDocumentType =
-  | 'Software'
-  | 'HardwareSoftware'
-  | 'HardwareFirmware'
-  | 'VexSoftware'
-  | 'VexHardwareSoftware'
-  | 'VexHardwareFirmware'
-  | 'VexSbom'
+export const sosDocumentTypes = [
+  'Software',
+  'HardwareSoftware',
+  'HardwareFirmware',
+  'VexSoftware',
+  'VexHardwareSoftware',
+  'VexHardwareFirmware',
+  'VexSbom',
+] as const
+
+export type TSOSDocumentType = (typeof sosDocumentTypes)[number]
 
 export type TDocumentStore = {
   sosDocumentType: TSOSDocumentType
