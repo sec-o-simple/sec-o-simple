@@ -8,6 +8,7 @@ import {
 } from '@/routes/document-information/types/tDocumentInformation'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
+import { TRelationship } from '@/routes/products/types/tRelationship'
 
 export type TemplateKeys<T> = {
   [K in keyof T]: string | TemplateKeys<T[K]>
@@ -79,6 +80,9 @@ export function useTemplateInitializer() {
     (state) => state.updateDocumentInformation,
   )
   const updateProducts = useDocumentStore((state) => state.updateProducts)
+  const updateRelationships = useDocumentStore(
+    (state) => state.updateRelationships,
+  )
   const updateVulnerabilities = useDocumentStore(
     (state) => state.updateVulnerabilities,
   )
@@ -94,6 +98,9 @@ export function useTemplateInitializer() {
         )
         updateDocumentInformation(documentInformation)
         updateProducts(getTemplateValue<TProductTreeBranch[]>('products', []))
+        updateRelationships(
+          getTemplateValue<TRelationship[]>('relationships', []),
+        )
         updateVulnerabilities(
           getTemplateValue<TVulnerability[]>('vulnerabilities', []),
         )
