@@ -27,7 +27,7 @@
     "@heroui/table": "^2.2.12",
     "@heroui/tabs": "^2.2.11",
     "@heroui/theme": "^2.4.9",
-    "@internationalized/date": "^3.8.0",
+    "@internationalized/date": "3.8.0",
     "@secvisogram/csaf-validator-lib": "^1.3.50",
     "motion": "^12.4.7",
     "react": "18.3.1",
