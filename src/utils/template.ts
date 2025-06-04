@@ -25,6 +25,16 @@ export function checkReadOnly<T extends object>(
   )
 }
 
+export function getPlaceholder<T extends object>(
+  obj: T,
+  field?: string,
+): string | undefined {
+  const fieldKey = `${field}.placeholder`
+  if (fieldKey in obj) {
+    return obj[fieldKey as keyof typeof obj] as string
+  }
+}
+
 export function useTemplate() {
   const config = useConfigStore((state) => state.config)
 
@@ -70,7 +80,20 @@ export function useTemplate() {
     return false
   }
 
-  return { getTemplateValue, getTemplateData, isFieldReadonly }
+  function getFieldPlaceholder(key: string): string | undefined {
+    const value = getTemplateValue<string | undefined>(
+      `${key}.placeholder`,
+      undefined,
+    )
+    return value
+  }
+
+  return {
+    getTemplateValue,
+    getTemplateData,
+    isFieldReadonly,
+    getFieldPlaceholder,
+  }
 }
 
 export function useTemplateInitializer() {

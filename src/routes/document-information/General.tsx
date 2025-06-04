@@ -26,7 +26,7 @@ export default function General() {
   })
 
   const hasVisitedPage = usePageVisit()
-  const { isFieldReadonly } = useTemplate()
+  const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
 
   return (
     <WizardStep
@@ -41,6 +41,7 @@ export default function General() {
         value={localState.title}
         onValueChange={(title) => setLocalState({ ...localState, title })}
         isDisabled={isFieldReadonly('document-information.title')}
+        placeholder={getFieldPlaceholder('document-information.title')}
       />
       <HSplit className="items-start">
         <Input
@@ -50,6 +51,7 @@ export default function General() {
           value={localState.id}
           onValueChange={(id) => setLocalState({ ...localState, id })}
           isDisabled={isFieldReadonly('document-information.id')}
+          placeholder={getFieldPlaceholder('document-information.id')}
         />
         <Select
           label="Language"
@@ -60,6 +62,7 @@ export default function General() {
             setLocalState({ ...localState, language: [...v][0] as string })
           }
           isDisabled={isFieldReadonly('document-information.language')}
+          placeholder={getFieldPlaceholder('document-information.language')}
         >
           {['de', 'en'].map((key) => (
             <SelectItem key={key}>{key}</SelectItem>
