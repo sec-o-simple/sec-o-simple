@@ -7,11 +7,13 @@ import useDocumentStore, {
 import { getFilename } from './helpers'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
+import { TRelationship } from '@/routes/products/types/tRelationship'
 
 export type SOSDraft = {
   sosDocumentType: TSOSDocumentType
   documentInformation: TDocumentInformation
   products: TProductTreeBranch[]
+  relationships: TRelationship[]
   vulnerabilities: TVulnerability[]
 }
 
@@ -36,6 +38,9 @@ export function useSOSImport() {
     (state) => state.updateDocumentInformation,
   )
   const updateProducts = useDocumentStore((state) => state.updateProducts)
+  const updateRelationships = useDocumentStore(
+    (state) => state.updateRelationships,
+  )
   const updateVulnerabilities = useDocumentStore(
     (state) => state.updateVulnerabilities,
   )
@@ -64,6 +69,13 @@ export function useSOSImport() {
     }
 
     if (
+      !('relationships' in jsonObject) ||
+      typeof jsonObject.relationships !== 'object'
+    ) {
+      return
+    }
+
+    if (
       !('vulnerabilities' in jsonObject) ||
       typeof jsonObject.vulnerabilities !== 'object'
     ) {
@@ -74,6 +86,7 @@ export function useSOSImport() {
       sosDocumentType: jsonObject.sosDocumentType,
       documentInformation: jsonObject.documentInformation,
       products: jsonObject.products,
+      relationships: jsonObject.relationships,
       vulnerabilities: jsonObject.vulnerabilities,
     } as SOSDraft
   }
@@ -89,6 +102,7 @@ export function useSOSImport() {
       setSOSDocumentType(sosDraft.sosDocumentType)
       updateDocumentInformation(sosDraft.documentInformation)
       updateProducts(sosDraft.products)
+      updateRelationships(sosDraft.relationships)
       updateVulnerabilities(sosDraft.vulnerabilities)
       return true
     }
