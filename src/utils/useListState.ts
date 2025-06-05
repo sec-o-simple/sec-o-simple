@@ -9,6 +9,7 @@ export type UseListStateProps<T, IdType> = {
   idKey?: DynamicObjectValueKey<T, IdType>
   /** Generator function to create a new element */
   generator?: () => T
+  onRemove?: (entry: T) => void
 }
 
 export type ListState<T, IdType = string> = {
@@ -32,8 +33,10 @@ export function useListState<T extends object, IdType = string>(
     )
   }
 
-  const removeDataEntry = (entry: T) =>
+  const removeDataEntry = (entry: T) => {
     setData([...data.filter((e) => getId(e) !== getId(entry))])
+    options?.onRemove?.(entry)
+  }
 
   /** adds a new data entry to the state
    *  returns the id of the new data entry */

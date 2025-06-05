@@ -29,6 +29,7 @@ export default function Vulnerabilities() {
     localState: vulnerabilitiesListState.data,
     valueField: 'vulnerabilities',
     valueUpdater: 'updateVulnerabilities',
+    mergeUpdate: false,
     init: (initialData) => {
       vulnerabilitiesListState.setData(Object.values(initialData))
     },

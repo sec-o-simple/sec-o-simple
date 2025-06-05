@@ -26,6 +26,8 @@ export type useDocumentStoreUpdaterProps<T> = {
   init: (initialData: T) => void
   /** Will prevent a store update if false is returned */
   shouldUpdate?: (update: T) => boolean
+  /** Whether the update is merged or replaced with the previous value (defaults to true) */
+  mergeUpdate?: boolean
 }
 
 export function useDocumentValidation() {
@@ -65,6 +67,7 @@ export default function useDocumentStoreUpdater<T>({
   valueUpdater,
   init,
   shouldUpdate,
+  mergeUpdate = true,
 }: useDocumentStoreUpdaterProps<T>) {
   const config = useConfigStore((state) => state.config)
   const documentStoreValue = useDocumentStore((state) => state[valueField]) as T
@@ -84,10 +87,12 @@ export default function useDocumentStoreUpdater<T>({
   // TODO: enhance performance:
   // TODO: add debounce (and save on dismount in case component gets dismounted before save)
   useEffect(() => {
-    const update = {
-      ...documentStoreValue,
-      ...getStateObject(localState).getUpdate(),
-    }
+    const update = mergeUpdate
+      ? {
+          ...documentStoreValue,
+          ...getStateObject(localState).getUpdate(),
+        }
+      : (getStateObject(localState).getUpdate() as T)
 
     if (!shouldUpdate || shouldUpdate?.(update)) {
       updateDocumentStoreValue(update)
