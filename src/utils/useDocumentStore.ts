@@ -46,7 +46,6 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
   products: [],
   updateProducts: (update: TProductTreeBranch[]) => set({ products: update }),
 
-  // TODO: add this in sosDraftExport/Import after that was merged
   relationships: [],
   updateRelationships: (update: TRelationship[]) =>
     set({ relationships: update }),
