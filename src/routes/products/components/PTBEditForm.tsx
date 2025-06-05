@@ -12,7 +12,7 @@ import {
   ModalFooter,
   ModalHeader,
 } from '@heroui/modal'
-import { checkReadOnly } from '@/utils/template'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import Select from '@/components/forms/Select'
 import { SelectItem } from '@heroui/select'
 
@@ -46,12 +46,14 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
               value={name}
               onValueChange={setName}
               isDisabled={!ptb || checkReadOnly(ptb, 'name')}
+              placeholder={ptb ? getPlaceholder(ptb, 'name') : undefined}
             />
             <Textarea
               label="Description"
               value={description}
               onValueChange={setDescription}
               isDisabled={!ptb || checkReadOnly(ptb, 'description')}
+              placeholder={ptb ? getPlaceholder(ptb, 'description') : undefined}
             />
             {ptb?.category === 'product_name' && (
               <Select
@@ -61,6 +63,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
                   setType([...selected][0] as TProductTreeBranchProductType)
                 }}
                 isDisabled={!ptb || checkReadOnly(ptb, 'type')}
+                placeholder={ptb ? getPlaceholder(ptb, 'type') : undefined}
               >
                 {productTreeBranchProductTypes.map((type) => (
                   <SelectItem key={type}>{type}</SelectItem>

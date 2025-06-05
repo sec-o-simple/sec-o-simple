@@ -16,7 +16,7 @@ import usePageVisit from '@/utils/usePageVisit'
 
 export default function Publisher() {
   const [localState, setLocalState] = useState(getDefaultDocumentPublisher())
-  const { isFieldReadonly } = useTemplate()
+  const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
   const hasVisitedPage = usePageVisit()
 
   useDocumentStoreUpdater<TDocumentInformation>({
@@ -41,6 +41,7 @@ export default function Publisher() {
         value={localState.name}
         onValueChange={(v) => setLocalState({ ...localState, name: v })}
         isDisabled={isFieldReadonly('document-information.publisher.name')}
+        placeholder={getFieldPlaceholder('document-information.publisher.name')}
       />
       <HSplit className="items-start">
         <Select
@@ -57,6 +58,9 @@ export default function Publisher() {
           isDisabled={isFieldReadonly(
             'document-information.publisher.category',
           )}
+          placeholder={getFieldPlaceholder(
+            'document-information.publisher.category',
+          )}
         >
           {publisherCategories.map((key) => (
             <SelectItem key={key}>{key}</SelectItem>
@@ -66,10 +70,12 @@ export default function Publisher() {
           label="Namespace of Publisher"
           csafPath="/document/publisher/namespace"
           isTouched={hasVisitedPage}
-          placeholder="e.g., https://publisher.example.org/"
           value={localState.namespace}
           onValueChange={(v) => setLocalState({ ...localState, namespace: v })}
           isDisabled={isFieldReadonly(
+            'document-information.publisher.namespace',
+          )}
+          placeholder={getFieldPlaceholder(
             'document-information.publisher.namespace',
           )}
         />
@@ -85,6 +91,9 @@ export default function Publisher() {
         isDisabled={isFieldReadonly(
           'document-information.publisher.contactDetails',
         )}
+        placeholder={getFieldPlaceholder(
+          'document-information.publisher.contactDetails',
+        )}
       />
       <Textarea
         label="Issuing Authority"
@@ -95,6 +104,9 @@ export default function Publisher() {
           setLocalState({ ...localState, issuingAuthority: v })
         }
         isDisabled={isFieldReadonly(
+          'document-information.publisher.issuingAuthority',
+        )}
+        placeholder={getFieldPlaceholder(
           'document-information.publisher.issuingAuthority',
         )}
       />

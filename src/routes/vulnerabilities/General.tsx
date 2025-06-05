@@ -2,7 +2,7 @@ import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
 import { TCwe, TVulnerability } from './types/tVulnerability'
-import { checkReadOnly } from '@/utils/template'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { Autocomplete } from '@/components/forms/Autocomplete'
 import { useMemo } from 'react'
 import { weaknesses } from '@secvisogram/csaf-validator-lib/cwe.js'
@@ -34,6 +34,7 @@ export default function General({
           }
           autoFocus
           isDisabled={checkReadOnly(vulnerability, 'cve')}
+          placeholder={getPlaceholder(vulnerability, 'cve')}
         />
         <Autocomplete
           label="CWE"
@@ -47,6 +48,7 @@ export default function General({
             })
           }}
           isDisabled={checkReadOnly(vulnerability, 'cwe')}
+          placeholder={getPlaceholder(vulnerability, 'cwe')}
         >
           {cwes.map((cwe) => (
             <AutocompleteItem
@@ -67,6 +69,7 @@ export default function General({
           onChange({ ...vulnerability, title: newValue })
         }
         isDisabled={checkReadOnly(vulnerability, 'title')}
+        placeholder={getPlaceholder(vulnerability, 'title')}
       />
     </VSplit>
   )

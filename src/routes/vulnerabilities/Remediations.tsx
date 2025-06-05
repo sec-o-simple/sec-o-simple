@@ -3,7 +3,7 @@ import ComponentList from '@/components/forms/ComponentList'
 import { useListState } from '@/utils/useListState'
 import VSplit from '@/components/forms/VSplit'
 import { Input, Textarea } from '@/components/forms/Input'
-import { checkReadOnly } from '@/utils/template'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useEffect } from 'react'
 import ProductsTagList from './components/ProductsTagList'
 import { Chip } from '@heroui/chip'
@@ -93,6 +93,7 @@ function RemediationForm({
             })
           }}
           isDisabled={checkReadOnly(remediation, 'category')}
+          placeholder={getPlaceholder(remediation, 'category')}
         >
           {remediationCategories.map((remediation) => (
             <SelectItem key={remediation}>{remediation}</SelectItem>
@@ -116,6 +117,7 @@ function RemediationForm({
           onChange({ ...remediation, details: newValue })
         }
         isDisabled={checkReadOnly(remediation, 'details')}
+        placeholder={getPlaceholder(remediation, 'details')}
       />
       <Input
         label="URL"
@@ -126,6 +128,7 @@ function RemediationForm({
           onChange({ ...remediation, url: newValue })
         }
         isDisabled={checkReadOnly(remediation, 'url')}
+        placeholder={getPlaceholder(remediation, 'url')}
       />
       <ProductsTagList
         products={remediation.productIds}

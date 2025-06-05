@@ -9,7 +9,7 @@ import {
   TDocumentReference,
   getDefaultDocumentReference,
 } from './types/tDocumentReference'
-import { checkReadOnly } from '@/utils/template'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import usePageVisit from '@/utils/usePageVisit'
 
 export default function References() {
@@ -68,12 +68,14 @@ function ReferenceForm({
         }
         autoFocus={true}
         isDisabled={checkReadOnly(reference, 'summary')}
+        placeholder={getPlaceholder(reference, 'summary')}
       />
       <Input
         label="URL of the reference"
         value={reference.url}
         onValueChange={(newValue) => onChange({ ...reference, url: newValue })}
         isDisabled={checkReadOnly(reference, 'url')}
+        placeholder={getPlaceholder(reference, 'url')}
       />
     </VSplit>
   )

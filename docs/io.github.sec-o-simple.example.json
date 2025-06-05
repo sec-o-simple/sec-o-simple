@@ -2,7 +2,7 @@
   "template": {
     "document-information.title": "Test Document",
     "document-information.title.readonly": true,
-    "document-information.id": "testid",
+    "document-information.id.placeholder": "Put your ID here",
     "document-information.language": "en",
 
     "document-information.notes": [
@@ -17,8 +17,7 @@
         "id": "description",
         "category": "description",
         "title": "Document Description",
-        "content": "Enter your description here",
-        "content.readonly": false
+        "content.placeholder": "Enter your description here"
       }
     ],
 
