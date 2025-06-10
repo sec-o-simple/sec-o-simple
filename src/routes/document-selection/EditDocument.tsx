@@ -1,4 +1,4 @@
-import { useSOSImport } from '@/utils/csafExport/sosDraft'
+import { useSOSImport } from '@/utils/sosDraft'
 import { faArrowRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
