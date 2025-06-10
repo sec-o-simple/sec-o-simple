@@ -20,6 +20,7 @@ import { Input } from '@/components/forms/Input'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 
 export type RelationshipEditFormProps = {
   relationship?: TRelationship
@@ -56,6 +57,14 @@ export default function RelationshipEditForm({
                     productId1: ptb.id,
                   })
                 }
+                isDisabled={
+                  relationship && checkReadOnly(relationship, 'productId1')
+                }
+                placeholder={
+                  relationship
+                    ? getPlaceholder(relationship, 'productId1')
+                    : undefined
+                }
               />
 
               <PTBSelect
@@ -73,7 +82,16 @@ export default function RelationshipEditForm({
                     product1VersionIds: ptbs.map((x) => x.id),
                   })
                 }
-                isDisabled={!updatedRelationship.productId1}
+                isDisabled={
+                  !updatedRelationship.productId1 ||
+                  (relationship &&
+                    checkReadOnly(relationship, 'product1VersionIds'))
+                }
+                placeholder={
+                  relationship
+                    ? getPlaceholder(relationship, 'product1VersionIds')
+                    : undefined
+                }
               />
             </div>
 
@@ -88,6 +106,14 @@ export default function RelationshipEditForm({
                     ...updatedRelationship,
                     productId2: ptb.id,
                   })
+                }
+                isDisabled={
+                  relationship && checkReadOnly(relationship, 'productId2')
+                }
+                placeholder={
+                  relationship
+                    ? getPlaceholder(relationship, 'productId2')
+                    : undefined
                 }
               />
 
@@ -106,13 +132,21 @@ export default function RelationshipEditForm({
                     product2VersionIds: ptbs.map((x) => x.id),
                   })
                 }
-                isDisabled={!updatedRelationship.productId2}
+                isDisabled={
+                  !updatedRelationship.productId2 ||
+                  (relationship &&
+                    checkReadOnly(relationship, 'product2VersionIds'))
+                }
+                placeholder={
+                  relationship
+                    ? getPlaceholder(relationship, 'product2VersionIds')
+                    : undefined
+                }
               />
             </div>
 
             <Select
               label="Relationship Type"
-              placeholder="Select a type"
               selectedKeys={[updatedRelationship.category]}
               onSelectionChange={(selected) => {
                 const category = [...selected][0] as string
@@ -121,6 +155,14 @@ export default function RelationshipEditForm({
                   category: category as TRelationshipCategory,
                 })
               }}
+              isDisabled={
+                relationship && checkReadOnly(relationship, 'category')
+              }
+              placeholder={
+                relationship
+                  ? getPlaceholder(relationship, 'category')
+                  : 'Select a type'
+              }
             >
               {relationshipCategories.map((category) => (
                 <SelectItem key={category}>{category}</SelectItem>
@@ -129,12 +171,17 @@ export default function RelationshipEditForm({
 
             <Input
               label="Description"
-              placeholder="Enter the description..."
               className="w-full"
               type="text"
               value={updatedRelationship.name}
               onValueChange={(name) =>
                 setUpdateRelationship({ ...updatedRelationship, name })
+              }
+              isDisabled={relationship && checkReadOnly(relationship, 'name')}
+              placeholder={
+                relationship
+                  ? getPlaceholder(relationship, 'name')
+                  : 'Enter the description...'
               }
             />
 

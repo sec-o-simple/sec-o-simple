@@ -7,7 +7,7 @@ import {
 } from './types/tVulnerabilityScore'
 import VSplit from '@/components/forms/VSplit'
 import { Input } from '@/components/forms/Input'
-import { checkReadOnly } from '@/utils/template'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useEffect } from 'react'
 import ProductsTagList from './components/ProductsTagList'
 
@@ -73,6 +73,7 @@ function ScoreForm({
         }
         autoFocus={true}
         isDisabled={checkReadOnly(score, 'vectorString')}
+        placeholder={getPlaceholder(score, 'vectorString')}
       />
       <ProductsTagList
         products={score.productIds}
