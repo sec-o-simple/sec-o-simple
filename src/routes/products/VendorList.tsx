@@ -14,11 +14,12 @@ import { Modal, useDisclosure } from '@heroui/modal'
 import { faAdd, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 export default function VendorList() {
-  const { rootBranch, addPTB, updatePTB, getPTBsByCategory } =
+  const { rootBranch, addPTB, updatePTB, deletePTB, getPTBsByCategory } =
     useProductTreeBranch()
 
   const vendorListState = useListState<TProductTreeBranch>({
     generator: () => getDefaultProductTreeBranch('vendor'),
+    onRemove: (entry) => deletePTB(entry.id),
   })
 
   const vendorPTBs = useMemo(
@@ -34,6 +35,7 @@ export default function VendorList() {
     localState: vendorListState.data,
     valueField: 'products',
     valueUpdater: 'updateProducts',
+    mergeUpdate: false,
     init: (initialData) => {
       vendorListState.setData(
         getPTBsByCategory('vendor', Object.values(initialData)),
