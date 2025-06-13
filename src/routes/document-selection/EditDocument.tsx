@@ -1,15 +1,44 @@
+import { useCSAFImport } from '@/utils/csafImport/csafImport'
 import { useSOSImport } from '@/utils/sosDraft'
 import { faArrowRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
 import { motion } from 'motion/react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
 
 export default function EditDocument() {
   const navigate = useNavigate()
   const { isSOSDraft, importSOSDocument } = useSOSImport()
+  const { isCSAFDocument, isCSAFVersionSupported, importCSAFDocument } =
+    useCSAFImport()
   const [jsonObject, setJsonObject] = useState<object | undefined>()
+  const [errorMessage, setErrorMessage] = useState<string | undefined>()
+
+  useEffect(() => {
+    if (jsonObject) {
+      if (!isSOSDraft(jsonObject) && !isCSAFDocument(jsonObject)) {
+        setErrorMessage('Not a valid Sec-O-Simple or CSAF file')
+        return
+      }
+      if (isCSAFDocument(jsonObject) && !isCSAFVersionSupported(jsonObject)) {
+        setErrorMessage('Unsupported CSAF version')
+        return
+      }
+    }
+    setErrorMessage(undefined)
+  }, [jsonObject, isSOSDraft, isCSAFDocument, isCSAFVersionSupported])
+
+  const importDocument = () => {
+    if (jsonObject && !errorMessage) {
+      if (isCSAFDocument(jsonObject)) {
+        importCSAFDocument(jsonObject)
+      } else {
+        importSOSDocument(jsonObject)
+      }
+      navigate('/document-information/')
+    }
+  }
 
   return (
     <motion.div
@@ -48,18 +77,16 @@ export default function EditDocument() {
           }}
           className="w-full rounded-md border p-2 text-sm outline-none focus:border-black"
         />
+        {errorMessage && (
+          <div className="px-3 text-sm text-danger">{errorMessage}</div>
+        )}
       </div>
       <div className="self-end">
         <Button
           color="primary"
           endContent={<FontAwesomeIcon icon={faArrowRight} />}
-          onPress={() => {
-            if (jsonObject) {
-              importSOSDocument(jsonObject)
-              navigate('/document-information/')
-            }
-          }}
-          isDisabled={!(jsonObject && isSOSDraft(jsonObject))}
+          onPress={importDocument}
+          isDisabled={!jsonObject || !!errorMessage}
         >
           Edit Document
         </Button>

@@ -98,15 +98,19 @@ export function useSOSImport() {
   const importSOSDocument = (jsonObject: object): boolean => {
     const sosDraft = getSOSDraft(jsonObject)
     if (sosDraft) {
-      setSOSDocumentType(sosDraft.sosDocumentType)
-      updateDocumentInformation(sosDraft.documentInformation)
-      updateProducts(sosDraft.products)
-      updateRelationships(sosDraft.relationships)
-      updateVulnerabilities(sosDraft.vulnerabilities)
+      importSOSDraft(sosDraft)
       return true
     }
     return false
   }
 
-  return { isSOSDraft, importSOSDocument }
+  const importSOSDraft = (sosDraft: SOSDraft) => {
+    setSOSDocumentType(sosDraft.sosDocumentType)
+    updateDocumentInformation(sosDraft.documentInformation)
+    updateProducts(sosDraft.products)
+    updateRelationships(sosDraft.relationships)
+    updateVulnerabilities(sosDraft.vulnerabilities)
+  }
+
+  return { isSOSDraft, importSOSDocument, importSOSDraft }
 }
