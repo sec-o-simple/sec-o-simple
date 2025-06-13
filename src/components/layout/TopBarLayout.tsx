@@ -1,5 +1,5 @@
 import { useCSAFExport } from '@/utils/csafExport/csafExport'
-import { useSOSExport } from '@/utils/csafExport/sosDraft'
+import { useSOSExport } from '@/utils/sosDraft'
 import useValidationStore from '@/utils/useValidationStore'
 import {
   faAdd,

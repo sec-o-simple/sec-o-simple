@@ -6,6 +6,8 @@ import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
 import { PidGenerator } from './pidGenerator'
 
+export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
+
 export function createCSAFDocument(documentStore: TDocumentStore) {
   const pidGenerator = new PidGenerator()
   const currentDate = new Date().toISOString()
