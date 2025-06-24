@@ -11,12 +11,26 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
-import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, useDisclosure } from '@heroui/react'
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  Tooltip,
+  useDisclosure,
+} from '@heroui/react'
 import { Outlet, useNavigate } from 'react-router'
 
 function ValidationErrorList() {
   const { messages } = useValidationStore()
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
@@ -24,7 +38,9 @@ function ValidationErrorList() {
         <ModalContent>
           {(onClose) => (
             <>
-              <ModalHeader className="flex flex-col gap-1">Validation Errors</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1">
+                Validation Errors
+              </ModalHeader>
               <ModalBody>
                 <Table aria-label="Example static collection table">
                   <TableHeader>
@@ -35,7 +51,9 @@ function ValidationErrorList() {
                     {messages.map((message, index) => (
                       <TableRow key={index}>
                         <TableCell>{message.path}</TableCell>
-                        <TableCell><pre>{message.message}</pre></TableCell>
+                        <TableCell>
+                          <pre>{message.message}</pre>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -56,10 +74,11 @@ function ValidationErrorList() {
         onPress={onOpen}
         isDisabled={messages.length === 0}
       >
-        <FontAwesomeIcon icon={faCircleExclamation} /> {messages.length} Error{messages.length !== 1 ? 's' : ''}
+        <FontAwesomeIcon icon={faCircleExclamation} /> {messages.length} Error
+        {messages.length !== 1 ? 's' : ''}
       </Button>
     </>
-  );
+  )
 }
 
 export default function TopBarLayout() {

@@ -90,11 +90,7 @@ function ScoreForm({
       <Input
         label="Base Severity"
         isTouched={isTouched}
-        value={
-          baseScore
-            ? calculateQualScore(baseScore)
-            : ''
-        }
+        value={baseScore ? calculateQualScore(baseScore) : ''}
         description="Base severity is calculated from vector string"
         isReadOnly={true}
       />
