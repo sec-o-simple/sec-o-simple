@@ -40,8 +40,9 @@ export default function References() {
         listState={referencesListState}
         title="summary"
         itemLabel="Reference"
-        content={(reference) => (
+        content={(reference, index) => (
           <ReferenceForm
+            referenceIndex={index}
             reference={reference}
             onChange={referencesListState.updateDataEntry}
           />
@@ -53,15 +54,18 @@ export default function References() {
 
 function ReferenceForm({
   reference,
+  referenceIndex,
   onChange,
 }: {
   reference: TDocumentReference
+  referenceIndex: number
   onChange: (reference: TDocumentReference) => void
 }) {
   return (
     <VSplit>
       <Textarea
         label="Summary of the reference"
+        csafPath={`/document/references/${referenceIndex}/summary`}
         value={reference.summary}
         onValueChange={(newValue) =>
           onChange({ ...reference, summary: newValue })
@@ -72,6 +76,7 @@ function ReferenceForm({
       />
       <Input
         label="URL of the reference"
+        csafPath={`/document/references/${referenceIndex}/url`}
         value={reference.url}
         onValueChange={(newValue) => onChange({ ...reference, url: newValue })}
         isDisabled={checkReadOnly(reference, 'url')}

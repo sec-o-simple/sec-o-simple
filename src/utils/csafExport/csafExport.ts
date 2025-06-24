@@ -5,6 +5,7 @@ import { getFilename } from './helpers'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
 import { PidGenerator } from './pidGenerator'
+import { calculateBaseScore, calculateQualScore } from 'cvss4';
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
@@ -72,9 +73,9 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         title: vulnerability.title,
         cwe: vulnerability.cwe
           ? {
-              id: vulnerability.cwe.id,
-              name: vulnerability.cwe.name,
-            }
+            id: vulnerability.cwe.id,
+            name: vulnerability.cwe.name,
+          }
           : undefined,
         notes: vulnerability.notes.map(parseNote),
         product_status: {
@@ -94,16 +95,25 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
             pidGenerator.getPid(id),
           ),
         })),
-        scores: vulnerability.scores.map((score) => ({
-          ['cvss_v3']: {
-            version: '3.1',
-            vectorString: score.vectorString,
-          },
-          products: score.productIds.map((id) => pidGenerator.getPid(id)),
-        })),
+        scores: vulnerability.scores.map((score) => {
+          const baseScore = calculateBaseScore(score.vectorString)
+          
+          return {
+            ['cvss_v3']: {
+              version: '3.1',
+              vectorString: score.vectorString,
+              baseScore: baseScore,
+              baseSeverity: calculateQualScore(baseScore).toUpperCase(),
+            },
+            products: score.productIds.map((id) => pidGenerator.getPid(id)),
+          }
+
+        }),
       }),
     ),
   }
+
+  console.log(csafDocument)
 
   return csafDocument
 }

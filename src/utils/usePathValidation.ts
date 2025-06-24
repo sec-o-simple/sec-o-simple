@@ -14,6 +14,9 @@ const validationSections: Record<string, HasErrorFunction> = {
   '/document-information/publisher': (errorPaths) => {
     return errorPaths.some((path) => path.startsWith('/document/publisher'))
   },
+  '/document-information/references': (errorPaths) => {
+    return errorPaths.some((path) => path.startsWith('/document/references'))
+  },
   '/products': (errorPaths) => {
     return errorPaths.some((path) => path.startsWith('/products'))
   },

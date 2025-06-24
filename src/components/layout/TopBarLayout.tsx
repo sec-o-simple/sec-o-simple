@@ -7,11 +7,60 @@ import {
   faFileExport,
   faSave,
   faShieldHalved,
+  faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
-import { Tooltip } from '@heroui/react'
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, Table, TableBody, TableCell, TableColumn, TableHeader, TableRow, Tooltip, useDisclosure } from '@heroui/react'
 import { Outlet, useNavigate } from 'react-router'
+
+function ValidationErrorList() {
+  const { messages } = useValidationStore()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
+    <>
+      <Modal isOpen={isOpen} size={'full'} onClose={onClose}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">Validation Errors</ModalHeader>
+              <ModalBody>
+                <Table aria-label="Example static collection table">
+                  <TableHeader>
+                    <TableColumn>PATH</TableColumn>
+                    <TableColumn>MESSAGE</TableColumn>
+                  </TableHeader>
+                  <TableBody>
+                    {messages.map((message, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{message.path}</TableCell>
+                        <TableCell><pre>{message.message}</pre></TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+      <Button
+        color="danger"
+        variant="light"
+        onPress={onOpen}
+        isDisabled={messages.length === 0}
+      >
+        <FontAwesomeIcon icon={faCircleExclamation} /> {messages.length} Error{messages.length !== 1 ? 's' : ''}
+      </Button>
+    </>
+  );
+}
 
 export default function TopBarLayout() {
   const navigate = useNavigate()
@@ -44,7 +93,7 @@ export default function TopBarLayout() {
           </Button>
           <Button color="secondary" onPress={exportSOSDocument}>
             <FontAwesomeIcon icon={faSave} />
-            Save Draft
+            Export Draft
           </Button>
           <Tooltip
             content="There are some errors in the document. Please fix them before exporting."
@@ -57,10 +106,11 @@ export default function TopBarLayout() {
                 isDisabled={!isValid || isValidating}
               >
                 <FontAwesomeIcon icon={faFileExport} />
-                Export
+                Export CSAF
               </Button>
             </div>
           </Tooltip>
+          <ValidationErrorList />
         </div>
       </div>
       <Outlet />
