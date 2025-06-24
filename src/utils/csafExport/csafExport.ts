@@ -113,8 +113,6 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
     ),
   }
 
-  console.log(csafDocument)
-
   return csafDocument
 }
 
