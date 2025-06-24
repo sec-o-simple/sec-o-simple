@@ -26,7 +26,6 @@ type ValidationStore = {
   visitPage: (path: string) => void
   hasVisitedPage: (path: string) => boolean
 
-  errors: ValidationMessage[]
   warnings: ValidationMessage[]
   infos: ValidationMessage[]
 }

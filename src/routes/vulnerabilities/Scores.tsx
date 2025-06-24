@@ -10,6 +10,7 @@ import { Input } from '@/components/forms/Input'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useEffect } from 'react'
 import ProductsTagList from './components/ProductsTagList'
+import { calculateBaseScore, calculateQualScore } from 'cvss4'
 
 export default function Scores({
   vulnerability,
@@ -61,6 +62,19 @@ function ScoreForm({
   onChange: (note: TVulnerabilityScore) => void
   isTouched?: boolean
 }) {
+  let baseScore = ''
+  let baseSeverity = ''
+
+  try {
+    let scoreFloat = calculateBaseScore(score.vectorString)
+
+    baseScore = `${scoreFloat}`
+    baseSeverity = calculateQualScore(scoreFloat)
+  } catch {
+    // If the score is invalid, we leave baseScore and baseSeverity as defaults
+    // as there will be errors already in the vectorString
+  }
+
   return (
     <VSplit>
       <Input
@@ -74,6 +88,22 @@ function ScoreForm({
         autoFocus={true}
         isDisabled={checkReadOnly(score, 'vectorString')}
         placeholder={getPlaceholder(score, 'vectorString')}
+      />
+      {/* baseScore */}
+      <Input
+        label="Base Score"
+        isTouched={isTouched}
+        value={baseScore}
+        description="Base score is calculated from vector string"
+        isReadOnly={true} // Base score is calculated from vector string
+      />
+      {/* severity */}
+      <Input
+        label="Base Severity"
+        isTouched={isTouched}
+        value={baseSeverity}
+        description="Base severity is calculated from vector string"
+        isReadOnly={true}
       />
       <ProductsTagList
         products={score.productIds}

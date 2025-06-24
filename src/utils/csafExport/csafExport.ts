@@ -5,6 +5,7 @@ import { getFilename } from './helpers'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
 import { PidGenerator } from './pidGenerator'
+import { calculateBaseScore, calculateQualScore } from 'cvss4'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
@@ -94,13 +95,28 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
             pidGenerator.getPid(id),
           ),
         })),
-        scores: vulnerability.scores.map((score) => ({
-          ['cvss_v3']: {
-            version: '3.1',
-            vectorString: score.vectorString,
-          },
-          products: score.productIds.map((id) => pidGenerator.getPid(id)),
-        })),
+        scores: vulnerability.scores.map((score) => {
+          let baseScore = 0
+          let baseSeverity = ''
+
+          try {
+            baseScore = calculateBaseScore(score.vectorString)
+            baseSeverity = calculateQualScore(baseScore).toUpperCase()
+          } catch {
+            // If the score is invalid, we leave baseScore and baseSeverity as defaults
+            // as there will be errors already in the vectorString
+          }
+
+          return {
+            ['cvss_v3']: {
+              version: '3.1',
+              vectorString: score.vectorString,
+              baseScore,
+              baseSeverity,
+            },
+            products: score.productIds.map((id) => pidGenerator.getPid(id)),
+          }
+        }),
       }),
     ),
   }
