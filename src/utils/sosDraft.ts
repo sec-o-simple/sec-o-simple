@@ -1,10 +1,10 @@
 import { TDocumentInformation } from '@/routes/document-information/types/tDocumentInformation'
-import { download } from '../download'
+import { download } from './download'
 import useDocumentStore, {
   TSOSDocumentType,
   sosDocumentTypes,
-} from '../useDocumentStore'
-import { getFilename } from './helpers'
+} from './useDocumentStore'
+import { getFilename } from './csafExport/helpers'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { TRelationship } from '@/routes/products/types/tRelationship'
@@ -98,16 +98,19 @@ export function useSOSImport() {
   const importSOSDocument = (jsonObject: object): boolean => {
     const sosDraft = getSOSDraft(jsonObject)
     if (sosDraft) {
-      console.log(sosDraft)
-      setSOSDocumentType(sosDraft.sosDocumentType)
-      updateDocumentInformation(sosDraft.documentInformation)
-      updateProducts(sosDraft.products)
-      updateRelationships(sosDraft.relationships)
-      updateVulnerabilities(sosDraft.vulnerabilities)
+      importSOSDraft(sosDraft)
       return true
     }
     return false
   }
 
-  return { isSOSDraft, importSOSDocument }
+  const importSOSDraft = (sosDraft: SOSDraft) => {
+    setSOSDocumentType(sosDraft.sosDocumentType)
+    updateDocumentInformation(sosDraft.documentInformation)
+    updateProducts(sosDraft.products)
+    updateRelationships(sosDraft.relationships)
+    updateVulnerabilities(sosDraft.vulnerabilities)
+  }
+
+  return { isSOSDraft, importSOSDocument, importSOSDraft }
 }
