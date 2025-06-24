@@ -62,7 +62,18 @@ function ScoreForm({
   onChange: (note: TVulnerabilityScore) => void
   isTouched?: boolean
 }) {
-  const baseScore = calculateBaseScore(score.vectorString)
+  let baseScore = ''
+  let baseSeverity = ''
+
+  try {
+    let scoreFloat = calculateBaseScore(score.vectorString)
+
+    baseScore = `${scoreFloat}`
+    baseSeverity = calculateQualScore(scoreFloat)
+  } catch {
+    // If the score is invalid, we leave baseScore and baseSeverity as defaults
+    // as there will be errors already in the vectorString
+  }
 
   return (
     <VSplit>
@@ -82,7 +93,7 @@ function ScoreForm({
       <Input
         label="Base Score"
         isTouched={isTouched}
-        value={`${baseScore || ''}`}
+        value={baseScore}
         description="Base score is calculated from vector string"
         isReadOnly={true} // Base score is calculated from vector string
       />
@@ -90,7 +101,7 @@ function ScoreForm({
       <Input
         label="Base Severity"
         isTouched={isTouched}
-        value={baseScore ? calculateQualScore(baseScore) : ''}
+        value={baseSeverity}
         description="Base severity is calculated from vector string"
         isReadOnly={true}
       />

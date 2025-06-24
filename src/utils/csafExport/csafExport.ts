@@ -96,14 +96,23 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           ),
         })),
         scores: vulnerability.scores.map((score) => {
-          const baseScore = calculateBaseScore(score.vectorString)
+          let baseScore = 0
+          let baseSeverity = ''
+
+          try {
+            baseScore = calculateBaseScore(score.vectorString)
+            baseSeverity = calculateQualScore(baseScore).toUpperCase()
+          } catch {
+            // If the score is invalid, we leave baseScore and baseSeverity as defaults
+            // as there will be errors already in the vectorString
+          }
 
           return {
             ['cvss_v3']: {
               version: '3.1',
               vectorString: score.vectorString,
-              baseScore: baseScore,
-              baseSeverity: calculateQualScore(baseScore).toUpperCase(),
+              baseScore,
+              baseSeverity,
             },
             products: score.productIds.map((id) => pidGenerator.getPid(id)),
           }
