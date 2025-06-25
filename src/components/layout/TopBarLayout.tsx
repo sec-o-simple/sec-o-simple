@@ -34,7 +34,12 @@ function ValidationErrorList() {
 
   return (
     <>
-      <Modal isOpen={isOpen} size={'full'} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        scrollBehavior="inside"
+        size="full"
+      >
         <ModalContent>
           {(onClose) => (
             <>
