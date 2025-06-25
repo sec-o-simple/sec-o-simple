@@ -2,6 +2,7 @@ import { usePathValidation } from '@/utils/usePathValidation'
 import React from 'react'
 import { PropsWithChildren, useMemo } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router'
+import pkg from '../../../package.json'
 
 export default function NavigationLayout() {
   return (
@@ -29,7 +30,7 @@ export default function NavigationLayout() {
         </div>
 
         <p className="text-center text-sm text-neutral-400">
-          Version <span className="font-semibold">1.0.0</span>
+          Version <span className="font-semibold">{pkg.version}</span>
         </p>
       </div>
 
