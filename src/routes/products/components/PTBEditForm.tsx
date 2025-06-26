@@ -43,6 +43,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
           <ModalBody>
             <Input
               label="Name"
+              autoFocus
               value={name}
               onValueChange={setName}
               isDisabled={!ptb || checkReadOnly(ptb, 'name')}
