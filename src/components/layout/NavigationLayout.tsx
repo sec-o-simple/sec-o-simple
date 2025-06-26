@@ -7,7 +7,7 @@ import pkg from '../../../package.json'
 export default function NavigationLayout() {
   return (
     <div className="flex grow">
-      <div className="flex flex-col justify-between p-4 border-r">
+      <div className="flex flex-col justify-between border-r p-4">
         <div className="flex basis-80 flex-col gap-2">
           <Section
             number={1}
