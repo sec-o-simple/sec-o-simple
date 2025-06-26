@@ -23,52 +23,58 @@ export function parseVulnerabilities(
   idGenerator: IdGenerator,
   ptbs: TProductTreeBranch[],
 ): TVulnerability[] {
-  return csafDocument.vulnerabilities.map((vulnerability) => {
-    const defaultVulnerability = getDefaultVulnerability()
-    return {
-      id: defaultVulnerability.id,
-      cve: vulnerability.cve ?? defaultVulnerability.cve,
-      cwe: vulnerability.cwe as TCwe | undefined,
-      title: vulnerability.title ?? defaultVulnerability.title,
-      notes: vulnerability.notes.map((note) => parseNote(note as TParsedNote)),
-      products: parseVulnerabilityProducts(
-        vulnerability.product_status,
-        idGenerator,
-        ptbs,
-      ),
-      remediations: vulnerability.remediations.map((remediation) => {
-        const defaultRemediation = getDefaultRemediation()
-        return {
-          id: defaultRemediation.id,
-          category: remediation.category ?? defaultRemediation.category,
-          date: remediation.date ?? defaultRemediation.date,
-          details: remediation.details ?? defaultRemediation.details,
-          url: remediation.url ?? defaultRemediation.url,
-          productIds: remediation.product_ids.map((id) =>
-            idGenerator.getId(id),
-          ),
-        } as TRemediation
-      }),
-      scores: vulnerability.scores.map((score) => {
-        const defaultScore = getDefaultVulnerabilityScore()
+  return (
+    csafDocument.vulnerabilities?.map((vulnerability) => {
+      const defaultVulnerability = getDefaultVulnerability()
+      return {
+        id: defaultVulnerability.id,
+        cve: vulnerability.cve ?? defaultVulnerability.cve,
+        cwe: vulnerability.cwe as TCwe | undefined,
+        title: vulnerability.title ?? defaultVulnerability.title,
+        notes: vulnerability.notes.map((note) =>
+          parseNote(note as TParsedNote),
+        ),
+        products: parseVulnerabilityProducts(
+          vulnerability.product_status,
+          idGenerator,
+          ptbs,
+        ),
+        remediations: vulnerability.remediations?.map((remediation) => {
+          const defaultRemediation = getDefaultRemediation()
+          return {
+            id: defaultRemediation.id,
+            category: remediation.category ?? defaultRemediation.category,
+            date: remediation.date ?? defaultRemediation.date,
+            details: remediation.details ?? defaultRemediation.details,
+            url: remediation.url ?? defaultRemediation.url,
+            productIds: remediation.product_ids.map((id) =>
+              idGenerator.getId(id),
+            ),
+          } as TRemediation
+        }),
+        scores: vulnerability.scores.map((score) => {
+          const defaultScore = getDefaultVulnerabilityScore()
 
-        const cvssVersion =
-          Object.keys(score).find((x) => x.startsWith('cvss_')) ?? 'cvss_v3'
+          const cvssVersion =
+            Object.keys(score).find((x) => x.startsWith('cvss_')) ?? 'cvss_v3'
 
-        const cvssInfos = (score as { [key: string]: unknown })[cvssVersion] as
-          | undefined
-          | {
-              version: string
-              vectorString: string
-            }
+          const cvssInfos = (score as { [key: string]: unknown })[
+            cvssVersion
+          ] as
+            | undefined
+            | {
+                version: string
+                vectorString: string
+              }
 
-        return {
-          id: defaultScore.id,
-          productIds: score.products.map((id) => idGenerator.getId(id)),
-          cvssVersion: cvssInfos?.version ?? defaultScore.cvssVersion,
-          vectorString: cvssInfos?.vectorString ?? defaultScore.vectorString,
-        } as TVulnerabilityScore
-      }),
-    } as TVulnerability
-  })
+          return {
+            id: defaultScore.id,
+            productIds: score.products.map((id) => idGenerator.getId(id)),
+            cvssVersion: cvssInfos?.version ?? defaultScore.cvssVersion,
+            vectorString: cvssInfos?.vectorString ?? defaultScore.vectorString,
+          } as TVulnerabilityScore
+        }),
+      } as TVulnerability
+    }) || []
+  )
 }

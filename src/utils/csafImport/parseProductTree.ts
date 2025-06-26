@@ -11,20 +11,22 @@ function convertCSAFProductTreeBranches(
   csafPTBs: TParsedProductTreeBranch[],
   idGenerator: IdGenerator,
 ): TProductTreeBranch[] {
-  return csafPTBs.map((csafPTB) => {
-    const defaultPTB = getDefaultProductTreeBranch(csafPTB.category)
-    return {
-      id: idGenerator.getId(csafPTB.product?.product_id),
-      category: csafPTB.category,
-      name: csafPTB.name || defaultPTB.name,
-      description: csafPTB.product?.name ?? defaultPTB.description,
-      subBranches: convertCSAFProductTreeBranches(
-        csafPTB.branches ?? [],
-        idGenerator,
-      ),
-      type: defaultPTB.type,
-    } as TProductTreeBranch
-  })
+  return (
+    csafPTBs?.map((csafPTB) => {
+      const defaultPTB = getDefaultProductTreeBranch(csafPTB.category)
+      return {
+        id: idGenerator.getId(csafPTB.product?.product_id),
+        category: csafPTB.category,
+        name: csafPTB.name || defaultPTB.name,
+        description: csafPTB.product?.name ?? defaultPTB.description,
+        subBranches: convertCSAFProductTreeBranches(
+          csafPTB.branches ?? [],
+          idGenerator,
+        ),
+        type: defaultPTB.type,
+      } as TProductTreeBranch
+    }) || []
+  )
 }
 
 export function parseProductTree(

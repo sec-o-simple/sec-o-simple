@@ -37,7 +37,7 @@ export function parseRelationships(
       productId2: parent2,
       category: csafRelationship.category,
     }
-    relationship.name += csafRelationship.full_product_name.name
+    relationship.name += csafRelationship.full_product_name?.name
     if (!relationship.product1VersionIds.includes(id1)) {
       relationship.product1VersionIds.push(id1)
     }

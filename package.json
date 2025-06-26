@@ -8,7 +8,7 @@
     "preview": "vite preview",
     "test": "npm run lint && cypress run",
     "lint": "eslint .",
-    "format": "eslint --fix ."
+    "lint:fix": "eslint --fix ."
   },
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^6.7.2",
