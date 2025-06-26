@@ -14,7 +14,7 @@ import { Modal, useDisclosure } from '@heroui/modal'
 import { faAdd, faEdit } from '@fortawesome/free-solid-svg-icons'
 
 export default function VendorList() {
-  const { rootBranch, addPTB, updatePTB, deletePTB, getPTBsByCategory } =
+  const { rootBranch, updatePTB, deletePTB, getPTBsByCategory } =
     useProductTreeBranch()
 
   const vendorListState = useListState<TProductTreeBranch>({
@@ -35,23 +35,14 @@ export default function VendorList() {
     localState: vendorListState.data,
     valueField: 'products',
     valueUpdater: 'updateProducts',
-    mergeUpdate: false,
+    mergeUpdate: true,
     init: (initialData) => {
       vendorListState.setData(
         getPTBsByCategory('vendor', Object.values(initialData)),
       )
     },
     // update PTBs manually to not overwrite root level items that are no vendors
-    shouldUpdate: (update) => {
-      Object.values(update).forEach((ptb) => {
-        if (rootBranch.some((x) => x.id === ptb.id)) {
-          updatePTB(ptb)
-        } else {
-          addPTB(ptb)
-        }
-      })
-      return false
-    },
+    shouldUpdate: () => true,
   })
 
   // modal variables
