@@ -21,19 +21,25 @@ export type PTBEditFormProps = {
   onSave?: (updatedPtb: TProductTreeBranch) => void
 }
 
+export function getCategoryLabel(category: string): string {
+  switch (category) {
+    case 'vendor':
+      return 'Vendor'
+    case 'product_name':
+      return 'Product'
+    case 'product_version':
+      return 'Product Version'
+    default:
+      return ''
+  }
+}
+
 export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
   const [name, setName] = useState(ptb?.name ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
   const [type, setType] = useState(ptb?.type ?? 'Software')
 
-  const categoryLabel =
-    ptb?.category === 'vendor'
-      ? 'Vendor'
-      : ptb?.category === 'product_name'
-        ? 'Product'
-        : ptb?.category === 'product_version'
-          ? 'Product Version'
-          : ''
+  const categoryLabel = getCategoryLabel(ptb?.category ?? '')
 
   return (
     <ModalContent>
