@@ -51,6 +51,7 @@
             "category": "product_name",
             "name": "Product A",
             "description": "",
+            "type": "Software",
             "subBranches": [
               {
                 "id": "version1",
