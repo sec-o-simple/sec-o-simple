@@ -15,6 +15,7 @@ import {
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import Select from '@/components/forms/Select'
 import { SelectItem } from '@heroui/select'
+import useDocumentStore from '@/utils/useDocumentStore'
 
 export type PTBEditFormProps = {
   ptb?: TProductTreeBranch
@@ -38,6 +39,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
   const [name, setName] = useState(ptb?.name ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
   const [type, setType] = useState(ptb?.type ?? 'Software')
+  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
   const categoryLabel = getCategoryLabel(ptb?.category ?? '')
 
@@ -66,15 +68,20 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
               <Select
                 label="Type"
                 selectedKeys={[type ?? 'Software']}
-                onSelectionChange={(selected) => {
-                  setType([...selected][0] as TProductTreeBranchProductType)
+                onChange={(e) => {
+                  if (!e.target.value) {
+                    return
+                  }
+                  setType(e.target.value as TProductTreeBranchProductType)
                 }}
                 isDisabled={!ptb || checkReadOnly(ptb, 'type')}
                 placeholder={ptb ? getPlaceholder(ptb, 'type') : undefined}
               >
-                {productTreeBranchProductTypes.map((type) => (
-                  <SelectItem key={type}>{type}</SelectItem>
-                ))}
+                {productTreeBranchProductTypes
+                  .filter((type) => sosDocumentType.includes(type))
+                  .map((type) => (
+                    <SelectItem key={type}>{type}</SelectItem>
+                  ))}
               </Select>
             )}
           </ModalBody>
