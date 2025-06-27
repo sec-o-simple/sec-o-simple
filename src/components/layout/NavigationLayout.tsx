@@ -2,27 +2,38 @@ import { usePathValidation } from '@/utils/usePathValidation'
 import React from 'react'
 import { PropsWithChildren, useMemo } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router'
+import pkg from '../../../package.json'
 
 export default function NavigationLayout() {
   return (
     <div className="flex grow">
-      <div className="flex basis-80 flex-col gap-2 border-r p-4">
-        <Section
-          number={1}
-          title="Document Information"
-          to="/document-information"
-        >
-          <SubSection title="General" to="/document-information/general" />
-          <SubSection title="Notes" to="/document-information/notes" />
-          <SubSection title="Publisher" to="/document-information/publisher" />
-          <SubSection
-            title="References"
-            to="/document-information/references"
-          />
-        </Section>
-        <Section number={2} title="Products" to="/product-management" />
-        <Section number={3} title="Vulnerabilities" to="/vulnerabilities" />
+      <div className="flex flex-col justify-between border-r p-4">
+        <div className="flex basis-80 flex-col gap-2">
+          <Section
+            number={1}
+            title="Document Information"
+            to="/document-information"
+          >
+            <SubSection title="General" to="/document-information/general" />
+            <SubSection title="Notes" to="/document-information/notes" />
+            <SubSection
+              title="Publisher"
+              to="/document-information/publisher"
+            />
+            <SubSection
+              title="References"
+              to="/document-information/references"
+            />
+          </Section>
+          <Section number={2} title="Products" to="/product-management" />
+          <Section number={3} title="Vulnerabilities" to="/vulnerabilities" />
+        </div>
+
+        <p className="text-center text-sm text-neutral-400">
+          Version <span className="font-semibold">{pkg.version}</span>
+        </p>
       </div>
+
       <div className="grow bg-editor">
         <Outlet />
       </div>
