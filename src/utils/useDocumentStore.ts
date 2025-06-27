@@ -32,6 +32,8 @@ export type TDocumentStore = {
   updateProducts: (update: TProductTreeBranch[]) => void
   updateRelationships: (update: TRelationship[]) => void
   updateVulnerabilities: (update: TVulnerability[]) => void
+
+  reset: () => void
 }
 
 const useDocumentStore = create<TDocumentStore>((set) => ({
@@ -53,6 +55,14 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
   vulnerabilities: [],
   updateVulnerabilities: (update: TVulnerability[]) =>
     set({ vulnerabilities: update }),
+
+  reset: () =>
+    set({
+      documentInformation: getDefaultDocumentInformation(),
+      products: [],
+      relationships: [],
+      vulnerabilities: [],
+    }),
 }))
 
 export default useDocumentStore

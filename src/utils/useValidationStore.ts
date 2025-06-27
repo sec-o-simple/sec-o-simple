@@ -26,6 +26,8 @@ type ValidationStore = {
   visitPage: (path: string) => void
   hasVisitedPage: (path: string) => boolean
 
+  reset: () => void
+
   warnings: ValidationMessage[]
   infos: ValidationMessage[]
 }
@@ -66,6 +68,16 @@ const useValidationStore = create<ValidationStore>((set, get) => ({
     set((state) => ({
       touchedFields: new Set([...state.touchedFields, path]),
     })),
+
+  reset: () => {
+    set({
+      messages: [],
+      touchedFields: new Set(),
+      visitedPages: new Set(),
+      isValidating: false,
+      isValid: true,
+    })
+  },
 
   get errors() {
     return get().messages.filter((m) => m.severity === 'error')
