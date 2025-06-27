@@ -1,5 +1,6 @@
 import { useCSAFExport } from '@/utils/csafExport/csafExport'
 import { useSOSExport } from '@/utils/sosDraft'
+import useDocumentStore from '@/utils/useDocumentStore'
 import useValidationStore from '@/utils/useValidationStore'
 import {
   faAdd,
@@ -27,6 +28,7 @@ import {
   useDisclosure,
 } from '@heroui/react'
 import { Outlet, useNavigate } from 'react-router'
+import ConfirmButton from '../forms/ConfirmButton'
 
 function ValidationErrorList() {
   const { messages } = useValidationStore()
@@ -85,7 +87,8 @@ export default function TopBarLayout() {
   const navigate = useNavigate()
   const { exportSOSDocument } = useSOSExport()
   const { exportCSAFDocument } = useCSAFExport()
-  const { isValid, isValidating } = useValidationStore()
+  const { isValid, isValidating, reset: resetValidation } = useValidationStore()
+  const { reset } = useDocumentStore()
 
   return (
     <div className="flex h-screen flex-col">
@@ -96,14 +99,21 @@ export default function TopBarLayout() {
             <p>Sec-o-simple</p>
           </span>
 
-          <Button
+          <ConfirmButton
             className="ml-4"
+            fullWidth={false}
             color="secondary"
-            onPress={() => navigate('/')}
+            confirmText="Are you sure you want to create a new document? This will reset the current document."
+            confirmTitle="Create New Document"
+            onConfirm={() => {
+              reset()
+              resetValidation()
+              navigate('/')
+            }}
           >
             <FontAwesomeIcon icon={faAdd} />
             New Document
-          </Button>
+          </ConfirmButton>
         </div>
         <div className="flex gap-3">
           <Button color="secondary" isDisabled={true}>
