@@ -63,7 +63,7 @@ export function useSOSImport() {
 
     if (
       !('products' in jsonObject) ||
-      !(jsonObject.products instanceof Array)
+      typeof jsonObject.products !== 'object'
     ) {
       return
     }

@@ -1,5 +1,6 @@
 import { useCSAFImport } from '@/utils/csafImport/csafImport'
 import { useSOSImport } from '@/utils/sosDraft'
+import useValidationStore from '@/utils/useValidationStore'
 import { faArrowRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
@@ -10,6 +11,7 @@ import { useNavigate } from 'react-router'
 export default function EditDocument() {
   const navigate = useNavigate()
   const { isSOSDraft, importSOSDocument } = useSOSImport()
+  const visitAllPages = useValidationStore((state) => state.visitAllPages)
   const { isCSAFDocument, isCSAFVersionSupported, importCSAFDocument } =
     useCSAFImport()
   const [jsonObject, setJsonObject] = useState<object | undefined>()
@@ -68,6 +70,7 @@ export default function EditDocument() {
                 try {
                   const jsonData = JSON.parse(e.target.result as string)
                   setJsonObject(jsonData)
+                  visitAllPages()
                 } catch (err) {
                   console.error('Error parsing JSON:', err)
                 }

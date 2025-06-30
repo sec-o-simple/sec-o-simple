@@ -24,6 +24,7 @@ type ValidationStore = {
   getMessagesForPath: (path: string) => ValidationMessage[]
   isFieldTouched: (path: string) => boolean
   visitPage: (path: string) => void
+  visitAllPages: () => void
   hasVisitedPage: (path: string) => boolean
 
   reset: () => void
@@ -58,6 +59,18 @@ const useValidationStore = create<ValidationStore>((set, get) => ({
   visitPage: (path: string) =>
     set((state) => ({
       visitedPages: new Set([...state.visitedPages, path]),
+    })),
+
+  visitAllPages: () =>
+    set(() => ({
+      visitedPages: new Set([
+        '/document-information/general',
+        '/document-information/notes',
+        '/document-information/publisher',
+        '/document-information/references',
+        '/product-management',
+        '/vulnerabilities',
+      ]),
     })),
 
   hasVisitedPage: (path: string) => {
