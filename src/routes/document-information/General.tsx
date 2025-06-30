@@ -12,6 +12,7 @@ import {
 } from './types/tGeneralDocumentInformation'
 import { useTemplate } from '@/utils/template'
 import usePageVisit from '@/utils/usePageVisit'
+import { useTranslation } from 'react-i18next'
 
 export default function General() {
   const [localState, setLocalState] = useState<TGeneralDocumentInformation>(
@@ -26,11 +27,12 @@ export default function General() {
   })
 
   const hasVisitedPage = usePageVisit()
+  const { t } = useTranslation()
   const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
 
   return (
     <WizardStep
-      title="Document Information - General"
+      title={t('nav.documentInformation.general')}
       progress={1}
       onContinue={'/document-information/notes'}
     >

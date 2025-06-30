@@ -1,0 +1,23 @@
+{
+  "translation": {
+    "common.cancel": "Cancel",
+    "common.save": "Save",
+    "common.close": "Close",
+    "common.ok": "OK",
+    "common.confirm": "Confirm",
+
+    "preview": "Preview",
+    "newDocument": "New Document",
+    "confirm.newDocument.title": "Create New Document",
+    "confirm.newDocument.body": "Are you sure you want to create a new document? This will reset the current document.",
+
+    "export.draft": "Export",
+    "export.csaf": "Export CSAF",
+
+    "validation.error": "Error",
+    "validation.errors": "Errors",
+    "validation.errors.title": "Validation Errors",
+    "validation.errors.column.path": "Path",
+    "validation.errors.column.message": "Message"
+  }
+}

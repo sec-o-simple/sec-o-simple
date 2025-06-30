@@ -29,13 +29,25 @@ import {
 } from '@heroui/react'
 import { Outlet, useNavigate } from 'react-router'
 import ConfirmButton from '../forms/ConfirmButton'
+import { useTranslation } from 'react-i18next'
 
 function ValidationErrorList() {
+  const { t } = useTranslation()
   const { messages } = useValidationStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
+      <Button
+        color="danger"
+        variant="light"
+        onPress={onOpen}
+        isDisabled={messages.length === 0}
+      >
+        <FontAwesomeIcon icon={faCircleExclamation} /> {messages.length}{' '}
+        {t('validation.error' + (messages.length !== 1 ? 's' : ''))}
+      </Button>
+
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -46,13 +58,17 @@ function ValidationErrorList() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Validation Errors
+                {t('validation.errors.title')}
               </ModalHeader>
               <ModalBody>
-                <Table aria-label="Example static collection table">
+                <Table>
                   <TableHeader>
-                    <TableColumn>PATH</TableColumn>
-                    <TableColumn>MESSAGE</TableColumn>
+                    <TableColumn>
+                      {t('validation.errors.column.path')}
+                    </TableColumn>
+                    <TableColumn>
+                      {t('validation.errors.column.message')}
+                    </TableColumn>
                   </TableHeader>
                   <TableBody>
                     {messages.map((message, index) => (
@@ -67,28 +83,20 @@ function ValidationErrorList() {
                 </Table>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
+                <Button color="primary" onPress={onClose}>
+                  {t('common.close')}
                 </Button>
               </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-      <Button
-        color="danger"
-        variant="light"
-        onPress={onOpen}
-        isDisabled={messages.length === 0}
-      >
-        <FontAwesomeIcon icon={faCircleExclamation} /> {messages.length} Error
-        {messages.length !== 1 ? 's' : ''}
-      </Button>
     </>
   )
 }
 
 export default function TopBarLayout() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { exportSOSDocument } = useSOSExport()
   const { exportCSAFDocument } = useCSAFExport()
@@ -108,8 +116,8 @@ export default function TopBarLayout() {
             className="ml-4"
             fullWidth={false}
             color="secondary"
-            confirmText="Are you sure you want to create a new document? This will reset the current document."
-            confirmTitle="Create New Document"
+            confirmText={t('confirm.newDocument.body')}
+            confirmTitle={t('confirm.newDocument.title')}
             onConfirm={() => {
               reset()
               resetValidation()
@@ -117,17 +125,18 @@ export default function TopBarLayout() {
             }}
           >
             <FontAwesomeIcon icon={faAdd} />
-            New Document
+            {t('newDocument')}
           </ConfirmButton>
         </div>
+
         <div className="flex gap-3">
           <Button color="secondary" isDisabled={true}>
             <FontAwesomeIcon icon={faEye} />
-            Preview
+            {t('preview')}
           </Button>
           <Button color="secondary" onPress={exportSOSDocument}>
             <FontAwesomeIcon icon={faSave} />
-            Export Draft
+            {t('export.draft')}
           </Button>
           <Tooltip
             content="There are some errors in the document. Please fix them before exporting."
@@ -140,7 +149,7 @@ export default function TopBarLayout() {
                 isDisabled={!isValid || isValidating}
               >
                 <FontAwesomeIcon icon={faFileExport} />
-                Export CSAF
+                {t('export.csaf')}
               </Button>
             </div>
           </Tooltip>

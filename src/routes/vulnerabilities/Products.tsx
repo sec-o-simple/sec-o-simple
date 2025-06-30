@@ -7,6 +7,7 @@ import {
   TVulnerabilityProduct,
   getDefaultVulnerabilityProduct,
 } from './types/tVulnerabilityProduct'
+import { useTranslation } from 'react-i18next'
 
 export default function Products({
   vulnerability,
@@ -16,6 +17,7 @@ export default function Products({
   vulnerabilityIndex: number
   onChange: (vulnerability: TVulnerability) => void
 }) {
+  const { t } = useTranslation()
   const productsListState = useListState<TVulnerabilityProduct>({
     initialData: vulnerability.products,
     generator: getDefaultVulnerabilityProduct,
@@ -31,9 +33,9 @@ export default function Products({
     <>
       <table className="w-full [&_td]:p-2">
         <thead className="border-b-1 [&>th]:p-2 [&>th]:text-left [&>th]:font-normal [&>th]:text-gray">
-          <th>Product name</th>
-          <th>First affected version</th>
-          <th>First fixed version</th>
+          <th>{t('products.product.name')}</th>
+          <th>{t('products.product.affected.version')}</th>
+          <th>{t('products.product.fixed.version')}</th>
           <th></th>
         </thead>
         <tbody>

@@ -13,10 +13,13 @@ import {
 } from './types/tDocumentPublisher'
 import { useTemplate } from '@/utils/template'
 import usePageVisit from '@/utils/usePageVisit'
+import { useTranslation } from 'react-i18next'
 
 export default function Publisher() {
   const [localState, setLocalState] = useState(getDefaultDocumentPublisher())
   const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
+
+  const { t } = useTranslation()
   const hasVisitedPage = usePageVisit()
 
   useDocumentStoreUpdater<TDocumentInformation>({
@@ -29,7 +32,7 @@ export default function Publisher() {
 
   return (
     <WizardStep
-      title="Document Information - Publisher"
+      title={t('nav.documentInformation.publisher')}
       progress={1.5}
       onBack={'/document-information/notes'}
       onContinue={'/document-information/references'}

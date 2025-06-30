@@ -8,12 +8,14 @@ import { PTBEditForm } from './PTBEditForm'
 import IconButton from '@/components/forms/IconButton'
 import { faCodeFork } from '@fortawesome/free-solid-svg-icons'
 import { useNavigate } from 'react-router'
+import { useTranslation } from 'react-i18next'
 
 export type ProductCardProps = Partial<InfoCardProps> & {
   product: TProductTreeBranch
 }
 
 export default function ProductCard({ product, ...props }: ProductCardProps) {
+  const { t } = useTranslation()
   const { updatePTB, deletePTB } = useProductTreeBranch()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const navigate = useNavigate()
@@ -31,7 +33,7 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
       endContent={
         <IconButton
           icon={faCodeFork}
-          tooltip="Manage Versions"
+          tooltip={t('products.versions.edit')}
           onPress={() => navigate(`product/${product.id}`)}
         />
       }

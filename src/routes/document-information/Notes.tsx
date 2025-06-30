@@ -6,8 +6,10 @@ import { TDocumentInformation } from './types/tDocumentInformation'
 import { Alert } from '@heroui/react'
 import { useListValidation } from '@/utils/useListValidation'
 import usePageVisit from '@/utils/usePageVisit'
+import { useTranslation } from 'react-i18next'
 
 export default function Notes() {
+  const { t } = useTranslation()
   const notesListState = useListState<TNote>({
     generator: NoteGenerator,
   })
@@ -27,7 +29,7 @@ export default function Notes() {
 
   return (
     <WizardStep
-      title="Document Information - Notes"
+      title={t('nav.documentInformation.notes')}
       progress={1.25}
       onBack={'/document-information/general'}
       onContinue={'/document-information/publisher'}

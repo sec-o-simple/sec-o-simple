@@ -16,6 +16,7 @@ import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import Select from '@/components/forms/Select'
 import { SelectItem } from '@heroui/select'
 import useDocumentStore from '@/utils/useDocumentStore'
+import { useTranslation } from 'react-i18next'
 
 export type PTBEditFormProps = {
   ptb?: TProductTreeBranch
@@ -36,6 +37,7 @@ export function getCategoryLabel(category: string): string {
 }
 
 export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
+  const { t } = useTranslation()
   const [name, setName] = useState(ptb?.name ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
   const [type, setType] = useState(ptb?.type ?? 'Software')
@@ -47,10 +49,14 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
     <ModalContent>
       {(onClose) => (
         <>
-          <ModalHeader>Edit {categoryLabel}</ModalHeader>
+          <ModalHeader>
+            {t('products.modal.edit', {
+              label: t(`products.${categoryLabel.toLowerCase()}`),
+            })}
+          </ModalHeader>
           <ModalBody>
             <Input
-              label="Name"
+              label={t('products.product.name')}
               autoFocus
               value={name}
               onValueChange={setName}
@@ -58,7 +64,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
               placeholder={ptb ? getPlaceholder(ptb, 'name') : undefined}
             />
             <Textarea
-              label="Description"
+              label={t('products.product.description')}
               value={description}
               onValueChange={setDescription}
               isDisabled={!ptb || checkReadOnly(ptb, 'description')}
@@ -66,7 +72,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
             />
             {ptb?.category === 'product_name' && (
               <Select
-                label="Type"
+                label={t('products.product.type')}
                 selectedKeys={[type ?? 'Software']}
                 onChange={(e) => {
                   if (!e.target.value) {
@@ -86,7 +92,9 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
             )}
           </ModalBody>
           <ModalFooter>
-            <Button onPress={onClose}>Cancel</Button>
+            <Button onPress={onClose} variant="light">
+              {t('common.cancel')}
+            </Button>
             <Button
               color="primary"
               onPress={() => {
@@ -96,7 +104,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
                 onClose()
               }}
             >
-              Save
+              {t('common.save')}
             </Button>
           </ModalFooter>
         </>

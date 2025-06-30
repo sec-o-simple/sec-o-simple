@@ -12,6 +12,7 @@ import AddItemButton from './AddItemButton'
 import { checkReadOnly } from '@/utils/template'
 import { twMerge } from 'tailwind-merge'
 import { FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
+import { useTranslation } from 'react-i18next'
 
 export type CustomAction<T> = {
   icon: FontAwesomeIconProps['icon']
@@ -44,6 +45,7 @@ export default function ComponentList<T extends object>({
   titleProps,
   customActions,
 }: ComponentListProps<T>) {
+  const { t } = useTranslation()
   const [expandedKeys, setExpandedKeys] = useState<Selection>(new Set([]))
 
   return (
@@ -78,7 +80,9 @@ export default function ComponentList<T extends object>({
                     )}
                   >
                     {getDynamicObjectValue(item, title) || (
-                      <span>Untitled {itemLabel}</span>
+                      <span>
+                        {t('common.untitled')} {itemLabel}
+                      </span>
                     )}
                   </div>
                   {endContent?.(item)}
@@ -113,7 +117,9 @@ export default function ComponentList<T extends object>({
         ))}
       </Accordion>
       <AddItemButton
-        label={`Add New ${itemLabel}`}
+        label={t('common.add', {
+          label: t(itemLabel),
+        })}
         onPress={() => {
           const key = listState.addDataEntry()
           // expand new item

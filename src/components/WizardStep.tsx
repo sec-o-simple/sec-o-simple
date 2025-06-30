@@ -2,6 +2,7 @@ import { Button } from '@heroui/button'
 import { PropsWithChildren } from 'react'
 import { useNavigate } from 'react-router'
 import ProgressBar from './ProgressBar'
+import { useTranslation } from 'react-i18next'
 
 export type WizardStepProps = PropsWithChildren<{
   title?: string
@@ -20,10 +21,16 @@ export default function WizardStep({
   noContentWrapper,
 }: WizardStepProps) {
   const navigate = useNavigate()
+  const { t } = useTranslation()
+
   return (
     <div className="flex max-w-5xl flex-col gap-4 p-8">
       <ProgressBar
-        sections={['Documents', 'Products', 'Vulnerabilities']}
+        sections={[
+          t('nav.document'),
+          t('nav.products'),
+          t('nav.vulnerabilities'),
+        ]}
         progress={progress ?? 1}
       />
       {(noContentWrapper && <>{children}</>) || (
@@ -42,7 +49,7 @@ export default function WizardStep({
               variant="bordered"
               className="border-1 bg-content1"
             >
-              Back
+              {t('common.back')}
             </Button>
           )}
         </div>
@@ -55,7 +62,7 @@ export default function WizardStep({
             }
             color="primary"
           >
-            Next
+            {t('common.next')}
           </Button>
         )}
       </div>
