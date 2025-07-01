@@ -1,6 +1,8 @@
 import { Input } from '@/components/forms/Input'
 import { Button } from '@heroui/button'
 import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/table'
+import IconButton from './IconButton'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
 export interface RevisionHistoryEntry {
   version: string
@@ -37,21 +39,22 @@ export default function RevisionHistoryTable({ revisions, onChange }: RevisionHi
 
   return (
     <div className="mt-4">
-        <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold">Revision History</h2>
-            <Button
-              variant='flat'
-              onPress={handleAddRevision}
-            >
-                Add Revision
-            </Button>
-        </div>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-semibold">Revision History</h2>
+        <Button
+          variant='light'
+          color='primary'
+          onPress={handleAddRevision}
+        >
+          Add Revision
+        </Button>
+      </div>
       <Table>
         <TableHeader>
-            <TableColumn>Version</TableColumn>
-            <TableColumn>Date</TableColumn>
-            <TableColumn>Description</TableColumn>
-            <TableColumn>Actions</TableColumn>
+          <TableColumn>Version</TableColumn>
+          <TableColumn>Date</TableColumn>
+          <TableColumn>Description</TableColumn>
+          <TableColumn>Actions</TableColumn>
         </TableHeader>
         <TableBody>
           {(revisions || []).map((revision, index) => (
@@ -78,13 +81,10 @@ export default function RevisionHistoryTable({ revisions, onChange }: RevisionHi
                 />
               </TableCell>
               <TableCell>
-                <Button
-                  color="danger"
-                  variant="ghost"
+                <IconButton
+                  icon={faTrash}
                   onPress={() => handleDeleteRevision(index)}
-                >
-                  Delete
-                </Button>
+                />
               </TableCell>
             </TableRow>
           ))}
