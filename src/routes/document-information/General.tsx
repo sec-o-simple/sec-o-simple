@@ -13,6 +13,7 @@ import {
 import { useTemplate } from '@/utils/template'
 import usePageVisit from '@/utils/usePageVisit'
 import { useTranslation } from 'react-i18next'
+import RevisionHistoryTable, { RevisionHistoryEntry } from '@/components/forms/RevisionHistoryTable'
 
 export default function General() {
   const [localState, setLocalState] = useState<TGeneralDocumentInformation>(
@@ -29,6 +30,14 @@ export default function General() {
   const hasVisitedPage = usePageVisit()
   const { t } = useTranslation()
   const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
+
+  const [revisionHistory, setRevisionHistory] = useState<RevisionHistoryEntry[]>(() => [
+    {
+      version: '',
+      date: new Date().toISOString().split('T')[0],
+      description: '',
+    },
+  ])
 
   return (
     <WizardStep
@@ -71,6 +80,11 @@ export default function General() {
           ))}
         </Select>
       </HSplit>
+      <RevisionHistoryTable
+        revisions={revisionHistory}
+        onChange={(newRevisions) => setRevisionHistory(newRevisions)
+        }
+      />
     </WizardStep>
   )
 }
