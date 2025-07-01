@@ -65,7 +65,7 @@ function CategoryChip({ remediation }: { remediation: TRemediation }) {
   const { t } = useTranslation()
 
   return (
-    <Chip color="primary" variant="flat" radius="md" size="lg">
+    <Chip color="primary" variant="flat" radius="md">
       {t(`vulnerabilities.remediation.categories.${remediation.category}`)}
     </Chip>
   )

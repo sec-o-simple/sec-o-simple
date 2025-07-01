@@ -82,7 +82,7 @@ function Section({
     <div className="flex flex-col gap-2 text-neutral-foreground">
       <NavLink
         to={to}
-        className={`flex cursor-pointer items-center gap-2 rounded-lg p-2 transition-colors hover:bg-content2 ${
+        className={`flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 transition-colors hover:bg-content2 ${
           isActive ? 'bg-content2 font-semibold text-foreground' : ''
         }`}
       >

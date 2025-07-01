@@ -1,25 +1,208 @@
 {
   "translation": {
-    "common.cancel": "Cancel",
-    "common.save": "Save",
-    "common.close": "Close",
-    "common.ok": "OK",
-    "common.confirm": "Confirm",
-
+    "common": {
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success",
+      "warning": "Warning",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "edit": "Edit",
+      "delete": "Delete",
+      "create": "Create",
+      "search": "Search",
+      "save": "Save",
+      "close": "Close",
+      "back": "Back",
+      "next": "Next",
+      "ok": "OK",
+      "untitled": "Untitled",
+      "add": "Add {{label}}"
+    },
     "preview": "Preview",
     "newDocument": "New Document",
     "confirm.newDocument.title": "Create New Document",
     "confirm.newDocument.body": "Are you sure you want to create a new document? This will reset the current document.",
-
-    "export.draft": "Export",
-    "export.csaf": "Export CSAF",
-
-    "validation": {
-      "error_one": "Error",
-      "error_other": "Errors"
+    "export": {
+      "draft": "Export",
+      "csaf": "CSAF Export",
+      "error": "{{ errorCount }} errors in the document. Please fix them before exporting."
     },
-    "validation.errors.title": "Validation Errors",
-    "validation.errors.column.path": "Path",
-    "validation.errors.column.message": "Message"
+    "nav": {
+      "home": "Home",
+      "products": "Products",
+      "vendors": "Vendors",
+      "document": "Document",
+      "vulnerabilities": "Vulnerabilities",
+      "documentInformation": {
+        "general": "General",
+        "notes": "Notes",
+        "publisher": "Publisher",
+        "references": "References"
+      }
+    },
+    "document": {
+      "general": {
+        "title": "Document Title",
+        "id": "Document ID",
+        "language": "Language"
+      },
+      "publisher": {
+        "name": "Publisher Name",
+        "category": "Publisher Category",
+        "namespace": "Namespace",
+        "contactDetails": "Contact Details",
+        "issuingAuthority": "Issuing Authority",
+        "categories": {
+          "coordinator": "Coordinator",
+          "discoverer": "Discoverer",
+          "other": "Other",
+          "translator": "Translator",
+          "user": "User",
+          "vendor": "Vendor"
+        }
+      },
+      "references": {
+        "url": "URL"
+      }
+    },
+    "vulnerabilities": {
+      "vulnerability": "Vulnerability",
+      "vulnerabilities": "Vulnerabilities",
+      "general": "General",
+      "general.title": "Title",
+      "notes": "Notes",
+      "products": "Products",
+      "scores": "Scores",
+      "score": {
+        "title": "Score",
+        "cvss": "CVSS",
+        "baseScore": "Base Score",
+        "baseScoreDescription": "Base score is calculated from the vector string",
+        "baseSeverity": "Base Severity",
+        "baseSeverityDescription": "Base severity is calculated from the vector string"
+      },
+      "remediations": "Remediations",
+      "remediation": {
+        "title": "Remediation",
+        "category": "Category",
+        "categories": {
+          "mitigation": "Mitigation",
+          "no_fix_planned": "No fix planned",
+          "none_available": "None available",
+          "vendor_fix": "Vendor fix",
+          "workaround": "Workaround"
+        },
+        "date": "Date",
+        "details": "Details",
+        "url": "URL",
+        "products.empty": "No products added"
+      }
+    },
+    "notes": {
+      "title": "Title",
+      "note": "Note",
+      "notes": "Notes",
+      "content": "Content",
+      "category": "Category",
+      "category_plural": "Categories",
+      "categories": {
+        "description": "Description",
+        "details": "Details",
+        "faq": "FAQ",
+        "general": "General",
+        "legal_disclaimer": "Legal Disclaimer",
+        "other": "Other",
+        "summary": "Summary"
+      }
+    },
+    "ref": {
+      "references": "References",
+      "reference": "Reference",
+      "summary": "Summary",
+      "url": "URL"
+    },
+    "untitled": {
+      "vendor": "Untitled Vendor",
+      "product_name": "Untitled Product",
+      "product_version": "Untitled Product Version",
+      "": "Untitled"
+    },
+    "modal": {
+      "edit": "Edit {{label}}"
+    },
+    "vendor": {
+      "label": "Vendor",
+      "name": "Vendor Name",
+      "description": "Vendor Description"
+    },
+    "product_version": {
+      "label": "Version",
+      "name": "Version Name",
+      "description": "Version Description"
+    },
+    "product_name": {
+      "label": "Product",
+      "name": "Product Name",
+      "description": "Product Description",
+      "type": "Product Type"
+    },
+    "products": {
+      "vendors": "Vendor",
+      "products": "Products",
+      "manage": "Manage Products",
+      "empty": "You haven't created any {{ type }} product yet.\nYou can add one by creating a vendor and adding a product to it.",
+      "software": "Software",
+      "hardware": "Hardware",
+      "vendor": {
+        "label": "Vendor"
+      },
+      "product": {
+        "label": "Product",
+        "name": "Product Name",
+        "description": "Product Description",
+        "type": "Product Type",
+        "version": {
+          "label": "Version",
+          "empty": "No versions available",
+          "edit": "Edit Product Version",
+          "edit_plural": "Edit Product Versions",
+          "affected": "Affected Versions",
+          "fixed": "Fixed Versions"
+        }
+      },
+      "relationship": {
+        "label": "Relationships",
+        "empty": "No relationships available",
+        "edit": "Edit Relationship",
+        "edit_plural": "Edit Relationships",
+        "name": "Name",
+        "namePlaceholder": "Relationship Name",
+        "sourceProduct": "Source",
+        "targetProduct": "Target",
+        "version": "Version",
+        "version_plural": "Versions",
+        "category": "Relationship Type",
+        "categoryPlaceholder": "Select relationship type",
+        "categories": {
+          "default_component_of": "Default component of",
+          "external_component_of": "External component of",
+          "installed_on": "Installed on",
+          "installed_with": "Installed with",
+          "optional_component_of": "Optional component of"
+        }
+      }
+    },
+    "validation": {
+      "error": "Error",
+      "error_plural": "Error",
+      "errors": {
+        "title": "Validation Errors",
+        "column": {
+          "path": "Path",
+          "message": "Message"
+        }
+      }
+    }
   }
 }
