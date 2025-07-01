@@ -23,7 +23,9 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
   return (
     <InfoCard
       variant="boxed"
-      title={getPTBName(product)}
+      title={
+        getPTBName(product) ?? t(`untitled.${product.category?.toLowerCase()}`)
+      }
       linkTo={`product/${product.id}`}
       startContent={
         <Chip color="primary" variant="flat" radius="md" size="lg">
@@ -33,7 +35,9 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
       endContent={
         <IconButton
           icon={faCodeFork}
-          tooltip={t('products.versions.edit')}
+          tooltip={t('products.product.version.edit', {
+            count: 2,
+          })}
           onPress={() => navigate(`product/${product.id}`)}
         />
       }

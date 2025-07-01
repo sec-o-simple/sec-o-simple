@@ -12,8 +12,10 @@ import { Accordion, AccordionItem } from '@heroui/accordion'
 import InfoCard from './components/InfoCard'
 import TagList from './components/TagList'
 import { Chip } from '@heroui/chip'
+import { useTranslation } from 'react-i18next'
 
 export default function Version() {
+  const { t } = useTranslation()
   const { productVersionId } = useParams()
   const { findProductTreeBranch, findProductTreeBranchWithParents } =
     useProductTreeBranch()
@@ -47,12 +49,21 @@ export default function Version() {
   return (
     <WizardStep noContentWrapper={true}>
       <SubMenuHeader
-        title={'Productversion ' + getPTBName(productVersion)}
-        backLink={
-          `/product-management/product/${productVersion.parent?.id}` ??
-          '/product-management'
+        title={
+          productVersion.name
+            ? `${t('products.product.version.label')} ${getPTBName(
+                productVersion,
+              )}`
+            : t('untitled.product_version')
         }
-        actionTitle="Add Relationship"
+        backLink={
+          productVersion.parent?.id
+            ? `/product-management/product/${productVersion.parent?.id}`
+            : '/product-management'
+        }
+        actionTitle={t('common.add', {
+          label: t('products.relationship.label'),
+        })}
         onAction={() => {
           // add new relationship
           const newRelationship = getDefaultRelationship()
@@ -63,7 +74,7 @@ export default function Version() {
         }}
       />
       <Modal
-        size="xl"
+        size="3xl"
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         isDismissable={false}
@@ -73,10 +84,10 @@ export default function Version() {
           onSave={addOrUpdateRelationship}
         />
       </Modal>
-      <div className="font-bold">Relationships</div>
+      <div className="font-bold">{t('products.relationship.label')}</div>
       {relationshipsByCategory.length === 0 && (
         <span className="text-center text-neutral-foreground">
-          No relationships added yet
+          {t('products.relationship.empty')}
         </span>
       )}
       <Accordion
@@ -101,7 +112,7 @@ export default function Version() {
                 <InfoCard
                   key={relationship.id}
                   variant="plain"
-                  title={product.name}
+                  title={product.name ?? t('untitled.product_name')}
                   className="border-t py-2"
                   onEdit={() => {
                     setEditingRelationship(relationship)
@@ -118,7 +129,8 @@ export default function Version() {
                     <TagList
                       items={relationship.product2VersionIds}
                       labelGenerator={(x) =>
-                        getPTBName(findProductTreeBranch(x))
+                        getPTBName(findProductTreeBranch(x)) ??
+                        t('untitled.product_version')
                       }
                     />
                   )}

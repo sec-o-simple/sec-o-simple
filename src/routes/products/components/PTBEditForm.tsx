@@ -23,19 +23,6 @@ export type PTBEditFormProps = {
   onSave?: (updatedPtb: TProductTreeBranch) => void
 }
 
-export function getCategoryLabel(category: string): string {
-  switch (category) {
-    case 'vendor':
-      return 'Vendor'
-    case 'product_name':
-      return 'Product'
-    case 'product_version':
-      return 'Product Version'
-    default:
-      return ''
-  }
-}
-
 export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
   const { t } = useTranslation()
   const [name, setName] = useState(ptb?.name ?? '')
@@ -43,20 +30,18 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
   const [type, setType] = useState(ptb?.type ?? 'Software')
   const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
-  const categoryLabel = getCategoryLabel(ptb?.category ?? '')
-
   return (
     <ModalContent>
       {(onClose) => (
         <>
           <ModalHeader>
-            {t('products.modal.edit', {
-              label: t(`products.${categoryLabel.toLowerCase()}`),
+            {t('modal.edit', {
+              label: t(`${ptb?.category}.label`),
             })}
           </ModalHeader>
           <ModalBody>
             <Input
-              label={t('products.product.name')}
+              label={t(`${ptb?.category}.name`)}
               autoFocus
               value={name}
               onValueChange={setName}
@@ -64,7 +49,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
               placeholder={ptb ? getPlaceholder(ptb, 'name') : undefined}
             />
             <Textarea
-              label={t('products.product.description')}
+              label={t(`${ptb?.category}.description`)}
               value={description}
               onValueChange={setDescription}
               isDisabled={!ptb || checkReadOnly(ptb, 'description')}
@@ -72,7 +57,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
             />
             {ptb?.category === 'product_name' && (
               <Select
-                label={t('products.product.type')}
+                label={t(`${ptb?.category}.type`)}
                 selectedKeys={[type ?? 'Software']}
                 onChange={(e) => {
                   if (!e.target.value) {

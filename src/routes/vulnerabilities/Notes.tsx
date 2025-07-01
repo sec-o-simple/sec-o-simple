@@ -4,7 +4,6 @@ import { useEffect } from 'react'
 import { TVulnerability } from './types/tVulnerability'
 import { Alert } from '@heroui/react'
 import { useListValidation } from '@/utils/useListValidation'
-import { useTranslation } from 'react-i18next'
 
 export default function Notes({
   vulnerability,

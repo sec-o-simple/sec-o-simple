@@ -17,6 +17,7 @@ import {
 import { SelectItem } from '@heroui/select'
 import HSplit from '@/components/forms/HSplit'
 import DatePicker from '@/components/forms/DatePicker'
+import { useTranslation } from 'react-i18next'
 
 export default function Remediations({
   vulnerability,
@@ -29,6 +30,7 @@ export default function Remediations({
   onChange: (vulnerability: TVulnerability) => void
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
   const remediationsListState = useListState<TRemediation>({
     initialData: vulnerability.remediations,
     generator: getDefaultRemediation,
@@ -45,7 +47,7 @@ export default function Remediations({
     <ComponentList
       listState={remediationsListState}
       title="url"
-      itemLabel="Remediation"
+      itemLabel={t('vulnerabilities.remediation.title')}
       startContent={(r) => <CategoryChip remediation={r} />}
       content={(remediation, index) => (
         <RemediationForm
@@ -60,9 +62,11 @@ export default function Remediations({
 }
 
 function CategoryChip({ remediation }: { remediation: TRemediation }) {
+  const { t } = useTranslation()
+
   return (
     <Chip color="primary" variant="flat" radius="md" size="lg">
-      {remediation.category}
+      {t(`vulnerabilities.remediation.categories.${remediation.category}`)}
     </Chip>
   )
 }
@@ -78,11 +82,13 @@ function RemediationForm({
   onChange: (remediation: TRemediation) => void
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <VSplit>
       <HSplit className="items-start">
         <Select
-          label="Remediation category"
+          label={t('vulnerabilities.remediation.category')}
           csafPath={`${csafPath}/category`}
           isTouched={isTouched}
           selectedKeys={[remediation.category]}
@@ -96,11 +102,13 @@ function RemediationForm({
           placeholder={getPlaceholder(remediation, 'category')}
         >
           {remediationCategories.map((remediation) => (
-            <SelectItem key={remediation}>{remediation}</SelectItem>
+            <SelectItem key={remediation}>
+              {t(`vulnerabilities.remediation.categories.${remediation}`)}
+            </SelectItem>
           ))}
         </Select>
         <DatePicker
-          label="Remediation date"
+          label={t('vulnerabilities.remediation.date')}
           isTouched={isTouched}
           csafPath={`${csafPath}/date`}
           value={remediation.date}
@@ -109,7 +117,7 @@ function RemediationForm({
         />
       </HSplit>
       <Textarea
-        label="Details"
+        label={t('vulnerabilities.remediation.details')}
         isTouched={isTouched}
         csafPath={`${csafPath}/details`}
         value={remediation.details}
@@ -120,7 +128,7 @@ function RemediationForm({
         placeholder={getPlaceholder(remediation, 'details')}
       />
       <Input
-        label="URL"
+        label={t('vulnerabilities.remediation.url')}
         isTouched={isTouched}
         csafPath={`${csafPath}/url`}
         value={remediation.url}

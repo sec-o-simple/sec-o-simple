@@ -79,7 +79,7 @@ function ReferenceForm({
         placeholder={getPlaceholder(reference, 'summary')}
       />
       <Input
-        label="URL of the reference"
+        label={t('ref.url')}
         csafPath={`/document/references/${referenceIndex}/url`}
         value={reference.url}
         onValueChange={(newValue) => onChange({ ...reference, url: newValue })}

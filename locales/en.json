@@ -14,8 +14,10 @@
     "export.draft": "Export",
     "export.csaf": "Export CSAF",
 
-    "validation.error": "Error",
-    "validation.errors": "Errors",
+    "validation": {
+      "error_one": "Error",
+      "error_other": "Errors"
+    },
     "validation.errors.title": "Validation Errors",
     "validation.errors.column.path": "Path",
     "validation.errors.column.message": "Message"

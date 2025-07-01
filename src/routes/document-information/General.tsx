@@ -37,7 +37,7 @@ export default function General() {
       onContinue={'/document-information/notes'}
     >
       <Input
-        label="Title"
+        label={t('document.general.title')}
         csafPath="/document/title"
         isTouched={hasVisitedPage}
         value={localState.title}
@@ -47,7 +47,7 @@ export default function General() {
       />
       <HSplit className="items-start">
         <Input
-          label="ID"
+          label={t('document.general.id')}
           csafPath="/document/tracking/id"
           isTouched={hasVisitedPage}
           value={localState.id}
@@ -56,7 +56,7 @@ export default function General() {
           placeholder={getFieldPlaceholder('document-information.id')}
         />
         <Select
-          label="Language"
+          label={t('document.general.language')}
           csafPath="/document/lang"
           isTouched={hasVisitedPage}
           selectedKeys={[localState.language]}
@@ -67,7 +67,7 @@ export default function General() {
           placeholder={getFieldPlaceholder('document-information.language')}
         >
           {['de', 'en'].map((key) => (
-            <SelectItem key={key}>{key}</SelectItem>
+            <SelectItem key={key}>{key.toUpperCase()}</SelectItem>
           ))}
         </Select>
       </HSplit>

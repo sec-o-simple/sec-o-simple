@@ -1,81 +1,230 @@
 {
   "translation": {
-    "common.cancel": "Abbrechen",
-    "common.save": "Speichern",
-    "common.close": "Schließen",
-    "common.back": "Zurück",
-    "common.next": "Weiter",
-    "common.ok": "OK",
-    "common.confirm": "Bestätigen",
-    "common.untitled": "Unbenannte",
-    "common.add": "{{label}} hinzufügen",
+    "common": {
+      "loading": "Laden...",
+      "error": "Fehler",
+      "success": "Erfolg",
+      "warning": "Warnung",
+      "cancel": "Abbrechen",
+      "confirm": "Bestätigen",
+      "edit": "Bearbeiten",
+      "delete": "Löschen",
+      "create": "Erstellen",
+      "search": "Suchen",
+      "save": "Speichern",
+      "close": "Schließen",
+      "back": "Zurück",
+      "next": "Weiter",
+      "ok": "OK",
+      "untitled": "Unbenannt",
+      "add": "{{label}} hinzufügen"
+    },
 
     "preview": "Vorschau",
     "newDocument": "Neues Dokument",
     "confirm.newDocument.title": "Neues Dokument erstellen",
     "confirm.newDocument.body": "Sind Sie sicher, dass Sie ein neues Dokument erstellen möchten? Dadurch wird das aktuelle Dokument zurückgesetzt.",
 
-    "export.draft": "Exportieren",
-    "export.csaf": "CSAF exportieren",
+    "export": {
+      "draft": "Export",
+      "csaf": "CSAF Export",
+      "error": "{{ errorCount }} Fehler im Dokument. Bitte beheben Sie diese vor dem Export"
+    },
 
-    "nav.home": "Startseite",
-    "nav.products": "Produkte",
-    "nav.vendors": "Anbieter",
-    "nav.document": "Dokument",
-    "nav.vulnerabilities": "Schwachstellen",
-    "nav.documentInformation": "Dokument",
-    "nav.documentInformation.general": "Allgemein",
-    "nav.documentInformation.notes": "Notizen",
-    "nav.documentInformation.publisher": "Herausgeber",
-    "nav.documentInformation.references": "Referenzen",
+    "nav": {
+      "home": "Startseite",
+      "products": "Produkte",
+      "vendors": "Anbieter",
+      "document": "Dokument",
+      "vulnerabilities": "Schwachstellen",
+      "documentInformation": {
+        "general": "Allgemein",
+        "notes": "Notizen",
+        "publisher": "Herausgeber",
+        "references": "Referenzen"
+      }
+    },
 
-    "vulnerabilities.vulnerability": "Schwachstelle",
-    "vulnerabilities.vulnerabilities": "Schwachstellen",
-    "vulnerabilities.general": "Allgemein",
-    "vulnerabilities.general.title": "Titel",
-    "vulnerabilities.notes": "Notizen",
-    "vulnerabilities.products": "Produkte",
-    "vulnerabilities.remediations": "Behebungen",
-    "vulnerabilities.scores": "Bewertungen",
+    "document": {
+      "general": {
+        "title": "Dokumenttitel",
+        "id": "Dokument-ID",
+        "language": "Sprache"
+      },
+      "publisher": {
+        "name": "Herausgebername",
+        "category": "Kategorie von Herausgeber",
+        "namespace": "Namensraum",
+        "contactDetails": "Kontaktdetails",
+        "issuingAuthority": "Ausstellende Behörde",
+        "categories": {
+          "coordinator": "Koordinator",
+          "discoverer": "Entdecker",
+          "other": "Andere",
+          "translator": "Übersetzer",
+          "user": "Benutzer",
+          "vendor": "Anbieter"
+        }
+      },
+      "references": {
+        "url": "URL"
+      }
+    },
 
-    "notes.title": "Titel",
-    "notes.notes": "Notizen",
-    "notes.note": "Notiz",
-    "notes.content": "Inhalt",
-    "notes.category": "Kategorie",
-    "notes.categories": "Kategorien",
-    "notes.categories.description": "Beschreibung",
-    "notes.categories.details": "Details",
-    "notes.categories.faq": "FAQ",
-    "notes.categories.general": "Allgemein",
-    "notes.categories.legal_disclaimer": "Rechtlicher Hinweis",
-    "notes.categories.other": "Andere",
-    "notes.categories.summary": "Zusammenfassung",
+    "vulnerabilities": {
+      "vulnerability": "Schwachstelle",
+      "vulnerabilities": "Schwachstellen",
+      "general": "Allgemein",
+      "general.title": "Titel",
+      "notes": "Notizen",
+      "products": "Produkte",
+      "scores": "Bewertungen",
+      "score": {
+        "title": "Bewertung",
+        "cvss": "CVSS",
+        "baseScore": "Basis Bewertung",
+        "baseScoreDescription": "Basis Bewertung wird aus dem Vektorstring berechnet",
+        "baseSeverity": "Basis Schweregrad",
+        "baseSeverityDescription": "Basis Schweregrad wird aus dem Vektorstring berechnet"
+      },
+      "remediations": "Behebungen",
+      "remediation": {
+        "title": "Behebung",
+        "category": "Kategorie",
+        "categories": {
+          "mitigation": "Minderung",
+          "no_fix_planned": "Keine Behebung geplant",
+          "none_available": "Keine verfügbar",
+          "vendor_fix": "Anbieterbehebung",
+          "workaround": "Workaround"
+        },
+        "date": "Datum",
+        "details": "Details",
+        "url": "URL",
+        "products.empty": "Keine Produkte hinzugefügt"
+      }
+    },
 
-    "ref.references": "Referenzen",
-    "ref.reference": "Referenz",
-    "ref.summary": "Typ",
-    "ref.url": "URL",
+    "notes": {
+      "title": "Titel",
+      "note": "Notiz",
+      "notes": "Notizen",
+      "content": "Inhalt",
+      "category": "Kategorie",
+      "category_plural": "Kategorien",
+      "categories": {
+        "description": "Beschreibung",
+        "details": "Details",
+        "faq": "FAQ",
+        "general": "Allgemein",
+        "legal_disclaimer": "Rechtlicher Hinweis",
+        "other": "Andere",
+        "summary": "Zusammenfassung"
+      }
+    },
 
-    "products.vendor": "Anbieter",
-    "products.vendors": "Anbieter",
-    "products.software": "Software",
-    "products.hardware": "Hardware",
-    "products.product": "Produkt",
-    "products.products": "Produkte",
-    "products.product.name": "Produktname",
-    "products.product.description": "Produktbeschreibung",
-    "products.product.type": "Produktart",
-    "products.modal.edit": "{{label}} bearbeiten",
-    "products.versions.edit": "Versionen bearbeiten",
+    "ref": {
+      "references": "Referenzen",
+      "reference": "Referenz",
+      "summary": "Zusammenfassung",
+      "url": "URL"
+    },
 
-    "products.product.affected.version": "Betroffene Version",
-    "products.product.fixed.version": "Reparierte Version",
+    "untitled": {
+      "vendor": "Unbenannter Anbieter",
+      "product_name": "Unbenanntes Produkt",
+      "product_version": "Unbenannte Produktversion",
+      "": "Unbenannt"
+    },
 
-    "validation.error": "Fehler",
-    "validation.errors": "Fehler",
-    "validation.errors.title": "Validierungsfehler",
-    "validation.errors.column.path": "Pfad",
-    "validation.errors.column.message": "Nachricht"
+    "modal": {
+      "edit": "{{label}} bearbeiten"
+    },
+
+    "vendor": {
+      "label": "Anbieter",
+      "name": "Anbietername",
+      "description": "Anbieterbeschreibung"
+    },
+    "product_version": {
+      "label": "Version",
+      "name": "Versionname",
+      "description": "Versionbeschreibung"
+    },
+    "product_name": {
+      "label": "Produkt",
+      "name": "Produktname",
+      "description": "Produktbeschreibung",
+      "type": "Produktart"
+    },
+
+    "products": {
+      "vendors": "Anbieter",
+      "products": "Produkte",
+      "manage": "Produkte verwalten",
+
+      "empty": "Sie haben noch kein {{ type }}-Produkt erstellt.\nSie können eines hinzufügen, indem Sie einen Anbieter erstellen und ihm ein Produkt hinzufügen.",
+
+      "software": "Software",
+      "hardware": "Hardware",
+
+      "vendor": {
+        "label": "Anbieter"
+      },
+
+      "product": {
+        "label": "Produkt",
+        "name": "Produktname",
+        "description": "Produktbeschreibung",
+        "type": "Produktart",
+
+        "version": {
+          "label": "Version",
+          "empty": "Keine Versionen vorhanden",
+          "edit": "Produktversion bearbeiten",
+          "edit_plural": "Produktversionen bearbeiten",
+
+          "affected": "Betroffene Versionen",
+          "fixed": "Reparierte Versionen"
+        }
+      },
+
+      "relationship": {
+        "label": "Beziehungen",
+        "empty": "Keine Beziehungen vorhanden",
+        "edit": "Beziehung bearbeiten",
+        "edit_plural": "Beziehungen bearbeiten",
+
+        "name": "Name",
+        "namePlaceholder": "Beziehungsname",
+        "sourceProduct": "Quelle",
+        "targetProduct": "Ziel",
+        "version": "Version",
+        "version_plural": "Versionen",
+
+        "category": "Beziehungstyp",
+        "categoryPlaceholder": "Beziehungstyp auswählen",
+
+        "categories": {
+          "default_component_of": "Standardkomponente von",
+          "external_component_of": "Externe Komponente von",
+          "installed_on": "Installiert auf",
+          "installed_with": "Installiert mit",
+          "optional_component_of": "Optionale Komponente von"
+        }
+      }
+    },
+
+    "validation": {
+      "error": "Fehler",
+      "error_plural": "Fehler",
+      "errors": {
+        "title": "Validierungsfehler",
+        "column": {
+          "path": "Pfad",
+          "message": "Nachricht"
+        }
+      }
+    }
   }
 }

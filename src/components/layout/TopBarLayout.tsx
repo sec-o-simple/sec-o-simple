@@ -45,7 +45,9 @@ function ValidationErrorList() {
         isDisabled={messages.length === 0}
       >
         <FontAwesomeIcon icon={faCircleExclamation} /> {messages.length}{' '}
-        {t('validation.error' + (messages.length !== 1 ? 's' : ''))}
+        {t('validation.error', {
+          count: messages.length,
+        })}
       </Button>
 
       <Modal
@@ -100,7 +102,12 @@ export default function TopBarLayout() {
   const navigate = useNavigate()
   const { exportSOSDocument } = useSOSExport()
   const { exportCSAFDocument } = useCSAFExport()
-  const { isValid, isValidating, reset: resetValidation } = useValidationStore()
+  const {
+    isValid,
+    messages,
+    isValidating,
+    reset: resetValidation,
+  } = useValidationStore()
   const { reset } = useDocumentStore()
 
   return (
@@ -139,7 +146,9 @@ export default function TopBarLayout() {
             {t('export.draft')}
           </Button>
           <Tooltip
-            content="There are some errors in the document. Please fix them before exporting."
+            content={t('export.error', {
+              errorCount: messages.length,
+            })}
             isDisabled={isValid && !isValidating}
           >
             <div>

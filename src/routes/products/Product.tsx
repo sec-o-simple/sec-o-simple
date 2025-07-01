@@ -13,11 +13,13 @@ import {
 import { useState } from 'react'
 import IconButton from '@/components/forms/IconButton'
 import { faLink } from '@fortawesome/free-solid-svg-icons'
+import { useTranslation } from 'react-i18next'
 
 export default function Product() {
   const { productId } = useParams()
   const { findProductTreeBranch, updatePTB, deletePTB } = useProductTreeBranch()
   const navigate = useNavigate()
+  const { t } = useTranslation()
 
   // modal variables
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -31,9 +33,15 @@ export default function Product() {
   return (
     <WizardStep noContentWrapper={true}>
       <SubMenuHeader
-        title={'Product ' + getPTBName(product)}
+        title={
+          product.name
+            ? t('products.product.label') + ' ' + getPTBName(product)
+            : t('untitled.product_name')
+        }
         backLink={'/product-management'}
-        actionTitle="Add Version"
+        actionTitle={t('common.add', {
+          label: t('products.product.version.label'),
+        })}
         onAction={() => {
           // add new version
           const newVersion = getDefaultProductTreeBranch('product_version')
@@ -49,10 +57,22 @@ export default function Product() {
       <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
         <PTBEditForm ptb={editingPTB} onSave={(ptb) => updatePTB(ptb)} />
       </Modal>
-      <div className="font-bold">Versions ({product.subBranches.length})</div>
+      <div className="font-bold">
+        {t('products.relationship.version', {
+          count: product.subBranches.length,
+        })}{' '}
+        ({product.subBranches.length})
+      </div>
+
+      {product.subBranches.length === 0 && (
+        <div className="text-center text-lg text-neutral-foreground">
+          <p>{t('products.product.version.empty')}</p>
+        </div>
+      )}
+
       {product.subBranches.map((version) => (
         <InfoCard
-          title={getPTBName(version)}
+          title={getPTBName(version) ?? t('untitled.product_version')}
           linkTo={`/product-management/version/${version.id}`}
           key={version.id}
           variant="boxed"
@@ -64,14 +84,16 @@ export default function Product() {
           endContent={
             <IconButton
               icon={faLink}
-              tooltip="Manage Relationships"
+              tooltip={t('products.relationship.edit', {
+                count: 2,
+              })}
               onPress={() =>
                 navigate(`/product-management/version/${version.id}`)
               }
             />
           }
         >
-          <div>{version.description}</div>
+          {version.description && <div>{version.description}</div>}
         </InfoCard>
       ))}
     </WizardStep>

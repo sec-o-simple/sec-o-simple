@@ -34,8 +34,8 @@ export default function Products({
       <table className="w-full [&_td]:p-2">
         <thead className="border-b-1 [&>th]:p-2 [&>th]:text-left [&>th]:font-normal [&>th]:text-gray">
           <th>{t('products.product.name')}</th>
-          <th>{t('products.product.affected.version')}</th>
-          <th>{t('products.product.fixed.version')}</th>
+          <th>{t('products.product.version.affected')}</th>
+          <th>{t('products.product.version.fixed')}</th>
           <th></th>
         </thead>
         <tbody>

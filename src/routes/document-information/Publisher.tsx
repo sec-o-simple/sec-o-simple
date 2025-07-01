@@ -38,7 +38,7 @@ export default function Publisher() {
       onContinue={'/document-information/references'}
     >
       <Input
-        label="Name of publisher"
+        label={t('document.publisher.name')}
         csafPath="/document/publisher/name"
         isTouched={hasVisitedPage}
         value={localState.name}
@@ -48,7 +48,7 @@ export default function Publisher() {
       />
       <HSplit className="items-start">
         <Select
-          label="Category of Publisher"
+          label={t('document.publisher.category')}
           csafPath="/document/publisher/category"
           isTouched={hasVisitedPage}
           selectedKeys={[localState.category]}
@@ -66,11 +66,13 @@ export default function Publisher() {
           )}
         >
           {publisherCategories.map((key) => (
-            <SelectItem key={key}>{key}</SelectItem>
+            <SelectItem key={key}>
+              {t(`document.publisher.categories.${key}`)}
+            </SelectItem>
           ))}
         </Select>
         <Input
-          label="Namespace of Publisher"
+          label={t('document.publisher.namespace')}
           csafPath="/document/publisher/namespace"
           isTouched={hasVisitedPage}
           value={localState.namespace}
@@ -84,7 +86,7 @@ export default function Publisher() {
         />
       </HSplit>
       <Textarea
-        label="Contact Details"
+        label={t('document.publisher.contactDetails')}
         csafPath="/document/publisher/contact_details"
         isTouched={hasVisitedPage}
         value={localState.contactDetails}
@@ -99,7 +101,7 @@ export default function Publisher() {
         )}
       />
       <Textarea
-        label="Issuing Authority"
+        label={t('document.publisher.issuingAuthority')}
         csafPath="/document/publisher/issuing_authority"
         isTouched={hasVisitedPage}
         value={localState.issuingAuthority}

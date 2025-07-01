@@ -11,6 +11,7 @@ import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useEffect } from 'react'
 import ProductsTagList from './components/ProductsTagList'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
+import { useTranslation } from 'react-i18next'
 
 export default function Scores({
   vulnerability,
@@ -23,6 +24,7 @@ export default function Scores({
   onChange: (vulnerability: TVulnerability) => void
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
   const scoresListState = useListState<TVulnerabilityScore>({
     initialData: vulnerability.scores,
     generator: getDefaultVulnerabilityScore,
@@ -37,8 +39,8 @@ export default function Scores({
   return (
     <ComponentList
       listState={scoresListState}
-      title={(score) => `CVSS ${score.cvssVersion} score`}
-      itemLabel="Score"
+      title={(score) => `CVSS ${score.cvssVersion} Score`}
+      itemLabel={t('vulnerabilities.score.title')}
       content={(score, index) => (
         <ScoreForm
           score={score}
@@ -62,6 +64,7 @@ function ScoreForm({
   onChange: (note: TVulnerabilityScore) => void
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
   let baseScore = ''
   let baseSeverity = ''
 
@@ -91,18 +94,18 @@ function ScoreForm({
       />
       {/* baseScore */}
       <Input
-        label="Base Score"
+        label={t('vulnerabilities.score.baseScore')}
         isTouched={isTouched}
         value={baseScore}
-        description="Base score is calculated from vector string"
+        description={t('vulnerabilities.score.baseScoreDescription')}
         isReadOnly={true} // Base score is calculated from vector string
       />
       {/* severity */}
       <Input
-        label="Base Severity"
+        label={t('vulnerabilities.score.baseSeverity')}
         isTouched={isTouched}
         value={baseSeverity}
-        description="Base severity is calculated from vector string"
+        description={t('vulnerabilities.score.baseSeverityDescription')}
         isReadOnly={true}
       />
       <ProductsTagList

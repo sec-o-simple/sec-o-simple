@@ -1,12 +1,14 @@
 import { TProductTreeBranchProductType } from './types/tProductTreeBranch'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import ProductCard from './components/ProductCard'
+import { useTranslation } from 'react-i18next'
 
 export type ProductListProps = {
   productType: TProductTreeBranchProductType
 }
 
 export default function ProductList({ productType }: ProductListProps) {
+  const { t } = useTranslation()
   const { getPTBsByCategory } = useProductTreeBranch()
   const products = getPTBsByCategory('product_name').filter(
     (product) => product.type === productType,
@@ -16,9 +18,10 @@ export default function ProductList({ productType }: ProductListProps) {
     <div className="flex flex-col items-stretch gap-2">
       {products.length === 0 && (
         <div className="text-center text-lg text-neutral-foreground">
-          <p>You haven&apos;t created any {productType}-Products yet.</p>
           <p>
-            You can add one by creating a vendor and adding a product to it.
+            {t('products.empty', {
+              type: productType,
+            })}
           </p>
         </div>
       )}
