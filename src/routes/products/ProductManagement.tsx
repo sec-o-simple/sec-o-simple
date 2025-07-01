@@ -6,12 +6,16 @@ import useDocumentStore from '@/utils/useDocumentStore'
 import ProductList from './ProductList'
 import { useTranslation } from 'react-i18next'
 import usePageVisit from '@/utils/validation/usePageVisit'
+import ProductDatabaseSelector from './components/ProductDatabaseSelector'
+import { Button } from '@heroui/button'
 
 export default function ProductManagement() {
   usePageVisit()
   const { t } = useTranslation()
+
   const [selectedTab, setSelectedTab] = useState<string>('Vendors')
   const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
+  const [modalOpen, setModalOpen] = useState(false)
 
   return (
     <WizardStep
@@ -20,8 +24,17 @@ export default function ProductManagement() {
       onContinue={'/vulnerabilities'}
       noContentWrapper
     >
+      <ProductDatabaseSelector isOpen={modalOpen} onClose={() => setModalOpen(false)} />
       <div className="flex w-full items-center justify-between rounded-lg border-1 border-default-200 bg-white p-8">
         <p className="text-xl font-semibold">{t('products.manage')}</p>
+
+        <Button
+          variant="solid"
+          color="primary"
+          onPress={() => setModalOpen(true)}
+        >
+          Add from Database
+        </Button>
       </div>
 
       <div className="px-6">
