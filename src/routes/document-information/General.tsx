@@ -31,7 +31,9 @@ export default function General() {
   const { t } = useTranslation()
   const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
 
-  const [revisionHistory, setRevisionHistory] = useState<RevisionHistoryEntry[]>(() => [
+  const [revisionHistory, setRevisionHistory] = useState<
+    RevisionHistoryEntry[]
+  >(() => [
     {
       version: '',
       date: new Date().toISOString().split('T')[0],
@@ -82,8 +84,7 @@ export default function General() {
       </HSplit>
       <RevisionHistoryTable
         revisions={revisionHistory}
-        onChange={(newRevisions) => setRevisionHistory(newRevisions)
-        }
+        onChange={(newRevisions) => setRevisionHistory(newRevisions)}
       />
     </WizardStep>
   )

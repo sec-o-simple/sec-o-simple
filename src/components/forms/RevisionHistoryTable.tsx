@@ -1,6 +1,13 @@
 import { Input } from '@/components/forms/Input'
 import { Button } from '@heroui/button'
-import { Table, TableBody, TableCell, TableColumn, TableHeader, TableRow } from '@heroui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from '@heroui/table'
 import IconButton from './IconButton'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 
@@ -15,17 +22,24 @@ interface RevisionHistoryTableProps {
   onChange: (revisions: RevisionHistoryEntry[]) => void
 }
 
-export default function RevisionHistoryTable({ revisions, onChange }: RevisionHistoryTableProps) {
+export default function RevisionHistoryTable({
+  revisions,
+  onChange,
+}: RevisionHistoryTableProps) {
   const handleAddRevision = () => {
     const newRevision: RevisionHistoryEntry = {
       version: '',
       date: new Date().toISOString().split('T')[0],
-      description: ''
+      description: '',
     }
     onChange([...(revisions || []), newRevision])
   }
 
-  const handleRevisionChange = (index: number, field: keyof RevisionHistoryEntry, value: string) => {
+  const handleRevisionChange = (
+    index: number,
+    field: keyof RevisionHistoryEntry,
+    value: string,
+  ) => {
     const updatedHistory = [...(revisions || [])]
     updatedHistory[index] = { ...updatedHistory[index], [field]: value }
     onChange(updatedHistory)
@@ -39,13 +53,9 @@ export default function RevisionHistoryTable({ revisions, onChange }: RevisionHi
 
   return (
     <div className="mt-4">
-      <div className="flex items-center justify-between mb-4">
+      <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Revision History</h2>
-        <Button
-          variant='light'
-          color='primary'
-          onPress={handleAddRevision}
-        >
+        <Button variant="light" color="primary" onPress={handleAddRevision}>
           Add Revision
         </Button>
       </div>
@@ -62,7 +72,9 @@ export default function RevisionHistoryTable({ revisions, onChange }: RevisionHi
               <TableCell>
                 <Input
                   value={revision.version}
-                  onValueChange={(value) => handleRevisionChange(index, 'version', value)}
+                  onValueChange={(value) =>
+                    handleRevisionChange(index, 'version', value)
+                  }
                   placeholder="Enter version"
                 />
               </TableCell>
@@ -70,13 +82,17 @@ export default function RevisionHistoryTable({ revisions, onChange }: RevisionHi
                 <Input
                   type="date"
                   value={revision.date}
-                  onValueChange={(value) => handleRevisionChange(index, 'date', value)}
+                  onValueChange={(value) =>
+                    handleRevisionChange(index, 'date', value)
+                  }
                 />
               </TableCell>
               <TableCell>
                 <Input
                   value={revision.description}
-                  onValueChange={(value) => handleRevisionChange(index, 'description', value)}
+                  onValueChange={(value) =>
+                    handleRevisionChange(index, 'description', value)
+                  }
                   placeholder="Enter description"
                 />
               </TableCell>
