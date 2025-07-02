@@ -26,7 +26,7 @@ export default function DocumentSelection() {
         </AnimatePresence>
       </div>
 
-      <div className="absolute bottom-4 left-0 right-0 flex justify-center">
+      <div className="absolute inset-x-0 bottom-4 flex justify-center">
         <LanguageSwitcher />
       </div>
     </div>

@@ -1,4 +1,3 @@
-import { useTranslation } from 'react-i18next'
 import { uid } from 'uid'
 
 export const productTreeBranchCategories = [

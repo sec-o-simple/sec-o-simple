@@ -53,7 +53,7 @@ export default function InfoCard(props: InfoCardProps) {
 
 function BoxedInfoCard(props: InfoCardProps) {
   return (
-    <div className="rounded-lg border bg-content1 py-2 px-4">
+    <div className="rounded-lg border bg-content1 px-4 py-2">
       <InfoCard {...props} variant="plain" />
     </div>
   )

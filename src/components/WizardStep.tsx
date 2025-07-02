@@ -34,7 +34,7 @@ export default function WizardStep({
         progress={progress ?? 1}
       />
       {(noContentWrapper && <>{children}</>) || (
-        <div className="flex flex-col gap-2 rounded-lg bg-content1 p-8 border-1 border-default-200">
+        <div className="flex flex-col gap-2 rounded-lg border-1 border-default-200 bg-content1 p-8">
           {title && <div className="mb-4 text-xl font-semibold">{title}</div>}
           {children}
         </div>

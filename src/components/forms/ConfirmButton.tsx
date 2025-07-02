@@ -7,7 +7,6 @@ import {
   ModalHeader,
   useDisclosure,
 } from '@heroui/react'
-import { t } from 'i18next'
 import { useTranslation } from 'react-i18next'
 
 type ConfirmButtonProps = {
