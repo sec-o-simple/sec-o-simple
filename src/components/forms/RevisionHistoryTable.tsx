@@ -76,9 +76,15 @@ export default function RevisionHistoryTable() {
       )}
       <Table>
         <TableHeader>
-          <TableColumn width="20%">{t('document.general.revisionHistory.version')}</TableColumn>
-          <TableColumn width="20%">{t('document.general.revisionHistory.date')}</TableColumn>
-          <TableColumn width="30%">{t('document.general.revisionHistory.description')}</TableColumn>
+          <TableColumn width="20%">
+            {t('document.general.revisionHistory.version')}
+          </TableColumn>
+          <TableColumn width="20%">
+            {t('document.general.revisionHistory.date')}
+          </TableColumn>
+          <TableColumn width="30%">
+            {t('document.general.revisionHistory.description')}
+          </TableColumn>
           <TableColumn width="10%">{t('common.actions')}</TableColumn>
         </TableHeader>
         <TableBody emptyContent={t('document.general.revisionHistory.empty')}>
