@@ -130,7 +130,7 @@ function SubSection({ title, to }: { title: string; to: string }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center gap-2 cursor-pointer pl-12 transition-colors hover:text-primary ${
+        `flex cursor-pointer items-center gap-2 pl-12 transition-colors hover:text-primary ${
           isActive ? 'text-primary' : ''
         }`
       }
