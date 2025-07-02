@@ -11,13 +11,15 @@ import {
 import IconButton from './IconButton'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { useListState } from '@/utils/useListState'
-import { getDefaultRevisionHistoryEntry, TRevisionHistoryEntry } from '@/routes/document-information/types/tRevisionHistoryEntry'
+import {
+  getDefaultRevisionHistoryEntry,
+  TRevisionHistoryEntry,
+} from '@/routes/document-information/types/tRevisionHistoryEntry'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { TDocumentInformation } from '@/routes/document-information/types/tDocumentInformation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { Alert } from '@heroui/react'
 import DatePicker from './DatePicker'
-
 
 export default function RevisionHistoryTable() {
   const revisionHistoryState = useListState<TRevisionHistoryEntry>({
@@ -25,19 +27,21 @@ export default function RevisionHistoryTable() {
   })
 
   useDocumentStoreUpdater<TDocumentInformation>({
-    localState: [revisionHistoryState.data, () => ({ revisionHistory: revisionHistoryState.data })],
+    localState: [
+      revisionHistoryState.data,
+      () => ({ revisionHistory: revisionHistoryState.data }),
+    ],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
-    init: (initialData) => revisionHistoryState.setData(initialData.revisionHistory),
+    init: (initialData) =>
+      revisionHistoryState.setData(initialData.revisionHistory),
   })
 
   const handleAddRevision = () => {
     revisionHistoryState.addDataEntry()
   }
 
-  const handleRevisionChange = (
-    updatedRevision: TRevisionHistoryEntry,
-  ) => {
+  const handleRevisionChange = (updatedRevision: TRevisionHistoryEntry) => {
     revisionHistoryState.updateDataEntry(updatedRevision)
   }
 
@@ -72,7 +76,7 @@ export default function RevisionHistoryTable() {
           <TableColumn width="30%">Description</TableColumn>
           <TableColumn width="10%">Actions</TableColumn>
         </TableHeader>
-        <TableBody emptyContent={"No revisions added yet"}>
+        <TableBody emptyContent={'No revisions added yet'}>
           {revisionHistoryState.data.map((revision, index) => (
             <TableRow key={revision.id}>
               <TableCell>
@@ -92,7 +96,9 @@ export default function RevisionHistoryTable() {
                 <DatePicker
                   csafPath={`/document/tracking/revision_history/${index}/date`}
                   value={revision.date}
-                  onChange={(newValue) => handleRevisionChange({ ...revision, date: newValue })}
+                  onChange={(newValue) =>
+                    handleRevisionChange({ ...revision, date: newValue })
+                  }
                 />
               </TableCell>
               <TableCell>

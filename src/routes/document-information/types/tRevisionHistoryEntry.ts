@@ -1,10 +1,10 @@
-import { uid } from "uid"
+import { uid } from 'uid'
 
 export type TRevisionHistoryEntry = {
-    id: string
-    date: string
-    number: string
-    summary: string
+  id: string
+  date: string
+  number: string
+  summary: string
 }
 
 export function getDefaultRevisionHistoryEntry(): TRevisionHistoryEntry {

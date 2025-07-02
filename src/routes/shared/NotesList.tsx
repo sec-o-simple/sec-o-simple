@@ -62,12 +62,20 @@ export function NotesList({
           onChange={notesListState.updateDataEntry}
         />
       )}
-      startContent={({ item, index }) => <NoteStartContent item={item} csafPath={`${csafPath}/${index}`} />}
+      startContent={({ item, index }) => (
+        <NoteStartContent item={item} csafPath={`${csafPath}/${index}`} />
+      )}
     />
   )
 }
 
-function NoteStartContent({ item, csafPath }: { item: TNote, csafPath: string }) {
+function NoteStartContent({
+  item,
+  csafPath,
+}: {
+  item: TNote
+  csafPath: string
+}) {
   const { hasErrors } = usePrefixValidation(csafPath)
   const { t } = useTranslation()
 

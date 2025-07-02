@@ -82,7 +82,13 @@ export default function Remediations({
   )
 }
 
-function RemediationStartContent({ item, csafPath }: { item: TRemediation, csafPath: string }) {
+function RemediationStartContent({
+  item,
+  csafPath,
+}: {
+  item: TRemediation
+  csafPath: string
+}) {
   const { hasErrors } = usePrefixValidation(csafPath)
   const { t } = useTranslation()
 
@@ -165,7 +171,11 @@ function RemediationForm({
         placeholder={getPlaceholder(remediation, 'url')}
       />
       <ProductsTagList
-        error={fieldValidation.hasErrors ? fieldValidation.errorMessages[0].message : ''}
+        error={
+          fieldValidation.hasErrors
+            ? fieldValidation.errorMessages[0].message
+            : ''
+        }
         products={remediation.productIds}
         onChange={(productIds) => onChange({ ...remediation, productIds })}
       />

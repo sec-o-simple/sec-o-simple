@@ -28,7 +28,7 @@ export type ComponentListProps<T> = {
   /** The label of an element in the list (defaults to Item) */
   itemLabel?: string
   onDelete?: (item: T) => void
-  startContent?: React.ComponentType<{ item: T, index: number }>,
+  startContent?: React.ComponentType<{ item: T; index: number }>
   endContent?: (item: T) => ReactNode
   titleProps?: HTMLProps<HTMLDivElement>
   customActions?: CustomAction<T>[]

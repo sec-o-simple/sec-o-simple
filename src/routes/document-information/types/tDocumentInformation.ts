@@ -33,7 +33,7 @@ export function getDefaultDocumentInformation(): TDocumentInformation {
         date: new Date().toISOString(),
         number: '1',
         summary: 'Initial revision',
-      }
+      },
     ],
   }
 }

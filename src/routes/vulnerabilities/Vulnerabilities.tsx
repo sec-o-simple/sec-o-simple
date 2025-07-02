@@ -82,8 +82,7 @@ function VulnerabilityListStartContent({
   item: TVulnerability
   index: number
 }) {
-  const { hasErrors } = usePrefixValidation(
-    `/vulnerabilities/${index}`,)
+  const { hasErrors } = usePrefixValidation(`/vulnerabilities/${index}`)
 
   return (
     <>
@@ -103,7 +102,15 @@ function CVEChip({ vulnerability }: { vulnerability: TVulnerability }) {
   )
 }
 
-function TabTitle({ title, csafPrefix = '', csafPaths = [] }: { title: string, csafPrefix?: string, csafPaths?: string[] }) {
+function TabTitle({
+  title,
+  csafPrefix = '',
+  csafPaths = [],
+}: {
+  title: string
+  csafPrefix?: string
+  csafPaths?: string[]
+}) {
   const messages = useValidationStore((state) => state.messages)
   const errorPaths = messages
     .filter((m) => m.severity === 'error')
@@ -121,9 +128,7 @@ function TabTitle({ title, csafPrefix = '', csafPaths = [] }: { title: string, c
 
   return (
     <div className="flex items-center gap-2">
-      <StatusIndicator
-        hasErrors={hasError}
-        hasVisited={true} />
+      <StatusIndicator hasErrors={hasError} hasVisited={true} />
       {title}
     </div>
   )

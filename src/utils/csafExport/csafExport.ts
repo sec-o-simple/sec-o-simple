@@ -28,13 +28,19 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         },
         current_release_date: currentDate,
         initial_release_date: currentDate,
-        revision_history: documentStore.documentInformation.revisionHistory.map(entry => ({
-          date: entry.date,
-          number: entry.number,
-          summary: entry.summary,
-        })),
+        revision_history: documentStore.documentInformation.revisionHistory.map(
+          (entry) => ({
+            date: entry.date,
+            number: entry.number,
+            summary: entry.summary,
+          }),
+        ),
         status: 'final',
-        version: documentStore.documentInformation.revisionHistory.length ? retrieveLatestVersion(documentStore.documentInformation.revisionHistory) : '1',
+        version: documentStore.documentInformation.revisionHistory.length
+          ? retrieveLatestVersion(
+              documentStore.documentInformation.revisionHistory,
+            )
+          : '1',
         id: documentStore.documentInformation.id,
       },
       lang: documentStore.documentInformation.language,

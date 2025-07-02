@@ -60,7 +60,9 @@ export default function Scores({
         title={(score) => `CVSS ${score.cvssVersion} Score`}
         itemLabel={t('vulnerabilities.score.title')}
         startContent={({ index }) => (
-          <ScoreStartContent csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${index}`} />
+          <ScoreStartContent
+            csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${index}`}
+          />
         )}
         content={(score, index) => (
           <ScoreForm
@@ -78,9 +80,7 @@ export default function Scores({
 function ScoreStartContent({ csafPath }: { csafPath: string }) {
   const { hasErrors } = usePrefixValidation(csafPath)
 
-  return (
-    <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
-  )
+  return <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
 }
 
 function ScoreForm({
@@ -141,7 +141,11 @@ function ScoreForm({
         isReadOnly={true}
       />
       <ProductsTagList
-        error={fieldValidation.hasErrors ? fieldValidation.errorMessages[0].message : ''}
+        error={
+          fieldValidation.hasErrors
+            ? fieldValidation.errorMessages[0].message
+            : ''
+        }
         products={score.productIds}
         onChange={(productIds) => onChange({ ...score, productIds })}
       />

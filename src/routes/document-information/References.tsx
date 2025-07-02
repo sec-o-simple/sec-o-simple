@@ -72,13 +72,9 @@ export default function References() {
 }
 
 function StartContent({ index }: { index: number }) {
-  const { hasErrors } = usePrefixValidation(
-    `/document/references/${index}`,
-  )
+  const { hasErrors } = usePrefixValidation(`/document/references/${index}`)
 
-  return (
-    <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
-  )
+  return <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
 }
 
 function ReferenceForm({
