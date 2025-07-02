@@ -4,8 +4,8 @@ import { useState } from 'react'
 import VendorList from './VendorList'
 import useDocumentStore from '@/utils/useDocumentStore'
 import ProductList from './ProductList'
-import usePageVisit from '@/utils/usePageVisit'
 import { useTranslation } from 'react-i18next'
+import usePageVisit from '@/utils/validation/usePageVisit'
 
 export default function ProductManagement() {
   usePageVisit()

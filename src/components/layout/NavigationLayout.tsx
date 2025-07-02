@@ -1,10 +1,11 @@
-import { usePathValidation } from '@/utils/usePathValidation'
+import { usePathValidation } from '@/utils/validation/usePathValidation'
 import React from 'react'
 import { PropsWithChildren, useMemo } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router'
 import { LanguageSwitcher } from '../forms/LanguageSwitcher'
 import SecOSimpleVersion from '../forms/SecOSimpleVersion'
 import { useTranslation } from 'react-i18next'
+import StatusIndicator from '../StatusIndicator'
 
 export default function NavigationLayout() {
   const { t } = useTranslation()
@@ -100,26 +101,6 @@ function Section({
       </NavLink>
       {children}
     </div>
-  )
-}
-
-function StatusIndicator({
-  hasErrors,
-  hasVisited,
-}: {
-  hasErrors: boolean
-  hasVisited: boolean
-}) {
-  return (
-    <div
-      className={`size-2 rounded-full ${
-        hasVisited
-          ? hasErrors
-            ? 'bg-red-400'
-            : 'bg-green-500'
-          : 'bg-neutral-300'
-      }`}
-    />
   )
 }
 

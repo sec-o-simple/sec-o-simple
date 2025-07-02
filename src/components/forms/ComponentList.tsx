@@ -28,10 +28,11 @@ export type ComponentListProps<T> = {
   /** The label of an element in the list (defaults to Item) */
   itemLabel?: string
   onDelete?: (item: T) => void
-  startContent?: (item: T) => ReactNode
+  startContent?: React.ComponentType<{ item: T, index: number }>,
   endContent?: (item: T) => ReactNode
   titleProps?: HTMLProps<HTMLDivElement>
   customActions?: CustomAction<T>[]
+  renderTitlePrefix?: (item: T) => ReactNode
 }
 
 export default function ComponentList<T extends object>({
@@ -40,10 +41,10 @@ export default function ComponentList<T extends object>({
   content,
   itemLabel = 'Item',
   onDelete,
-  startContent,
   endContent,
   titleProps,
   customActions,
+  ...props
 }: ComponentListProps<T>) {
   const { t } = useTranslation()
   const [expandedKeys, setExpandedKeys] = useState<Selection>(new Set([]))
@@ -74,7 +75,9 @@ export default function ComponentList<T extends object>({
               startContent={
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    {startContent?.(item)}
+                    {props.startContent && (
+                      <props.startContent item={item} index={index} />
+                    )}
                     <div
                       {...titleProps}
                       className={twMerge(

@@ -3,8 +3,10 @@ import HSplit from '@/components/forms/HSplit'
 import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
+import StatusIndicator from '@/components/StatusIndicator'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 import { Chip } from '@heroui/chip'
 import { SelectItem } from '@heroui/select'
 import { useTranslation } from 'react-i18next'
@@ -60,18 +62,22 @@ export function NotesList({
           onChange={notesListState.updateDataEntry}
         />
       )}
-      startContent={(note) => <CategoryChip note={note} />}
+      startContent={({ item, index }) => <NoteStartContent item={item} csafPath={`${csafPath}/${index}`} />}
     />
   )
 }
 
-function CategoryChip({ note }: { note: TNote }) {
+function NoteStartContent({ item, csafPath }: { item: TNote, csafPath: string }) {
+  const { hasErrors } = usePrefixValidation(csafPath)
   const { t } = useTranslation()
 
   return (
-    <Chip color="primary" variant="flat" radius="md" size="lg">
-      {t(`notes.categories.${note.category}`)}
-    </Chip>
+    <>
+      <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
+      <Chip color="primary" variant="flat" radius="md" size="lg">
+        {t(`notes.categories.${item.category}`)}
+      </Chip>
+    </>
   )
 }
 

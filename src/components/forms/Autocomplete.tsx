@@ -1,5 +1,5 @@
 import { useDebounceInput } from '@/utils/useDebounceInput'
-import { useFieldValidation } from '@/utils/useFieldValidation'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import {
   Autocomplete as HeroUIAutocomplete,
   AutocompleteProps,

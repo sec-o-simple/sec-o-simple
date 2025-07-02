@@ -30,18 +30,22 @@ export function usePathValidation(path: string) {
   const errorPaths = messages
     .filter((m) => m.severity === 'error')
     .map((e) => e.path)
-  const hasVisitedPage = useValidationStore((state) => state.hasVisitedPage)
+  // const hasVisitedPage = useValidationStore((state) => state.hasVisitedPage)
 
   if (validationSections[path]) {
     const hasErrors = validationSections[path](errorPaths)
     return {
       hasErrors,
-      hasVisited: hasVisitedPage(path),
+      // For now we mark all fields as touched until we have a better way to handle this
+      // hasVisited: hasVisitedPage(path),
+      hasVisited: true,
     }
   }
 
   return {
     hasErrors: false,
-    hasVisited: hasVisitedPage(path),
+    // For now we mark all fields as touched until we have a better way to handle this
+    // hasVisited: hasVisitedPage(path),
+    hasVisited: true,
   }
 }

@@ -12,8 +12,8 @@ import {
   publisherCategories,
 } from './types/tDocumentPublisher'
 import { useTemplate } from '@/utils/template'
-import usePageVisit from '@/utils/usePageVisit'
 import { useTranslation } from 'react-i18next'
+import usePageVisit from '@/utils/validation/usePageVisit'
 
 export default function Publisher() {
   const [localState, setLocalState] = useState(getDefaultDocumentPublisher())

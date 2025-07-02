@@ -1,7 +1,7 @@
 import { useCSAFExport } from '@/utils/csafExport/csafExport'
 import { useSOSExport } from '@/utils/sosDraft'
 import useDocumentStore from '@/utils/useDocumentStore'
-import useValidationStore from '@/utils/useValidationStore'
+import useValidationStore from '@/utils/validation/useValidationStore'
 import {
   faAdd,
   faEye,

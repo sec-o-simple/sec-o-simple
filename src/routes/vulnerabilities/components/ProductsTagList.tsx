@@ -12,11 +12,13 @@ import { useTranslation } from 'react-i18next'
 export type ProductsTagListProps = {
   products?: string[]
   onChange?: (productIds: string[]) => void
+  error?: string
 }
 
 export default function ProductsTagList({
   products,
   onChange,
+  error,
 }: ProductsTagListProps) {
   const { t } = useTranslation()
   const { findProductTreeBranchWithParents } = useProductTreeBranch()
@@ -57,6 +59,10 @@ export default function ProductsTagList({
           }
         />
       )}
+      {error && (
+        <span className="text-sm text-red-500">{error}</span>
+      )}
+      {/* If no products are selected, show a message */}
       {selectedProducts.length === 0 && (
         <span className="text-center text-neutral-foreground">
           {t('vulnerabilities.remediation.products.empty')}

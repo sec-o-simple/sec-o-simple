@@ -3,7 +3,7 @@ import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
 import { useEffect } from 'react'
 import { TVulnerability } from './types/tVulnerability'
 import { Alert } from '@heroui/react'
-import { useListValidation } from '@/utils/useListValidation'
+import { useListValidation } from '@/utils/validation/useListValidation'
 
 export default function Notes({
   vulnerability,
