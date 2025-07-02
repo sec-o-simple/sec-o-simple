@@ -21,12 +21,32 @@ import { useListValidation } from '@/utils/validation/useListValidation'
 import { Alert } from '@heroui/react'
 import DatePicker from './DatePicker'
 import { useTranslation } from 'react-i18next'
+import semver from 'semver'
+import { retrieveLatestVersion } from '@/utils/csafExport/latestVersion'
 
 export default function RevisionHistoryTable() {
   const { t } = useTranslation()
 
   const revisionHistoryState = useListState<TRevisionHistoryEntry>({
-    generator: () => getDefaultRevisionHistoryEntry(),
+    generator: () => {
+      const latestRevision: string = revisionHistoryState.data.length
+        ? retrieveLatestVersion(revisionHistoryState.data)
+        : '0'
+      let nextVersion: string = ''
+
+      // If using semver, increment the version number patch version
+      // If using integer versioning, increment the version number by 1
+      if (semver.valid(latestRevision)) {
+        nextVersion = semver.inc(latestRevision, 'patch') || ''
+      } else if (!isNaN(parseInt(latestRevision))) {
+        nextVersion = (parseInt(latestRevision) + 1).toString()
+      }
+
+      return {
+        ...getDefaultRevisionHistoryEntry(),
+        number: nextVersion,
+      }
+    },
   })
 
   useDocumentStoreUpdater<TDocumentInformation>({
