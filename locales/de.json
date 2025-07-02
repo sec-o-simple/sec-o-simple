@@ -176,7 +176,7 @@
     "products": {
       "vendors": "Anbieter",
       "products": "Produkte",
-      "manage": "Produkte Verwaltung",
+      "manage": "Produktverwaltung",
 
       "empty": "Sie haben noch kein {{ type }}-Produkt erstellt.\nSie können eines hinzufügen, indem Sie einen Anbieter erstellen und ihm ein Produkt hinzufügen.",
 
