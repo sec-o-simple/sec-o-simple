@@ -20,8 +20,11 @@ import { TDocumentInformation } from '@/routes/document-information/types/tDocum
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { Alert } from '@heroui/react'
 import DatePicker from './DatePicker'
+import { useTranslation } from 'react-i18next'
 
 export default function RevisionHistoryTable() {
+  const { t } = useTranslation()
+
   const revisionHistoryState = useListState<TRevisionHistoryEntry>({
     generator: () => getDefaultRevisionHistoryEntry(),
   })
@@ -59,7 +62,9 @@ export default function RevisionHistoryTable() {
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">Revision History</h2>
         <Button variant="light" color="primary" onPress={handleAddRevision}>
-          Add Revision
+          {t('common.add', {
+            label: t('document.general.revisionHistory.label'),
+          })}
         </Button>
       </div>
       {listValidation.hasErrors && (
@@ -71,12 +76,12 @@ export default function RevisionHistoryTable() {
       )}
       <Table>
         <TableHeader>
-          <TableColumn width="20%">Version</TableColumn>
-          <TableColumn width="20%">Date</TableColumn>
-          <TableColumn width="30%">Description</TableColumn>
-          <TableColumn width="10%">Actions</TableColumn>
+          <TableColumn width="20%">{t('document.general.revisionHistory.version')}</TableColumn>
+          <TableColumn width="20%">{t('document.general.revisionHistory.date')}</TableColumn>
+          <TableColumn width="30%">{t('document.general.revisionHistory.description')}</TableColumn>
+          <TableColumn width="10%">{t('common.actions')}</TableColumn>
         </TableHeader>
-        <TableBody emptyContent={'No revisions added yet'}>
+        <TableBody emptyContent={t('document.general.revisionHistory.empty')}>
           {revisionHistoryState.data.map((revision, index) => (
             <TableRow key={revision.id}>
               <TableCell>
@@ -89,7 +94,9 @@ export default function RevisionHistoryTable() {
                       number: value,
                     })
                   }
-                  placeholder="Enter version"
+                  placeholder={t('common.placeholder', {
+                    label: t('document.general.revisionHistory.version'),
+                  })}
                 />
               </TableCell>
               <TableCell>
@@ -111,7 +118,9 @@ export default function RevisionHistoryTable() {
                       summary: value,
                     })
                   }
-                  placeholder="Enter description"
+                  placeholder={t('common.placeholder', {
+                    label: t('document.general.revisionHistory.description'),
+                  })}
                 />
               </TableCell>
               <TableCell>

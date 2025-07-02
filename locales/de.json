@@ -17,7 +17,9 @@
       "next": "Weiter",
       "ok": "OK",
       "untitled": "Unbenannt",
-      "add": "{{label}} hinzufügen"
+      "add": "{{label}} hinzufügen",
+      "placeholder": "{{label}} eingeben",
+      "actions": "Aktionen"
     },
 
     "preview": "Vorschau",
@@ -64,7 +66,14 @@
       "general": {
         "title": "Dokumenttitel",
         "id": "Dokument-ID",
-        "language": "Sprache"
+        "language": "Sprache",
+        "revisionHistory": {
+          "label": "Revision",
+          "version": "Version",
+          "date": "Datum",
+          "description": "Beschreibung",
+          "empty": "Keine Revisionen hinzugefügt"
+        }
       },
       "publisher": {
         "name": "Name von Herausgeber",

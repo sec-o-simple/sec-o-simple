@@ -6,7 +6,7 @@ const validationSections: Record<string, HasErrorFunction> = {
   '/document-information/general': (errorPaths) => {
     return ['/document/title', '/document/tracking/id', '/document/lang'].some(
       (path) => errorPaths.includes(path),
-    )
+    ) || errorPaths.some((path) => path.startsWith('/document/tracking/revision_history'))
   },
   '/document-information/notes': (errorPaths) => {
     return errorPaths.some((path) => path.startsWith('/document/notes'))
