@@ -10,46 +10,45 @@ import {
 } from '@heroui/table'
 import IconButton from './IconButton'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
+import { useListState } from '@/utils/useListState'
+import { getDefaultRevisionHistoryEntry, TRevisionHistoryEntry } from '@/routes/document-information/types/tRevisionHistoryEntry'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
+import { TDocumentInformation } from '@/routes/document-information/types/tDocumentInformation'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import { Alert } from '@heroui/react'
+import DatePicker from './DatePicker'
 
-export interface RevisionHistoryEntry {
-  version: string
-  date: string
-  description: string
-}
 
-interface RevisionHistoryTableProps {
-  revisions: RevisionHistoryEntry[]
-  onChange: (revisions: RevisionHistoryEntry[]) => void
-}
+export default function RevisionHistoryTable() {
+  const revisionHistoryState = useListState<TRevisionHistoryEntry>({
+    generator: () => getDefaultRevisionHistoryEntry(),
+  })
 
-export default function RevisionHistoryTable({
-  revisions,
-  onChange,
-}: RevisionHistoryTableProps) {
+  useDocumentStoreUpdater<TDocumentInformation>({
+    localState: [revisionHistoryState.data, () => ({ revisionHistory: revisionHistoryState.data })],
+    valueField: 'documentInformation',
+    valueUpdater: 'updateDocumentInformation',
+    init: (initialData) => revisionHistoryState.setData(initialData.revisionHistory),
+  })
+
   const handleAddRevision = () => {
-    const newRevision: RevisionHistoryEntry = {
-      version: '',
-      date: new Date().toISOString().split('T')[0],
-      description: '',
-    }
-    onChange([...(revisions || []), newRevision])
+    revisionHistoryState.addDataEntry()
   }
 
   const handleRevisionChange = (
-    index: number,
-    field: keyof RevisionHistoryEntry,
-    value: string,
+    updatedRevision: TRevisionHistoryEntry,
   ) => {
-    const updatedHistory = [...(revisions || [])]
-    updatedHistory[index] = { ...updatedHistory[index], [field]: value }
-    onChange(updatedHistory)
+    revisionHistoryState.updateDataEntry(updatedRevision)
   }
 
-  const handleDeleteRevision = (index: number) => {
-    const updatedHistory = [...(revisions || [])]
-    updatedHistory.splice(index, 1)
-    onChange(updatedHistory)
+  const handleDeleteRevision = (revision: TRevisionHistoryEntry) => {
+    revisionHistoryState.removeDataEntry(revision)
   }
+
+  const listValidation = useListValidation(
+    `/document/tracking/revision_history`,
+    revisionHistoryState.data,
+  )
 
   return (
     <div className="mt-4">
@@ -59,39 +58,52 @@ export default function RevisionHistoryTable({
           Add Revision
         </Button>
       </div>
+      {listValidation.hasErrors && (
+        <Alert color="danger" className="mb-4">
+          {listValidation.errorMessages.map((m) => (
+            <p key={m.path}>{m.message}</p>
+          ))}
+        </Alert>
+      )}
       <Table>
         <TableHeader>
-          <TableColumn>Version</TableColumn>
-          <TableColumn>Date</TableColumn>
-          <TableColumn>Description</TableColumn>
-          <TableColumn>Actions</TableColumn>
+          <TableColumn width="20%">Version</TableColumn>
+          <TableColumn width="20%">Date</TableColumn>
+          <TableColumn width="30%">Description</TableColumn>
+          <TableColumn width="10%">Actions</TableColumn>
         </TableHeader>
-        <TableBody>
-          {(revisions || []).map((revision, index) => (
-            <TableRow key={index}>
+        <TableBody emptyContent={"No revisions added yet"}>
+          {revisionHistoryState.data.map((revision, index) => (
+            <TableRow key={revision.id}>
               <TableCell>
                 <Input
-                  value={revision.version}
+                  csafPath={`/document/tracking/revision_history/${index}/number`}
+                  value={revision.number}
                   onValueChange={(value) =>
-                    handleRevisionChange(index, 'version', value)
+                    handleRevisionChange({
+                      ...revision,
+                      number: value,
+                    })
                   }
                   placeholder="Enter version"
                 />
               </TableCell>
               <TableCell>
-                <Input
-                  type="date"
+                <DatePicker
+                  csafPath={`/document/tracking/revision_history/${index}/date`}
                   value={revision.date}
-                  onValueChange={(value) =>
-                    handleRevisionChange(index, 'date', value)
-                  }
+                  onChange={(newValue) => handleRevisionChange({ ...revision, date: newValue })}
                 />
               </TableCell>
               <TableCell>
                 <Input
-                  value={revision.description}
+                  value={revision.summary}
+                  csafPath={`/document/tracking/revision_history/${index}/summary`}
                   onValueChange={(value) =>
-                    handleRevisionChange(index, 'description', value)
+                    handleRevisionChange({
+                      ...revision,
+                      summary: value,
+                    })
                   }
                   placeholder="Enter description"
                 />
@@ -99,7 +111,7 @@ export default function RevisionHistoryTable({
               <TableCell>
                 <IconButton
                   icon={faTrash}
-                  onPress={() => handleDeleteRevision(index)}
+                  onPress={() => handleDeleteRevision(revision)}
                 />
               </TableCell>
             </TableRow>
