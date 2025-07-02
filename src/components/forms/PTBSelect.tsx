@@ -5,7 +5,7 @@ import {
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { SelectItem, SelectProps } from '@heroui/select'
 import Select from './Select'
-import { getCategoryLabel } from '@/routes/products/components/PTBEditForm'
+import { useTranslation } from 'react-i18next'
 
 type PTBSelectBaseProps = Omit<
   SelectProps,
@@ -28,6 +28,7 @@ type PTBMultiSelectProps = PTBSelectBaseProps & {
 export type PTBSelectProps = PTBSingleSelectProps | PTBMultiSelectProps
 
 export default function PTBSelect(props: PTBSelectProps) {
+  const { t } = useTranslation()
   const {
     selectionMode,
     selectionCategory,
@@ -40,8 +41,6 @@ export default function PTBSelect(props: PTBSelectProps) {
   const ptbs = getPTBsByCategory(selectionCategory).filter(
     (x) => !allowedIds || allowedIds.includes(x.id),
   )
-
-  const categoryLabel = getCategoryLabel(selectionCategory ?? '')
 
   return (
     <Select
@@ -67,7 +66,7 @@ export default function PTBSelect(props: PTBSelectProps) {
     >
       {ptbs.map((p) => (
         <SelectItem key={p.id}>
-          {p.name !== '' ? p.name : `Untitled ${categoryLabel}`}
+          {p.name !== '' ? p.name : t(`untitled.${selectionCategory}`)}
         </SelectItem>
       ))}
     </Select>

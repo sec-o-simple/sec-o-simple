@@ -2,6 +2,7 @@ import { SelectItem } from '@heroui/select'
 import Select from './Select'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { useTranslation } from 'react-i18next'
 
 export type ProductSelectProps = {
   onAdd?: (product: TProductTreeBranch) => void
@@ -10,10 +11,13 @@ export type ProductSelectProps = {
 export default function ProductSelect({ onAdd }: ProductSelectProps) {
   const { getSelectablePTBs } = useProductTreeBranch()
   const ptbs = getSelectablePTBs()
+  const { t } = useTranslation()
 
   return (
     <Select
-      placeholder="Add Product"
+      placeholder={t('common.add', {
+        label: t('products.product.label') as string,
+      })}
       selectedKeys={[]}
       onSelectionChange={(selected) => {
         const productId = [...selected][0] as string

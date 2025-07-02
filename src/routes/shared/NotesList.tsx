@@ -7,6 +7,7 @@ import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
 import { Chip } from '@heroui/chip'
 import { SelectItem } from '@heroui/select'
+import { useTranslation } from 'react-i18next'
 import { uid } from 'uid'
 
 export const noteCategories = [
@@ -18,6 +19,7 @@ export const noteCategories = [
   'other',
   'summary',
 ] as const
+
 export type TNoteCategory = (typeof noteCategories)[number]
 
 export type TNote = {
@@ -43,11 +45,13 @@ export function NotesList({
   csafPath: string
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <ComponentList
       listState={notesListState}
       title="title"
-      itemLabel="Note"
+      itemLabel={t('notes.note')}
       content={(note, index) => (
         <NoteForm
           note={note}
@@ -62,9 +66,11 @@ export function NotesList({
 }
 
 function CategoryChip({ note }: { note: TNote }) {
+  const { t } = useTranslation()
+
   return (
     <Chip color="primary" variant="flat" radius="md" size="lg">
-      {note.category}
+      {t(`notes.categories.${note.category}`)}
     </Chip>
   )
 }
@@ -80,11 +86,13 @@ function NoteForm({
   onChange: (note: TNote) => void
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <VSplit className="pt-4">
       <HSplit className="items-start">
         <Select
-          label="Note category"
+          label={t('notes.category')}
           csafPath={`${csafPath}/category`}
           isTouched={isTouched}
           selectedKeys={[note.category]}
@@ -98,11 +106,11 @@ function NoteForm({
           placeholder={getPlaceholder(note, 'category')}
         >
           {noteCategories.map((key) => (
-            <SelectItem key={key}>{key}</SelectItem>
+            <SelectItem key={key}>{t(`notes.categories.${key}`)}</SelectItem>
           ))}
         </Select>
         <Input
-          label="Title"
+          label={t('notes.title')}
           isTouched={isTouched}
           csafPath={`${csafPath}/title`}
           value={note.title}
@@ -113,7 +121,7 @@ function NoteForm({
         />
       </HSplit>
       <Textarea
-        label="Note Content"
+        label={t('notes.content')}
         isTouched={isTouched}
         csafPath={`${csafPath}/text`}
         value={note.content}

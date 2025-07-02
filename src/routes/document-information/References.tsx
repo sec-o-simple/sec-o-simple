@@ -11,12 +11,14 @@ import {
 } from './types/tDocumentReference'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import usePageVisit from '@/utils/usePageVisit'
+import { useTranslation } from 'react-i18next'
 
 export default function References() {
   const referencesListState = useListState<TDocumentReference>({
     generator: getDefaultDocumentReference,
   })
 
+  const { t } = useTranslation()
   usePageVisit()
 
   useDocumentStoreUpdater<TDocumentInformation>({
@@ -31,15 +33,15 @@ export default function References() {
 
   return (
     <WizardStep
-      title="Document Information - References"
+      title={t('nav.documentInformation.references')}
       progress={1.75}
       onBack={'/document-information/publisher'}
-      onContinue={'/product-management'}
+      onContinue="/product-management"
     >
       <ComponentList
         listState={referencesListState}
         title="summary"
-        itemLabel="Reference"
+        itemLabel={t('ref.reference')}
         content={(reference, index) => (
           <ReferenceForm
             referenceIndex={index}
@@ -61,10 +63,12 @@ function ReferenceForm({
   referenceIndex: number
   onChange: (reference: TDocumentReference) => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <VSplit>
       <Textarea
-        label="Summary of the reference"
+        label={t('ref.summary')}
         csafPath={`/document/references/${referenceIndex}/summary`}
         value={reference.summary}
         onValueChange={(newValue) =>
@@ -75,7 +79,7 @@ function ReferenceForm({
         placeholder={getPlaceholder(reference, 'summary')}
       />
       <Input
-        label="URL of the reference"
+        label={t('ref.url')}
         csafPath={`/document/references/${referenceIndex}/url`}
         value={reference.url}
         onValueChange={(newValue) => onChange({ ...reference, url: newValue })}

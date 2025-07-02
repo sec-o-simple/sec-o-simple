@@ -47,16 +47,8 @@ export function getPTBName(branch?: TProductTreeBranch) {
   if (branch.name) {
     return branch.name
   }
-  switch (branch.category) {
-    case 'vendor':
-      return 'Untitled Vendor'
-    case 'product_name':
-      return 'Untitled Product'
-    case 'product_version':
-      return 'Untitled Version'
-    default:
-      return 'Untitled'
-  }
+
+  return null
 }
 
 export function getFullPTBName(branch: TProductTreeBranchWithParents) {

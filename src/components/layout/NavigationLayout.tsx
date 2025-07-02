@@ -2,36 +2,55 @@ import { usePathValidation } from '@/utils/usePathValidation'
 import React from 'react'
 import { PropsWithChildren, useMemo } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router'
-import pkg from '../../../package.json'
+import { LanguageSwitcher } from '../forms/LanguageSwitcher'
+import SecOSimpleVersion from '../forms/SecOSimpleVersion'
+import { useTranslation } from 'react-i18next'
 
 export default function NavigationLayout() {
+  const { t } = useTranslation()
+
   return (
     <div className="flex grow">
       <div className="flex flex-col justify-between border-r p-4">
         <div className="flex basis-80 flex-col gap-2">
           <Section
             number={1}
-            title="Document Information"
+            title={t('nav.documentInfo')}
             to="/document-information"
           >
-            <SubSection title="General" to="/document-information/general" />
-            <SubSection title="Notes" to="/document-information/notes" />
             <SubSection
-              title="Publisher"
+              title={t('nav.documentInformation.general')}
+              to="/document-information/general"
+            />
+            <SubSection
+              title={t('nav.documentInformation.notes')}
+              to="/document-information/notes"
+            />
+            <SubSection
+              title={t('nav.documentInformation.publisher')}
               to="/document-information/publisher"
             />
             <SubSection
-              title="References"
+              title={t('nav.documentInformation.references')}
               to="/document-information/references"
             />
           </Section>
-          <Section number={2} title="Products" to="/product-management" />
-          <Section number={3} title="Vulnerabilities" to="/vulnerabilities" />
+          <Section
+            number={2}
+            title={t('nav.products')}
+            to="/product-management"
+          />
+          <Section
+            number={3}
+            title={t('nav.vulnerabilities')}
+            to="/vulnerabilities"
+          />
         </div>
 
-        <p className="text-center text-sm text-neutral-400">
-          Version <span className="font-semibold">{pkg.version}</span>
-        </p>
+        <div className="flex flex-col gap-2">
+          <SecOSimpleVersion />
+          <LanguageSwitcher />
+        </div>
       </div>
 
       <div className="grow bg-editor">
@@ -63,7 +82,7 @@ function Section({
     <div className="flex flex-col gap-2 text-neutral-foreground">
       <NavLink
         to={to}
-        className={`flex cursor-pointer items-center gap-2 rounded-lg p-2 transition-colors hover:bg-content2 ${
+        className={`flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 transition-colors hover:bg-content2 ${
           isActive ? 'bg-content2 font-semibold text-foreground' : ''
         }`}
       >
@@ -111,7 +130,7 @@ function SubSection({ title, to }: { title: string; to: string }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex items-center gap-2 cursor-pointer pl-12 transition-colors hover:text-primary ${
+        `flex cursor-pointer items-center gap-2 pl-12 transition-colors hover:text-primary ${
           isActive ? 'text-primary' : ''
         }`
       }
