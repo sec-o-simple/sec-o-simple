@@ -68,7 +68,12 @@ export default function Remediations({
         listState={remediationsListState}
         title="url"
         itemLabel={t('vulnerabilities.remediation.title')}
-        startContent={({ item, index }) => <RemediationStartContent item={item} csafPath={`${csafPath}/${index}`} />}
+        startContent={({ item, index }) => (
+          <RemediationStartContent
+            item={item}
+            csafPath={`${csafPath}/${index}`}
+          />
+        )}
         content={(remediation, index) => (
           <RemediationForm
             remediation={remediation}

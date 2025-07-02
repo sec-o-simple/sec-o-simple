@@ -158,25 +158,58 @@ function VulnerabilityForm({
   return (
     <VSplit>
       <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
-        <Tab title={<TabTitle title={t('vulnerabilities.general')} csafPaths={
-          [
-            `${prefix}/cve`,
-            `${prefix}/cwe/name`,
-            `${prefix}/title`,
-          ]
-        } />}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.general')}
+              csafPaths={[
+                `${prefix}/cve`,
+                `${prefix}/cwe/name`,
+                `${prefix}/title`,
+              ]}
+            />
+          }
+        >
           <General {...tabProps} />
         </Tab>
-        <Tab title={<TabTitle title={t('vulnerabilities.notes')} csafPrefix={`${prefix}/notes`} />}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.notes')}
+              csafPrefix={`${prefix}/notes`}
+            />
+          }
+        >
           <Notes {...tabProps} />
         </Tab>
-        <Tab title={<TabTitle title={t('vulnerabilities.products')} csafPrefix={`${prefix}/products`} />}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.products')}
+              csafPrefix={`${prefix}/products`}
+            />
+          }
+        >
           <Products {...tabProps} />
         </Tab>
-        <Tab title={<TabTitle title={t('vulnerabilities.remediations')} csafPrefix={`${prefix}/remediations`} />}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.remediations')}
+              csafPrefix={`${prefix}/remediations`}
+            />
+          }
+        >
           <Remediations {...tabProps} />
         </Tab>
-        <Tab title={<TabTitle title={t('vulnerabilities.scores')} csafPrefix={`${prefix}/scores`} />}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.scores')}
+              csafPrefix={`${prefix}/scores`}
+            />
+          }
+        >
           <Scores {...tabProps} />
         </Tab>
       </Tabs>
