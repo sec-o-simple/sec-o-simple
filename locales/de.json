@@ -36,6 +36,7 @@
       "products": "Produkte",
       "vendors": "Anbieter",
       "document": "Dokument",
+      "documentInfo": "Dokument Informationen",
       "vulnerabilities": "Schwachstellen",
       "documentInformation": {
         "general": "Allgemein",
@@ -45,6 +46,20 @@
       }
     },
 
+    "documentSelection": {
+      "create": "Dokument erstellen",
+      "selectType": "Dokumenttyp auswählen",
+      "selectTypeDescription": "Wählen Sie, ob Sie ein neues Dokument erstellen oder ein bestehendes bearbeiten möchten",
+      "newDocument": "Neues Dokument erstellen",
+      "existingDocument": "Bestehendes Dokument bearbeiten",
+      "advisory": "Sicherheitshinweis",
+      "vex": "VEX Dokument",
+      "software": "Software",
+      "softAndHardware": "Software und Hardware",
+      "softAndFirmware": "Software und Firmware",
+      "sbom": "SBOM"
+    },
+
     "document": {
       "general": {
         "title": "Dokumenttitel",
@@ -52,9 +67,9 @@
         "language": "Sprache"
       },
       "publisher": {
-        "name": "Herausgebername",
+        "name": "Name von Herausgeber",
         "category": "Kategorie von Herausgeber",
-        "namespace": "Namensraum",
+        "namespace": "Namensraum von Herausgeber",
         "contactDetails": "Kontaktdetails",
         "issuingAuthority": "Ausstellende Behörde",
         "categories": {
@@ -106,11 +121,11 @@
     },
 
     "notes": {
-      "title": "Titel",
+      "title": "Notiz Titel",
       "note": "Notiz",
       "notes": "Notizen",
-      "content": "Inhalt",
-      "category": "Kategorie",
+      "content": "Notiz Inhalt",
+      "category": "Notiz Kategorie",
       "category_plural": "Kategorien",
       "categories": {
         "description": "Beschreibung",
@@ -161,7 +176,7 @@
     "products": {
       "vendors": "Anbieter",
       "products": "Produkte",
-      "manage": "Produkte verwalten",
+      "manage": "Produkte Verwaltung",
 
       "empty": "Sie haben noch kein {{ type }}-Produkt erstellt.\nSie können eines hinzufügen, indem Sie einen Anbieter erstellen und ihm ein Produkt hinzufügen.",
 

@@ -33,7 +33,7 @@ export default function References() {
 
   return (
     <WizardStep
-      title={t('nav.documentInformation.publisher')}
+      title={t('nav.documentInformation.references')}
       progress={1.75}
       onBack={'/document-information/publisher'}
       onContinue="/product-management"

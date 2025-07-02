@@ -33,6 +33,7 @@
       "products": "Products",
       "vendors": "Vendors",
       "document": "Document",
+      "documentInfo": "Document Information",
       "vulnerabilities": "Vulnerabilities",
       "documentInformation": {
         "general": "General",
@@ -41,6 +42,22 @@
         "references": "References"
       }
     },
+
+    "documentSelection": {
+      "create": "Create document",
+      "selectType": "Select Document Type",
+      "selectTypeDescription": "Choose whether you want to create a new document or edit an existing one",
+      "newDocument": "Create new Document",
+      "existingDocument": "Edit existing Document",
+
+      "advisory": "Security Advisory",
+      "vex": "VEX Document",
+      "software": "Software",
+      "softAndHardware": "Software and Hardware",
+      "softAndFirmware": "Software and Firmware",
+      "sbom": "SBOM"
+    },
+
     "document": {
       "general": {
         "title": "Document Title",
@@ -48,9 +65,9 @@
         "language": "Language"
       },
       "publisher": {
-        "name": "Publisher Name",
-        "category": "Publisher Category",
-        "namespace": "Namespace",
+        "name": "Name of Publisher",
+        "category": "Category of Publisher",
+        "namespace": "Namespace of Publisher",
         "contactDetails": "Contact Details",
         "issuingAuthority": "Issuing Authority",
         "categories": {
@@ -100,11 +117,11 @@
       }
     },
     "notes": {
-      "title": "Title",
+      "title": "Note Title",
       "note": "Note",
       "notes": "Notes",
-      "content": "Content",
-      "category": "Category",
+      "content": "Note Content",
+      "category": "Note Category",
       "category_plural": "Categories",
       "categories": {
         "description": "Description",
@@ -125,7 +142,7 @@
     "untitled": {
       "vendor": "Untitled Vendor",
       "product_name": "Untitled Product",
-      "product_version": "Untitled Product Version",
+      "product_version": "Untitled Version",
       "": "Untitled"
     },
     "modal": {
@@ -148,9 +165,9 @@
       "type": "Product Type"
     },
     "products": {
-      "vendors": "Vendor",
+      "vendors": "Vendors",
       "products": "Products",
-      "manage": "Manage Products",
+      "manage": "Product Management",
       "empty": "You haven't created any {{ type }} product yet.\nYou can add one by creating a vendor and adding a product to it.",
       "software": "Software",
       "hardware": "Hardware",
@@ -167,8 +184,8 @@
           "empty": "No versions available",
           "edit": "Edit Product Version",
           "edit_plural": "Edit Product Versions",
-          "affected": "Affected Versions",
-          "fixed": "Fixed Versions"
+          "affected": "First affected Version",
+          "fixed": "First fixed Version"
         }
       },
       "relationship": {

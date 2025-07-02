@@ -20,11 +20,11 @@ export default function ProductManagement() {
       onContinue={'/vulnerabilities'}
       noContentWrapper
     >
-      <div className="flex w-full items-center justify-between rounded-lg border-1 border-default-200 bg-white p-4">
+      <div className="flex w-full items-center justify-between rounded-lg border-1 border-default-200 bg-white p-8">
         <p className="text-xl font-semibold">{t('products.manage')}</p>
       </div>
 
-      <div>
+      <div className="px-6">
         <Tabs
           className="w-full"
           color="primary"

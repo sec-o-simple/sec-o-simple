@@ -15,7 +15,7 @@ export default function NavigationLayout() {
         <div className="flex basis-80 flex-col gap-2">
           <Section
             number={1}
-            title={t('nav.document')}
+            title={t('nav.documentInfo')}
             to="/document-information"
           >
             <SubSection
