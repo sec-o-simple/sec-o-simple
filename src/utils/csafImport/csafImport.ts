@@ -27,6 +27,8 @@ import {
 } from '@/routes/products/types/tRelationship'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { parseRelationships } from './parseRelationships'
+import { getDefaultRevisionHistoryEntry } from '@/routes/document-information/types/tRevisionHistoryEntry'
+import { uid } from 'uid'
 
 export const supportedCSAFVersions = ['2.0']
 
@@ -38,11 +40,20 @@ export function parseCSAFDocument(
   const sosDocumentType: TSOSDocumentType = 'HardwareSoftware'
 
   const defaultDocumentInformation = getDefaultDocumentInformation()
+  const defaultRevisionHistoryEntry = getDefaultRevisionHistoryEntry()
+
   const csafDoc = csafDocument.document
   const documentInformation: TDocumentInformation = {
     id: csafDoc?.tracking?.id || defaultDocumentInformation.id,
     language: csafDoc?.lang ?? defaultDocumentInformation.language,
     title: csafDoc?.title ?? defaultDocumentInformation.title,
+    revisionHistory:
+      csafDoc?.tracking?.revision_history?.map((revision) => ({
+        id: uid(),
+        date: revision?.date ?? defaultRevisionHistoryEntry.date,
+        number: revision?.number ?? defaultRevisionHistoryEntry.number,
+        summary: revision?.summary ?? defaultRevisionHistoryEntry.summary,
+      })) ?? defaultDocumentInformation.revisionHistory,
     publisher: {
       name:
         csafDoc?.publisher?.name ?? defaultDocumentInformation.publisher.name,

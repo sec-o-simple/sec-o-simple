@@ -2,6 +2,7 @@ import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
 import generateRelationships from './generateRelationships'
 import { getFilename } from './helpers'
+import { retrieveLatestVersion } from './latestVersion'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
 import { PidGenerator } from './pidGenerator'
@@ -27,15 +28,19 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         },
         current_release_date: currentDate,
         initial_release_date: currentDate,
-        revision_history: [
-          {
-            date: currentDate,
-            number: '1',
-            summary: 'Initial revision',
-          },
-        ],
+        revision_history: documentStore.documentInformation.revisionHistory.map(
+          (entry) => ({
+            date: entry.date,
+            number: entry.number,
+            summary: entry.summary,
+          }),
+        ),
         status: 'final',
-        version: '1',
+        version: documentStore.documentInformation.revisionHistory.length
+          ? retrieveLatestVersion(
+              documentStore.documentInformation.revisionHistory,
+            )
+          : '1',
         id: documentStore.documentInformation.id,
       },
       lang: documentStore.documentInformation.language,
@@ -69,7 +74,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
     },
     vulnerabilities: Object.values(documentStore.vulnerabilities).map(
       (vulnerability) => ({
-        cve: vulnerability.cve,
+        cve: vulnerability.cve || undefined,
         title: vulnerability.title,
         cwe: vulnerability.cwe
           ? {

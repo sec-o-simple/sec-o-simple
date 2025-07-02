@@ -11,8 +11,9 @@ import {
   getDefaultGeneralDocumentInformation,
 } from './types/tGeneralDocumentInformation'
 import { useTemplate } from '@/utils/template'
-import usePageVisit from '@/utils/usePageVisit'
+import usePageVisit from '@/utils/validation/usePageVisit'
 import { useTranslation } from 'react-i18next'
+import RevisionHistoryTable from '@/components/forms/RevisionHistoryTable'
 
 export default function General() {
   const [localState, setLocalState] = useState<TGeneralDocumentInformation>(
@@ -71,6 +72,7 @@ export default function General() {
           ))}
         </Select>
       </HSplit>
+      <RevisionHistoryTable />
     </WizardStep>
   )
 }

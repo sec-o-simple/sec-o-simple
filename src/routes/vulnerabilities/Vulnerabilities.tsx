@@ -10,11 +10,14 @@ import Notes from './Notes'
 import Products from './Products'
 import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
 import { Alert } from '@heroui/react'
-import { useListValidation } from '@/utils/useListValidation'
-import usePageVisit from '@/utils/usePageVisit'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import usePageVisit from '@/utils/validation/usePageVisit'
 import Scores from './Scores'
 import Remediations from './Remediations'
 import { useTranslation } from 'react-i18next'
+import useValidationStore from '@/utils/validation/useValidationStore'
+import StatusIndicator from '@/components/StatusIndicator'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
@@ -66,11 +69,26 @@ export default function Vulnerabilities() {
             onChange={vulnerabilitiesListState.updateDataEntry}
           />
         )}
-        startContent={(vulnerability) => (
-          <CVEChip vulnerability={vulnerability} />
-        )}
+        startContent={VulnerabilityListStartContent}
       />
     </WizardStep>
+  )
+}
+
+function VulnerabilityListStartContent({
+  item,
+  index,
+}: {
+  item: TVulnerability
+  index: number
+}) {
+  const { hasErrors } = usePrefixValidation(`/vulnerabilities/${index}`)
+
+  return (
+    <>
+      <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
+      <CVEChip vulnerability={item} />
+    </>
   )
 }
 
@@ -81,6 +99,38 @@ function CVEChip({ vulnerability }: { vulnerability: TVulnerability }) {
         {vulnerability.cve}
       </Chip>
     )
+  )
+}
+
+function TabTitle({
+  title,
+  csafPrefix = '',
+  csafPaths = [],
+}: {
+  title: string
+  csafPrefix?: string
+  csafPaths?: string[]
+}) {
+  const messages = useValidationStore((state) => state.messages)
+  const errorPaths = messages
+    .filter((m) => m.severity === 'error')
+    .map((e) => e.path)
+
+  let hasError = false
+
+  if (csafPrefix && csafPrefix.length) {
+    hasError = errorPaths.some((path) => path.startsWith(csafPrefix))
+  }
+
+  if (!hasError && csafPaths.length > 0) {
+    hasError = csafPaths.some((path) => errorPaths.includes(path))
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <StatusIndicator hasErrors={hasError} hasVisited={true} />
+      {title}
+    </div>
   )
 }
 
@@ -103,22 +153,63 @@ function VulnerabilityForm({
     onChange,
   }
 
+  const prefix = `/vulnerabilities/${vulnerabilityIndex}`
+
   return (
     <VSplit>
       <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
-        <Tab title={t('vulnerabilities.general')}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.general')}
+              csafPaths={[
+                `${prefix}/cve`,
+                `${prefix}/cwe/name`,
+                `${prefix}/title`,
+              ]}
+            />
+          }
+        >
           <General {...tabProps} />
         </Tab>
-        <Tab title={t('vulnerabilities.notes')}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.notes')}
+              csafPrefix={`${prefix}/notes`}
+            />
+          }
+        >
           <Notes {...tabProps} />
         </Tab>
-        <Tab title={t('vulnerabilities.products')}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.products')}
+              csafPrefix={`${prefix}/products`}
+            />
+          }
+        >
           <Products {...tabProps} />
         </Tab>
-        <Tab title={t('vulnerabilities.remediations')}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.remediations')}
+              csafPrefix={`${prefix}/remediations`}
+            />
+          }
+        >
           <Remediations {...tabProps} />
         </Tab>
-        <Tab title={t('vulnerabilities.scores')}>
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.scores')}
+              csafPrefix={`${prefix}/scores`}
+            />
+          }
+        >
           <Scores {...tabProps} />
         </Tab>
       </Tabs>

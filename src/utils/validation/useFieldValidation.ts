@@ -1,4 +1,4 @@
-import useValidationStore from '@/utils/useValidationStore'
+import useValidationStore from '@/utils/validation/useValidationStore'
 
 export function useFieldValidation(path?: string) {
   const validationStore = useValidationStore()
@@ -16,7 +16,8 @@ export function useFieldValidation(path?: string) {
     errorMessages,
     warningMessages,
     infoMessages,
-    isTouched: !path ? true : validationStore.isFieldTouched(path),
+    // For now we mark all fields as touched until we have a better way to handle this
+    isTouched: true,
     markFieldAsTouched: validationStore.markFieldAsTouched,
   }
 }

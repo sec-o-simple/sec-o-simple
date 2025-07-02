@@ -18,6 +18,11 @@ import { SelectItem } from '@heroui/select'
 import HSplit from '@/components/forms/HSplit'
 import DatePicker from '@/components/forms/DatePicker'
 import { useTranslation } from 'react-i18next'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import { Alert } from '@heroui/react'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import StatusIndicator from '@/components/StatusIndicator'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 
 export default function Remediations({
   vulnerability,
@@ -43,31 +48,62 @@ export default function Remediations({
     [remediationsListState.data],
   )
 
+  const listValidation = useListValidation(
+    `/vulnerabilities/${vulnerabilityIndex}/remediations`,
+    remediationsListState.data,
+  )
+
+  const csafPath = `/vulnerabilities/${vulnerabilityIndex}/remediations`
+
   return (
-    <ComponentList
-      listState={remediationsListState}
-      title="url"
-      itemLabel={t('vulnerabilities.remediation.title')}
-      startContent={(r) => <CategoryChip remediation={r} />}
-      content={(remediation, index) => (
-        <RemediationForm
-          remediation={remediation}
-          csafPath={`/vulnerabilities/${vulnerabilityIndex}/remediations/${index}`}
-          isTouched={isTouched}
-          onChange={remediationsListState.updateDataEntry}
-        />
+    <>
+      {listValidation.hasErrors && (
+        <Alert color="danger" className="mb-4">
+          {listValidation.errorMessages.map((m) => (
+            <p key={m.path}>{m.message}</p>
+          ))}
+        </Alert>
       )}
-    />
+      <ComponentList
+        listState={remediationsListState}
+        title="url"
+        itemLabel={t('vulnerabilities.remediation.title')}
+        startContent={({ item, index }) => (
+          <RemediationStartContent
+            item={item}
+            csafPath={`${csafPath}/${index}`}
+          />
+        )}
+        content={(remediation, index) => (
+          <RemediationForm
+            remediation={remediation}
+            csafPath={`${csafPath}/${index}`}
+            isTouched={isTouched}
+            onChange={remediationsListState.updateDataEntry}
+          />
+        )}
+      />
+    </>
   )
 }
 
-function CategoryChip({ remediation }: { remediation: TRemediation }) {
+function RemediationStartContent({
+  item,
+  csafPath,
+}: {
+  item: TRemediation
+  csafPath: string
+}) {
+  const { hasErrors } = usePrefixValidation(csafPath)
   const { t } = useTranslation()
 
   return (
-    <Chip color="primary" variant="flat" radius="md">
-      {t(`vulnerabilities.remediation.categories.${remediation.category}`)}
-    </Chip>
+    <>
+      <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
+      <Chip color="primary" variant="flat" radius="md" size="lg">
+        {t(`vulnerabilities.remediation.categories.${item.category}`)}
+      </Chip>
+    </>
   )
 }
 
@@ -83,6 +119,7 @@ function RemediationForm({
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
+  const fieldValidation = useFieldValidation(`${csafPath}/product_ids`)
 
   return (
     <VSplit>
@@ -139,6 +176,11 @@ function RemediationForm({
         placeholder={getPlaceholder(remediation, 'url')}
       />
       <ProductsTagList
+        error={
+          fieldValidation.hasErrors
+            ? fieldValidation.errorMessages[0].message
+            : ''
+        }
         products={remediation.productIds}
         onChange={(productIds) => onChange({ ...remediation, productIds })}
       />

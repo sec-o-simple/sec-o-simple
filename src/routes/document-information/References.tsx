@@ -10,8 +10,12 @@ import {
   getDefaultDocumentReference,
 } from './types/tDocumentReference'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import usePageVisit from '@/utils/usePageVisit'
 import { useTranslation } from 'react-i18next'
+import usePageVisit from '@/utils/validation/usePageVisit'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import { Alert } from '@heroui/react'
+import StatusIndicator from '@/components/StatusIndicator'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 
 export default function References() {
   const referencesListState = useListState<TDocumentReference>({
@@ -20,6 +24,11 @@ export default function References() {
 
   const { t } = useTranslation()
   usePageVisit()
+
+  const listValidation = useListValidation(
+    `/document/references`,
+    referencesListState.data,
+  )
 
   useDocumentStoreUpdater<TDocumentInformation>({
     localState: [
@@ -38,10 +47,18 @@ export default function References() {
       onBack={'/document-information/publisher'}
       onContinue="/product-management"
     >
+      {listValidation.isTouched && listValidation.hasErrors && (
+        <Alert color="danger">
+          {listValidation.errorMessages.map((m) => (
+            <p key={m.path}>{m.message}</p>
+          ))}
+        </Alert>
+      )}
       <ComponentList
         listState={referencesListState}
         title="summary"
         itemLabel={t('ref.reference')}
+        startContent={StartContent}
         content={(reference, index) => (
           <ReferenceForm
             referenceIndex={index}
@@ -52,6 +69,12 @@ export default function References() {
       />
     </WizardStep>
   )
+}
+
+function StartContent({ index }: { index: number }) {
+  const { hasErrors } = usePrefixValidation(`/document/references/${index}`)
+
+  return <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
 }
 
 function ReferenceForm({

@@ -17,7 +17,9 @@
       "next": "Next",
       "ok": "OK",
       "untitled": "Untitled",
-      "add": "Add {{label}}"
+      "add": "Add {{label}}",
+      "placeholder": "Enter {{label}}",
+      "actions": "Actions"
     },
     "preview": "Preview",
     "newDocument": "New Document",
@@ -62,7 +64,14 @@
       "general": {
         "title": "Document Title",
         "id": "Document ID",
-        "language": "Language"
+        "language": "Language",
+        "revisionHistory": {
+          "label": "Revision",
+          "version": "Version",
+          "date": "Date",
+          "description": "Description",
+          "empty": "No revisions added yet"
+        }
       },
       "publisher": {
         "name": "Name of Publisher",
