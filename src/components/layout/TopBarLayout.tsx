@@ -90,7 +90,6 @@ function ValidationErrorList() {
 
 export default function TopBarLayout() {
   const navigate = useNavigate()
-  const { exportSOSDocument } = useSOSExport()
   const { exportCSAFDocument } = useCSAFExport()
   const { isValid, isValidating, reset: resetValidation } = useValidationStore()
   const { reset } = useDocumentStore()
@@ -125,23 +124,22 @@ export default function TopBarLayout() {
             <FontAwesomeIcon icon={faEye} />
             Preview
           </Button>
-          <Button color="secondary" onPress={exportSOSDocument}>
-            <FontAwesomeIcon icon={faSave} />
-            Export Draft
-          </Button>
           <Tooltip
-            content="There are some errors in the document. Please fix them before exporting."
+            content={!isValid ? 'Document is not valid' : ''}
             isDisabled={isValid && !isValidating}
           >
             <div>
-              <Button
+              <ConfirmButton
+                confirmText="Are you sure you want to export an invalid document?"
+                confirmTitle="Export Document"
+                onConfirm={exportCSAFDocument}
+                skipConfirm={isValid && !isValidating}
                 color="primary"
-                onPress={exportCSAFDocument}
-                isDisabled={!isValid || isValidating}
+                fullWidth={false}
               >
                 <FontAwesomeIcon icon={faFileExport} />
                 Export CSAF
-              </Button>
+              </ConfirmButton>
             </div>
           </Tooltip>
           <ValidationErrorList />

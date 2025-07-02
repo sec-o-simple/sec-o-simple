@@ -12,19 +12,21 @@ type ConfirmButtonProps = {
   confirmText: string
   confirmTitle: string
   onConfirm: () => void
+  skipConfirm?: boolean
 } & ButtonProps
 
 export default function ConfirmButton({
   confirmText,
   confirmTitle,
   onConfirm,
+  skipConfirm = false,
   ...props
 }: ConfirmButtonProps) {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   return (
     <>
-      <Button onPress={onOpen} fullWidth {...props}>
+      <Button onPress={skipConfirm ? onConfirm : onOpen} fullWidth {...props}>
         {props?.children || 'Confirm'}
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">

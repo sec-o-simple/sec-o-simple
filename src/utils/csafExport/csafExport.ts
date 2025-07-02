@@ -1,5 +1,6 @@
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
+import useValidationStore from '../useValidationStore'
 import generateRelationships from './generateRelationships'
 import { getFilename } from './helpers'
 import { parseNote } from './parseNote'
@@ -126,14 +127,16 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
 
 export function useCSAFExport() {
   const documentStore = useDocumentStore()
+  const { isValid } = useValidationStore()
 
   const exportCSAFDocument = () => {
     const csafDocument = createCSAFDocument(documentStore)
 
-    download(
-      `${getFilename(documentStore.documentInformation.id)}.json`,
-      JSON.stringify(csafDocument, null, 2),
-    )
+    const prefix = !isValid ? 'invalid_' : ''
+    const id = documentStore.documentInformation.id || 'csaf_document'
+    const filename = prefix + id + '.json'
+
+    download(filename, JSON.stringify(csafDocument, null, 2))
   }
 
   return { exportCSAFDocument }
