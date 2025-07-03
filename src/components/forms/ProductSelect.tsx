@@ -1,4 +1,4 @@
-import { SelectItem, SelectProps } from '@heroui/select'
+import { SelectItem } from '@heroui/select'
 import Select from './Select'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
