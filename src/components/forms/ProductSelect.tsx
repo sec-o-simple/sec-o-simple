@@ -1,4 +1,4 @@
-import { SelectItem } from '@heroui/select'
+import { SelectItem, SelectProps } from '@heroui/select'
 import Select from './Select'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
@@ -6,9 +6,13 @@ import { useTranslation } from 'react-i18next'
 
 export type ProductSelectProps = {
   onAdd?: (product: TProductTreeBranch) => void
+  isRequired?: boolean
 }
 
-export default function ProductSelect({ onAdd }: ProductSelectProps) {
+export default function ProductSelect({
+  onAdd,
+  isRequired,
+}: ProductSelectProps) {
   const { getSelectablePTBs } = useProductTreeBranch()
   const ptbs = getSelectablePTBs()
   const { t } = useTranslation()
@@ -26,6 +30,7 @@ export default function ProductSelect({ onAdd }: ProductSelectProps) {
           onAdd?.(ptb)
         }
       }}
+      isRequired={isRequired}
     >
       {ptbs.map((p) => (
         <SelectItem key={p.id}>{p.name}</SelectItem>

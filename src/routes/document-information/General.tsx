@@ -45,6 +45,7 @@ export default function General() {
         onValueChange={(title) => setLocalState({ ...localState, title })}
         isDisabled={isFieldReadonly('document-information.title')}
         placeholder={getFieldPlaceholder('document-information.title')}
+        isRequired
       />
       <HSplit className="items-start">
         <Input
@@ -55,6 +56,7 @@ export default function General() {
           onValueChange={(id) => setLocalState({ ...localState, id })}
           isDisabled={isFieldReadonly('document-information.id')}
           placeholder={getFieldPlaceholder('document-information.id')}
+          isRequired
         />
         <Select
           label={t('document.general.language')}
@@ -65,6 +67,7 @@ export default function General() {
             setLocalState({ ...localState, language: [...v][0] as string })
           }
           isDisabled={isFieldReadonly('document-information.language')}
+          isRequired
           placeholder={getFieldPlaceholder('document-information.language')}
         >
           {['de', 'en'].map((key) => (

@@ -109,8 +109,11 @@ function NoteForm({
           label={t('notes.category')}
           csafPath={`${csafPath}/category`}
           isTouched={isTouched}
+          isRequired
           selectedKeys={[note.category]}
           onSelectionChange={(selected) => {
+            if (!selected.anchorKey) return
+
             onChange({
               ...note,
               category: [...selected][0] as TNoteCategory,
@@ -130,8 +133,9 @@ function NoteForm({
           value={note.title}
           onValueChange={(newValue) => onChange({ ...note, title: newValue })}
           autoFocus={true}
-          isDisabled={checkReadOnly(note, 'title')}
           placeholder={getPlaceholder(note, 'title')}
+          isDisabled={checkReadOnly(note, 'title')}
+          isRequired
         />
       </HSplit>
       <Textarea
@@ -140,8 +144,9 @@ function NoteForm({
         csafPath={`${csafPath}/text`}
         value={note.content}
         onValueChange={(newValue) => onChange({ ...note, content: newValue })}
-        isDisabled={checkReadOnly(note, 'content')}
         placeholder={getPlaceholder(note, 'content')}
+        isDisabled={checkReadOnly(note, 'content')}
+        isRequired
       />
     </VSplit>
   )
