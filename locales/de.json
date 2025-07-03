@@ -151,7 +151,12 @@
       "references": "Referenzen",
       "reference": "Referenz",
       "summary": "Zusammenfassung",
-      "url": "URL"
+      "url": "URL",
+      "category": "Herkunft",
+      "categories": {
+        "external": "Extern",
+        "self": "Intern"
+      }
     },
 
     "untitled": {
