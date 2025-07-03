@@ -30,7 +30,7 @@ export default function Notes() {
   return (
     <WizardStep
       title={t('nav.documentInformation.notes')}
-      progress={1.25}
+      progress={1.2}
       onBack={'/document-information/general'}
       onContinue={'/document-information/publisher'}
     >

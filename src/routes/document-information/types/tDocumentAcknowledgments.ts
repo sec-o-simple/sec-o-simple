@@ -1,0 +1,29 @@
+import { uid } from 'uid'
+
+export type TAcknowledgmentName = {
+  id: string
+  name: string
+}
+
+export type TAcknowledgment = {
+  id: string
+  summary: string
+  organization?: string
+  names?: TAcknowledgmentName[]
+}
+
+export function getDefaultDocumentAcknowledgment(): TAcknowledgment {
+  return {
+    id: uid(),
+    summary: '',
+    organization: undefined,
+    names: [],
+  }
+}
+
+export function getDefaultDocumentAcknowledgmentName(): TAcknowledgmentName {
+  return {
+    id: uid(),
+    name: '',
+  }
+}

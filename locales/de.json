@@ -44,7 +44,8 @@
         "general": "Allgemein",
         "notes": "Notizen",
         "publisher": "Herausgeber",
-        "references": "Referenzen"
+        "references": "Referenzen",
+        "acknowledgments": "Danksagungen"
       }
     },
 
@@ -92,6 +93,17 @@
       },
       "references": {
         "url": "URL"
+      },
+
+      "acknowledgments": {
+        "title": "Danksagungen",
+        "acknowledgment": "Danksagung",
+        "acknowledgments": "Danksagungen",
+        "summary": "Zusammenfassung",
+        "name": "Name",
+        "description": "Beschreibung",
+        "url": "URL",
+        "empty": "Keine Danksagungen hinzugefügt"
       }
     },
 

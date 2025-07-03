@@ -1,3 +1,4 @@
+import { calculateBaseScore, calculateQualScore } from 'cvss4'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
 import generateRelationships from './generateRelationships'
@@ -6,7 +7,6 @@ import { retrieveLatestVersion } from './latestVersion'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
 import { PidGenerator } from './pidGenerator'
-import { calculateBaseScore, calculateQualScore } from 'cvss4'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
@@ -59,6 +59,14 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         (reference) => ({
           summary: reference.summary,
           url: reference.url,
+        }),
+      ),
+      acknowledgments: documentStore.documentInformation.acknowledgments.map(
+        (acknowledgment) => ({
+          id: acknowledgment.id,
+          summary: acknowledgment.summary,
+          organization: acknowledgment.organization,
+          names: acknowledgment.names?.map((name) => name.name) || [],
         }),
       ),
     },

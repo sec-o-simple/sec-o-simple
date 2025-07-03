@@ -4,11 +4,11 @@ import useDocumentStore from '@/utils/useDocumentStore'
 import useValidationStore from '@/utils/validation/useValidationStore'
 import {
   faAdd,
+  faCircleExclamation,
   faEye,
   faFileExport,
   faSave,
   faShieldHalved,
-  faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
@@ -27,9 +27,9 @@ import {
   Tooltip,
   useDisclosure,
 } from '@heroui/react'
+import { useTranslation } from 'react-i18next'
 import { Outlet, useNavigate } from 'react-router'
 import ConfirmButton from '../forms/ConfirmButton'
-import { useTranslation } from 'react-i18next'
 
 function ValidationErrorList() {
   const { t } = useTranslation()
@@ -155,7 +155,7 @@ export default function TopBarLayout() {
               <Button
                 color="primary"
                 onPress={exportCSAFDocument}
-                isDisabled={!isValid || isValidating}
+                // isDisabled={!isValid || isValidating}
               >
                 <FontAwesomeIcon icon={faFileExport} />
                 {t('export.csaf')}

@@ -41,7 +41,8 @@
         "general": "General",
         "notes": "Notes",
         "publisher": "Publisher",
-        "references": "References"
+        "references": "References",
+        "acknowledgments": "Acknowledgements"
       }
     },
 
@@ -90,6 +91,17 @@
       },
       "references": {
         "url": "URL"
+      },
+
+      "acknowledgments": {
+        "title": "Acknowledgements",
+        "acknowledgment": "Acknowledgement",
+        "acknowledgments": "Acknowledgements",
+        "name": "Name",
+        "names": "Acknowledged Names",
+        "organization": "Organization",
+        "summary": "Summary",
+        "empty": "No acknowledgements added yet"
       }
     },
     "vulnerabilities": {

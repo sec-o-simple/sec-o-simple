@@ -43,9 +43,9 @@ export default function References() {
   return (
     <WizardStep
       title={t('nav.documentInformation.references')}
-      progress={1.75}
+      progress={1.6}
       onBack={'/document-information/publisher'}
-      onContinue="/product-management"
+      onContinue="/document-information/acknowledgments"
     >
       {listValidation.isTouched && listValidation.hasErrors && (
         <Alert color="danger">

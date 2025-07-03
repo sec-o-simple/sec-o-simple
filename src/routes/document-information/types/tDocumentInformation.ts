@@ -13,12 +13,14 @@ import { TDocumentReference } from './tDocumentReference'
 import { TemplateKeys } from '@/utils/template'
 import { TRevisionHistoryEntry } from './tRevisionHistoryEntry'
 import { uid } from 'uid'
+import { TAcknowledgment } from './tDocumentAcknowledgments'
 
 export type TDocumentInformation = TGeneralDocumentInformation & {
   notes: TNote[]
   publisher: TDocumentPublisher
   references: TDocumentReference[]
   revisionHistory: TRevisionHistoryEntry[]
+  acknowledgments: TAcknowledgment[]
 }
 
 export function getDefaultDocumentInformation(): TDocumentInformation {
@@ -27,6 +29,7 @@ export function getDefaultDocumentInformation(): TDocumentInformation {
     notes: [],
     publisher: getDefaultDocumentPublisher(),
     references: [],
+    acknowledgments: [],
     revisionHistory: [
       {
         id: uid(),
@@ -45,5 +48,6 @@ export function getDocumentInformationTemplateKeys(): TemplateKeys<TDocumentInfo
     publisher: getDocumentPublisherTemplateKeys(),
     references: 'document-information.references',
     revisionHistory: 'document-information.revision-history',
+    acknowledgments: 'document-information.acknowledgments',
   }
 }
