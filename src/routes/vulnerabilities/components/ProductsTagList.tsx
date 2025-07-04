@@ -1,12 +1,12 @@
 import ProductSelect from '@/components/forms/ProductSelect'
 import VSplit from '@/components/forms/VSplit'
 import TagList from '@/routes/products/components/TagList'
-import { useEffect, useState } from 'react'
 import {
   TProductTreeBranchWithParents,
   getFullPTBName,
 } from '@/routes/products/types/tProductTreeBranch'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export type ProductsTagListProps = {
@@ -44,6 +44,7 @@ export default function ProductsTagList({
       </span>
       <ProductSelect
         isRequired={isRequired}
+        selected={selectedProducts.map((x) => x.id)}
         onAdd={(ptb) =>
           setSelectedProducts([
             ...new Set([
