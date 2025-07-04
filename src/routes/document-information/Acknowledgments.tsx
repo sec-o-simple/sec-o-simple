@@ -36,7 +36,7 @@ export default function Acknowledgments() {
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
     init: (initialData) =>
-      acknowledgmentsListState.setData(initialData.acknowledgments),
+      acknowledgmentsListState.setData(initialData.acknowledgments ?? []),
   })
 
   const listValidation = useListValidation(
