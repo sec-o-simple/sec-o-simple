@@ -1,12 +1,12 @@
 import WizardStep from '@/components/WizardStep'
-import { useListState } from '@/utils/useListState'
-import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
-import { TDocumentInformation } from './types/tDocumentInformation'
-import { Alert } from '@heroui/react'
-import { useTranslation } from 'react-i18next'
+import { useListState } from '@/utils/useListState'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import usePageVisit from '@/utils/validation/usePageVisit'
+import { Alert } from '@heroui/react'
+import { useTranslation } from 'react-i18next'
+import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
+import { TDocumentInformation } from './types/tDocumentInformation'
 
 export default function Notes() {
   const { t } = useTranslation()
@@ -15,10 +15,20 @@ export default function Notes() {
   })
 
   useDocumentStoreUpdater<TDocumentInformation>({
-    localState: [notesListState.data, () => ({ notes: notesListState.data })],
+    localState: [
+      notesListState.data,
+      () => ({
+        notes: notesListState.data.length > 0 ? notesListState.data : undefined,
+      }),
+    ],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
-    init: (initialData) => notesListState.setData(initialData.notes),
+    init: (initialData) => {
+      if (initialData.notes && initialData.notes.length > 0) {
+        notesListState.setData(initialData.notes)
+        return
+      }
+    },
   })
 
   const hasVisitedPage = usePageVisit()

@@ -1,21 +1,21 @@
+import StatusIndicator from '@/components/StatusIndicator'
 import WizardStep from '@/components/WizardStep'
 import ComponentList from '@/components/forms/ComponentList'
 import { Input, Textarea } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { useListState } from '@/utils/useListState'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import usePageVisit from '@/utils/validation/usePageVisit'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import { Alert } from '@heroui/react'
+import { useTranslation } from 'react-i18next'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TDocumentReference,
   getDefaultDocumentReference,
 } from './types/tDocumentReference'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import { useTranslation } from 'react-i18next'
-import usePageVisit from '@/utils/validation/usePageVisit'
-import { useListValidation } from '@/utils/validation/useListValidation'
-import { Alert } from '@heroui/react'
-import StatusIndicator from '@/components/StatusIndicator'
-import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 
 export default function References() {
   const referencesListState = useListState<TDocumentReference>({
@@ -25,20 +25,30 @@ export default function References() {
   const { t } = useTranslation()
   usePageVisit()
 
+  useDocumentStoreUpdater<TDocumentInformation>({
+    localState: [
+      referencesListState.data,
+      () => ({
+        references:
+          referencesListState.data.length > 0
+            ? referencesListState.data
+            : undefined,
+      }),
+    ],
+    valueField: 'documentInformation',
+    valueUpdater: 'updateDocumentInformation',
+    init: (initialData) => {
+      if (initialData.references && initialData.references.length > 0) {
+        referencesListState.setData(initialData.references)
+        return
+      }
+    },
+  })
+
   const listValidation = useListValidation(
     `/document/references`,
     referencesListState.data,
   )
-
-  useDocumentStoreUpdater<TDocumentInformation>({
-    localState: [
-      referencesListState.data,
-      () => ({ references: referencesListState.data }),
-    ],
-    valueField: 'documentInformation',
-    valueUpdater: 'updateDocumentInformation',
-    init: (initialData) => referencesListState.setData(initialData.references),
-  })
 
   return (
     <WizardStep

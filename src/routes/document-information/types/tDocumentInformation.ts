@@ -1,35 +1,32 @@
 import { TNote } from '@/routes/shared/NotesList'
-import {
-  getDefaultGeneralDocumentInformation,
-  getGeneralDocumentInformationTemplateKeys,
-  TGeneralDocumentInformation,
-} from './tGeneralDocumentInformation'
+import { TemplateKeys } from '@/utils/template'
+import { uid } from 'uid'
+import { TAcknowledgment } from './tDocumentAcknowledgments'
 import {
   getDefaultDocumentPublisher,
   getDocumentPublisherTemplateKeys,
   TDocumentPublisher,
 } from './tDocumentPublisher'
 import { TDocumentReference } from './tDocumentReference'
-import { TemplateKeys } from '@/utils/template'
+import {
+  getDefaultGeneralDocumentInformation,
+  getGeneralDocumentInformationTemplateKeys,
+  TGeneralDocumentInformation,
+} from './tGeneralDocumentInformation'
 import { TRevisionHistoryEntry } from './tRevisionHistoryEntry'
-import { uid } from 'uid'
-import { TAcknowledgment } from './tDocumentAcknowledgments'
 
 export type TDocumentInformation = TGeneralDocumentInformation & {
-  notes: TNote[]
   publisher: TDocumentPublisher
-  references: TDocumentReference[]
   revisionHistory: TRevisionHistoryEntry[]
-  acknowledgments: TAcknowledgment[]
+  acknowledgments?: TAcknowledgment[]
+  notes?: TNote[]
+  references?: TDocumentReference[]
 }
 
 export function getDefaultDocumentInformation(): TDocumentInformation {
   return {
     ...getDefaultGeneralDocumentInformation(),
-    notes: [],
     publisher: getDefaultDocumentPublisher(),
-    references: [],
-    acknowledgments: [],
     revisionHistory: [
       {
         id: uid(),

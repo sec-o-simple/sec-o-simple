@@ -26,21 +26,33 @@ export default function Acknowledgments() {
   const { t } = useTranslation()
   usePageVisit()
 
+  useDocumentStoreUpdater<TDocumentInformation>({
+    localState: [
+      acknowledgmentsListState.data,
+      () => ({
+        acknowledgments:
+          acknowledgmentsListState.data.length > 0
+            ? acknowledgmentsListState.data
+            : undefined,
+      }),
+    ],
+    valueField: 'documentInformation',
+    valueUpdater: 'updateDocumentInformation',
+    init: (initialData) => {
+      if (
+        initialData.acknowledgments &&
+        initialData.acknowledgments.length > 0
+      ) {
+        acknowledgmentsListState.setData(initialData.acknowledgments)
+        return
+      }
+    },
+  })
+
   const listValidation = useListValidation(
     `/document/acknowledgments`,
     acknowledgmentsListState.data,
   )
-
-  useDocumentStoreUpdater<TDocumentInformation>({
-    localState: [
-      acknowledgmentsListState.data,
-      () => ({ acknowledgments: acknowledgmentsListState.data }),
-    ],
-    valueField: 'documentInformation',
-    valueUpdater: 'updateDocumentInformation',
-    init: (initialData) =>
-      acknowledgmentsListState.setData(initialData.acknowledgments),
-  })
 
   return (
     <WizardStep
@@ -74,7 +86,9 @@ export default function Acknowledgments() {
 }
 
 function StartContent({ index }: { index: number }) {
-  const { hasErrors } = usePrefixValidation(`/document/references/${index}`)
+  const { hasErrors } = usePrefixValidation(
+    `/document/acknowledgments/${index}`,
+  )
 
   return <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
 }
