@@ -101,8 +101,8 @@
         "acknowledgments": "Danksagungen",
         "summary": "Zusammenfassung",
         "name": "Name",
-        "description": "Beschreibung",
-        "url": "URL",
+        "names": "Namen",
+        "organization": "Organisation",
         "empty": "Keine Danksagungen hinzugefügt"
       }
     },

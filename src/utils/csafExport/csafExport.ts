@@ -54,19 +54,18 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         name: documentStore.documentInformation.publisher.name,
         namespace: documentStore.documentInformation.publisher.namespace,
       },
-      notes: documentStore.documentInformation.notes.map(parseNote),
-      references: documentStore.documentInformation.references.map(
+      notes: documentStore.documentInformation.notes?.map(parseNote),
+      references: documentStore.documentInformation.references?.map(
         (reference) => ({
           summary: reference.summary,
           url: reference.url,
         }),
       ),
-      acknowledgments: documentStore.documentInformation.acknowledgments.map(
+      acknowledgments: documentStore.documentInformation.acknowledgments?.map(
         (acknowledgment) => ({
-          id: acknowledgment.id,
-          summary: acknowledgment.summary,
-          organization: acknowledgment.organization,
-          names: acknowledgment.names?.map((name) => name.name) || [],
+          organization: acknowledgment.organization || undefined,
+          names: acknowledgment.names?.map((name) => name.name) || undefined,
+          summary: acknowledgment.summary || undefined,
         }),
       ),
     },

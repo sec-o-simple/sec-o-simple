@@ -97,10 +97,10 @@
         "title": "Acknowledgements",
         "acknowledgment": "Acknowledgement",
         "acknowledgments": "Acknowledgements",
+        "summary": "Summary",
         "name": "Name",
         "names": "Acknowledged Names",
         "organization": "Organization",
-        "summary": "Summary",
         "empty": "No acknowledgements added yet"
       }
     },
