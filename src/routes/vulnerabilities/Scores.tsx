@@ -114,6 +114,7 @@ function ScoreForm({
     <VSplit>
       <Input
         label="CVSS Vector String"
+        isRequired
         isTouched={isTouched}
         csafPath={`${csafPath}/cvss_v3/vectorString`}
         value={score.vectorString}
@@ -141,6 +142,7 @@ function ScoreForm({
         isReadOnly={true}
       />
       <ProductsTagList
+        isRequired
         error={
           fieldValidation.hasErrors
             ? fieldValidation.errorMessages[0].message

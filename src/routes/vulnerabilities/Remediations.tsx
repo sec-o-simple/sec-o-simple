@@ -126,10 +126,13 @@ function RemediationForm({
       <HSplit className="items-start">
         <Select
           label={t('vulnerabilities.remediation.category')}
+          isRequired
           csafPath={`${csafPath}/category`}
           isTouched={isTouched}
           selectedKeys={[remediation.category]}
           onSelectionChange={(selected) => {
+            if (!selected.anchorKey) return
+
             onChange({
               ...remediation,
               category: [...selected][0] as TRemediationCategory,
@@ -151,6 +154,7 @@ function RemediationForm({
           value={remediation.date}
           onChange={(newValue) => onChange({ ...remediation, date: newValue })}
           isDisabled={checkReadOnly(remediation, 'details')}
+          isRequired
         />
       </HSplit>
       <Textarea
@@ -163,6 +167,7 @@ function RemediationForm({
         }
         isDisabled={checkReadOnly(remediation, 'details')}
         placeholder={getPlaceholder(remediation, 'details')}
+        isRequired
       />
       <Input
         label={t('vulnerabilities.remediation.url')}
@@ -174,6 +179,7 @@ function RemediationForm({
         }
         isDisabled={checkReadOnly(remediation, 'url')}
         placeholder={getPlaceholder(remediation, 'url')}
+        isRequired
       />
       <ProductsTagList
         error={
@@ -183,6 +189,7 @@ function RemediationForm({
         }
         products={remediation.productIds}
         onChange={(productIds) => onChange({ ...remediation, productIds })}
+        isRequired
       />
     </VSplit>
   )

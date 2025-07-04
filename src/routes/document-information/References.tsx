@@ -2,6 +2,7 @@ import StatusIndicator from '@/components/StatusIndicator'
 import WizardStep from '@/components/WizardStep'
 import ComponentList from '@/components/forms/ComponentList'
 import { Input, Textarea } from '@/components/forms/Input'
+import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
@@ -9,11 +10,12 @@ import { useListState } from '@/utils/useListState'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import usePageVisit from '@/utils/validation/usePageVisit'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
-import { Alert } from '@heroui/react'
+import { Alert, SelectItem } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TDocumentReference,
+  TReferenceCategory,
   getDefaultDocumentReference,
 } from './types/tDocumentReference'
 
@@ -100,6 +102,25 @@ function ReferenceForm({
 
   return (
     <VSplit>
+      <Select
+        label={t('ref.category')}
+        csafPath="/document/publisher/category"
+        selectedKeys={[reference.category]}
+        isRequired
+        onSelectionChange={(selected) => {
+          if (!selected.anchorKey) return
+
+          onChange({
+            ...reference,
+            category: [...selected][0] as TReferenceCategory,
+          })
+        }}
+        isDisabled={checkReadOnly(reference, 'category')}
+      >
+        {['external', 'self'].map((key) => (
+          <SelectItem key={key}>{t(`ref.categories.${key}`)}</SelectItem>
+        ))}
+      </Select>
       <Textarea
         label={t('ref.summary')}
         csafPath={`/document/references/${referenceIndex}/summary`}
@@ -108,16 +129,19 @@ function ReferenceForm({
           onChange({ ...reference, summary: newValue })
         }
         autoFocus={true}
-        isDisabled={checkReadOnly(reference, 'summary')}
         placeholder={getPlaceholder(reference, 'summary')}
+        isDisabled={checkReadOnly(reference, 'summary')}
+        isRequired
       />
       <Input
         label={t('ref.url')}
+        type="url"
         csafPath={`/document/references/${referenceIndex}/url`}
         value={reference.url}
         onValueChange={(newValue) => onChange({ ...reference, url: newValue })}
         isDisabled={checkReadOnly(reference, 'url')}
         placeholder={getPlaceholder(reference, 'url')}
+        isRequired
       />
     </VSplit>
   )

@@ -51,6 +51,8 @@ export default function General({
           }}
           isDisabled={checkReadOnly(vulnerability, 'cwe')}
           placeholder={getPlaceholder(vulnerability, 'cwe')}
+          maxListboxHeight={400}
+          itemHeight={48}
         >
           {cwes.map((cwe) => (
             <AutocompleteItem
@@ -66,6 +68,7 @@ export default function General({
         label={t('vulnerabilities.general.title')}
         csafPath={`/vulnerabilities/${vulnerabilityIndex}/title`}
         isTouched={isTouched}
+        isRequired
         value={vulnerability.title}
         onValueChange={(newValue) =>
           onChange({ ...vulnerability, title: newValue })

@@ -158,7 +158,12 @@
       "references": "References",
       "reference": "Reference",
       "summary": "Summary",
-      "url": "URL"
+      "url": "URL",
+      "category": "Origin",
+      "categories": {
+        "external": "External",
+        "self": "Self"
+      }
     },
     "untitled": {
       "vendor": "Untitled Vendor",

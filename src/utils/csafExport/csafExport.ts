@@ -50,7 +50,8 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         contact_details:
           documentStore.documentInformation.publisher.contactDetails,
         issuing_authority:
-          documentStore.documentInformation.publisher.issuingAuthority,
+          documentStore.documentInformation.publisher.issuingAuthority ||
+          undefined,
         name: documentStore.documentInformation.publisher.name,
         namespace: documentStore.documentInformation.publisher.namespace,
       },
@@ -59,6 +60,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         (reference) => ({
           summary: reference.summary,
           url: reference.url,
+          category: reference.category,
         }),
       ),
       acknowledgments: documentStore.documentInformation.acknowledgments?.map(

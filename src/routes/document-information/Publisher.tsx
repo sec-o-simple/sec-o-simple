@@ -43,21 +43,25 @@ export default function Publisher() {
         isTouched={hasVisitedPage}
         value={localState.name}
         onValueChange={(v) => setLocalState({ ...localState, name: v })}
-        isDisabled={isFieldReadonly('document-information.publisher.name')}
         placeholder={getFieldPlaceholder('document-information.publisher.name')}
+        isDisabled={isFieldReadonly('document-information.publisher.name')}
+        isRequired
       />
       <HSplit className="items-start">
         <Select
           label={t('document.publisher.category')}
           csafPath="/document/publisher/category"
           isTouched={hasVisitedPage}
+          isRequired
           selectedKeys={[localState.category]}
-          onSelectionChange={(selected) =>
+          onSelectionChange={(selected) => {
+            if (!selected.anchorKey) return
+
             setLocalState({
               ...localState,
               category: [...selected][0] as TPublisherCategory,
             })
-          }
+          }}
           isDisabled={isFieldReadonly(
             'document-information.publisher.category',
           )}
@@ -75,6 +79,8 @@ export default function Publisher() {
           label={t('document.publisher.namespace')}
           csafPath="/document/publisher/namespace"
           isTouched={hasVisitedPage}
+          isRequired
+          type="url"
           value={localState.namespace}
           onValueChange={(v) => setLocalState({ ...localState, namespace: v })}
           isDisabled={isFieldReadonly(
@@ -89,6 +95,7 @@ export default function Publisher() {
         label={t('document.publisher.contactDetails')}
         csafPath="/document/publisher/contact_details"
         isTouched={hasVisitedPage}
+        isRequired
         value={localState.contactDetails}
         onValueChange={(v) =>
           setLocalState({ ...localState, contactDetails: v })
