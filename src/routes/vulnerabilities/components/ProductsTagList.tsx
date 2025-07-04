@@ -13,12 +13,14 @@ export type ProductsTagListProps = {
   products?: string[]
   onChange?: (productIds: string[]) => void
   error?: string
+  isRequired?: boolean
 }
 
 export default function ProductsTagList({
   products,
   onChange,
   error,
+  isRequired,
 }: ProductsTagListProps) {
   const { t } = useTranslation()
   const { findProductTreeBranchWithParents } = useProductTreeBranch()
@@ -37,8 +39,11 @@ export default function ProductsTagList({
 
   return (
     <VSplit className="gap-2">
-      <span className="text-sm">{t('vulnerabilities.products')}</span>
+      <span className="text-sm">
+        {t('vulnerabilities.products')} {isRequired ? '*' : ''}
+      </span>
       <ProductSelect
+        isRequired={isRequired}
         onAdd={(ptb) =>
           setSelectedProducts([
             ...new Set([

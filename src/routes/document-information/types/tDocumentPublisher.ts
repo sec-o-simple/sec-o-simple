@@ -5,7 +5,7 @@ export type TDocumentPublisher = {
   category: TPublisherCategory
   namespace: string
   contactDetails: string
-  issuingAuthority: string
+  issuingAuthority?: string
 }
 
 export const publisherCategories = [
@@ -24,7 +24,7 @@ export function getDefaultDocumentPublisher(): TDocumentPublisher {
     category: 'vendor',
     namespace: '',
     contactDetails: '',
-    issuingAuthority: '',
+    issuingAuthority: undefined,
   }
 }
 
