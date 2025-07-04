@@ -18,17 +18,12 @@ export default function Notes() {
     localState: [
       notesListState.data,
       () => ({
-        notes: notesListState.data.length > 0 ? notesListState.data : undefined,
+        notes: notesListState.data,
       }),
     ],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
-    init: (initialData) => {
-      if (initialData.notes && initialData.notes.length > 0) {
-        notesListState.setData(initialData.notes)
-        return
-      }
-    },
+    init: (initialData) => notesListState.setData(initialData.notes),
   })
 
   const hasVisitedPage = usePageVisit()

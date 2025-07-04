@@ -30,23 +30,13 @@ export default function Acknowledgments() {
     localState: [
       acknowledgmentsListState.data,
       () => ({
-        acknowledgments:
-          acknowledgmentsListState.data.length > 0
-            ? acknowledgmentsListState.data
-            : undefined,
+        acknowledgments: acknowledgmentsListState.data,
       }),
     ],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
-    init: (initialData) => {
-      if (
-        initialData.acknowledgments &&
-        initialData.acknowledgments.length > 0
-      ) {
-        acknowledgmentsListState.setData(initialData.acknowledgments)
-        return
-      }
-    },
+    init: (initialData) =>
+      acknowledgmentsListState.setData(initialData.acknowledgments),
   })
 
   const listValidation = useListValidation(

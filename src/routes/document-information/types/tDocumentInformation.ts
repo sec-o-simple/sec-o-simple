@@ -18,15 +18,18 @@ import { TRevisionHistoryEntry } from './tRevisionHistoryEntry'
 export type TDocumentInformation = TGeneralDocumentInformation & {
   publisher: TDocumentPublisher
   revisionHistory: TRevisionHistoryEntry[]
-  acknowledgments?: TAcknowledgment[]
-  notes?: TNote[]
-  references?: TDocumentReference[]
+  acknowledgments: TAcknowledgment[]
+  notes: TNote[]
+  references: TDocumentReference[]
 }
 
 export function getDefaultDocumentInformation(): TDocumentInformation {
   return {
     ...getDefaultGeneralDocumentInformation(),
     publisher: getDefaultDocumentPublisher(),
+    acknowledgments: [],
+    notes: [],
+    references: [],
     revisionHistory: [
       {
         id: uid(),

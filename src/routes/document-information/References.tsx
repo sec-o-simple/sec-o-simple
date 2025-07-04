@@ -31,20 +31,12 @@ export default function References() {
     localState: [
       referencesListState.data,
       () => ({
-        references:
-          referencesListState.data.length > 0
-            ? referencesListState.data
-            : undefined,
+        references: referencesListState.data,
       }),
     ],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
-    init: (initialData) => {
-      if (initialData.references && initialData.references.length > 0) {
-        referencesListState.setData(initialData.references)
-        return
-      }
-    },
+    init: (initialData) => referencesListState.setData(initialData.references),
   })
 
   const listValidation = useListValidation(
