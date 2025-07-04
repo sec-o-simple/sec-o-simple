@@ -33,7 +33,7 @@ export default function Publisher() {
   return (
     <WizardStep
       title={t('nav.documentInformation.publisher')}
-      progress={1.5}
+      progress={1.4}
       onBack={'/document-information/notes'}
       onContinue={'/document-information/references'}
     >

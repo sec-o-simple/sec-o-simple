@@ -12,6 +12,7 @@ import { useConfigInitializer } from './utils/useConfigStore'
 import ProductManagement from './routes/products/ProductManagement'
 import Product from './routes/products/Product'
 import Version from './routes/products/Version'
+import Acknowledgments from './routes/document-information/Acknowledgments'
 
 export default function App() {
   useConfigInitializer()
@@ -29,6 +30,7 @@ export default function App() {
               <Route path="notes" element={<Notes />} />
               <Route path="publisher" element={<Publisher />} />
               <Route path="references" element={<References />} />
+              <Route path="acknowledgments" element={<Acknowledgments />} />
             </Route>
             <Route path="product-management">
               <Route index element={<ProductManagement />} />
