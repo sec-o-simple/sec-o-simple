@@ -65,7 +65,17 @@
       "general": {
         "title": "Document Title",
         "id": "Document ID",
+        "state": "Status",
         "language": "Language",
+        "languages": {
+          "de": "German",
+          "en": "English"
+        },
+        "status": {
+          "draft": "Draft",
+          "final": "Final",
+          "interim": "Interim"
+        },
         "revisionHistory": {
           "label": "Revision",
           "version": "Version",

@@ -1,8 +1,8 @@
 import { Button } from '@heroui/button'
 import { PropsWithChildren } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import ProgressBar from './ProgressBar'
-import { useTranslation } from 'react-i18next'
 
 export type WizardStepProps = PropsWithChildren<{
   title?: string

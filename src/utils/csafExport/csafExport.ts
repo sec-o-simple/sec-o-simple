@@ -30,14 +30,18 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         },
         current_release_date: currentDate,
         initial_release_date: currentDate,
-        revision_history: documentInformation.revisionHistory.map((entry) => ({
-          date: entry.date,
-          number: entry.number,
-          summary: entry.summary,
-        })),
-        status: 'final',
-        version: documentInformation.revisionHistory.length
-          ? retrieveLatestVersion(documentInformation.revisionHistory)
+        revision_history: documentStore.documentInformation.revisionHistory.map(
+          (entry) => ({
+            date: entry.date,
+            number: entry.number,
+            summary: entry.summary,
+          }),
+        ),
+        status: documentStore.documentInformation.status,
+        version: documentStore.documentInformation.revisionHistory.length
+          ? retrieveLatestVersion(
+              documentStore.documentInformation.revisionHistory,
+            )
           : '1',
         id: documentInformation.id,
       },
