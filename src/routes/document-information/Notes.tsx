@@ -6,6 +6,7 @@ import usePageVisit from '@/utils/validation/usePageVisit'
 import { Alert } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
+import { NotesTemplates } from '../shared/NotesTemplates'
 import { TDocumentInformation } from './types/tDocumentInformation'
 
 export default function Notes() {
@@ -47,6 +48,12 @@ export default function Notes() {
             ))}
           </Alert>
         )}
+
+      <NotesTemplates
+        notesListState={notesListState}
+        templatePath="document-information.notes_templates"
+      />
+
       <NotesList
         notesListState={notesListState}
         csafPath="/document/notes"

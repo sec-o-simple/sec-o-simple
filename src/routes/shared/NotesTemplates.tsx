@@ -18,14 +18,20 @@ import { TNote } from './NotesList'
 
 export function NotesTemplates({
   notesListState,
+  templatePath,
 }: {
   notesListState: ListState<TNote>
+  templatePath: string
 }) {
   const { t } = useTranslation()
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const templates = useConfigStore(
-    (state) => state.config?.template?.['vulnerabilities.notes_templates'],
+    (state) => state.config?.template?.[templatePath],
   )
+
+  if (!templates) {
+    return null
+  }
 
   return (
     <>
@@ -54,14 +60,19 @@ export function NotesTemplates({
                       key={key}
                       textValue={template.title}
                       description={
-                        <p>{template.content.substring(0, 150) + '...'}</p>
+                        <p>
+                          {template.content.length > 150
+                            ? template.content.substring(0, 150) + '...'
+                            : template.content}
+                        </p>
                       }
                       onClick={() => {
                         notesListState.setData((prev) => [
                           ...prev,
                           {
-                            id: uid() + '_template',
+                            id: uid(),
                             readonly: true,
+                            deletable: template.deletable,
                             title: template.title,
                             category: template.category,
                             content: template.content,

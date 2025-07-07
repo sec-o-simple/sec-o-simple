@@ -1,4 +1,5 @@
 import VSplit from '@/components/forms/VSplit'
+import { checkReadOnly } from '@/utils/template'
 import { useListState } from '@/utils/useListState'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { Alert } from '@heroui/react'
@@ -35,7 +36,7 @@ export default function Notes({
   )
 
   return (
-    <>
+    <VSplit>
       {(isTouched || listValidation.isTouched) && listValidation.hasErrors && (
         <Alert color="danger">
           {listValidation.errorMessages.map((m) => (
@@ -44,15 +45,18 @@ export default function Notes({
         </Alert>
       )}
 
-      <VSplit>
-        <NotesTemplates notesListState={notesListState} />
-
-        <NotesList
-          isTouched={isTouched}
+      {!checkReadOnly(vulnerability) && (
+        <NotesTemplates
           notesListState={notesListState}
-          csafPath={`/vulnerabilities/${vulnerabilityIndex}/notes`}
+          templatePath="vulnerabilities.notes_templates"
         />
-      </VSplit>
-    </>
+      )}
+
+      <NotesList
+        isTouched={isTouched}
+        notesListState={notesListState}
+        csafPath={`/vulnerabilities/${vulnerabilityIndex}/notes`}
+      />
+    </VSplit>
   )
 }

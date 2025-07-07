@@ -1,14 +1,14 @@
-import { useEffect } from 'react'
-import { useConfigStore } from './useConfigStore'
-import { UpdatePriority, useStateInitializer } from './useStateInitializer'
-import useDocumentStore from './useDocumentStore'
 import {
   getDefaultDocumentInformation,
   getDocumentInformationTemplateKeys,
 } from '@/routes/document-information/types/tDocumentInformation'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
-import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { TRelationship } from '@/routes/products/types/tRelationship'
+import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
+import { useEffect } from 'react'
+import { useConfigStore } from './useConfigStore'
+import useDocumentStore from './useDocumentStore'
+import { UpdatePriority, useStateInitializer } from './useStateInitializer'
 
 export type TemplateKeys<T> = {
   [K in keyof T]: string | TemplateKeys<T[K]>
@@ -23,6 +23,10 @@ export function checkReadOnly<T extends object>(
     ('readonly' in obj && obj['readonly'] === true && !(fieldKey in obj)) ||
     (fieldKey in obj && obj[fieldKey as keyof typeof obj] === true)
   )
+}
+
+export function checkDeletable<T extends object>(obj: T): boolean {
+  return 'deletable' in obj && obj['deletable'] === true
 }
 
 export function getPlaceholder<T extends object>(

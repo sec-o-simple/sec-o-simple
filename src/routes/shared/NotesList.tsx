@@ -54,9 +54,6 @@ export function NotesList({
       listState={notesListState}
       title="title"
       itemLabel={t('notes.note')}
-      isItemDeletable={(item) =>
-        item.id.includes('_template') || !checkReadOnly(item, 'id')
-      }
       content={(note, index) => (
         <NoteForm
           note={note}

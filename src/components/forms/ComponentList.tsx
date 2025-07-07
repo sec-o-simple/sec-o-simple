@@ -2,7 +2,7 @@ import {
   DynamicObjectValueKey,
   getDynamicObjectValue,
 } from '@/utils/dynamicObjectValue'
-import { checkReadOnly } from '@/utils/template'
+import { checkDeletable, checkReadOnly } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
@@ -27,7 +27,6 @@ export type ComponentListProps<T> = {
   content: (item: T, index: number) => ReactNode
   /** The label of an element in the list (defaults to Item) */
   itemLabel?: string
-  isItemDeletable?: (item: T) => boolean
   onDelete?: (item: T) => void
   startContent?: React.ComponentType<{ item: T; index: number }>
   endContent?: (item: T) => ReactNode
@@ -41,7 +40,6 @@ export default function ComponentList<T extends object>({
   title,
   content,
   itemLabel = 'Item',
-  isItemDeletable,
   onDelete,
   endContent,
   titleProps,
@@ -115,9 +113,7 @@ export default function ComponentList<T extends object>({
                           : listState.removeDataEntry(item)
                       }
                       isDisabled={
-                        isItemDeletable
-                          ? !isItemDeletable(item)
-                          : checkReadOnly(item)
+                        checkDeletable(item) ? false : checkReadOnly(item)
                       }
                     />
                   </div>
