@@ -6,7 +6,7 @@ export function usePrefixValidation(prefix: string) {
     .filter((m) => m.severity === 'error')
     .map((e) => e.path)
 
-  const hasErrors = errorPaths.some((path) => path.startsWith(prefix))
+  const hasErrors = errorPaths.some((path) => path.startsWith(prefix + '/'))
 
   return {
     hasErrors,

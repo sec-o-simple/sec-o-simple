@@ -7,9 +7,9 @@ import VSplit from '@/components/forms/VSplit'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { useListState } from '@/utils/useListState'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import usePageVisit from '@/utils/validation/usePageVisit'
-import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 import useValidationStore from '@/utils/validation/useValidationStore'
 import { Alert } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
@@ -77,9 +77,7 @@ export default function Acknowledgments() {
 }
 
 function StartContent({ index }: { index: number }) {
-  const { hasErrors } = usePrefixValidation(
-    `/document/acknowledgments/${index}`,
-  )
+  const { hasErrors } = useFieldValidation(`/document/acknowledgments/${index}`)
 
   return <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
 }
