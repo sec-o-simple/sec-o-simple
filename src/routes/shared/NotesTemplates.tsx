@@ -1,4 +1,3 @@
-import HSplit from '@/components/forms/HSplit'
 import { useConfigStore } from '@/utils/useConfigStore'
 import { ListState } from '@/utils/useListState'
 import { faAdd } from '@fortawesome/free-solid-svg-icons'
@@ -30,16 +29,17 @@ export function NotesTemplates({
 
   return (
     <>
-      <HSplit className="justify-end">
+      <div className="flex justify-end">
         <Button
           onPress={onOpen}
           variant="flat"
           color="primary"
+          className="w-auto"
           startContent={<FontAwesomeIcon icon={faAdd} />}
         >
           {t('notesTemplates.addTemplateButton')}
         </Button>
-      </HSplit>
+      </div>
       <Modal isOpen={isOpen} size="xl" onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (
