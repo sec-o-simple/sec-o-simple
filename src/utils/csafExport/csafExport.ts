@@ -84,59 +84,58 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         pidGenerator,
       ),
     },
-    vulnerabilities:
-      documentStore.vulnerabilities.length > 0
-        ? Object.values(documentStore.vulnerabilities).map((vulnerability) => ({
-            cve: vulnerability.cve || undefined,
-            title: vulnerability.title,
-            cwe: vulnerability.cwe
-              ? {
-                  id: vulnerability.cwe.id,
-                  name: vulnerability.cwe.name,
-                }
-              : undefined,
-            notes: vulnerability.notes.map(parseNote),
-            product_status: {
-              known_affected: vulnerability.products.map((p) =>
-                pidGenerator.getPid(p.firstAffectedVersionId),
-              ),
-              fixed: vulnerability.products.map((p) =>
-                pidGenerator.getPid(p.firstFixedVersionId),
-              ),
+    vulnerabilities: Object.values(documentStore.vulnerabilities).map(
+      (vulnerability) => ({
+        cve: vulnerability.cve || undefined,
+        title: vulnerability.title,
+        cwe: vulnerability.cwe
+          ? {
+              id: vulnerability.cwe.id,
+              name: vulnerability.cwe.name,
+            }
+          : undefined,
+        notes: vulnerability.notes.map(parseNote),
+        product_status: {
+          known_affected: vulnerability.products.map((p) =>
+            pidGenerator.getPid(p.firstAffectedVersionId),
+          ),
+          fixed: vulnerability.products.map((p) =>
+            pidGenerator.getPid(p.firstFixedVersionId),
+          ),
+        },
+        remediations: vulnerability.remediations.map((remediation) => ({
+          category: remediation.category,
+          date: remediation.date,
+          details: remediation.details,
+          url: remediation.url,
+          product_ids: remediation.productIds.map((id) =>
+            pidGenerator.getPid(id),
+          ),
+        })),
+        scores: vulnerability.scores.map((score) => {
+          let baseScore = 0
+          let baseSeverity = ''
+
+          try {
+            baseScore = calculateBaseScore(score.vectorString)
+            baseSeverity = calculateQualScore(baseScore).toUpperCase()
+          } catch {
+            // If the score is invalid, we leave baseScore and baseSeverity as defaults
+            // as there will be errors already in the vectorString
+          }
+
+          return {
+            ['cvss_v3']: {
+              version: '3.1',
+              vectorString: score.vectorString,
+              baseScore,
+              baseSeverity,
             },
-            remediations: vulnerability.remediations.map((remediation) => ({
-              category: remediation.category,
-              date: remediation.date,
-              details: remediation.details,
-              url: remediation.url,
-              product_ids: remediation.productIds.map((id) =>
-                pidGenerator.getPid(id),
-              ),
-            })),
-            scores: vulnerability.scores.map((score) => {
-              let baseScore = 0
-              let baseSeverity = ''
-
-              try {
-                baseScore = calculateBaseScore(score.vectorString)
-                baseSeverity = calculateQualScore(baseScore).toUpperCase()
-              } catch {
-                // If the score is invalid, we leave baseScore and baseSeverity as defaults
-                // as there will be errors already in the vectorString
-              }
-
-              return {
-                ['cvss_v3']: {
-                  version: '3.1',
-                  vectorString: score.vectorString,
-                  baseScore,
-                  baseSeverity,
-                },
-                products: score.productIds.map((id) => pidGenerator.getPid(id)),
-              }
-            }),
-          }))
-        : undefined,
+            products: score.productIds.map((id) => pidGenerator.getPid(id)),
+          }
+        }),
+      }),
+    ),
   }
 
   return csafDocument
