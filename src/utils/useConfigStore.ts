@@ -7,7 +7,7 @@ const DEFAULT_CONFIG: TConfig = {
   template: {},
   productDatabase: {
     enabled: false,
-  }
+  },
 }
 
 export type TConfig = {
@@ -15,7 +15,7 @@ export type TConfig = {
     enabled: boolean
     url?: string
     apiUrl?: string
-  },
+  }
   template: { [key: string]: unknown }
 }
 

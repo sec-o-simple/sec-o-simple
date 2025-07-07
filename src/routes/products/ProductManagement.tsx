@@ -19,7 +19,8 @@ export default function ProductManagement() {
   const [modalOpen, setModalOpen] = useState(false)
   const config = useConfigStore((state) => state.config)
 
-  const productDbEnabled = config?.productDatabase?.enabled && config?.productDatabase?.url
+  const productDbEnabled =
+    config?.productDatabase?.enabled && config?.productDatabase?.url
 
   return (
     <WizardStep
@@ -29,10 +30,11 @@ export default function ProductManagement() {
       noContentWrapper
     >
       {productDbEnabled && (
-      <ProductDatabaseSelector
-        isOpen={modalOpen}
-        onClose={() => setModalOpen(false)}
-      />)}
+        <ProductDatabaseSelector
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
       <div className="flex w-full items-center justify-between rounded-lg border-1 border-default-200 bg-white p-8">
         <p className="text-xl font-semibold">{t('products.manage')}</p>
 

@@ -12,7 +12,11 @@ import {
 import { Accordion, AccordionItem, Alert, Checkbox } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router'
-import { useDatabaseClient, Product, Vendor as DatabaseVendor } from '@/utils/useDatabaseClient'
+import {
+  useDatabaseClient,
+  Product,
+  Vendor as DatabaseVendor,
+} from '@/utils/useDatabaseClient'
 import { useConfigStore } from '@/utils/useConfigStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
@@ -27,7 +31,7 @@ type Vendor = DatabaseVendor & {
 }
 
 export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
-  const client = useDatabaseClient();
+  const client = useDatabaseClient()
   const config = useConfigStore((state) => state.config)
   const { addPTB, updatePTB, rootBranch } = useProductTreeBranch()
 
@@ -41,22 +45,30 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
         client.fetchProducts(),
       ])
 
-      setVendors(dbVendors.filter(v => products.map(p => p.vendor_id).includes(v.id)).map((vendor) => {
-        return {
-          ...vendor,
-          products: products.filter((product) => product.vendor_id === vendor.id),
-        }
-      }));
+      setVendors(
+        dbVendors
+          .filter((v) => products.map((p) => p.vendor_id).includes(v.id))
+          .map((vendor) => {
+            return {
+              ...vendor,
+              products: products.filter(
+                (product) => product.vendor_id === vendor.id,
+              ),
+            }
+          }),
+      )
     }
     fetchVendors()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const [searchQuery, setSearchQuery] = useState('')
-  const filteredVendors = vendors.filter((vendor) =>
-    vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    vendor.products.some((product) =>
-      product.name.toLowerCase().includes(searchQuery.toLowerCase()),
-    ),
+  const filteredVendors = vendors.filter(
+    (vendor) =>
+      vendor.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      vendor.products.some((product) =>
+        product.name.toLowerCase().includes(searchQuery.toLowerCase()),
+      ),
   )
 
   const [submitting, setSubmitting] = useState(false)
@@ -69,68 +81,71 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
     setSubmitting(true)
 
     try {
-      await Promise.allSettled(vendors.map(async (vendor) => {
-        const selectedVendorProducts = vendor.products.filter(prodct =>
-          selectedProducts.includes(prodct.id)
-        )
-
-        // If no products selected for this vendor, skip
-        if (selectedVendorProducts.length === 0) return
-
-        // Check if vendor already exists in document
-        let existingVendor = rootBranch.find(ptb =>
-          ptb.category === 'vendor' && ptb.id === vendor.id
-        )
-
-        // If not, create a new vendor branch
-        if (!existingVendor) {
-          existingVendor = {
-            id: vendor.id,
-            category: 'vendor',
-            name: vendor.name,
-            description: vendor.description || '',
-            subBranches: [],
-          }
-        }
-
-        // Add products to vendor
-        await Promise.allSettled(selectedVendorProducts.map(async (product) => {
-          // Check if product already exists under this vendor
-          const existingProduct = existingVendor.subBranches.find(ptb =>
-            ptb.category === 'product_name' && ptb.id === product.id
+      await Promise.allSettled(
+        vendors.map(async (vendor) => {
+          const selectedVendorProducts = vendor.products.filter((prodct) =>
+            selectedProducts.includes(prodct.id),
           )
 
-          if (existingProduct) return
+          // If no products selected for this vendor, skip
+          if (selectedVendorProducts.length === 0) return
 
-          const versions = await client.fetchProductVersions(product.id)
+          // Check if vendor already exists in document
+          let existingVendor = rootBranch.find(
+            (ptb) => ptb.category === 'vendor' && ptb.id === vendor.id,
+          )
 
-          // Create new product branch with a default version
-          const productBranch: TProductTreeBranch = {
-            id: product.id,
-            category: 'product_name',
-            name: product.name,
-            description: product.description || '',
-            type: product.type === 'software' ? 'Software' : 'Hardware',
-            subBranches: versions.map(version => (
-              {
-                id: version.id,
-                category: 'product_version',
-                name: version.name,
-                description: version.description,
-                subBranches: [],
-              }
-            )),
+          // If not, create a new vendor branch
+          if (!existingVendor) {
+            existingVendor = {
+              id: vendor.id,
+              category: 'vendor',
+              name: vendor.name,
+              description: vendor.description || '',
+              subBranches: [],
+            }
           }
 
-          existingVendor.subBranches.push(productBranch)
-        }))
+          // Add products to vendor
+          await Promise.allSettled(
+            selectedVendorProducts.map(async (product) => {
+              // Check if product already exists under this vendor
+              const existingProduct = existingVendor.subBranches.find(
+                (ptb) =>
+                  ptb.category === 'product_name' && ptb.id === product.id,
+              )
 
-        if (!rootBranch.find(ptb => ptb.id === existingVendor.id)) {
-          addPTB(existingVendor)
-        } else {
-          updatePTB(existingVendor)
-        }
-      }))
+              if (existingProduct) return
+
+              const versions = await client.fetchProductVersions(product.id)
+
+              // Create new product branch with a default version
+              const productBranch: TProductTreeBranch = {
+                id: product.id,
+                category: 'product_name',
+                name: product.name,
+                description: product.description || '',
+                type: product.type === 'software' ? 'Software' : 'Hardware',
+                subBranches: versions.map((version) => ({
+                  id: version.id,
+                  category: 'product_version',
+                  name: version.name,
+                  description: version.description,
+                  subBranches: [],
+                })),
+              }
+
+              existingVendor.subBranches.push(productBranch)
+            }),
+          )
+
+          if (!rootBranch.find((ptb) => ptb.id === existingVendor.id)) {
+            addPTB(existingVendor)
+          } else {
+            updatePTB(existingVendor)
+          }
+        }),
+      )
     } finally {
       setSubmitting(false)
       setSelectedProducts([])
@@ -207,9 +222,9 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                             ? selectedAllProducts
                               ? 'selected all products'
                               : 'selected ' +
-                              selectedProductCount +
-                              ' product' +
-                              (selectedProductCount !== 1 ? 's' : '')
+                                selectedProductCount +
+                                ' product' +
+                                (selectedProductCount !== 1 ? 's' : '')
                             : ''
                         }
                         startContent={
