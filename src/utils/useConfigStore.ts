@@ -5,9 +5,16 @@ const CONFIG_NAME = 'io.github.sec-o-simple.json'
 
 const DEFAULT_CONFIG: TConfig = {
   template: {},
+  productDatabase: {
+    enabled: false,
+  }
 }
 
 export type TConfig = {
+  productDatabase: {
+    enabled: boolean
+    url?: string
+  },
   template: { [key: string]: unknown }
 }
 

@@ -1,4 +1,5 @@
 import { Input } from '@/components/forms/Input'
+import { useConfigStore } from '@/utils/useConfigStore'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
@@ -30,6 +31,8 @@ interface Vendor {
 }
 
 export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
+  const config = useConfigStore((state) => state.config)
+
   const vendors: Vendor[] = [
     {
       id: 'vendor1',
@@ -70,7 +73,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                   Changes to the added products will not be persisted. To
                   modify, add, or delete products, please visit the{' '}
                   <Link
-                    to="http://localhost:3000"
+                    to={config?.productDatabase.url || '#'}
                     className="underline"
                     target="_blank"
                   >
