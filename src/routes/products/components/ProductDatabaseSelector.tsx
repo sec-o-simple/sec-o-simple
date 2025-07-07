@@ -36,7 +36,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
   const config = useConfigStore((state) => state.config)
   const products = Object.values(useDocumentStore((store) => store.products))
   const updateProducts = useDocumentStore((store) => store.updateProducts)
-  
+
   const { t } = useTranslation()
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [vendors, setVendors] = useState<Vendor[]>([])
@@ -83,7 +83,6 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
 
     setSubmitting(true)
 
-    
     try {
       let updatedProducts: TProductTreeBranch[] = products.slice()
 
@@ -173,12 +172,11 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
               {t('products.import.title')}
             </ModalHeader>
             <ModalBody>
-              <p>
-                {t('products.import.description')}
-              </p>
+              <p>{t('products.import.description')}</p>
               <Alert className="mt-2" color="default">
                 <p>
-                  {t('products.import.warning')} <Link
+                  {t('products.import.warning')}{' '}
+                  <Link
                     to={config?.productDatabase?.url || '#'}
                     className="underline"
                     target="_blank"
@@ -226,7 +224,9 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                           selectedProductCount
                             ? selectedAllProducts
                               ? t('products.import.selectedAll')
-                              : t('products.import.selected', { count: selectedProductCount })
+                              : t('products.import.selected', {
+                                  count: selectedProductCount,
+                                })
                             : ''
                         }
                         startContent={
