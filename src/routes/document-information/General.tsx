@@ -1,19 +1,20 @@
 import WizardStep from '@/components/WizardStep'
 import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
+import RevisionHistoryTable from '@/components/forms/RevisionHistoryTable'
 import Select from '@/components/forms/Select'
+import { useTemplate } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
+import usePageVisit from '@/utils/validation/usePageVisit'
 import { SelectItem } from '@heroui/select'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import {
+  TDocumentStatus,
   TGeneralDocumentInformation,
   getDefaultGeneralDocumentInformation,
 } from './types/tGeneralDocumentInformation'
-import { useTemplate } from '@/utils/template'
-import usePageVisit from '@/utils/validation/usePageVisit'
-import { useTranslation } from 'react-i18next'
-import RevisionHistoryTable from '@/components/forms/RevisionHistoryTable'
 
 export default function General() {
   const [localState, setLocalState] = useState<TGeneralDocumentInformation>(
@@ -37,16 +38,45 @@ export default function General() {
       progress={1}
       onContinue={'/document-information/notes'}
     >
-      <Input
-        label={t('document.general.title')}
-        csafPath="/document/title"
-        isTouched={hasVisitedPage}
-        value={localState.title}
-        onValueChange={(title) => setLocalState({ ...localState, title })}
-        isDisabled={isFieldReadonly('document-information.title')}
-        placeholder={getFieldPlaceholder('document-information.title')}
-        isRequired
-      />
+      <HSplit className="items-start">
+        <Input
+          label={t('document.general.title')}
+          csafPath="/document/title"
+          isTouched={hasVisitedPage}
+          value={localState.title}
+          onValueChange={(title) => setLocalState({ ...localState, title })}
+          isDisabled={isFieldReadonly('document-information.title')}
+          placeholder={getFieldPlaceholder('document-information.title')}
+          isRequired
+        />
+
+        <Select
+          className="w-1/2"
+          label={t('document.general.state')}
+          csafPath="/document/tracking/status"
+          isTouched={hasVisitedPage}
+          selectedKeys={[localState.status]}
+          onSelectionChange={(v) => {
+            if (!v.anchorKey) return
+
+            setLocalState({
+              ...localState,
+              status: [...v][0] as TDocumentStatus,
+            })
+          }}
+          isDisabled={isFieldReadonly('document-information.tracking.status')}
+          isRequired
+          placeholder={getFieldPlaceholder(
+            'document-information.tracking.status',
+          )}
+        >
+          {['draft', 'final', 'interim'].map((key) => (
+            <SelectItem key={key}>
+              {t(`document.general.status.${key}`)}
+            </SelectItem>
+          ))}
+        </Select>
+      </HSplit>
       <HSplit className="items-start">
         <Input
           label={t('document.general.id')}
@@ -59,6 +89,7 @@ export default function General() {
           isRequired
         />
         <Select
+          className="w-1/2"
           label={t('document.general.language')}
           csafPath="/document/lang"
           isTouched={hasVisitedPage}
@@ -71,7 +102,9 @@ export default function General() {
           placeholder={getFieldPlaceholder('document-information.language')}
         >
           {['de', 'en'].map((key) => (
-            <SelectItem key={key}>{key.toUpperCase()}</SelectItem>
+            <SelectItem key={key}>
+              {t(`document.general.languages.${key}`)}
+            </SelectItem>
           ))}
         </Select>
       </HSplit>

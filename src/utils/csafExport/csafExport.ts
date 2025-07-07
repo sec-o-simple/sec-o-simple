@@ -35,7 +35,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
             summary: entry.summary,
           }),
         ),
-        status: 'final',
+        status: documentStore.documentInformation.status,
         version: documentStore.documentInformation.revisionHistory.length
           ? retrieveLatestVersion(
               documentStore.documentInformation.revisionHistory,

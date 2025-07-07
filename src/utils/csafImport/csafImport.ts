@@ -46,6 +46,9 @@ export function parseCSAFDocument(
   const documentInformation: TDocumentInformation = {
     id: csafDoc?.tracking?.id || defaultDocumentInformation.id,
     language: csafDoc?.lang ?? defaultDocumentInformation.language,
+    status:
+      (csafDoc?.tracking?.status as TDocumentInformation['status']) ??
+      defaultDocumentInformation.status,
     title: csafDoc?.title ?? defaultDocumentInformation.title,
     revisionHistory:
       csafDoc?.tracking?.revision_history?.map((revision) => ({
