@@ -74,7 +74,7 @@
         "cve": "CVE-2025-30073",
         "cwe": "CWE1",
         "title": "Vulnerability 1",
-        "predefined_notes": [
+        "notes_templates": [
           {
             "id": "description",
             "category": "description",
