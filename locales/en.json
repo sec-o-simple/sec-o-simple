@@ -41,7 +41,8 @@
         "general": "General",
         "notes": "Notes",
         "publisher": "Publisher",
-        "references": "References"
+        "references": "References",
+        "acknowledgments": "Acknowledgements"
       }
     },
 
@@ -64,7 +65,17 @@
       "general": {
         "title": "Document Title",
         "id": "Document ID",
+        "state": "Status",
         "language": "Language",
+        "languages": {
+          "de": "German",
+          "en": "English"
+        },
+        "status": {
+          "draft": "Draft",
+          "final": "Final",
+          "interim": "Interim"
+        },
         "revisionHistory": {
           "label": "Revision",
           "version": "Version",
@@ -90,6 +101,17 @@
       },
       "references": {
         "url": "URL"
+      },
+
+      "acknowledgments": {
+        "title": "Acknowledgements",
+        "acknowledgment": "Acknowledgement",
+        "acknowledgments": "Acknowledgements",
+        "summary": "Summary",
+        "name": "Name",
+        "names": "Acknowledged Names",
+        "organization": "Organization",
+        "empty": "No acknowledgements added yet"
       }
     },
     "vulnerabilities": {

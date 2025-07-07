@@ -44,7 +44,8 @@
         "general": "Allgemein",
         "notes": "Notizen",
         "publisher": "Herausgeber",
-        "references": "Referenzen"
+        "references": "Referenzen",
+        "acknowledgments": "Danksagungen"
       }
     },
 
@@ -66,7 +67,17 @@
       "general": {
         "title": "Dokumenttitel",
         "id": "Dokument-ID",
+        "state": "Status",
         "language": "Sprache",
+        "languages": {
+          "de": "Deutsch",
+          "en": "Englisch"
+        },
+        "status": {
+          "draft": "Entwurf",
+          "final": "Final",
+          "interim": "Zwischenstand"
+        },
         "revisionHistory": {
           "label": "Revision",
           "version": "Version",
@@ -92,6 +103,17 @@
       },
       "references": {
         "url": "URL"
+      },
+
+      "acknowledgments": {
+        "title": "Danksagungen",
+        "acknowledgment": "Danksagung",
+        "acknowledgments": "Danksagungen",
+        "summary": "Zusammenfassung",
+        "name": "Name",
+        "names": "Namen",
+        "organization": "Organisation",
+        "empty": "Keine Danksagungen hinzugefügt"
       }
     },
 

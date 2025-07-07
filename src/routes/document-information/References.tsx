@@ -1,23 +1,23 @@
+import StatusIndicator from '@/components/StatusIndicator'
 import WizardStep from '@/components/WizardStep'
 import ComponentList from '@/components/forms/ComponentList'
 import { Input, Textarea } from '@/components/forms/Input'
+import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { useListState } from '@/utils/useListState'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import usePageVisit from '@/utils/validation/usePageVisit'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import { Alert, SelectItem } from '@heroui/react'
+import { useTranslation } from 'react-i18next'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TDocumentReference,
   TReferenceCategory,
   getDefaultDocumentReference,
 } from './types/tDocumentReference'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import { useTranslation } from 'react-i18next'
-import usePageVisit from '@/utils/validation/usePageVisit'
-import { useListValidation } from '@/utils/validation/useListValidation'
-import { Alert, SelectItem } from '@heroui/react'
-import StatusIndicator from '@/components/StatusIndicator'
-import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
-import Select from '@/components/forms/Select'
 
 export default function References() {
   const referencesListState = useListState<TDocumentReference>({
@@ -27,27 +27,29 @@ export default function References() {
   const { t } = useTranslation()
   usePageVisit()
 
-  const listValidation = useListValidation(
-    `/document/references`,
-    referencesListState.data,
-  )
-
   useDocumentStoreUpdater<TDocumentInformation>({
     localState: [
       referencesListState.data,
-      () => ({ references: referencesListState.data }),
+      () => ({
+        references: referencesListState.data,
+      }),
     ],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
     init: (initialData) => referencesListState.setData(initialData.references),
   })
 
+  const listValidation = useListValidation(
+    `/document/references`,
+    referencesListState.data,
+  )
+
   return (
     <WizardStep
       title={t('nav.documentInformation.references')}
-      progress={1.75}
+      progress={1.6}
       onBack={'/document-information/publisher'}
-      onContinue="/product-management"
+      onContinue="/document-information/acknowledgments"
     >
       {listValidation.isTouched && listValidation.hasErrors && (
         <Alert color="danger">

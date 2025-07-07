@@ -19,6 +19,11 @@ const validationSections: Record<string, HasErrorFunction> = {
   '/document-information/publisher': (errorPaths) => {
     return errorPaths.some((path) => path.startsWith('/document/publisher'))
   },
+  '/document-information/acknowledgments': (errorPaths) => {
+    return errorPaths.some((path) =>
+      path.startsWith('/document/acknowledgments'),
+    )
+  },
   '/document-information/references': (errorPaths) => {
     return errorPaths.some((path) => path.startsWith('/document/references'))
   },
@@ -36,7 +41,6 @@ export function usePathValidation(path: string) {
     .filter((m) => m.severity === 'error')
     .map((e) => e.path)
   // const hasVisitedPage = useValidationStore((state) => state.hasVisitedPage)
-
   if (validationSections[path]) {
     const hasErrors = validationSections[path](errorPaths)
     return {

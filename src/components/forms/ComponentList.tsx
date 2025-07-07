@@ -64,7 +64,7 @@ export default function ComponentList<T extends object>({
           startContent: 'grow',
           indicator: 'text-neutral-foreground',
           base: 'border border-gray shadow-none px-4 py-2',
-          content: 'py-0',
+          content: 'py-2',
         }}
         className="px-0"
       >

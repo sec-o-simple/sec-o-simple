@@ -1,3 +1,4 @@
+import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
@@ -13,6 +14,7 @@ export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 export function createCSAFDocument(documentStore: TDocumentStore) {
   const pidGenerator = new PidGenerator()
   const currentDate = new Date().toISOString()
+  const documentInformation = documentStore.documentInformation
 
   const csafDocument = {
     document: {
@@ -35,34 +37,58 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
             summary: entry.summary,
           }),
         ),
-        status: 'final',
+        status: documentStore.documentInformation.status,
         version: documentStore.documentInformation.revisionHistory.length
           ? retrieveLatestVersion(
               documentStore.documentInformation.revisionHistory,
             )
           : '1',
-        id: documentStore.documentInformation.id,
+        id: documentInformation.id,
       },
-      lang: documentStore.documentInformation.language,
-      title: documentStore.documentInformation.title,
+      lang: documentInformation.language,
+      title: documentInformation.title,
       publisher: {
-        category: documentStore.documentInformation.publisher.category,
-        contact_details:
-          documentStore.documentInformation.publisher.contactDetails,
+        category: documentInformation.publisher.category,
+        contact_details: documentInformation.publisher.contactDetails,
         issuing_authority:
-          documentStore.documentInformation.publisher.issuingAuthority ||
-          undefined,
-        name: documentStore.documentInformation.publisher.name,
-        namespace: documentStore.documentInformation.publisher.namespace,
+          documentInformation.publisher.issuingAuthority || undefined,
+        name: documentInformation.publisher.name,
+        namespace: documentInformation.publisher.namespace,
       },
-      notes: documentStore.documentInformation.notes.map(parseNote),
-      references: documentStore.documentInformation.references.map(
-        (reference) => ({
-          summary: reference.summary,
-          url: reference.url,
-          category: reference.category,
-        }),
-      ),
+      notes:
+        documentInformation.notes.length > 0
+          ? documentInformation.notes.map(parseNote)
+          : undefined,
+      references:
+        documentInformation.references.length > 0
+          ? documentInformation.references?.map((reference) => ({
+              summary: reference.summary,
+              url: reference.url,
+              category: reference.category,
+            }))
+          : undefined,
+      acknowledgments:
+        documentInformation.acknowledgments.length > 0
+          ? documentInformation.acknowledgments.map((ack) => {
+              const acknowledgment: TAcknowledgmentOutput = {
+                organization: ack.organization || undefined,
+                names:
+                  ack.names && ack.names?.length > 0
+                    ? ack.names?.map((name) => name.name)
+                    : undefined,
+                summary: ack.summary || undefined,
+              }
+
+              Object.keys(acknowledgment).forEach((key) => {
+                const typedKey = key as keyof TAcknowledgmentOutput
+                if (acknowledgment[typedKey] === undefined) {
+                  delete acknowledgment[typedKey]
+                }
+              })
+
+              return acknowledgment
+            })
+          : undefined,
     },
     product_tree: {
       branches: parseProductTreeBranches(
