@@ -14,6 +14,7 @@ export type TConfig = {
   productDatabase: {
     enabled: boolean
     url?: string
+    apiUrl?: string
   },
   template: { [key: string]: unknown }
 }
