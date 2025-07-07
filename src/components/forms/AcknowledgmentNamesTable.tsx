@@ -22,9 +22,11 @@ import IconButton from './IconButton'
 
 export default function AcknowledgmentNamesTable({
   acknowledgment,
+  acknowledgmentIndex,
   onChange,
 }: {
   acknowledgment: TAcknowledgment
+  acknowledgmentIndex: number
   onChange: (acknowledgment: TAcknowledgment) => void
 }) {
   const { t } = useTranslation()
@@ -76,7 +78,7 @@ export default function AcknowledgmentNamesTable({
               <TableCell>
                 <Input
                   value={name.name}
-                  csafPath={`/document/tracking/revision_history/${index}/name`}
+                  csafPath={`/document/acknowledgments/${acknowledgmentIndex}/names/${index}`}
                   onValueChange={(value) =>
                     handleRevisionChange({
                       ...acknowledgmentNames.data[index],

@@ -120,6 +120,7 @@ function AcknowledgmentForm({
 
       <AcknowledgmentNamesTable
         acknowledgment={acknowledgment}
+        acknowledgmentIndex={acknowledgmentIndex}
         onChange={(updatedAcknowledgment) =>
           onChange({
             ...acknowledgment,
