@@ -10,6 +10,7 @@ import { useListState } from '@/utils/useListState'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import usePageVisit from '@/utils/validation/usePageVisit'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import useValidationStore from '@/utils/validation/useValidationStore'
 import { Alert } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -93,9 +94,18 @@ function AcknowledgmentForm({
   onChange: (reference: TAcknowledgment) => void
 }) {
   const { t } = useTranslation()
+  const message = useValidationStore((state) => state.messages).filter(
+    (m) => m.path === `/document/acknowledgments/${acknowledgmentIndex}`,
+  )?.[0]
 
   return (
     <VSplit>
+      {message?.severity === 'error' && (
+        <Alert color="danger" className="mb-4">
+          <p>{message.message}</p>
+        </Alert>
+      )}
+
       <Textarea
         label={t('document.acknowledgments.summary')}
         csafPath={`/document/acknowledgments/${acknowledgmentIndex}/summary`}

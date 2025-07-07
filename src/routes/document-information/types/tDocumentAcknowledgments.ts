@@ -12,6 +12,12 @@ export type TAcknowledgment = {
   names?: TAcknowledgmentName[]
 }
 
+export type TAcknowledgmentOutput = {
+  summary?: string
+  organization?: string
+  names?: string[]
+}
+
 export function getDefaultDocumentAcknowledgment(): TAcknowledgment {
   return {
     id: uid(),

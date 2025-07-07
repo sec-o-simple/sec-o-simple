@@ -1,3 +1,4 @@
+import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
@@ -64,14 +65,25 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           : undefined,
       acknowledgments:
         documentInformation.acknowledgments.length > 0
-          ? documentInformation.acknowledgments.map((ack) => ({
-              organization: ack.organization || undefined,
-              names:
-                ack.names && ack.names?.length > 0
-                  ? ack.names?.map((name) => name.name)
-                  : undefined,
-              summary: ack.summary || undefined,
-            }))
+          ? documentInformation.acknowledgments.map((ack) => {
+              const acknowledgment: TAcknowledgmentOutput = {
+                organization: ack.organization || undefined,
+                names:
+                  ack.names && ack.names?.length > 0
+                    ? ack.names?.map((name) => name.name)
+                    : undefined,
+                summary: ack.summary || undefined,
+              }
+
+              Object.keys(acknowledgment).forEach((key) => {
+                const typedKey = key as keyof TAcknowledgmentOutput
+                if (acknowledgment[typedKey] === undefined) {
+                  delete acknowledgment[typedKey]
+                }
+              })
+
+              return acknowledgment
+            })
           : undefined,
     },
     product_tree: {
