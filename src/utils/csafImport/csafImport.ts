@@ -1,4 +1,8 @@
 import {
+  TAcknowledgment,
+  TAcknowledgmentName,
+} from '@/routes/document-information/types/tDocumentAcknowledgments'
+import {
   TDocumentInformation,
   getDefaultDocumentInformation,
 } from '@/routes/document-information/types/tDocumentInformation'
@@ -88,6 +92,21 @@ export function parseCSAFDocument(
             defaultReference.category,
         } as TDocumentReference
       }) ?? ([] as TDocumentReference[]),
+    acknowledgments:
+      csafDoc?.acknowledgments?.map((ack) => {
+        return {
+          id: uid(),
+          organization: ack?.organization,
+          summary: ack?.summary ?? '',
+          names:
+            ack?.names?.map((name) => {
+              return {
+                id: uid(),
+                name: name,
+              } as TAcknowledgmentName
+            }) ?? ([] as TAcknowledgmentName[]),
+        } as TAcknowledgment
+      }) ?? ([] as TAcknowledgment[]),
   }
 
   const products: TProductTreeBranch[] = parseProductTree(
