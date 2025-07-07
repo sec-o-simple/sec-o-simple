@@ -115,7 +115,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
           await Promise.allSettled(
             selectedVendorProducts.map(async (product) => {
               // Check if product already exists under this vendor
-              const existingProduct = existingVendor.subBranches.find(
+              const existingProduct = existingVendor?.subBranches.find(
                 (ptb) =>
                   ptb.category === 'product_name' && ptb.id === product.id,
               )
@@ -140,15 +140,15 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                 })),
               }
 
-              existingVendor.subBranches.push(productBranch)
+              existingVendor?.subBranches.push(productBranch)
             }),
           )
 
-          if (!products.find((ptb) => ptb.id === existingVendor.id)) {
+          if (!products.find((ptb) => ptb.id === existingVendor!.id)) {
             updatedProducts.push(existingVendor)
           } else {
             updatedProducts = products.map((ptb) =>
-              ptb.id === existingVendor.id ? existingVendor : ptb,
+              ptb.id === existingVendor!.id ? existingVendor! : ptb,
             )
           }
         }),
