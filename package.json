@@ -29,6 +29,7 @@
     "@heroui/theme": "^2.4.9",
     "@internationalized/date": "3.8.0",
     "@secvisogram/csaf-validator-lib": "^1.3.50",
+    "axios": "^1.10.0",
     "cvss4": "^1.0.7",
     "i18next": "^25.2.1",
     "motion": "^12.4.7",

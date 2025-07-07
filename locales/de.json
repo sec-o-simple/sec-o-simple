@@ -21,18 +21,15 @@
       "placeholder": "{{label}} eingeben",
       "actions": "Aktionen"
     },
-
     "preview": "Vorschau",
     "newDocument": "Neues Dokument",
     "confirm.newDocument.title": "Neues Dokument erstellen",
     "confirm.newDocument.body": "Sind Sie sicher, dass Sie ein neues Dokument erstellen möchten? Dadurch wird das aktuelle Dokument zurückgesetzt.",
-
     "export": {
       "draft": "Export",
       "csaf": "CSAF Export",
       "error": "{{ errorCount }} Fehler im Dokument. Bitte beheben Sie diese vor dem Export"
     },
-
     "nav": {
       "home": "Startseite",
       "products": "Produkte",
@@ -48,7 +45,6 @@
         "acknowledgments": "Danksagungen"
       }
     },
-
     "documentSelection": {
       "create": "Dokument erstellen",
       "selectType": "Dokumenttyp auswählen",
@@ -62,7 +58,6 @@
       "softAndFirmware": "Software und Firmware",
       "sbom": "SBOM"
     },
-
     "document": {
       "general": {
         "title": "Dokumenttitel",
@@ -116,7 +111,6 @@
         "empty": "Keine Danksagungen hinzugefügt"
       }
     },
-
     "vulnerabilities": {
       "vulnerability": "Schwachstelle",
       "vulnerabilities": "Schwachstellen",
@@ -150,7 +144,6 @@
         "products.empty": "Keine Produkte hinzugefügt"
       }
     },
-
     "notes": {
       "title": "Notiz Titel",
       "note": "Notiz",
@@ -186,18 +179,15 @@
         "self": "Intern"
       }
     },
-
     "untitled": {
       "vendor": "Unbenannter Anbieter",
       "product_name": "Unbenanntes Produkt",
       "product_version": "Unbenannte Produktversion",
       "": "Unbenannt"
     },
-
     "modal": {
       "edit": "{{label}} bearbeiten"
     },
-
     "vendor": {
       "label": "Anbieter",
       "name": "Anbietername",
@@ -214,54 +204,56 @@
       "description": "Produktbeschreibung",
       "type": "Produktart"
     },
-
     "products": {
+      "import": {
+        "title": "Aus Datenbank hinzufügen",
+        "description": "Wähle ein oder mehrere Produkte aus deiner bestehenden Produktdatenbank aus, um sie zu deinem Dokument hinzuzufügen.",
+        "database": "Datenbank",
+        "warning": "Änderungen an den hinzugefügten Produkten werden nicht gespeichert. Um Produkte zu bearbeiten, hinzuzufügen oder zu löschen, besuche bitte die",
+        "noVendors": "Keine Anbieter in der Datenbank gefunden. Bitte füge Anbieter und Produkte zur Datenbank hinzu, bevor du diese Funktion verwendest.",
+        "searchPlaceholder": "Anbieter und Produkte suchen",
+        "selectedAll": "Alle Produkte ausgewählt",
+        "selected_one": "1 Produkt ausgewählt",
+        "selected_other": "{{count}} Produkte ausgewählt",
+        "add_one": "1 Produkt hinzufügen",
+        "add_other": "{{count}} Produkte hinzufügen"
+      },
       "vendors": "Anbieter",
       "products": "Produkte",
       "manage": "Produktverwaltung",
-
       "empty": "Sie haben noch kein {{ type }}-Produkt erstellt.\nSie können eines hinzufügen, indem Sie einen Anbieter erstellen und ihm ein Produkt hinzufügen.",
-
       "software": "Software",
       "hardware": "Hardware",
-
       "vendor": {
         "label": "Anbieter"
       },
-
       "product": {
         "label": "Produkt",
         "name": "Produktname",
         "description": "Produktbeschreibung",
         "type": "Produktart",
-
         "version": {
           "label": "Version",
           "empty": "Keine Versionen vorhanden",
           "edit": "Produktversion bearbeiten",
           "edit_plural": "Produktversionen bearbeiten",
-
           "affected": "Betroffene Versionen",
           "fixed": "Reparierte Versionen"
         }
       },
-
       "relationship": {
         "label": "Beziehungen",
         "empty": "Keine Beziehungen vorhanden",
         "edit": "Beziehung bearbeiten",
         "edit_plural": "Beziehungen bearbeiten",
-
         "name": "Name",
         "namePlaceholder": "Beziehungsname",
         "sourceProduct": "Quelle",
         "targetProduct": "Ziel",
         "version": "Version",
         "version_plural": "Versionen",
-
         "category": "Beziehungstyp",
         "categoryPlaceholder": "Beziehungstyp auswählen",
-
         "categories": {
           "default_component_of": "Standardkomponente von",
           "external_component_of": "Externe Komponente von",
@@ -271,7 +263,6 @@
         }
       }
     },
-
     "validation": {
       "error": "Fehler",
       "error_plural": "Fehler",
