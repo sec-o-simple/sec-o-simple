@@ -142,6 +142,13 @@
         "summary": "Summary"
       }
     },
+
+    "notesTemplates": {
+      "addTemplateButton": "Add predefined Note",
+      "editTemplateButton": "Edit predefined Note",
+      "selectTemplateTitle": "Select predefined Note"
+    },
+
     "ref": {
       "references": "References",
       "reference": "Reference",

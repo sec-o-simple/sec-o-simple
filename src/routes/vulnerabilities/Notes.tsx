@@ -1,9 +1,11 @@
+import VSplit from '@/components/forms/VSplit'
 import { useListState } from '@/utils/useListState'
-import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
-import { useEffect } from 'react'
-import { TVulnerability } from './types/tVulnerability'
-import { Alert } from '@heroui/react'
 import { useListValidation } from '@/utils/validation/useListValidation'
+import { Alert } from '@heroui/react'
+import { useEffect } from 'react'
+import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
+import { NotesTemplates } from '../shared/NotesTemplates'
+import { TVulnerability } from './types/tVulnerability'
 
 export default function Notes({
   vulnerability,
@@ -41,11 +43,16 @@ export default function Notes({
           ))}
         </Alert>
       )}
-      <NotesList
-        isTouched={isTouched}
-        notesListState={notesListState}
-        csafPath={`/vulnerabilities/${vulnerabilityIndex}/notes`}
-      />
+
+      <VSplit>
+        <NotesTemplates notesListState={notesListState} />
+
+        <NotesList
+          isTouched={isTouched}
+          notesListState={notesListState}
+          csafPath={`/vulnerabilities/${vulnerabilityIndex}/notes`}
+        />
+      </VSplit>
     </>
   )
 }

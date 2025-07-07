@@ -147,6 +147,12 @@
       }
     },
 
+    "notesTemplates": {
+      "addTemplateButton": "Vorlage hinzufügen",
+      "editTemplateButton": "Vorlage bearbeiten",
+      "selectTemplateTitle": "Vorlage auswählen"
+    },
+
     "ref": {
       "references": "Referenzen",
       "reference": "Referenz",

@@ -1,30 +1,90 @@
-import Select from '@/components/forms/Select'
+import HSplit from '@/components/forms/HSplit'
+import { useConfigStore } from '@/utils/useConfigStore'
 import { ListState } from '@/utils/useListState'
+import { faAdd } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Button } from '@heroui/button'
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@heroui/modal'
+import { Listbox, ListboxItem } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
+import { uid } from 'uid'
 import { TNote } from './NotesList'
 
 export function NotesTemplates({
   notesListState,
-  csafPath,
-  isTouched = false,
 }: {
   notesListState: ListState<TNote>
-  csafPath: string
-  isTouched?: boolean
 }) {
   const { t } = useTranslation()
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const templates = useConfigStore(
+    (state) => state.config?.template?.['vulnerabilities.notes_templates'],
+  )
 
   return (
-    <Select>
-      <Select.Item value="description">{t('notes.description')}</Select.Item>
-      <Select.Item value="details">{t('notes.details')}</Select.Item>
-      <Select.Item value="faq">{t('notes.faq')}</Select.Item>
-      <Select.Item value="general">{t('notes.general')}</Select.Item>
-      <Select.Item value="legal_disclaimer">
-        {t('notes.legal_disclaimer')}
-      </Select.Item>
-      <Select.Item value="other">{t('notes.other')}</Select.Item>
-      <Select.Item value="summary">{t('notes.summary')}</Select.Item>
-    </Select>
+    <>
+      <HSplit className="justify-end">
+        <Button
+          onPress={onOpen}
+          variant="flat"
+          color="primary"
+          startContent={<FontAwesomeIcon icon={faAdd} />}
+        >
+          {t('notesTemplates.addTemplateButton')}
+        </Button>
+      </HSplit>
+      <Modal isOpen={isOpen} size="xl" onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader>
+                {t('notesTemplates.selectTemplateTitle')}
+              </ModalHeader>
+              <ModalBody>
+                <Listbox>
+                  {Object.entries(templates || {}).map(([key, template]) => (
+                    <ListboxItem
+                      key={key}
+                      textValue={template.title}
+                      description={
+                        <p>{template.content.substring(0, 150) + '...'}</p>
+                      }
+                      onClick={() => {
+                        notesListState.setData((prev) => [
+                          ...prev,
+                          {
+                            id: uid() + '_template',
+                            readonly: true,
+                            title: template.title,
+                            category: template.category,
+                            content: template.content,
+                          },
+                        ])
+                        onClose()
+                      }}
+                    >
+                      {template.title}
+                    </ListboxItem>
+                  ))}
+                </Listbox>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button variant="light" color="primary" onPress={onClose}>
+                  {t('common.close')}
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+    </>
   )
 }
