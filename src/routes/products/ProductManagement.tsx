@@ -44,7 +44,7 @@ export default function ProductManagement() {
             color="primary"
             onPress={() => setModalOpen(true)}
           >
-            Add from Database
+            {t('products.import.title')}
           </Button>
         )}
       </div>

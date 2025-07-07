@@ -44,14 +44,12 @@
         "references": "References"
       }
     },
-
     "documentSelection": {
       "create": "Create document",
       "selectType": "Select Document Type",
       "selectTypeDescription": "Choose whether you want to create a new document or edit an existing one",
       "newDocument": "Create new Document",
       "existingDocument": "Edit existing Document",
-
       "advisory": "Security Advisory",
       "vex": "VEX Document",
       "software": "Software",
@@ -59,7 +57,6 @@
       "softAndFirmware": "Software and Firmware",
       "sbom": "SBOM"
     },
-
     "document": {
       "general": {
         "title": "Document Title",
@@ -189,6 +186,19 @@
       "type": "Product Type"
     },
     "products": {
+      "import": {
+        "title": "Add from Database",
+        "description": "Choose one or more products from your existing product database to add to your document.",
+        "database": "database",
+        "warning": "Changes to the added products will not be persisted. To modify, add, or delete products, please visit the",
+        "noVendors": "No vendors found in the database. Please add vendors and products to the database before using this feature.",
+        "searchPlaceholder": "Search vendors and products",
+        "selectedAll": "selected all products",
+        "selected_one": "selected 1 product",
+        "selected_other": "selected {{count}} products",
+        "add_one": "Add 1 product",
+        "add_other": "Add {{count}} products"
+      },
       "vendors": "Vendors",
       "products": "Products",
       "manage": "Product Management",

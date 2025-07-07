@@ -18,8 +18,9 @@ import {
   Vendor as DatabaseVendor,
 } from '@/utils/useDatabaseClient'
 import { useConfigStore } from '@/utils/useConfigStore'
-import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import { useTranslation } from 'react-i18next'
+import useDocumentStore from '@/utils/useDocumentStore'
 
 interface Props {
   isOpen: boolean
@@ -33,8 +34,10 @@ type Vendor = DatabaseVendor & {
 export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
   const client = useDatabaseClient()
   const config = useConfigStore((state) => state.config)
-  const { addPTB, updatePTB, rootBranch } = useProductTreeBranch()
-
+  const products = Object.values(useDocumentStore((store) => store.products))
+  const updateProducts = useDocumentStore((store) => store.updateProducts)
+  
+  const { t } = useTranslation()
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [vendors, setVendors] = useState<Vendor[]>([])
 
@@ -80,7 +83,10 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
 
     setSubmitting(true)
 
+    
     try {
+      let updatedProducts: TProductTreeBranch[] = products.slice()
+
       await Promise.allSettled(
         vendors.map(async (vendor) => {
           const selectedVendorProducts = vendor.products.filter((prodct) =>
@@ -91,7 +97,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
           if (selectedVendorProducts.length === 0) return
 
           // Check if vendor already exists in document
-          let existingVendor = rootBranch.find(
+          let existingVendor = products.find(
             (ptb) => ptb.category === 'vendor' && ptb.id === vendor.id,
           )
 
@@ -139,13 +145,17 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
             }),
           )
 
-          if (!rootBranch.find((ptb) => ptb.id === existingVendor.id)) {
-            addPTB(existingVendor)
+          if (!products.find((ptb) => ptb.id === existingVendor.id)) {
+            updatedProducts.push(existingVendor)
           } else {
-            updatePTB(existingVendor)
+            updatedProducts = products.map((ptb) =>
+              ptb.id === existingVendor.id ? existingVendor : ptb,
+            )
           }
         }),
       )
+
+      updateProducts(updatedProducts)
     } finally {
       setSubmitting(false)
       setSelectedProducts([])
@@ -160,30 +170,26 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
         {(onClose) => (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              Add from Database
+              {t('products.import.title')}
             </ModalHeader>
             <ModalBody>
               <p>
-                Choose one or more products from your existing product database
-                to add to your document.
+                {t('products.import.description')}
               </p>
               <Alert className="mt-2" color="default">
                 <p>
-                  Changes to the added products will not be persisted. To
-                  modify, add, or delete products, please visit the{' '}
-                  <Link
+                  {t('products.import.warning')} <Link
                     to={config?.productDatabase?.url || '#'}
                     className="underline"
                     target="_blank"
                   >
-                    database
+                    {t('products.import.database')}
                   </Link>
-                  .
                 </p>
               </Alert>
               <div className="py-4">
                 <Input
-                  placeholder="Search vendors and products"
+                  placeholder={t('products.import.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="mb-2"
@@ -197,8 +203,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
 
                 {vendors.length === 0 && (
                   <Alert color="warning">
-                    No vendors found in the database. Please add vendors and
-                    products to the database before using this feature.
+                    {t('products.import.noVendors')}
                   </Alert>
                 )}
 
@@ -220,11 +225,8 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                         subtitle={
                           selectedProductCount
                             ? selectedAllProducts
-                              ? 'selected all products'
-                              : 'selected ' +
-                                selectedProductCount +
-                                ' product' +
-                                (selectedProductCount !== 1 ? 's' : '')
+                              ? t('products.import.selectedAll')
+                              : t('products.import.selected', { count: selectedProductCount })
                             : ''
                         }
                         startContent={
@@ -269,8 +271,8 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
               </div>
             </ModalBody>
             <ModalFooter>
-              <Button color="danger" variant="light" onPress={onClose}>
-                Cancel
+              <Button variant="light" onPress={onClose}>
+                {t('common.cancel')}
               </Button>
               <Button
                 color="primary"
@@ -278,8 +280,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                 onPress={handleAddProducts}
                 isDisabled={selectedProducts.length === 0}
               >
-                Add {selectedProducts.length} Product
-                {selectedProducts.length !== 1 ? 's' : ''}
+                {t('products.import.add', { count: selectedProducts.length })}
               </Button>
             </ModalFooter>
           </>
