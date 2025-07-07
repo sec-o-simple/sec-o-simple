@@ -41,7 +41,8 @@
         "general": "Allgemein",
         "notes": "Notizen",
         "publisher": "Herausgeber",
-        "references": "Referenzen"
+        "references": "Referenzen",
+        "acknowledgments": "Danksagungen"
       }
     },
     "documentSelection": {
@@ -97,6 +98,17 @@
       },
       "references": {
         "url": "URL"
+      },
+
+      "acknowledgments": {
+        "title": "Danksagungen",
+        "acknowledgment": "Danksagung",
+        "acknowledgments": "Danksagungen",
+        "summary": "Zusammenfassung",
+        "name": "Name",
+        "names": "Namen",
+        "organization": "Organisation",
+        "empty": "Keine Danksagungen hinzugefügt"
       }
     },
     "vulnerabilities": {
