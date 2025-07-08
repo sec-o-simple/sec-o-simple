@@ -72,7 +72,7 @@ export function NotesTemplates({
                           {
                             id: uid(),
                             readonly: true,
-                            deletable: template.deletable,
+                            deletable: true,
                             title: template.title,
                             category: template.category,
                             content: template.content,
