@@ -2,7 +2,7 @@ import {
   DynamicObjectValueKey,
   getDynamicObjectValue,
 } from '@/utils/dynamicObjectValue'
-import { checkReadOnly } from '@/utils/template'
+import { checkDeletable, checkReadOnly } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
@@ -112,7 +112,9 @@ export default function ComponentList<T extends object>({
                           ? onDelete?.(item)
                           : listState.removeDataEntry(item)
                       }
-                      isDisabled={checkReadOnly(item)}
+                      isDisabled={
+                        checkDeletable(item) ? false : checkReadOnly(item)
+                      }
                     />
                   </div>
                 </div>

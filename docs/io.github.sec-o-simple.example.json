@@ -26,6 +26,16 @@
       }
     ],
 
+    "document-information.notes_templates": [
+      {
+        "readonly": true,
+        "id": "legaldisclaimer",
+        "category": "legal_disclaimer",
+        "title": "Legal Disclaimer",
+        "content": "This is an example legal disclaimer"
+      }
+    ],
+
     "document-information.publisher.readonly": true,
     "document-information.publisher.name": "Example publisher",
     "document-information.publisher.category": "discoverer",
@@ -89,6 +99,16 @@
           }
         ],
         "products": []
+      }
+    ],
+
+    "vulnerabilities.notes_templates": [
+      {
+        "readonly": true,
+        "id": "id",
+        "category": "description",
+        "title": "Vulnerability Description",
+        "content": "This is a description of the vulnerability."
       }
     ]
   }
