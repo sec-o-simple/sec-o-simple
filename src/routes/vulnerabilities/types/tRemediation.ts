@@ -13,9 +13,9 @@ export type TRemediationCategory = (typeof remediationCategories)[number]
 export type TRemediation = {
   id: string
   category: TRemediationCategory
-  details: string
-  date: string
-  url: string
+  details?: string
+  date?: string
+  url?: string
   productIds: string[]
 }
 
@@ -23,9 +23,6 @@ export function getDefaultRemediation(): TRemediation {
   return {
     id: uid(),
     category: 'mitigation',
-    details: '',
-    date: '',
-    url: '',
     productIds: [],
   }
 }
