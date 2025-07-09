@@ -40,7 +40,7 @@ export default function ProductsTagList({
   return (
     <VSplit className="gap-2">
       <span className="text-sm">
-        {t('vulnerabilities.products')} {isRequired ? '*' : ''}
+        {t('vulnerabilities.products.title')} {isRequired ? '*' : ''}
       </span>
       <ProductSelect
         isRequired={isRequired}

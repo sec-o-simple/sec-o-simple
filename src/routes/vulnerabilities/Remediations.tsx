@@ -1,28 +1,28 @@
-import { TVulnerability } from './types/tVulnerability'
 import ComponentList from '@/components/forms/ComponentList'
-import { useListState } from '@/utils/useListState'
-import VSplit from '@/components/forms/VSplit'
+import DatePicker from '@/components/forms/DatePicker'
+import HSplit from '@/components/forms/HSplit'
 import { Input, Textarea } from '@/components/forms/Input'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import { useEffect } from 'react'
-import ProductsTagList from './components/ProductsTagList'
-import { Chip } from '@heroui/chip'
 import Select from '@/components/forms/Select'
+import VSplit from '@/components/forms/VSplit'
+import StatusIndicator from '@/components/StatusIndicator'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import { useListState } from '@/utils/useListState'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import { Chip } from '@heroui/chip'
+import { Alert } from '@heroui/react'
+import { SelectItem } from '@heroui/select'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import ProductsTagList from './components/ProductsTagList'
 import {
   TRemediation,
   TRemediationCategory,
   getDefaultRemediation,
   remediationCategories,
 } from './types/tRemediation'
-import { SelectItem } from '@heroui/select'
-import HSplit from '@/components/forms/HSplit'
-import DatePicker from '@/components/forms/DatePicker'
-import { useTranslation } from 'react-i18next'
-import { useListValidation } from '@/utils/validation/useListValidation'
-import { Alert } from '@heroui/react'
-import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
-import StatusIndicator from '@/components/StatusIndicator'
-import { useFieldValidation } from '@/utils/validation/useFieldValidation'
+import { TVulnerability } from './types/tVulnerability'
 
 export default function Remediations({
   vulnerability,
@@ -68,6 +68,7 @@ export default function Remediations({
         listState={remediationsListState}
         title="url"
         itemLabel={t('vulnerabilities.remediation.title')}
+        itemBgColor="bg-zinc-50"
         startContent={({ item, index }) => (
           <RemediationStartContent
             item={item}

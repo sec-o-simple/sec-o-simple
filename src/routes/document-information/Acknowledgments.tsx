@@ -63,6 +63,7 @@ export default function Acknowledgments() {
         listState={acknowledgmentsListState}
         title="organization"
         itemLabel={t('document.acknowledgments.acknowledgment')}
+        itemBgColor="bg-zinc-50"
         startContent={StartContent}
         content={(acknowledgment, index) => (
           <AcknowledgmentForm

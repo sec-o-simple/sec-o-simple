@@ -112,14 +112,32 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           : undefined,
         notes: vulnerability.notes.map(parseNote),
         product_status: {
-          known_affected: vulnerability.products.map((p) =>
-            pidGenerator.getPid(p.firstAffectedVersionId),
-          ),
-          fixed: vulnerability.products.map((p) =>
-            pidGenerator.getPid(p.firstFixedVersionId),
-          ),
+          known_affected: vulnerability.products
+            .filter((p) => p.status === 'known_affected')
+            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
+          fixed: vulnerability.products
+            .filter((p) => p.status === 'fixed')
+            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
+          first_fixed: vulnerability.products
+            .filter((p) => p.status === 'first_fixed')
+            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
+          first_affected: vulnerability.products
+            .filter((p) => p.status === 'first_affected')
+            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
+          known_not_affected: vulnerability.products
+            .filter((p) => p.status === 'known_not_affected')
+            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
+          last_affected: vulnerability.products
+            .filter((p) => p.status === 'last_affected')
+            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
+          recommended: vulnerability.products
+            .filter((p) => p.status === 'recommended')
+            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
+          under_investigation: vulnerability.products
+            .filter((p) => p.status === 'under_investigation')
+            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
         },
-        remediations: vulnerability.remediations.map((remediation) => ({
+        remediations: vulnerability.remediations?.map((remediation) => ({
           category: remediation.category,
           date: remediation.date,
           details: remediation.details,
@@ -128,7 +146,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
             pidGenerator.getPid(id),
           ),
         })),
-        scores: vulnerability.scores.map((score) => {
+        scores: vulnerability.scores?.map((score) => {
           let baseScore = 0
           let baseSeverity = ''
 

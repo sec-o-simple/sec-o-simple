@@ -62,6 +62,7 @@ export default function References() {
         listState={referencesListState}
         title="summary"
         itemLabel={t('ref.reference')}
+        itemBgColor="bg-zinc-50"
         startContent={StartContent}
         content={(reference, index) => (
           <ReferenceForm

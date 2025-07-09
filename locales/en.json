@@ -117,7 +117,19 @@
       "general": "General",
       "general.title": "Title",
       "notes": "Notes",
-      "products": "Products",
+      "products": {
+        "title": "Products",
+        "status": {
+          "first_affected": "First Affected Version",
+          "known_affected": "Known Affected Version",
+          "known_not_affected": "Known Not Affected Version",
+          "last_affected": "Last Affected Version",
+          "first_fixed": "First Fixed Version",
+          "fixed": "Fixed Version",
+          "recommended": "Recommended Version",
+          "under_investigation": "Under Investigation"
+        }
+      },
       "scores": "Scores",
       "score": {
         "title": "Score",
