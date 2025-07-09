@@ -12,6 +12,7 @@ import { Alert } from '@heroui/react'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { TProductTreeBranch } from '../products/types/tProductTreeBranch'
 import ProductsTagList from './components/ProductsTagList'
 import { TVulnerability } from './types/tVulnerability'
 import {
@@ -47,6 +48,12 @@ export default function Scores({
     scoresListState.data,
   )
 
+  const { getSelectablePTBs } = useProductTreeBranch()
+  const ptbs = getSelectablePTBs()
+  const knownAffectedOrInvestigationProducts = vulnerability.products.filter(
+    (p) => p.status === 'known_affected' || p.status === 'under_investigation',
+  )
+
   return (
     <>
       {listValidation.hasErrors && (
@@ -71,6 +78,13 @@ export default function Scores({
             score={score}
             csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${index}`}
             isTouched={isTouched}
+            products={ptbs.filter(
+              (p) =>
+                knownAffectedOrInvestigationProducts.some((product) =>
+                  product.versions.some((v) => v === p.id),
+                ),
+              ptbs,
+            )}
             onChange={scoresListState.updateDataEntry}
           />
         )}
@@ -89,16 +103,15 @@ function ScoreForm({
   score,
   csafPath,
   onChange,
+  products: ptbs,
   isTouched = false,
 }: {
   score: TVulnerabilityScore
   csafPath: string
   onChange: (note: TVulnerabilityScore) => void
+  products?: TProductTreeBranch[]
   isTouched?: boolean
 }) {
-  const { getSelectablePTBs } = useProductTreeBranch()
-  const ptbs = getSelectablePTBs()
-
   const { t } = useTranslation()
   let baseScore = ''
   let baseSeverity = ''

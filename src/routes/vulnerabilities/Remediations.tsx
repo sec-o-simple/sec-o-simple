@@ -90,8 +90,8 @@ export default function Remediations({
             isTouched={isTouched}
             products={ptbs.filter(
               (p) =>
-                knownAffectedProducts.some((knownAffectedProduct) =>
-                  knownAffectedProduct.versions.some((v) => v === p.id),
+                knownAffectedProducts.some((product) =>
+                  product.versions.some((v) => v === p.id),
                 ),
               ptbs,
             )}

@@ -1,4 +1,5 @@
 import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
+import { TVulnerabilityProduct } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
@@ -15,6 +16,16 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
   const pidGenerator = new PidGenerator()
   const currentDate = new Date().toISOString()
   const documentInformation = documentStore.documentInformation
+
+  const filterProductStatus = (
+    productList: TVulnerabilityProduct[],
+    status: string,
+  ) => {
+    const products = productList.filter((p) => p.status === status)
+    return products.length > 0
+      ? products.map((p) => p.versions.map((v) => pidGenerator.getPid(v)))
+      : undefined
+  }
 
   const csafDocument = {
     document: {
@@ -101,74 +112,73 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
       ),
     },
     vulnerabilities: Object.values(documentStore.vulnerabilities).map(
-      (vulnerability) => ({
-        cve: vulnerability.cve || undefined,
-        title: vulnerability.title,
-        cwe: vulnerability.cwe
-          ? {
-              id: vulnerability.cwe.id,
-              name: vulnerability.cwe.name,
+      (vulnerability) => {
+        const productStatus = () => {
+          const products = vulnerability.products
+
+          const obj = Object.entries({
+            known_affected: filterProductStatus(products, 'known_affected'),
+            fixed: filterProductStatus(products, 'fixed'),
+            first_fixed: filterProductStatus(products, 'first_fixed'),
+            first_affected: filterProductStatus(products, 'first_affected'),
+            known_not_affected: filterProductStatus(
+              products,
+              'known_not_affected',
+            ),
+            last_affected: filterProductStatus(products, 'last_affected'),
+            recommended: filterProductStatus(products, 'recommended'),
+            under_investigation: filterProductStatus(
+              products,
+              'under_investigation',
+            ),
+          }).filter(([, value]) => value !== undefined)
+          return obj.length > 0 ? Object.fromEntries(obj) : undefined
+        }
+
+        return {
+          cve: vulnerability.cve || undefined,
+          title: vulnerability.title,
+          cwe: vulnerability.cwe
+            ? {
+                id: vulnerability.cwe.id,
+                name: vulnerability.cwe.name,
+              }
+            : undefined,
+          notes: vulnerability.notes.map(parseNote),
+          product_status: productStatus(),
+          remediations: vulnerability.remediations?.map((remediation) => ({
+            category: remediation.category,
+            date: remediation.date || undefined,
+            details: remediation.details || undefined,
+            url: remediation.url || undefined,
+            product_ids: remediation.productIds.map((id) =>
+              pidGenerator.getPid(id),
+            ),
+          })),
+          scores: vulnerability.scores?.map((score) => {
+            let baseScore = 0
+            let baseSeverity = ''
+
+            try {
+              baseScore = calculateBaseScore(score.vectorString)
+              baseSeverity = calculateQualScore(baseScore).toUpperCase()
+            } catch {
+              // If the score is invalid, we leave baseScore and baseSeverity as defaults
+              // as there will be errors already in the vectorString
             }
-          : undefined,
-        notes: vulnerability.notes.map(parseNote),
-        product_status: {
-          known_affected: vulnerability.products
-            .filter((p) => p.status === 'known_affected')
-            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
-          fixed: vulnerability.products
-            .filter((p) => p.status === 'fixed')
-            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
-          first_fixed: vulnerability.products
-            .filter((p) => p.status === 'first_fixed')
-            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
-          first_affected: vulnerability.products
-            .filter((p) => p.status === 'first_affected')
-            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
-          known_not_affected: vulnerability.products
-            .filter((p) => p.status === 'known_not_affected')
-            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
-          last_affected: vulnerability.products
-            .filter((p) => p.status === 'last_affected')
-            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
-          recommended: vulnerability.products
-            .filter((p) => p.status === 'recommended')
-            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
-          under_investigation: vulnerability.products
-            .filter((p) => p.status === 'under_investigation')
-            .map((p) => p.versions.map((v) => pidGenerator.getPid(v))),
-        },
-        remediations: vulnerability.remediations?.map((remediation) => ({
-          category: remediation.category,
-          date: remediation.date || undefined,
-          details: remediation.details || undefined,
-          url: remediation.url || undefined,
-          product_ids: remediation.productIds.map((id) =>
-            pidGenerator.getPid(id),
-          ),
-        })),
-        scores: vulnerability.scores?.map((score) => {
-          let baseScore = 0
-          let baseSeverity = ''
 
-          try {
-            baseScore = calculateBaseScore(score.vectorString)
-            baseSeverity = calculateQualScore(baseScore).toUpperCase()
-          } catch {
-            // If the score is invalid, we leave baseScore and baseSeverity as defaults
-            // as there will be errors already in the vectorString
-          }
-
-          return {
-            ['cvss_v3']: {
-              version: '3.1',
-              vectorString: score.vectorString,
-              baseScore,
-              baseSeverity,
-            },
-            products: score.productIds.map((id) => pidGenerator.getPid(id)),
-          }
-        }),
-      }),
+            return {
+              ['cvss_v3']: {
+                version: '3.1',
+                vectorString: score.vectorString,
+                baseScore,
+                baseSeverity,
+              },
+              products: score.productIds.map((id) => pidGenerator.getPid(id)),
+            }
+          }),
+        }
+      },
     ),
   }
 
