@@ -121,9 +121,9 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         },
         remediations: vulnerability.remediations.map((remediation) => ({
           category: remediation.category,
-          date: remediation.date,
-          details: remediation.details,
-          url: remediation.url,
+          date: remediation.date || undefined,
+          details: remediation.details || undefined,
+          url: remediation.url || undefined,
           product_ids: remediation.productIds.map((id) =>
             pidGenerator.getPid(id),
           ),

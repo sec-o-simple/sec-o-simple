@@ -1,8 +1,8 @@
 import { TDocumentStore } from '@/utils/useDocumentStore'
 import { createCSAFDocument } from '../csafExport/csafExport'
 
-import validate from '@secvisogram/csaf-validator-lib/validate.js'
 import * as basic from '@secvisogram/csaf-validator-lib/basic.js'
+import validate from '@secvisogram/csaf-validator-lib/validate.js'
 import { ValidationMessage } from './useValidationStore'
 
 const tests: unknown[] = [...Object.values(basic)]
