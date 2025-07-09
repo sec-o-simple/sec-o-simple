@@ -36,9 +36,65 @@ import { parseVulnerabilities } from './parseVulnerabilities'
 
 export const supportedCSAFVersions = ['2.0']
 
+const secOSimpleScheme = {
+  document: {
+    lang: 'string',
+    tracking: {
+      status: 'string',
+      revision_history: [
+        {
+          date: 'string',
+        },
+      ],
+    },
+  },
+}
+
+function findMismatchesWithExtras(data, schema, path = '') {
+  const mismatches = []
+
+  const allKeys = new Set([...Object.keys(data), ...Object.keys(schema)])
+
+  for (const key of allKeys) {
+    const currentPath = path ? `${path}.${key}` : key
+
+    if (!(key in schema)) {
+      mismatches.push(`Extra field: ${currentPath}`)
+      continue
+    }
+
+    if (!(key in data)) {
+      mismatches.push(`Missing field: ${currentPath}`)
+      continue
+    }
+
+    if (typeof schema[key] === 'object' && schema[key] !== null) {
+      if (typeof data[key] !== 'object' || data[key] === null) {
+        mismatches.push(`Type mismatch at ${currentPath}: expected object`)
+      } else {
+        mismatches.push(
+          ...findMismatchesWithExtras(data[key], schema[key], currentPath),
+        )
+      }
+    } else {
+      const expectedType = schema[key]
+      const actualType = typeof data[key]
+
+      if (actualType !== expectedType) {
+        mismatches.push(
+          `Type mismatch at ${currentPath}: expected ${expectedType}, got ${actualType}`,
+        )
+      }
+    }
+  }
+
+  return mismatches
+}
+
 export function parseCSAFDocument(
   csafDocument: DeepPartial<TCSAFDocument>,
 ): SOSDraft | undefined {
+  console.log(findMismatchesWithExtras(csafDocument, secOSimpleScheme))
   const idGenerator = new IdGenerator()
   // TODO: generate type dynamically
   const sosDocumentType: TSOSDocumentType = 'HardwareSoftware'
