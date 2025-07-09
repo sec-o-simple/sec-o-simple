@@ -2,6 +2,7 @@ import ProductSelect from '@/components/forms/ProductSelect'
 import VSplit from '@/components/forms/VSplit'
 import TagList from '@/routes/products/components/TagList'
 import {
+  TProductTreeBranch,
   TProductTreeBranchWithParents,
   getFullPTBName,
 } from '@/routes/products/types/tProductTreeBranch'
@@ -10,7 +11,8 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export type ProductsTagListProps = {
-  products?: string[]
+  products?: TProductTreeBranch[]
+  selected?: string[]
   onChange?: (productIds: string[]) => void
   error?: string
   isRequired?: boolean
@@ -18,6 +20,7 @@ export type ProductsTagListProps = {
 
 export default function ProductsTagList({
   products,
+  selected,
   onChange,
   error,
   isRequired,
@@ -26,7 +29,7 @@ export default function ProductsTagList({
   const { findProductTreeBranchWithParents } = useProductTreeBranch()
 
   const initialProducts =
-    (products
+    (selected
       ?.map((x) => findProductTreeBranchWithParents(x))
       .filter((x) => x !== undefined) as TProductTreeBranchWithParents[]) ?? []
 
@@ -43,6 +46,7 @@ export default function ProductsTagList({
         {t('vulnerabilities.products.title')} {isRequired ? '*' : ''}
       </span>
       <ProductSelect
+        products={products}
         isRequired={isRequired}
         selected={selectedProducts.map((x) => x.id)}
         onAdd={(ptb) =>

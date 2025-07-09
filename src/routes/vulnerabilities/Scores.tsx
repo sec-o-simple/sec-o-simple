@@ -4,6 +4,7 @@ import VSplit from '@/components/forms/VSplit'
 import StatusIndicator from '@/components/StatusIndicator'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useListState } from '@/utils/useListState'
+import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
@@ -95,6 +96,9 @@ function ScoreForm({
   onChange: (note: TVulnerabilityScore) => void
   isTouched?: boolean
 }) {
+  const { getSelectablePTBs } = useProductTreeBranch()
+  const ptbs = getSelectablePTBs()
+
   const { t } = useTranslation()
   let baseScore = ''
   let baseSeverity = ''
@@ -149,7 +153,8 @@ function ScoreForm({
             ? fieldValidation.errorMessages[0].message
             : ''
         }
-        products={score.productIds}
+        selected={score.productIds}
+        products={ptbs}
         onChange={(productIds) => onChange({ ...score, productIds })}
       />
     </VSplit>
