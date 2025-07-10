@@ -1,13 +1,14 @@
+import { Autocomplete } from '@/components/forms/Autocomplete'
 import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
-import { TCwe, TVulnerability } from './types/tVulnerability'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import { Autocomplete } from '@/components/forms/Autocomplete'
-import { useMemo } from 'react'
+import { useConfigStore } from '@/utils/useConfigStore'
+import { AutocompleteItem, Button, Tooltip } from '@heroui/react'
 import { weaknesses } from '@secvisogram/csaf-validator-lib/cwe.js'
-import { AutocompleteItem } from '@heroui/react'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { TCwe, TVulnerability } from './types/tVulnerability'
 
 export default function General({
   vulnerability,
@@ -22,22 +23,52 @@ export default function General({
 }) {
   const { t } = useTranslation()
   const cwes = useMemo<TCwe[]>(() => weaknesses, [])
+  const config = useConfigStore((state) => state.config)
+
+  let apiUrl = ''
+  if (config?.configuration && config?.configuration?.cveApiUrl) {
+    apiUrl = `${config.configuration?.cveApiUrl}/api/v1`
+  }
+
+  const fetchCveDescription = () => {
+    fetch(`${apiUrl}${vulnerability.cve}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.summary) {
+          onChange({ ...vulnerability, title: data.summary })
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching CVE description:', error)
+      })
+  }
 
   return (
     <VSplit>
       <HSplit>
-        <Input
-          label="CVE ID"
-          csafPath={`/vulnerabilities/${vulnerabilityIndex}/cve`}
-          isTouched={isTouched}
-          value={vulnerability.cve}
-          onValueChange={(newValue) =>
-            onChange({ ...vulnerability, cve: newValue })
-          }
-          autoFocus
-          isDisabled={checkReadOnly(vulnerability, 'cve')}
-          placeholder={getPlaceholder(vulnerability, 'cve')}
-        />
+        <HSplit className="w-full items-end gap-2">
+          <Input
+            label="CVE ID"
+            csafPath={`/vulnerabilities/${vulnerabilityIndex}/cve`}
+            isTouched={isTouched}
+            value={vulnerability.cve}
+            onValueChange={(newValue) =>
+              onChange({ ...vulnerability, cve: newValue })
+            }
+            autoFocus
+            isDisabled={checkReadOnly(vulnerability, 'cve')}
+            placeholder={getPlaceholder(vulnerability, 'cve')}
+          />
+
+          <Tooltip
+            content={t('vulnerabilities.general.fetchCveDescription')}
+            showArrow
+          >
+            <Button color="primary" onPress={fetchCveDescription}>
+              {t('vulnerabilities.general.fetchCve')}
+            </Button>
+          </Tooltip>
+        </HSplit>
         <Autocomplete
           label="CWE"
           csafPath={`/vulnerabilities/${vulnerabilityIndex}/cwe/name`}

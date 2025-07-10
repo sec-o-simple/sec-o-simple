@@ -116,6 +116,8 @@
       "vulnerabilities": "Vulnerabilities",
       "general": "General",
       "general.title": "Title",
+      "general.fetchCve": "Fetch",
+      "general.fetchCveDescription": "Fetches CVE data from the NVD",
       "notes": "Notes",
       "products": "Products",
       "scores": "Scores",

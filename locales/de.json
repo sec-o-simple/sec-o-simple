@@ -116,6 +116,8 @@
       "vulnerabilities": "Schwachstellen",
       "general": "Allgemein",
       "general.title": "Titel",
+      "general.fetchCve": "Laden",
+      "general.fetchCveDescription": "Lädt die CVE-Daten von der NVD",
       "notes": "Notizen",
       "products": "Produkte",
       "scores": "Bewertungen",

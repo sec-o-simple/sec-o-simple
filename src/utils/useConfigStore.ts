@@ -1,5 +1,5 @@
-import { create } from 'zustand'
 import { useEffect } from 'react'
+import { create } from 'zustand'
 
 const CONFIG_NAME = 'io.github.sec-o-simple.json'
 
@@ -15,6 +15,9 @@ export type TConfig = {
     enabled: boolean
     url?: string
     apiUrl?: string
+  }
+  configuration?: {
+    cveApiUrl?: string
   }
   template: { [key: string]: unknown }
 }
