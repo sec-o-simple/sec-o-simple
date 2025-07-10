@@ -26,6 +26,7 @@ export default function Version() {
     addOrUpdateRelationship,
     deleteRelationship,
   } = useRelationships()
+  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
   // modal variables
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -46,8 +47,6 @@ export default function Version() {
     ),
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
   ).filter(([_, relationships]) => relationships.length > 0)
-
-  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
   return (
     <WizardStep noContentWrapper={true}>
