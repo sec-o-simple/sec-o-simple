@@ -9,6 +9,8 @@ export default {
     id: 'string',
     lang: 'string',
     title: 'string',
+    // Tracking is added, because it is always generated automatically
+    // and not part of the original CSAF document.
     tracking: {
       status: 'string',
       revision_history: [
