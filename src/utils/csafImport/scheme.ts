@@ -9,6 +9,10 @@ export default {
     id: 'string',
     lang: 'string',
     title: 'string',
+    // Gets automatically generated
+    // and is not part of the original CSAF document.
+    category: 'string',
+    csaf_version: 'string',
     // Tracking is added, because it is always generated automatically
     // and not part of the original CSAF document.
     tracking: {
