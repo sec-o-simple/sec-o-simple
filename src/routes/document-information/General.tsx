@@ -93,13 +93,13 @@ export default function General() {
           label={t('document.general.language')}
           csafPath="/document/lang"
           isTouched={hasVisitedPage}
-          selectedKeys={[localState.language]}
+          selectedKeys={[localState.lang]}
           onSelectionChange={(v) =>
-            setLocalState({ ...localState, language: [...v][0] as string })
+            setLocalState({ ...localState, lang: [...v][0] as string })
           }
-          isDisabled={isFieldReadonly('document-information.language')}
+          isDisabled={isFieldReadonly('document-information.lang')}
           isRequired
-          placeholder={getFieldPlaceholder('document-information.language')}
+          placeholder={getFieldPlaceholder('document-information.lang')}
         >
           {['de', 'en'].map((key) => (
             <SelectItem key={key}>

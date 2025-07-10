@@ -33,68 +33,82 @@ import { parseNote } from './parseNote'
 import { parseProductTree } from './parseProductTree'
 import { parseRelationships } from './parseRelationships'
 import { parseVulnerabilities } from './parseVulnerabilities'
+import { default as secOSimpleScheme } from './scheme'
 
 export const supportedCSAFVersions = ['2.0']
 
-const secOSimpleScheme = {
-  document: {
-    lang: 'string',
-    tracking: {
-      status: 'string',
-      revision_history: [
-        {
-          date: 'string',
-        },
-      ],
-    },
-  },
+type JSONValue = string | number | boolean | null | JSONObject | JSONArray
+export interface JSONObject {
+  [key: string]: JSONValue
+}
+interface JSONArray extends Array<JSONValue> {}
+
+export interface HiddenField {
+  path: string
+  value: JSONValue
 }
 
-function findMismatchesWithExtras(data, schema, path = '') {
-  const mismatches = []
+/**
+ * Recursively checks a document against a schema and collects unknown fields (missing in schema).
+ * @param schema Expected structure of the document
+ * @param doc Imported document to check
+ * @param path Current field path during recursion
+ * @returns Array of unknown field paths
+ */
+function getHiddenFields(
+  schema: JSONValue,
+  doc: JSONValue,
+  path: string = '',
+): HiddenField[] {
+  const unknownFields: HiddenField[] = []
 
-  const allKeys = new Set([...Object.keys(data), ...Object.keys(schema)])
-
-  for (const key of allKeys) {
-    const currentPath = path ? `${path}.${key}` : key
-
-    if (!(key in schema)) {
-      mismatches.push(`Extra field: ${currentPath}`)
-      continue
-    }
-
-    if (!(key in data)) {
-      mismatches.push(`Missing field: ${currentPath}`)
-      continue
-    }
-
-    if (typeof schema[key] === 'object' && schema[key] !== null) {
-      if (typeof data[key] !== 'object' || data[key] === null) {
-        mismatches.push(`Type mismatch at ${currentPath}: expected object`)
-      } else {
-        mismatches.push(
-          ...findMismatchesWithExtras(data[key], schema[key], currentPath),
-        )
+  // If doc is an array
+  if (Array.isArray(doc)) {
+    const schemaItem = Array.isArray(schema) ? schema[0] : undefined
+    doc.forEach((item, index) => {
+      if (schemaItem === undefined) {
+        unknownFields.push({ path: `${path}/${index}`, value: item })
+        return
       }
-    } else {
-      const expectedType = schema[key]
-      const actualType = typeof data[key]
+      unknownFields.push(
+        ...getHiddenFields(schemaItem, item, `${path}/${index}`),
+      )
+    })
+  }
+  // If doc is an object
+  else if (isObject(doc)) {
+    const schemaKeys = isObject(schema) ? Object.keys(schema) : []
 
-      if (actualType !== expectedType) {
-        mismatches.push(
-          `Type mismatch at ${currentPath}: expected ${expectedType}, got ${actualType}`,
+    for (const key of Object.keys(doc)) {
+      const currentPath = `${path}/${key}`
+
+      if (!schemaKeys.includes(key)) {
+        unknownFields.push({ path: currentPath, value: doc[key] })
+      } else {
+        unknownFields.push(
+          ...getHiddenFields(
+            (schema as JSONObject)[key],
+            (doc as JSONObject)[key],
+            currentPath,
+          ),
         )
       }
     }
   }
 
-  return mismatches
+  return unknownFields
+}
+
+/**
+ * Type guard to check if a value is a JSONObject
+ */
+function isObject(value: JSONValue): value is JSONObject {
+  return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
 
 export function parseCSAFDocument(
   csafDocument: DeepPartial<TCSAFDocument>,
 ): SOSDraft | undefined {
-  console.log(findMismatchesWithExtras(csafDocument, secOSimpleScheme))
   const idGenerator = new IdGenerator()
   // TODO: generate type dynamically
   const sosDocumentType: TSOSDocumentType = 'HardwareSoftware'
@@ -105,7 +119,7 @@ export function parseCSAFDocument(
   const csafDoc = csafDocument.document
   const documentInformation: TDocumentInformation = {
     id: csafDoc?.tracking?.id || defaultDocumentInformation.id,
-    language: csafDoc?.lang ?? defaultDocumentInformation.language,
+    lang: csafDoc?.lang ?? defaultDocumentInformation.lang,
     status:
       (csafDoc?.tracking?.status as TDocumentInformation['status']) ??
       defaultDocumentInformation.status,
@@ -218,14 +232,18 @@ export function useCSAFImport() {
     )
   }
 
-  const importCSAFDocument = (csafDocument: object): boolean => {
+  const importCSAFDocument = (csafDocument: JSONObject): HiddenField[] => {
     const sosDocument = parseCSAFDocument(csafDocument)
     if (sosDocument) {
       importSOSDraft(sosDocument)
-      return true
+      return getHiddenFields(secOSimpleScheme, csafDocument)
     }
-    return false
+    return []
   }
 
-  return { isCSAFDocument, isCSAFVersionSupported, importCSAFDocument }
+  return {
+    isCSAFDocument,
+    isCSAFVersionSupported,
+    importCSAFDocument,
+  }
 }

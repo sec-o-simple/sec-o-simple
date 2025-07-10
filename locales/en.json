@@ -45,6 +45,14 @@
         "acknowledgments": "Acknowledgements"
       }
     },
+    "hiddenFields": {
+      "title": "Hidden Fields",
+      "description": "The following fields are hidden within Sec-O-Simple but are present in the imported document.",
+      "column": {
+        "path": "Path",
+        "value": "Value"
+      }
+    },
     "documentSelection": {
       "create": "Create document",
       "selectType": "Select Document Type",

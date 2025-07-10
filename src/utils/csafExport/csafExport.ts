@@ -45,7 +45,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           : '1',
         id: documentInformation.id,
       },
-      lang: documentInformation.language,
+      lang: documentInformation.lang,
       title: documentInformation.title,
       publisher: {
         category: documentInformation.publisher.category,

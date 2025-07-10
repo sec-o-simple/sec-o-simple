@@ -3,7 +3,7 @@ import { TemplateKeys } from '@/utils/template'
 export type TGeneralDocumentInformation = {
   title: string
   id: string
-  language: string
+  lang: string
   status: TDocumentStatus
 }
 
@@ -14,7 +14,7 @@ export function getDefaultGeneralDocumentInformation(): TGeneralDocumentInformat
   return {
     title: '',
     id: '',
-    language: 'en', // Default to English
+    lang: 'en', // Default to English
     status: 'draft', // Default to draft status
   }
 }
@@ -23,7 +23,7 @@ export function getGeneralDocumentInformationTemplateKeys(): TemplateKeys<TGener
   return {
     title: 'document-information.title',
     id: 'document-information.id',
-    language: 'document-information.language',
+    lang: 'document-information.lang',
     status: 'document-information.tracking.status',
   }
 }
