@@ -32,13 +32,11 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         current_release_date:
           revisionHistory[revisionHistory.length - 1]?.date || currentDate,
         initial_release_date: revisionHistory[0]?.date || currentDate,
-        revision_history: documentStore.documentInformation.revisionHistory.map(
-          (entry) => ({
-            date: entry.date,
-            number: entry.number,
-            summary: entry.summary,
-          }),
-        ),
+        revision_history: revisionHistory.map((entry) => ({
+          date: entry.date,
+          number: entry.number,
+          summary: entry.summary,
+        })),
         status: documentStore.documentInformation.status,
         version: documentStore.documentInformation.revisionHistory.length
           ? retrieveLatestVersion(
