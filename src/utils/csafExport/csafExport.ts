@@ -1,3 +1,4 @@
+import pck from '@/../package.json'
 import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
 import { download } from '../download'
@@ -24,7 +25,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         generator: {
           date: currentDate,
           engine: {
-            version: '0.0.1',
+            version: pck.version,
             name: 'Sec-O-Simple',
           },
         },
@@ -45,7 +46,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           : '1',
         id: documentInformation.id,
       },
-      lang: documentInformation.language,
+      lang: documentInformation.lang,
       title: documentInformation.title,
       publisher: {
         category: documentInformation.publisher.category,

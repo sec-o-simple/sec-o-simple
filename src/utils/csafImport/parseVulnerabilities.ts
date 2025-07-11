@@ -1,21 +1,21 @@
-import {
-  TCwe,
-  TVulnerability,
-  getDefaultVulnerability,
-} from '@/routes/vulnerabilities/types/tVulnerability'
-import { TCSAFDocument } from '../csafExport/csafExport'
-import { IdGenerator } from './idGenerator'
-import { parseNote } from './parseNote'
-import { TParsedNote } from '../csafExport/parseNote'
+import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import {
   TRemediation,
   getDefaultRemediation,
 } from '@/routes/vulnerabilities/types/tRemediation'
 import {
+  TCwe,
+  TVulnerability,
+  getDefaultVulnerability,
+} from '@/routes/vulnerabilities/types/tVulnerability'
+import {
   TVulnerabilityScore,
   getDefaultVulnerabilityScore,
 } from '@/routes/vulnerabilities/types/tVulnerabilityScore'
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import { TCSAFDocument } from '../csafExport/csafExport'
+import { TParsedNote } from '../csafExport/parseNote'
+import { IdGenerator } from './idGenerator'
+import { parseNote } from './parseNote'
 import { parseVulnerabilityProducts } from './parseVulnerabilityProducts'
 
 export function parseVulnerabilities(
@@ -31,7 +31,7 @@ export function parseVulnerabilities(
         cve: vulnerability.cve ?? defaultVulnerability.cve,
         cwe: vulnerability.cwe as TCwe | undefined,
         title: vulnerability.title ?? defaultVulnerability.title,
-        notes: vulnerability.notes.map((note) =>
+        notes: vulnerability.notes?.map((note) =>
           parseNote(note as TParsedNote),
         ),
         products: parseVulnerabilityProducts(
@@ -52,7 +52,7 @@ export function parseVulnerabilities(
             ),
           } as TRemediation
         }),
-        scores: vulnerability.scores.map((score) => {
+        scores: vulnerability.scores?.map((score) => {
           const defaultScore = getDefaultVulnerabilityScore()
 
           const cvssVersion =
@@ -69,7 +69,7 @@ export function parseVulnerabilities(
 
           return {
             id: defaultScore.id,
-            productIds: score.products.map((id) => idGenerator.getId(id)),
+            productIds: score.products?.map((id) => idGenerator.getId(id)),
             cvssVersion: cvssInfos?.version ?? defaultScore.cvssVersion,
             vectorString: cvssInfos?.vectorString ?? defaultScore.vectorString,
           } as TVulnerabilityScore
