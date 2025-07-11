@@ -87,14 +87,15 @@ export default {
           title: 'string',
         },
       ],
+      // Not all statuses are used in the UI, but they are defined here for completeness
       product_status: {
         known_affected: [['string']],
         fixed: [['string']],
-        first_fixed: [['string']],
-        first_affected: [['string']],
+        // first_fixed: [['string']],
+        // first_affected: [['string']],
         known_not_affected: [['string']],
-        last_affected: [['string']],
-        recommended: [['string']],
+        // last_affected: [['string']],
+        // recommended: [['string']],
         under_investigation: [['string']],
       },
       remediations: [
