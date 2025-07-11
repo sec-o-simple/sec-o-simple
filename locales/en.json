@@ -114,10 +114,12 @@
     "vulnerabilities": {
       "vulnerability": "Vulnerability",
       "vulnerabilities": "Vulnerabilities",
-      "general": "General",
-      "general.title": "Title",
-      "general.fetchCve": "Fetch",
-      "general.fetchCveDescription": "Fetches CVE data from the NVD",
+      "general": {
+        "": "General",
+        "title": "Title",
+        "fetchCve": "Fetch",
+        "fetchCveDescription": "Fetches CVE data from the provided API"
+      },
       "notes": "Notes",
       "products": "Products",
       "scores": "Scores",

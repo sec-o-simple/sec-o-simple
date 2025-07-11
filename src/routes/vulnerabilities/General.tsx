@@ -25,9 +25,9 @@ export default function General({
   const cwes = useMemo<TCwe[]>(() => weaknesses, [])
   const config = useConfigStore((state) => state.config)
 
-  let apiUrl = ''
-  if (config?.configuration && config?.configuration?.cveApiUrl) {
-    apiUrl = `${config.configuration?.cveApiUrl}/api/v1`
+  let apiUrl = undefined
+  if (config && config?.cveApiUrl) {
+    apiUrl = `${config?.cveApiUrl}/api/v1`
   }
 
   const fetchCveDescription = () => {
@@ -63,8 +63,13 @@ export default function General({
           <Tooltip
             content={t('vulnerabilities.general.fetchCveDescription')}
             showArrow
+            isDisabled={!vulnerability.cve || !apiUrl}
           >
-            <Button color="primary" onPress={fetchCveDescription}>
+            <Button
+              color={!vulnerability.cve || !apiUrl ? 'default' : 'primary'}
+              onPress={fetchCveDescription}
+              disabled={!vulnerability.cve || !apiUrl}
+            >
               {t('vulnerabilities.general.fetchCve')}
             </Button>
           </Tooltip>

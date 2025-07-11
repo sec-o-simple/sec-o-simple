@@ -16,9 +16,7 @@ export type TConfig = {
     url?: string
     apiUrl?: string
   }
-  configuration?: {
-    cveApiUrl?: string
-  }
+  cveApiUrl?: string
   template: { [key: string]: unknown }
 }
 

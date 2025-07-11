@@ -4,9 +4,7 @@
     "apiUrl": "http://127.0.0.1:9999",
     "url": "http://127.0.0.1:3000"
   },
-  "configuration": {
-    "cveApiUrl": "https://cveawg.mitre.org/api/cve/"
-  },
+  "cveApiUrl": "https://cveawg.mitre.org/api/cve/",
   "template": {
     "document-information.title": "Test Document",
     "document-information.title.readonly": true,

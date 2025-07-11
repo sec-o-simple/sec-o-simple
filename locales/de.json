@@ -114,10 +114,12 @@
     "vulnerabilities": {
       "vulnerability": "Schwachstelle",
       "vulnerabilities": "Schwachstellen",
-      "general": "Allgemein",
-      "general.title": "Titel",
-      "general.fetchCve": "Laden",
-      "general.fetchCveDescription": "Lädt die CVE-Daten von der NVD",
+      "general": {
+        "": "Allgemein",
+        "title": "Title",
+        "fetchCve": "Laden",
+        "fetchCveDescription": "Lädt die CVE-Daten von der hinterlegten API"
+      },
       "notes": "Notizen",
       "products": "Produkte",
       "scores": "Bewertungen",
