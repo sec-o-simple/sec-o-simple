@@ -7,7 +7,7 @@ import { ListState } from '@/utils/useListState'
 import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIconProps } from '@fortawesome/react-fontawesome'
 import { Accordion, AccordionItem } from '@heroui/accordion'
-import { Selection } from '@heroui/react'
+import { cn, Selection } from '@heroui/react'
 import { HTMLProps, ReactNode, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { twMerge } from 'tailwind-merge'
@@ -32,6 +32,7 @@ export type ComponentListProps<T> = {
   endContent?: (item: T) => ReactNode
   titleProps?: HTMLProps<HTMLDivElement>
   customActions?: CustomAction<T>[]
+  itemBgColor?: string
   renderTitlePrefix?: (item: T) => ReactNode
 }
 
@@ -44,6 +45,7 @@ export default function ComponentList<T extends object>({
   endContent,
   titleProps,
   customActions,
+  itemBgColor,
   ...props
 }: ComponentListProps<T>) {
   const { t } = useTranslation()
@@ -61,7 +63,7 @@ export default function ComponentList<T extends object>({
           titleWrapper: 'hidden',
           startContent: 'grow',
           indicator: 'text-neutral-foreground',
-          base: 'border border-gray shadow-none px-4 py-2',
+          base: 'border border-default-200 shadow-none px-4 py-2',
           content: 'py-2',
         }}
         className="px-0"
@@ -71,6 +73,7 @@ export default function ComponentList<T extends object>({
 
           return (
             <AccordionItem
+              className={cn(itemBgColor)}
               key={listState.getId(item)}
               startContent={
                 <div className="flex items-center justify-between">

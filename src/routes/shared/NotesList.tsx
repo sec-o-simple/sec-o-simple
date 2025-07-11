@@ -54,6 +54,7 @@ export function NotesList({
       listState={notesListState}
       title="title"
       itemLabel={t('notes.note')}
+      itemBgColor="bg-zinc-50"
       content={(note, index) => (
         <NoteForm
           note={note}

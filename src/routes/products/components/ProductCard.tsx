@@ -1,14 +1,14 @@
+import IconButton from '@/components/forms/IconButton'
+import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { faCodeFork } from '@fortawesome/free-solid-svg-icons'
 import { Chip } from '@heroui/chip'
+import { Modal, useDisclosure } from '@heroui/modal'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 import { TProductTreeBranch, getPTBName } from '../types/tProductTreeBranch'
 import InfoCard, { InfoCardProps } from './InfoCard'
-import TagList from './TagList'
-import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
-import { Modal, useDisclosure } from '@heroui/modal'
 import { PTBEditForm } from './PTBEditForm'
-import IconButton from '@/components/forms/IconButton'
-import { faCodeFork } from '@fortawesome/free-solid-svg-icons'
-import { useNavigate } from 'react-router'
-import { useTranslation } from 'react-i18next'
+import TagList from './TagList'
 
 export type ProductCardProps = Partial<InfoCardProps> & {
   product: TProductTreeBranch

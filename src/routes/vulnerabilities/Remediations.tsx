@@ -7,6 +7,7 @@ import VSplit from '@/components/forms/VSplit'
 import StatusIndicator from '@/components/StatusIndicator'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useListState } from '@/utils/useListState'
+import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
@@ -15,6 +16,7 @@ import { Alert } from '@heroui/react'
 import { SelectItem } from '@heroui/select'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+import { TProductTreeBranch } from '../products/types/tProductTreeBranch'
 import ProductsTagList from './components/ProductsTagList'
 import {
   TRemediation,
@@ -55,6 +57,12 @@ export default function Remediations({
 
   const csafPath = `/vulnerabilities/${vulnerabilityIndex}/remediations`
 
+  const { getSelectablePTBs } = useProductTreeBranch()
+  const ptbs = getSelectablePTBs()
+  const knownAffectedProducts = vulnerability.products.filter(
+    (p) => p.status === 'known_affected',
+  )
+
   return (
     <>
       {listValidation.hasErrors && (
@@ -68,6 +76,7 @@ export default function Remediations({
         listState={remediationsListState}
         title="url"
         itemLabel={t('vulnerabilities.remediation.title')}
+        itemBgColor="bg-zinc-50"
         startContent={({ item, index }) => (
           <RemediationStartContent
             item={item}
@@ -79,6 +88,13 @@ export default function Remediations({
             remediation={remediation}
             csafPath={`${csafPath}/${index}`}
             isTouched={isTouched}
+            products={ptbs.filter(
+              (p) =>
+                knownAffectedProducts.some((product) =>
+                  product.versions.some((v) => v === p.id),
+                ),
+              ptbs,
+            )}
             onChange={remediationsListState.updateDataEntry}
           />
         )}
@@ -111,11 +127,13 @@ function RemediationForm({
   remediation,
   csafPath,
   onChange,
+  products: ptbs = [],
   isTouched = false,
 }: {
   remediation: TRemediation
   csafPath: string
   onChange: (remediation: TRemediation) => void
+  products?: TProductTreeBranch[]
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
@@ -183,7 +201,8 @@ function RemediationForm({
             ? fieldValidation.errorMessages[0].message
             : ''
         }
-        products={remediation.productIds}
+        selected={remediation.productIds}
+        products={ptbs}
         onChange={(productIds) => onChange({ ...remediation, productIds })}
         isRequired
       />
