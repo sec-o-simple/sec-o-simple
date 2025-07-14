@@ -12,6 +12,11 @@ import { useTranslation } from 'react-i18next'
 import { uid } from 'uid'
 import { TCwe, TVulnerability } from './types/tVulnerability'
 
+interface CNADescription {
+  lang: string
+  value: string
+}
+
 export default function General({
   vulnerability,
   vulnerabilityIndex,
@@ -48,30 +53,37 @@ export default function General({
       if (data.containers && data.containers.cna) {
         onChange({ ...vulnerability, title: data.containers.cna.title })
 
-        if (!data.containers.cna.descriptions || data.containers.cna.descriptions.length === 0) {
+        if (
+          !data.containers.cna.descriptions ||
+          data.containers.cna.descriptions.length === 0
+        ) {
           addToast({
             title: t('vulnerabilities.general.noCveNotesFound'),
-            description: t('vulnerabilities.general.noCveNotesFoundDescription'),
+            description: t(
+              'vulnerabilities.general.noCveNotesFoundDescription',
+            ),
             color: 'warning',
           })
           return
         }
 
         let descriptions = data.containers?.cna.descriptions?.filter(
-          (desc: any) => (desc.lang as string).toLowerCase() === docLanguage,
+          (desc: CNADescription) =>
+            (desc.lang as string).toLowerCase() === docLanguage,
         )
 
         if (!descriptions || descriptions.length === 0) {
           descriptions = data.containers?.cna.descriptions?.filter(
-            (desc: any) => desc.lang === 'en',
+            (desc: CNADescription) => desc.lang === 'en',
           )
         }
 
-        descriptions?.map((desc: any, index: number) => {
+        descriptions?.map((desc: CNADescription, index: number) => {
           vulnerability.notes.push({
             id: uid(),
-            title: `${t('vulnerabilities.general.description')} - ${vulnerability.cve
-              } - ${index + 1}`,
+            title: `${t('vulnerabilities.general.description')} - ${
+              vulnerability.cve
+            } - ${index + 1}`,
             content: desc.value,
             category: 'description',
           })
