@@ -31,79 +31,71 @@ export default function General({
   )
   const [cveError, setCVEError] = useState(false)
 
-  let apiUrl = undefined
+  let apiUrl = 'https://cveawg.mitre.org/api/cve'
   if (config && config?.cveApiUrl) {
     apiUrl = config?.cveApiUrl
   }
+  const [fetchingCve, setFetchingCve] = useState(false)
 
-  const fetchCveDescription = () => {
-    fetch(`${apiUrl}/${vulnerability.cve}`)
-      .then((response) => {
-        if (!response.ok) {
+  const fetchCveDescription = async () => {
+    try {
+      setFetchingCve(true)
+      const response = await fetch(`${apiUrl}/${vulnerability.cve}`)
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      const data = await response.json()
+      if (data.containers && data.containers.cna) {
+        onChange({ ...vulnerability, title: data.containers.cna.title })
+
+        if (!data.containers.cna.descriptions || data.containers.cna.descriptions.length === 0) {
           addToast({
-            title: t('vulnerabilities.general.cveFetchError'),
-            description: t('vulnerabilities.general.cveFetchErrorDescription'),
-            color: 'danger',
+            title: t('vulnerabilities.general.noCveNotesFound'),
+            description: t('vulnerabilities.general.noCveNotesFoundDescription'),
+            color: 'warning',
           })
-          throw new Error(`HTTP error! status: ${response.status}`)
+          return
         }
-        return response.json()
-      })
-      .then((data) => {
-        if (data.containers && data.containers.cna) {
-          onChange({ ...vulnerability, title: data.containers.cna.title })
 
-          if (
-            !data.containers.cna.descriptions ||
-            data.containers.cna.descriptions.length === 0
-          ) {
-            addToast({
-              title: t('vulnerabilities.general.noCveNotesFound'),
-              description: t(
-                'vulnerabilities.general.noCveNotesFoundDescription',
-              ),
-              color: 'warning',
-            })
-            return
-          }
+        let descriptions = data.containers?.cna.descriptions?.filter(
+          (desc: any) => (desc.lang as string).toLowerCase() === docLanguage,
+        )
 
-          let descriptions = data.containers?.cna.descriptions?.filter(
-            (desc: any) => (desc.lang as string).toLowerCase() === docLanguage,
+        if (!descriptions || descriptions.length === 0) {
+          descriptions = data.containers?.cna.descriptions?.filter(
+            (desc: any) => desc.lang === 'en',
           )
-
-          if (!descriptions || descriptions.length === 0) {
-            descriptions = data.containers?.cna.descriptions?.filter(
-              (desc: any) => desc.lang === 'en',
-            )
-          }
-
-          descriptions?.map((desc: any, index: number) => {
-            vulnerability.notes.push({
-              id: uid(),
-              title: `${t('vulnerabilities.general.description')} - ${
-                vulnerability.cve
-              } - ${index + 1}`,
-              content: desc.value,
-              category: 'description',
-            })
-          })
-
-          addToast({
-            title: t('vulnerabilities.general.cveNotesFetched'),
-            description: t(
-              'vulnerabilities.general.cveNotesFetchedDescription',
-              {
-                count: descriptions.length,
-              },
-            ),
-            color: 'success',
-          })
         }
+
+        descriptions?.map((desc: any, index: number) => {
+          vulnerability.notes.push({
+            id: uid(),
+            title: `${t('vulnerabilities.general.description')} - ${vulnerability.cve
+              } - ${index + 1}`,
+            content: desc.value,
+            category: 'description',
+          })
+        })
+
+        addToast({
+          title: t('vulnerabilities.general.cveNotesFetched'),
+          description: t('vulnerabilities.general.cveNotesFetchedDescription', {
+            count: descriptions.length,
+          }),
+          color: 'success',
+        })
+      }
+    } catch (error) {
+      setCVEError(true)
+      console.error('Error fetching CVE description:', error)
+      addToast({
+        title: t('vulnerabilities.general.cveFetchError'),
+        description: t('vulnerabilities.general.cveFetchErrorDescription'),
+        color: 'danger',
       })
-      .catch((error) => {
-        setCVEError(true)
-        console.error('Error fetching CVE description:', error)
-      })
+    } finally {
+      setFetchingCve(false)
+    }
   }
 
   return (
@@ -129,19 +121,22 @@ export default function General({
             }}
           />
 
-          <Tooltip
-            content={t('vulnerabilities.general.fetchCveDescription')}
-            showArrow
-            isDisabled={!vulnerability.cve || !apiUrl}
-          >
-            <Button
-              color={!vulnerability.cve || !apiUrl ? 'default' : 'primary'}
-              onPress={fetchCveDescription}
-              disabled={!vulnerability.cve || !apiUrl}
+          {!!apiUrl && (
+            <Tooltip
+              content={t('vulnerabilities.general.fetchCveDescription')}
+              showArrow
+              isDisabled={!vulnerability.cve || !apiUrl}
             >
-              {t('vulnerabilities.general.fetchCve')}
-            </Button>
-          </Tooltip>
+              <Button
+                color={!vulnerability.cve || !apiUrl ? 'default' : 'primary'}
+                onPress={fetchCveDescription}
+                disabled={!vulnerability.cve || !apiUrl}
+                isLoading={fetchingCve}
+              >
+                {t('vulnerabilities.general.fetchCve')}
+              </Button>
+            </Tooltip>
+          )}
         </HSplit>
         <Autocomplete
           label="CWE"
