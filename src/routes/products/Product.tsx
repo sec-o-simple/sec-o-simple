@@ -1,19 +1,19 @@
+import IconButton from '@/components/forms/IconButton'
 import WizardStep from '@/components/WizardStep'
-import { useNavigate, useParams } from 'react-router'
-import SubMenuHeader from './components/SubMenuHeader'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
-import InfoCard from './components/InfoCard'
+import { faLink } from '@fortawesome/free-solid-svg-icons'
 import { Modal, useDisclosure } from '@heroui/modal'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router'
+import InfoCard from './components/InfoCard'
 import { PTBEditForm } from './components/PTBEditForm'
+import SubMenuHeader from './components/SubMenuHeader'
 import {
   TProductTreeBranch,
   getDefaultProductTreeBranch,
   getPTBName,
 } from './types/tProductTreeBranch'
-import { useState } from 'react'
-import IconButton from '@/components/forms/IconButton'
-import { faLink } from '@fortawesome/free-solid-svg-icons'
-import { useTranslation } from 'react-i18next'
 
 export default function Product() {
   const { productId } = useParams()

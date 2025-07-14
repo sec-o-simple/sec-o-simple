@@ -31,7 +31,7 @@ export function parseVulnerabilities(
         cve: vulnerability.cve ?? defaultVulnerability.cve,
         cwe: vulnerability.cwe as TCwe | undefined,
         title: vulnerability.title ?? defaultVulnerability.title,
-        notes: vulnerability.notes.map((note) =>
+        notes: vulnerability.notes?.map((note) =>
           parseNote(note as TParsedNote),
         ),
         products: parseVulnerabilityProducts(

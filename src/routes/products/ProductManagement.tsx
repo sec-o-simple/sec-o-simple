@@ -1,14 +1,14 @@
 import WizardStep from '@/components/WizardStep'
+import { useConfigStore } from '@/utils/useConfigStore'
+import useDocumentStore from '@/utils/useDocumentStore'
+import usePageVisit from '@/utils/validation/usePageVisit'
+import { Button } from '@heroui/button'
 import { Tab, Tabs } from '@heroui/tabs'
 import { useState } from 'react'
-import VendorList from './VendorList'
-import useDocumentStore from '@/utils/useDocumentStore'
-import ProductList from './ProductList'
 import { useTranslation } from 'react-i18next'
-import usePageVisit from '@/utils/validation/usePageVisit'
 import ProductDatabaseSelector from './components/ProductDatabaseSelector'
-import { Button } from '@heroui/button'
-import { useConfigStore } from '@/utils/useConfigStore'
+import ProductList from './ProductList'
+import VendorList from './VendorList'
 
 export default function ProductManagement() {
   usePageVisit()
@@ -60,12 +60,12 @@ export default function ProductManagement() {
           <Tab key="Vendors" title={t('products.vendors')}>
             <VendorList />
           </Tab>
-          {sosDocumentType.includes('Software') && (
+          {['Software', 'CSAFImport'].includes(sosDocumentType) && (
             <Tab key="Software" title={t('products.software')}>
               <ProductList productType="Software" />
             </Tab>
           )}
-          {sosDocumentType.includes('Hardware') && (
+          {['Hardware', 'CSAFImport'].includes(sosDocumentType) && (
             <Tab key="Hardware" title={t('products.hardware')}>
               <ProductList productType="Hardware" />
             </Tab>

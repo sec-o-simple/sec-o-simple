@@ -58,7 +58,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
             {ptb?.category === 'product_name' && (
               <Select
                 label={t(`${ptb?.category}.type`)}
-                selectedKeys={[type ?? 'Software']}
+                selectedKeys={[type ?? '']}
                 onChange={(e) => {
                   if (!e.target.value) {
                     return
@@ -69,7 +69,9 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
                 placeholder={ptb ? getPlaceholder(ptb, 'type') : undefined}
               >
                 {productTreeBranchProductTypes
-                  .filter((type) => sosDocumentType.includes(type))
+                  .filter((type) =>
+                    [type, 'CSAFImport'].includes(sosDocumentType),
+                  )
                   .map((type) => (
                     <SelectItem key={type}>{type}</SelectItem>
                   ))}

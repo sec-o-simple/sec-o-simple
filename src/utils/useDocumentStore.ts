@@ -8,6 +8,8 @@ import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { create } from 'zustand'
 
 export const sosDocumentTypes = [
+  // Used for importing CSAF documents
+  'CSAFImport',
   'Software',
   'HardwareSoftware',
   'HardwareFirmware',

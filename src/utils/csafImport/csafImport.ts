@@ -40,8 +40,7 @@ export function parseCSAFDocument(
   csafDocument: DeepPartial<TCSAFDocument>,
 ): SOSDraft | undefined {
   const idGenerator = new IdGenerator()
-  // TODO: generate type dynamically
-  const sosDocumentType: TSOSDocumentType = 'HardwareSoftware'
+  const sosDocumentType: TSOSDocumentType = 'CSAFImport'
 
   const defaultDocumentInformation = getDefaultDocumentInformation()
   const defaultRevisionHistoryEntry = getDefaultRevisionHistoryEntry()
