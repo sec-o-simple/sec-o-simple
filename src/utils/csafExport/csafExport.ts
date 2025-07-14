@@ -12,7 +12,10 @@ import { PidGenerator } from './pidGenerator'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
-export function createCSAFDocument(documentStore: TDocumentStore) {
+export function createCSAFDocument(
+  documentStore: TDocumentStore,
+  useImportedCSAFDoc = false,
+) {
   const pidGenerator = new PidGenerator()
   const currentDate = new Date().toISOString()
   const documentInformation = documentStore.documentInformation
@@ -155,6 +158,8 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
     ),
   }
 
+  console.log('Creating CSAF document with ID:', documentStore.csafDocument)
+
   return csafDocument
 }
 
@@ -162,7 +167,7 @@ export function useCSAFExport() {
   const documentStore = useDocumentStore()
 
   const exportCSAFDocument = () => {
-    const csafDocument = createCSAFDocument(documentStore)
+    const csafDocument = createCSAFDocument(documentStore, true)
 
     download(
       `${getFilename(documentStore.documentInformation.id)}.json`,
