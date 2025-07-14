@@ -4,10 +4,12 @@ import { Input } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useConfigStore } from '@/utils/useConfigStore'
-import { AutocompleteItem, Button, Tooltip } from '@heroui/react'
+import useDocumentStore from '@/utils/useDocumentStore'
+import { addToast, AutocompleteItem, Button, Tooltip } from '@heroui/react'
 import { weaknesses } from '@secvisogram/csaf-validator-lib/cwe.js'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { uid } from 'uid'
 import { TCwe, TVulnerability } from './types/tVulnerability'
 
 export default function General({
@@ -24,21 +26,82 @@ export default function General({
   const { t } = useTranslation()
   const cwes = useMemo<TCwe[]>(() => weaknesses, [])
   const config = useConfigStore((state) => state.config)
+  const docLanguage = useDocumentStore((state) =>
+    state.documentInformation.language.toLowerCase(),
+  )
+  const [cveError, setCVEError] = useState(false)
 
   let apiUrl = undefined
   if (config && config?.cveApiUrl) {
-    apiUrl = `${config?.cveApiUrl}/api/v1`
+    apiUrl = config?.cveApiUrl
   }
 
   const fetchCveDescription = () => {
-    fetch(`${apiUrl}${vulnerability.cve}`)
-      .then((response) => response.json())
+    fetch(`${apiUrl}/${vulnerability.cve}`)
+      .then((response) => {
+        if (!response.ok) {
+          addToast({
+            title: t('vulnerabilities.general.cveFetchError'),
+            description: t('vulnerabilities.general.cveFetchErrorDescription'),
+            color: 'danger',
+          })
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        return response.json()
+      })
       .then((data) => {
-        if (data.summary) {
-          onChange({ ...vulnerability, title: data.summary })
+        if (data.containers && data.containers.cna) {
+          onChange({ ...vulnerability, title: data.containers.cna.title })
+
+          if (
+            !data.containers.cna.descriptions ||
+            data.containers.cna.descriptions.length === 0
+          ) {
+            addToast({
+              title: t('vulnerabilities.general.noCveNotesFound'),
+              description: t(
+                'vulnerabilities.general.noCveNotesFoundDescription',
+              ),
+              color: 'warning',
+            })
+            return
+          }
+
+          let descriptions = data.containers?.cna.descriptions?.filter(
+            (desc: any) => (desc.lang as string).toLowerCase() === docLanguage,
+          )
+
+          if (!descriptions || descriptions.length === 0) {
+            descriptions = data.containers?.cna.descriptions?.filter(
+              (desc: any) => desc.lang === 'en',
+            )
+          }
+
+          descriptions?.map((desc: any, index: number) => {
+            vulnerability.notes.push({
+              id: uid(),
+              title: `${t('vulnerabilities.general.description')} - ${
+                vulnerability.cve
+              } - ${index + 1}`,
+              content: desc.value,
+              category: 'description',
+            })
+          })
+
+          addToast({
+            title: t('vulnerabilities.general.cveNotesFetched'),
+            description: t(
+              'vulnerabilities.general.cveNotesFetchedDescription',
+              {
+                count: descriptions.length,
+              },
+            ),
+            color: 'success',
+          })
         }
       })
       .catch((error) => {
+        setCVEError(true)
         console.error('Error fetching CVE description:', error)
       })
   }
@@ -52,12 +115,18 @@ export default function General({
             csafPath={`/vulnerabilities/${vulnerabilityIndex}/cve`}
             isTouched={isTouched}
             value={vulnerability.cve}
-            onValueChange={(newValue) =>
+            onValueChange={(newValue) => {
               onChange({ ...vulnerability, cve: newValue })
-            }
+              setCVEError(false)
+            }}
             autoFocus
             isDisabled={checkReadOnly(vulnerability, 'cve')}
             placeholder={getPlaceholder(vulnerability, 'cve')}
+            isInvalid={cveError}
+            onClear={() => {
+              onChange({ ...vulnerability, cve: '' })
+              setCVEError(false)
+            }}
           />
 
           <Tooltip
