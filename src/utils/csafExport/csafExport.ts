@@ -1,7 +1,6 @@
 import pck from '@/../package.json'
 import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
 import { TVulnerabilityProduct } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
-import { calculateBaseScore, calculateQualScore } from 'cvss4'
 import _ from 'lodash'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
@@ -10,6 +9,7 @@ import { getFilename } from './helpers'
 import { retrieveLatestVersion } from './latestVersion'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
+import parseScore from './parseScore'
 import { PidGenerator } from './pidGenerator'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
@@ -152,34 +152,15 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           remediations: vulnerability.remediations?.map((remediation) => ({
             category: remediation.category,
             date: remediation.date || undefined,
-            details: remediation.details || undefined,
+            details: remediation.details,
             url: remediation.url || undefined,
             product_ids: remediation.productIds.map((id) =>
               pidGenerator.getPid(id),
             ),
           })),
-          scores: vulnerability.scores?.map((score) => {
-            let baseScore = 0
-            let baseSeverity = ''
-
-            try {
-              baseScore = calculateBaseScore(score.vectorString)
-              baseSeverity = calculateQualScore(baseScore).toUpperCase()
-            } catch {
-              // If the score is invalid, we leave baseScore and baseSeverity as defaults
-              // as there will be errors already in the vectorString
-            }
-
-            return {
-              ['cvss_v3']: {
-                version: '3.1',
-                vectorString: score.vectorString,
-                baseScore,
-                baseSeverity,
-              },
-              products: score.productIds.map((id) => pidGenerator.getPid(id)),
-            }
-          }),
+          scores: vulnerability.scores.map((score) =>
+            parseScore(score, pidGenerator),
+          ),
         }
       },
     ),

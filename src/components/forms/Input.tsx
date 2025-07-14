@@ -21,6 +21,7 @@ export function Input(
     onValueChange,
     isInvalid,
     value: propValue,
+    errorMessage,
     ...rest
   } = props
   const validation = useFieldValidation(csafPath)
@@ -48,7 +49,10 @@ export function Input(
         inputWrapper: 'border-1 shadow-none',
       }}
       value={debouncedValue}
-      errorMessage={validation.errorMessages.map((m) => m.message).join(', ')}
+      errorMessage={
+        validation.errorMessages.map((m) => m.message).join(', ') ||
+        errorMessage
+      }
       isInvalid={
         isInvalid ||
         (!isDebouncing &&

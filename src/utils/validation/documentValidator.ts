@@ -48,6 +48,11 @@ export async function validateDocument(
       })
     })
 
+    // Ignore /vulnerabilities/%d/scores/%d	for now due to https://github.com/sec-o-simple/sec-o-simple/issues/32
+    // csaf validator lib will return an error when we set cvss_v4
+    const pattern = /^\/vulnerabilities\/\d+\/scores\/\d+$/
+    messages = messages.filter((m) => !pattern.test(m.path))
+
     return {
       // We want to use result.isValid when we implemented all fields
       // but for now we use the messages length to determine if the document is valid
