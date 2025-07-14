@@ -114,7 +114,7 @@ export function createCSAFDocument(
               name: vulnerability.cwe.name,
             }
           : undefined,
-        notes: vulnerability.notes.map(parseNote),
+        notes: vulnerability.notes?.map(parseNote),
         product_status: {
           known_affected: vulnerability.products.map((p) =>
             pidGenerator.getPid(p.firstAffectedVersionId),
@@ -123,7 +123,7 @@ export function createCSAFDocument(
             pidGenerator.getPid(p.firstFixedVersionId),
           ),
         },
-        remediations: vulnerability.remediations.map((remediation) => ({
+        remediations: vulnerability.remediations?.map((remediation) => ({
           category: remediation.category,
           date: remediation.date || undefined,
           details: remediation.details || undefined,
@@ -132,7 +132,7 @@ export function createCSAFDocument(
             pidGenerator.getPid(id),
           ),
         })),
-        scores: vulnerability.scores.map((score) => {
+        scores: vulnerability.scores?.map((score) => {
           let baseScore = 0
           let baseSeverity = ''
 
