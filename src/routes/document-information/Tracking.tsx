@@ -8,7 +8,11 @@ import usePageVisit from '@/utils/validation/usePageVisit'
 import { SelectItem } from '@heroui/select'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { getDefaultGeneralDocumentInformation, TDocumentStatus, TGeneralDocumentInformation } from './types/tGeneralDocumentInformation'
+import {
+  getDefaultGeneralDocumentInformation,
+  TDocumentStatus,
+  TGeneralDocumentInformation,
+} from './types/tGeneralDocumentInformation'
 import { TDocumentInformation } from './types/tDocumentInformation'
 
 export default function Tracking() {

@@ -50,11 +50,7 @@ export default function NavigationLayout() {
             title={t('nav.vulnerabilities')}
             to="/vulnerabilities"
           />
-          <Section
-            number={4}
-            title={t('nav.tracking')}
-            to="/tracking"
-          />
+          <Section number={4} title={t('nav.tracking')} to="/tracking" />
         </div>
 
         <div className="flex flex-col gap-2">
