@@ -193,9 +193,9 @@ export function useCSAFExport() {
   const exportCSAFDocument = () => {
     const csafDocument = createCSAFDocument(documentStore)
 
-    const prefix = !isValid ? 'invalid_' : ''
+    const suffix = !isValid ? '_invalid' : ''
     const id = documentStore.documentInformation.id || 'csaf_document'
-    const filename = prefix + id + '.json'
+    const filename = id + suffix + '.json'
 
     download(filename, JSON.stringify(csafDocument, null, 2))
   }
