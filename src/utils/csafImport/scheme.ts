@@ -67,10 +67,12 @@ export default {
 
   product_tree: {
     branches: [
+      // Vendors
       {
         category: 'string',
         name: 'string',
         branches: [
+          // Product Names
           {
             category: 'string',
             name: 'string',
@@ -78,6 +80,17 @@ export default {
               name: 'string',
               product_id: 'string',
             },
+            branches: [
+              // Product Versions
+              {
+                category: 'string',
+                name: 'string',
+                product: {
+                  name: 'string',
+                  product_id: 'string',
+                },
+              },
+            ],
           },
         ],
       },
@@ -126,6 +139,16 @@ export default {
       scores: [
         {
           cvss_v3: {
+            version: 'string',
+            vectorString: 'string',
+            baseSeverity: 'string',
+            temporalSeverity: 'string',
+            environmentalSeverity: 'string',
+          },
+          products: ['string'],
+        },
+        {
+          cvss_v4: {
             version: 'string',
             vectorString: 'string',
             baseSeverity: 'string',
