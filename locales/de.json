@@ -28,7 +28,9 @@
     "export": {
       "draft": "Export",
       "csaf": "CSAF Export",
-      "error": "{{ errorCount }} Fehler im Dokument. Bitte beheben Sie diese vor dem Export"
+      "error": "{{ errorCount }} Fehler im Dokument. Bitte beheben Sie diese vor dem Export",
+      "invalidExport": "Ungültiges CSAF-Dokument",
+      "invalidExportConfirm": "Sind Sie sicher, dass Sie ein ungültiges CSAF-Dokument exportieren möchten?"
     },
     "nav": {
       "home": "Startseite",

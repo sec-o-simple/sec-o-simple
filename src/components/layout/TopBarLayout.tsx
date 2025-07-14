@@ -146,8 +146,8 @@ export default function TopBarLayout() {
           >
             <div>
               <ConfirmButton
-                confirmText="Are you sure you want to export an invalid document?"
-                confirmTitle="Export Document"
+                confirmText={t('export.invalidExportConfirm')}
+                confirmTitle={t('export.invalidExport')}
                 onConfirm={exportCSAFDocument}
                 skipConfirm={isValid && !isValidating}
                 color="primary"
