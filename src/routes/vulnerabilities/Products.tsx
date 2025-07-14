@@ -31,7 +31,9 @@ export default function Products({
     [productsListState.data],
   )
 
-  const validation = useFieldValidation(`/vulnerabilities/${vulnerabilityIndex}/product_status`)
+  const validation = useFieldValidation(
+    `/vulnerabilities/${vulnerabilityIndex}/product_status`,
+  )
 
   return (
     <VSplit className="gap-2">
