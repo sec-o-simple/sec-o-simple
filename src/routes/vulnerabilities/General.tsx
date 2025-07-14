@@ -1,13 +1,13 @@
+import { Autocomplete } from '@/components/forms/Autocomplete'
 import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
 import VSplit from '@/components/forms/VSplit'
-import { TCwe, TVulnerability } from './types/tVulnerability'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import { Autocomplete } from '@/components/forms/Autocomplete'
-import { useMemo } from 'react'
-import { weaknesses } from '@secvisogram/csaf-validator-lib/cwe.js'
 import { AutocompleteItem } from '@heroui/react'
+import { weaknesses } from '@secvisogram/csaf-validator-lib/cwe.js'
+import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
+import { TCwe, TVulnerability } from './types/tVulnerability'
 
 export default function General({
   vulnerability,
@@ -25,6 +25,19 @@ export default function General({
 
   return (
     <VSplit>
+      <Input
+        label={t('vulnerabilities.general.title')}
+        csafPath={`/vulnerabilities/${vulnerabilityIndex}/title`}
+        isTouched={isTouched}
+        isRequired
+        value={vulnerability.title}
+        onValueChange={(newValue) =>
+          onChange({ ...vulnerability, title: newValue })
+        }
+        isDisabled={checkReadOnly(vulnerability, 'title')}
+        placeholder={getPlaceholder(vulnerability, 'title')}
+      />
+
       <HSplit>
         <Input
           label="CVE ID"
@@ -64,18 +77,6 @@ export default function General({
           ))}
         </Autocomplete>
       </HSplit>
-      <Input
-        label={t('vulnerabilities.general.title')}
-        csafPath={`/vulnerabilities/${vulnerabilityIndex}/title`}
-        isTouched={isTouched}
-        isRequired
-        value={vulnerability.title}
-        onValueChange={(newValue) =>
-          onChange({ ...vulnerability, title: newValue })
-        }
-        isDisabled={checkReadOnly(vulnerability, 'title')}
-        placeholder={getPlaceholder(vulnerability, 'title')}
-      />
     </VSplit>
   )
 }
