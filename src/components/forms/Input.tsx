@@ -19,6 +19,7 @@ export function Input(
     onBlur,
     onChange,
     onValueChange,
+    isInvalid,
     value: propValue,
     ...rest
   } = props
@@ -49,9 +50,10 @@ export function Input(
       value={debouncedValue}
       errorMessage={validation.errorMessages.map((m) => m.message).join(', ')}
       isInvalid={
-        !isDebouncing &&
-        validation.hasErrors &&
-        (isTouched || validation.isTouched || !!propValue?.length)
+        isInvalid ||
+        (!isDebouncing &&
+          validation.hasErrors &&
+          (isTouched || validation.isTouched || !!propValue?.length))
       }
       onBlur={(e) => {
         if (csafPath) {

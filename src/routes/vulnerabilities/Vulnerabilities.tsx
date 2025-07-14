@@ -161,7 +161,7 @@ function VulnerabilityForm({
         <Tab
           title={
             <TabTitle
-              title={t('vulnerabilities.general')}
+              title={t('vulnerabilities.general.')}
               csafPaths={[
                 `${prefix}/cve`,
                 `${prefix}/cwe/name`,

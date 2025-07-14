@@ -114,8 +114,18 @@
     "vulnerabilities": {
       "vulnerability": "Schwachstelle",
       "vulnerabilities": "Schwachstellen",
-      "general": "Allgemein",
-      "general.title": "Titel",
+      "general": {
+        "": "Allgemein",
+        "title": "Title",
+        "fetchCve": "Laden",
+        "fetchCveDescription": "Lädt die CVE-Daten von der hinterlegten API",
+        "cveFetchError": "Fehler beim Laden der CVE-Daten",
+        "cveFetchErrorDescription": "Die CVE-Daten konnten nicht geladen werden. Bitte überprüfen Sie die API-URL und die eingegebene CVE-ID.",
+        "description": "Beschreibung",
+        "cveNotesFetched": "CVE Notizen geladen",
+        "cveNotesFetchedDescription_one": "{{count}} Notiz erfolgreich geladen und hinzugefügt",
+        "cveNotesFetchedDescription": "{{count}} Notizen erfolgreich geladen und hinzugefügt"
+      },
       "notes": "Notizen",
       "products": {
         "title": "Produkte",
