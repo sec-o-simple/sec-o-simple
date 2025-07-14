@@ -153,7 +153,6 @@ export default function TopBarLayout() {
                 skipConfirm={isValid && !isValidating}
                 color="primary"
                 fullWidth={false}
-                onPress={exportCSAFDocument}
               >
                 <FontAwesomeIcon icon={faFileExport} />
                 {t('export.csaf')}
