@@ -63,7 +63,7 @@
       "general": {
         "title": "Dokumenttitel",
         "id": "Dokument-ID",
-        "state": "Status",
+        "state": "Dokumentstatus",
         "language": "Sprache",
         "languages": {
           "de": "Deutsch",
@@ -75,6 +75,7 @@
           "interim": "Zwischenstand"
         },
         "revisionHistory": {
+          "history": "Revisionsverlauf",
           "label": "Revision",
           "version": "Version",
           "date": "Datum",
