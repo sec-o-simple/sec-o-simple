@@ -47,6 +47,7 @@ export default function Vulnerabilities() {
       title={t('nav.vulnerabilities')}
       progress={3}
       onBack={'/product-management'}
+      onContinue={'/tracking'}
     >
       {(hasVisitedPage || listValidation.isTouched) &&
         listValidation.hasErrors && (
@@ -106,10 +107,12 @@ function TabTitle({
   title,
   csafPrefix = '',
   csafPaths = [],
+  hasError: hasPassedError = false,
 }: {
   title: string
   csafPrefix?: string
   csafPaths?: string[]
+  hasError?: boolean
 }) {
   const messages = useValidationStore((state) => state.messages)
   const errorPaths = messages
@@ -124,6 +127,10 @@ function TabTitle({
 
   if (!hasError && csafPaths.length > 0) {
     hasError = csafPaths.some((path) => errorPaths.includes(path))
+  }
+
+  if (!hasError) {
+    hasError = hasPassedError
   }
 
   return (
@@ -207,6 +214,9 @@ function VulnerabilityForm({
             <TabTitle
               title={t('vulnerabilities.scores')}
               csafPrefix={`${prefix}/scores`}
+              hasError={vulnerability.scores.some(
+                (score) => !score.cvssVersion,
+              )}
             />
           }
         >

@@ -170,7 +170,7 @@ function RemediationForm({
           csafPath={`${csafPath}/date`}
           value={remediation.date}
           onChange={(newValue) => onChange({ ...remediation, date: newValue })}
-          isDisabled={checkReadOnly(remediation, 'details')}
+          isDisabled={checkReadOnly(remediation, 'date')}
         />
       </HSplit>
       <Textarea
@@ -182,6 +182,7 @@ function RemediationForm({
           onChange({ ...remediation, details: newValue })
         }
         isDisabled={checkReadOnly(remediation, 'details')}
+        isRequired
         placeholder={getPlaceholder(remediation, 'details')}
       />
       <Input

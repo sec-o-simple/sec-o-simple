@@ -80,7 +80,9 @@ export default function RevisionHistoryTable() {
   return (
     <div className="mt-4">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold">Revision History</h2>
+        <h2 className="text-lg font-semibold">
+          {t('document.general.revisionHistory.history')}
+        </h2>
         <Button variant="light" color="primary" onPress={handleAddRevision}>
           {t('common.add', {
             label: t('document.general.revisionHistory.label'),

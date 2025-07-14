@@ -1,27 +1,28 @@
+import { Input } from '@/components/forms/Input'
+import PTBSelect from '@/components/forms/PTBSelect'
+import Select from '@/components/forms/Select'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import useDocumentStore from '@/utils/useDocumentStore'
+import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Button } from '@heroui/button'
 import {
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
 } from '@heroui/modal'
+import { SelectItem } from '@heroui/select'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { getPTBName } from '../types/tProductTreeBranch'
 import {
   TRelationship,
   TRelationshipCategory,
   getDefaultRelationship,
   relationshipCategories,
 } from '../types/tRelationship'
-import Select from '@/components/forms/Select'
-import { useState } from 'react'
-import { Button } from '@heroui/button'
-import PTBSelect from '@/components/forms/PTBSelect'
-import { getPTBName } from '../types/tProductTreeBranch'
-import { SelectItem } from '@heroui/select'
-import { Input } from '@/components/forms/Input'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
-import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import { useTranslation } from 'react-i18next'
 
 export type RelationshipEditFormProps = {
   relationship?: TRelationship
@@ -34,9 +35,17 @@ export default function RelationshipEditForm({
 }: RelationshipEditFormProps) {
   const { t } = useTranslation()
   const { findProductTreeBranch } = useProductTreeBranch()
+  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
   const [updatedRelationship, setUpdateRelationship] = useState<TRelationship>({
-    ...(relationship ?? getDefaultRelationship()),
+    ...(relationship ?? {
+      ...getDefaultRelationship(),
+      category:
+        sosDocumentType === 'HardwareSoftware' ||
+        sosDocumentType === 'HardwareFirmware'
+          ? 'installed_on'
+          : 'installed_on',
+    }),
   })
 
   return (

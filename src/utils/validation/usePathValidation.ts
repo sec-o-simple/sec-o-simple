@@ -4,10 +4,13 @@ type HasErrorFunction = (errorPaths: string[]) => boolean
 
 const validationSections: Record<string, HasErrorFunction> = {
   '/document-information/general': (errorPaths) => {
+    return ['/document/title', '/document/tracking/id', '/document/lang'].some(
+      (path) => errorPaths.includes(path),
+    )
+  },
+  '/tracking': (errorPaths) => {
     return (
-      ['/document/title', '/document/tracking/id', '/document/lang'].some(
-        (path) => errorPaths.includes(path),
-      ) ||
+      errorPaths.includes('/document/tracking/status') ||
       errorPaths.some((path) =>
         path.startsWith('/document/tracking/revision_history'),
       )

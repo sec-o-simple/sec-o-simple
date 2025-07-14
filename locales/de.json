@@ -45,7 +45,8 @@
         "publisher": "Herausgeber",
         "references": "Referenzen",
         "acknowledgments": "Danksagungen"
-      }
+      },
+      "tracking": "Historie"
     },
     "documentSelection": {
       "create": "Dokument erstellen",
@@ -64,7 +65,7 @@
       "general": {
         "title": "Dokumenttitel",
         "id": "Dokument-ID",
-        "state": "Status",
+        "state": "Dokumentstatus",
         "language": "Sprache",
         "languages": {
           "de": "Deutsch",
@@ -76,6 +77,7 @@
           "interim": "Zwischenstand"
         },
         "revisionHistory": {
+          "history": "Revisionsverlauf",
           "label": "Revision",
           "version": "Version",
           "date": "Datum",
@@ -144,8 +146,11 @@
       },
       "scores": "Bewertungen",
       "score": {
-        "title": "Bewertung",
+        "title": "CVSS Bewertung",
         "cvss": "CVSS",
+        "vectorStringDescription": "CVSS 3.1 und CVSS 4.0 werden unterstützt",
+        "vectorStringEmptyError": "Der Vektorstring darf nicht leer sein.",
+        "vectorStringInvalidError": "Der eingegebene Vektorstring ist ungültig. Bitte überprüfen Sie das Format.",
         "baseScore": "Basis Bewertung",
         "baseScoreDescription": "Basis Bewertung wird aus dem Vektorstring berechnet",
         "baseSeverity": "Basis Schweregrad",
