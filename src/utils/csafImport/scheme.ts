@@ -141,16 +141,15 @@ export default {
           cvss_v3: {
             version: 'string',
             vectorString: 'string',
+            baseScore: 'string',
             baseSeverity: 'string',
             temporalSeverity: 'string',
             environmentalSeverity: 'string',
           },
-          products: ['string'],
-        },
-        {
           cvss_v4: {
             version: 'string',
             vectorString: 'string',
+            baseScore: 'string',
             baseSeverity: 'string',
             temporalSeverity: 'string',
             environmentalSeverity: 'string',
