@@ -16,6 +16,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
   const pidGenerator = new PidGenerator()
   const currentDate = new Date().toISOString()
   const documentInformation = documentStore.documentInformation
+  const revisionHistory = documentInformation.revisionHistory || []
 
   const filterProductStatus = (
     productList: TVulnerabilityProduct[],
@@ -41,15 +42,14 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
             name: 'Sec-O-Simple',
           },
         },
-        current_release_date: currentDate,
-        initial_release_date: currentDate,
-        revision_history: documentStore.documentInformation.revisionHistory.map(
-          (entry) => ({
-            date: entry.date,
-            number: entry.number,
-            summary: entry.summary,
-          }),
-        ),
+        current_release_date:
+          revisionHistory[revisionHistory.length - 1]?.date || currentDate,
+        initial_release_date: revisionHistory[0]?.date || currentDate,
+        revision_history: revisionHistory.map((entry) => ({
+          date: entry.date,
+          number: entry.number,
+          summary: entry.summary,
+        })),
         status: documentStore.documentInformation.status,
         version: documentStore.documentInformation.revisionHistory.length
           ? retrieveLatestVersion(
