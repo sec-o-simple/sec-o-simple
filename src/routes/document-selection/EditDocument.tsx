@@ -36,7 +36,7 @@ export default function EditDocument() {
   const { isSOSDraft, importSOSDocument } = useSOSImport()
   const { isCSAFDocument, isCSAFVersionSupported, importCSAFDocument } =
     useCSAFImport()
-  const { setCSAFDocument } = useDocumentStore()
+  const { setImportedCSAFDocument } = useDocumentStore()
   const { isOpen, onOpenChange } = useDisclosure()
   const [hiddenFields, setHiddenFields] = useState<HiddenField[]>([])
   const [jsonObject, setJsonObject] = useState<JSONObject>()
@@ -60,7 +60,7 @@ export default function EditDocument() {
     if (jsonObject && !errorMessage) {
       if (isCSAFDocument(jsonObject)) {
         const hiddenFields = importCSAFDocument(jsonObject)
-        setCSAFDocument(jsonObject as DeepPartial<TCSAFDocument>)
+        setImportedCSAFDocument(jsonObject as DeepPartial<TCSAFDocument>)
 
         if (hiddenFields.length > 0) {
           setHiddenFields(hiddenFields)

@@ -6,7 +6,6 @@ interface JSONArray extends Array<JSONValue> {}
 
 export default {
   document: {
-    id: 'string',
     lang: 'string',
     title: 'string',
     // Gets automatically generated
@@ -16,7 +15,18 @@ export default {
     // Tracking is added, because it is always generated automatically
     // and not part of the original CSAF document.
     tracking: {
+      id: 'string',
       status: 'string',
+      version: 'string',
+      current_release_date: 'string',
+      initial_release_date: 'string',
+      generator: {
+        date: 'string',
+        engine: {
+          version: 'string',
+          name: 'string',
+        },
+      },
       revision_history: [
         {
           date: 'string',
@@ -60,10 +70,16 @@ export default {
       {
         category: 'string',
         name: 'string',
-        product: {
-          name: 'string',
-          product_id: 'string',
-        },
+        branches: [
+          {
+            category: 'string',
+            name: 'string',
+            product: {
+              name: 'string',
+              product_id: 'string',
+            },
+          },
+        ],
       },
     ],
     relationships: [

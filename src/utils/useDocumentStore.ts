@@ -30,8 +30,8 @@ export type TDocumentStore = {
   relationships: TRelationship[]
   vulnerabilities: TVulnerability[]
 
-  csafDocument: DeepPartial<TCSAFDocument>
-  setCSAFDocument: (update: DeepPartial<TCSAFDocument>) => void
+  importedCSAFDocument: DeepPartial<TCSAFDocument>
+  setImportedCSAFDocument: (update: DeepPartial<TCSAFDocument>) => void
 
   updateDocumentInformation: (update: TDocumentInformation) => void
   updateProducts: (update: TProductTreeBranch[]) => void
@@ -61,10 +61,10 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
   updateVulnerabilities: (update: TVulnerability[]) =>
     set({ vulnerabilities: update }),
 
-  csafDocument: {},
-  setCSAFDocument: (update: DeepPartial<TCSAFDocument>) =>
+  importedCSAFDocument: {},
+  setImportedCSAFDocument: (update: DeepPartial<TCSAFDocument>) =>
     set((state) => ({
-      csafDocument: { ...state.csafDocument, ...update },
+      importedCSAFDocument: { ...state.importedCSAFDocument, ...update },
     })),
 
   reset: () =>

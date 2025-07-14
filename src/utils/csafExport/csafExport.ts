@@ -164,7 +164,10 @@ export function useCSAFExport() {
 
   const exportCSAFDocument = () => {
     let csafDocument = createCSAFDocument(documentStore)
-    csafDocument = _.merge(documentStore.csafDocument, csafDocument)
+
+    // Merge with existing imported CSAF document if available
+    // Our created CSAF document has priority, and is handled as the base
+    csafDocument = _.merge({}, documentStore.importedCSAFDocument, csafDocument)
 
     download(
       `${getFilename(documentStore.documentInformation.id)}.json`,

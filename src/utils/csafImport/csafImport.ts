@@ -55,53 +55,54 @@ export interface HiddenField {
  * @param path Current field path during recursion
  * @returns Array of unknown field paths
  */
-function getHiddenFields(
+function getGroupedHiddenFields(
   schema: JSONValue,
   doc: JSONValue,
   path: string = '',
+  groupMap: Map<string, HiddenField> = new Map(),
 ): HiddenField[] {
-  const unknownFields: HiddenField[] = []
-
-  // If doc is an array
   if (Array.isArray(doc)) {
     const schemaItem = Array.isArray(schema) ? schema[0] : undefined
+
     doc.forEach((item, index) => {
+      const arrayPath = `${path}/*`
       if (schemaItem === undefined) {
-        unknownFields.push({ path: `${path}/${index}`, value: item })
-        return
+        const groupKey = `${arrayPath}`
+        if (!groupMap.has(groupKey)) {
+          groupMap.set(groupKey, { path: groupKey, value: item })
+        }
+      } else {
+        getGroupedHiddenFields(schemaItem, item, `${path}/${index}`, groupMap)
       }
-      unknownFields.push(
-        ...getHiddenFields(schemaItem, item, `${path}/${index}`),
-      )
     })
-  }
-  // If doc is an object
-  else if (isObject(doc)) {
+  } else if (isObject(doc)) {
     const schemaKeys = isObject(schema) ? Object.keys(schema) : []
 
     for (const key of Object.keys(doc)) {
       const currentPath = `${path}/${key}`
+      const generalizedPath = currentPath.replace(/\/\d+(?=\/|$)/g, '/*')
 
       if (!schemaKeys.includes(key)) {
-        unknownFields.push({ path: currentPath, value: doc[key] })
+        if (!groupMap.has(generalizedPath)) {
+          groupMap.set(generalizedPath, {
+            path: generalizedPath,
+            value: doc[key],
+          })
+        }
       } else {
-        unknownFields.push(
-          ...getHiddenFields(
-            (schema as JSONObject)[key],
-            (doc as JSONObject)[key],
-            currentPath,
-          ),
+        getGroupedHiddenFields(
+          (schema as JSONObject)[key],
+          (doc as JSONObject)[key],
+          currentPath,
+          groupMap,
         )
       }
     }
   }
 
-  return unknownFields
+  return Array.from(groupMap.values())
 }
 
-/**
- * Type guard to check if a value is a JSONObject
- */
 function isObject(value: JSONValue): value is JSONObject {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
@@ -236,7 +237,7 @@ export function useCSAFImport() {
     const sosDocument = parseCSAFDocument(csafDocument)
     if (sosDocument) {
       importSOSDraft(sosDocument)
-      return getHiddenFields(secOSimpleScheme, csafDocument)
+      return getGroupedHiddenFields(secOSimpleScheme, csafDocument)
     }
     return []
   }
