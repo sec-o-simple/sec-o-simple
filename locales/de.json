@@ -43,7 +43,8 @@
         "publisher": "Herausgeber",
         "references": "Referenzen",
         "acknowledgments": "Danksagungen"
-      }
+      },
+      "tracking": "Historie"
     },
     "documentSelection": {
       "create": "Dokument erstellen",

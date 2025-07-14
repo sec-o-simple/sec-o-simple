@@ -43,7 +43,8 @@
         "publisher": "Publisher",
         "references": "References",
         "acknowledgments": "Acknowledgements"
-      }
+      },
+      "tracking": "History"
     },
     "documentSelection": {
       "create": "Create document",
