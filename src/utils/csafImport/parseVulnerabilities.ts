@@ -1,21 +1,21 @@
-import {
-  TCwe,
-  TVulnerability,
-  getDefaultVulnerability,
-} from '@/routes/vulnerabilities/types/tVulnerability'
-import { TCSAFDocument } from '../csafExport/csafExport'
-import { IdGenerator } from './idGenerator'
-import { parseNote } from './parseNote'
-import { TParsedNote } from '../csafExport/parseNote'
+import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import {
   TRemediation,
   getDefaultRemediation,
 } from '@/routes/vulnerabilities/types/tRemediation'
 import {
+  TCwe,
+  TVulnerability,
+  getDefaultVulnerability,
+} from '@/routes/vulnerabilities/types/tVulnerability'
+import {
   TVulnerabilityScore,
   getDefaultVulnerabilityScore,
 } from '@/routes/vulnerabilities/types/tVulnerabilityScore'
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import { TCSAFDocument } from '../csafExport/csafExport'
+import { TParsedNote } from '../csafExport/parseNote'
+import { IdGenerator } from './idGenerator'
+import { parseNote } from './parseNote'
 import { parseVulnerabilityProducts } from './parseVulnerabilityProducts'
 
 export function parseVulnerabilities(
@@ -52,7 +52,7 @@ export function parseVulnerabilities(
             ),
           } as TRemediation
         }),
-        scores: vulnerability.scores.map((score) => {
+        scores: vulnerability.scores?.map((score) => {
           const defaultScore = getDefaultVulnerabilityScore()
 
           const cvssVersion =

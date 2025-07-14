@@ -22,6 +22,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  ToastProvider,
   Tooltip,
   useDisclosure,
 } from '@heroui/react'
@@ -152,6 +153,7 @@ export default function TopBarLayout() {
                 skipConfirm={isValid && !isValidating}
                 color="primary"
                 fullWidth={false}
+                onPress={exportCSAFDocument}
               >
                 <FontAwesomeIcon icon={faFileExport} />
                 {t('export.csaf')}
@@ -161,6 +163,8 @@ export default function TopBarLayout() {
           <ValidationErrorList />
         </div>
       </div>
+
+      <ToastProvider />
       <Outlet />
     </div>
   )

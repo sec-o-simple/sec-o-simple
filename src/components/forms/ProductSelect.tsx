@@ -1,22 +1,21 @@
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
-import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { SelectItem } from '@heroui/select'
 import { useTranslation } from 'react-i18next'
 import Select from './Select'
 
 export type ProductSelectProps = {
+  products?: TProductTreeBranch[]
   onAdd?: (product: TProductTreeBranch) => void
   isRequired?: boolean
   selected?: string[]
 }
 
 export default function ProductSelect({
+  products: ptbs = [],
   onAdd,
   isRequired,
   selected = [],
 }: ProductSelectProps) {
-  const { getSelectablePTBs } = useProductTreeBranch()
-  const ptbs = getSelectablePTBs()
   const { t } = useTranslation()
 
   return (
