@@ -1,19 +1,20 @@
+import IconButton from '@/components/forms/IconButton'
 import WizardStep from '@/components/WizardStep'
-import { useNavigate, useParams } from 'react-router'
-import SubMenuHeader from './components/SubMenuHeader'
+import useDocumentStore from '@/utils/useDocumentStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
-import InfoCard from './components/InfoCard'
+import { faLink } from '@fortawesome/free-solid-svg-icons'
 import { Modal, useDisclosure } from '@heroui/modal'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate, useParams } from 'react-router'
+import InfoCard from './components/InfoCard'
 import { PTBEditForm } from './components/PTBEditForm'
+import SubMenuHeader from './components/SubMenuHeader'
 import {
   TProductTreeBranch,
   getDefaultProductTreeBranch,
   getPTBName,
 } from './types/tProductTreeBranch'
-import { useState } from 'react'
-import IconButton from '@/components/forms/IconButton'
-import { faLink } from '@fortawesome/free-solid-svg-icons'
-import { useTranslation } from 'react-i18next'
 
 export default function Product() {
   const { productId } = useParams()
@@ -24,6 +25,7 @@ export default function Product() {
   // modal variables
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [editingPTB, setEditingPTB] = useState<TProductTreeBranch | undefined>()
+  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
   const product = findProductTreeBranch(productId ?? '')
   if (!product) {
@@ -82,15 +84,17 @@ export default function Product() {
           }}
           onDelete={() => deletePTB(version.id)}
           endContent={
-            <IconButton
-              icon={faLink}
-              tooltip={t('products.relationship.edit', {
-                count: 2,
-              })}
-              onPress={() =>
-                navigate(`/product-management/version/${version.id}`)
-              }
-            />
+            sosDocumentType !== 'Software' ? (
+              <IconButton
+                icon={faLink}
+                tooltip={t('products.relationship.edit', {
+                  count: 2,
+                })}
+                onPress={() =>
+                  navigate(`/product-management/version/${version.id}`)
+                }
+              />
+            ) : undefined
           }
         >
           {version.description && <div>{version.description}</div>}

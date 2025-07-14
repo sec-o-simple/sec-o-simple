@@ -1,18 +1,19 @@
 import WizardStep from '@/components/WizardStep'
-import { useParams } from 'react-router'
-import SubMenuHeader from './components/SubMenuHeader'
+import useDocumentStore from '@/utils/useDocumentStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
-import { Modal, useDisclosure } from '@heroui/modal'
-import { getPTBName } from './types/tProductTreeBranch'
-import { useState } from 'react'
-import { TRelationship, getDefaultRelationship } from './types/tRelationship'
-import RelationshipEditForm from './components/RelationshipEditForm'
 import { useRelationships } from '@/utils/useRelationships'
 import { Accordion, AccordionItem } from '@heroui/accordion'
-import InfoCard from './components/InfoCard'
-import TagList from './components/TagList'
 import { Chip } from '@heroui/chip'
+import { Modal, useDisclosure } from '@heroui/modal'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router'
+import InfoCard from './components/InfoCard'
+import RelationshipEditForm from './components/RelationshipEditForm'
+import SubMenuHeader from './components/SubMenuHeader'
+import TagList from './components/TagList'
+import { getPTBName } from './types/tProductTreeBranch'
+import { TRelationship, getDefaultRelationship } from './types/tRelationship'
 
 export default function Version() {
   const { t } = useTranslation()
@@ -25,6 +26,7 @@ export default function Version() {
     addOrUpdateRelationship,
     deleteRelationship,
   } = useRelationships()
+  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
   // modal variables
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
@@ -61,9 +63,13 @@ export default function Version() {
             ? `/product-management/product/${productVersion.parent?.id}`
             : '/product-management'
         }
-        actionTitle={t('common.add', {
-          label: t('products.relationship.label'),
-        })}
+        actionTitle={
+          sosDocumentType !== 'Software'
+            ? t('common.add', {
+                label: t('products.relationship.label'),
+              })
+            : undefined
+        }
         onAction={() => {
           // add new relationship
           const newRelationship = getDefaultRelationship()
