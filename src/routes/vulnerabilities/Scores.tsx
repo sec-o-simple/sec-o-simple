@@ -1,22 +1,24 @@
-import { TVulnerability } from './types/tVulnerability'
 import ComponentList from '@/components/forms/ComponentList'
+import { Input } from '@/components/forms/Input'
+import VSplit from '@/components/forms/VSplit'
+import StatusIndicator from '@/components/StatusIndicator'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useListState } from '@/utils/useListState'
+import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import { Alert } from '@heroui/react'
+import { calculateBaseScore, calculateQualScore } from 'cvss4'
+import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { TProductTreeBranch } from '../products/types/tProductTreeBranch'
+import ProductsTagList from './components/ProductsTagList'
+import { TVulnerability } from './types/tVulnerability'
 import {
   TVulnerabilityScore,
   getDefaultVulnerabilityScore,
 } from './types/tVulnerabilityScore'
-import VSplit from '@/components/forms/VSplit'
-import { Input } from '@/components/forms/Input'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import { useEffect } from 'react'
-import ProductsTagList from './components/ProductsTagList'
-import { calculateBaseScore, calculateQualScore } from 'cvss4'
-import { useTranslation } from 'react-i18next'
-import { useListValidation } from '@/utils/validation/useListValidation'
-import { Alert } from '@heroui/react'
-import { useFieldValidation } from '@/utils/validation/useFieldValidation'
-import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
-import StatusIndicator from '@/components/StatusIndicator'
 
 export default function Scores({
   vulnerability,
@@ -46,6 +48,12 @@ export default function Scores({
     scoresListState.data,
   )
 
+  const { getSelectablePTBs } = useProductTreeBranch()
+  const ptbs = getSelectablePTBs()
+  const knownAffectedOrInvestigationProducts = vulnerability.products.filter(
+    (p) => p.status === 'known_affected' || p.status === 'under_investigation',
+  )
+
   return (
     <>
       {listValidation.hasErrors && (
@@ -59,6 +67,7 @@ export default function Scores({
         listState={scoresListState}
         title={(score) => `CVSS ${score.cvssVersion} Score`}
         itemLabel={t('vulnerabilities.score.title')}
+        itemBgColor="bg-zinc-50"
         startContent={({ index }) => (
           <ScoreStartContent
             csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${index}`}
@@ -69,6 +78,13 @@ export default function Scores({
             score={score}
             csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${index}`}
             isTouched={isTouched}
+            products={ptbs.filter(
+              (p) =>
+                knownAffectedOrInvestigationProducts.some((product) =>
+                  product.versions.some((v) => v === p.id),
+                ),
+              ptbs,
+            )}
             onChange={scoresListState.updateDataEntry}
           />
         )}
@@ -87,11 +103,13 @@ function ScoreForm({
   score,
   csafPath,
   onChange,
+  products: ptbs,
   isTouched = false,
 }: {
   score: TVulnerabilityScore
   csafPath: string
   onChange: (note: TVulnerabilityScore) => void
+  products?: TProductTreeBranch[]
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
@@ -148,7 +166,8 @@ function ScoreForm({
             ? fieldValidation.errorMessages[0].message
             : ''
         }
-        products={score.productIds}
+        selected={score.productIds}
+        products={ptbs}
         onChange={(productIds) => onChange({ ...score, productIds })}
       />
     </VSplit>

@@ -30,6 +30,7 @@ export default function WizardStep({
           t('nav.document'),
           t('nav.products'),
           t('nav.vulnerabilities'),
+          t('nav.tracking'),
         ]}
         progress={progress ?? 1}
       />

@@ -31,7 +31,7 @@ export function parseProductTreeBranches(
       )
     } else {
       pbObj['product'] = {
-        name: branch.description,
+        name: branch.name,
         product_id: pidGenerator.getPid(branch.id),
       }
     }

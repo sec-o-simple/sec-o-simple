@@ -13,6 +13,7 @@ import ProductManagement from './routes/products/ProductManagement'
 import Product from './routes/products/Product'
 import Version from './routes/products/Version'
 import Acknowledgments from './routes/document-information/Acknowledgments'
+import Tracking from './routes/document-information/Tracking'
 
 export default function App() {
   useConfigInitializer()
@@ -38,6 +39,7 @@ export default function App() {
               <Route path="version/:productVersionId" element={<Version />} />
             </Route>
             <Route path="vulnerabilities" element={<Vulnerabilities />} />
+            <Route path="tracking" element={<Tracking />} />
           </Route>
         </Route>
       </Routes>

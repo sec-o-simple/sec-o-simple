@@ -43,7 +43,8 @@
         "publisher": "Publisher",
         "references": "References",
         "acknowledgments": "Acknowledgements"
-      }
+      },
+      "tracking": "History"
     },
     "hiddenFields": {
       "title": "Hidden Fields",
@@ -70,7 +71,7 @@
       "general": {
         "title": "Document Title",
         "id": "Document ID",
-        "state": "Status",
+        "state": "Document Status",
         "language": "Language",
         "languages": {
           "de": "German",
@@ -82,6 +83,7 @@
           "interim": "Interim"
         },
         "revisionHistory": {
+          "history": "Revision History",
           "label": "Revision",
           "version": "Version",
           "date": "Date",
@@ -122,10 +124,32 @@
     "vulnerabilities": {
       "vulnerability": "Vulnerability",
       "vulnerabilities": "Vulnerabilities",
-      "general": "General",
-      "general.title": "Title",
+      "general": {
+        "": "General",
+        "title": "Title",
+        "fetchCve": "Fetch",
+        "fetchCveDescription": "Fetches CVE data from the provided API",
+        "cveFetchError": "CVE Fetch Error",
+        "cveFetchErrorDescription": "Failed to fetch CVE data. Please check the API URL and the CVE ID.",
+        "description": "Description",
+        "cveNotesFetched": "CVE Notes fetched",
+        "cveNotesFetchedDescription_one": "{{count}} CVE note fetched and added successfully",
+        "cveNotesFetchedDescription": "{{count}} CVE notes fetched and added successfully"
+      },
       "notes": "Notes",
-      "products": "Products",
+      "products": {
+        "title": "Products",
+        "status": {
+          "first_affected": "First Affected",
+          "known_affected": "Known Affected",
+          "known_not_affected": "Known Not Affected",
+          "last_affected": "Last Affected",
+          "first_fixed": "First Fixed",
+          "fixed": "Fixed",
+          "recommended": "Recommended Version",
+          "under_investigation": "Under Investigation"
+        }
+      },
       "scores": "Scores",
       "score": {
         "title": "Score",

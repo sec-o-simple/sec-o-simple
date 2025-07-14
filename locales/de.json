@@ -43,7 +43,8 @@
         "publisher": "Herausgeber",
         "references": "Referenzen",
         "acknowledgments": "Danksagungen"
-      }
+      },
+      "tracking": "Historie"
     },
     "hiddenFields": {
       "title": "Versteckte Felder",
@@ -70,7 +71,7 @@
       "general": {
         "title": "Dokumenttitel",
         "id": "Dokument-ID",
-        "state": "Status",
+        "state": "Dokumentstatus",
         "language": "Sprache",
         "languages": {
           "de": "Deutsch",
@@ -82,6 +83,7 @@
           "interim": "Zwischenstand"
         },
         "revisionHistory": {
+          "history": "Revisionsverlauf",
           "label": "Revision",
           "version": "Version",
           "date": "Datum",
@@ -122,10 +124,32 @@
     "vulnerabilities": {
       "vulnerability": "Schwachstelle",
       "vulnerabilities": "Schwachstellen",
-      "general": "Allgemein",
-      "general.title": "Titel",
+      "general": {
+        "": "Allgemein",
+        "title": "Title",
+        "fetchCve": "Laden",
+        "fetchCveDescription": "Lädt die CVE-Daten von der hinterlegten API",
+        "cveFetchError": "Fehler beim Laden der CVE-Daten",
+        "cveFetchErrorDescription": "Die CVE-Daten konnten nicht geladen werden. Bitte überprüfen Sie die API-URL und die eingegebene CVE-ID.",
+        "description": "Beschreibung",
+        "cveNotesFetched": "CVE Notizen geladen",
+        "cveNotesFetchedDescription_one": "{{count}} Notiz erfolgreich geladen und hinzugefügt",
+        "cveNotesFetchedDescription": "{{count}} Notizen erfolgreich geladen und hinzugefügt"
+      },
       "notes": "Notizen",
-      "products": "Produkte",
+      "products": {
+        "title": "Produkte",
+        "status": {
+          "first_affected": "Erste betroffene Version",
+          "known_affected": "Bekannte betroffene Version",
+          "known_not_affected": "Bekannte nicht betroffene Version",
+          "last_affected": "Letzte betroffene Version",
+          "first_fixed": "Erste reparierte Version",
+          "fixed": "Reparierte Version",
+          "recommended": "Empfohlene Version",
+          "under_investigation": "In Untersuchung"
+        }
+      },
       "scores": "Bewertungen",
       "score": {
         "title": "Bewertung",

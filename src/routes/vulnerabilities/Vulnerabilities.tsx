@@ -1,23 +1,23 @@
+import StatusIndicator from '@/components/StatusIndicator'
 import WizardStep from '@/components/WizardStep'
 import ComponentList from '@/components/forms/ComponentList'
 import VSplit from '@/components/forms/VSplit'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { useListState } from '@/utils/useListState'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import usePageVisit from '@/utils/validation/usePageVisit'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import useValidationStore from '@/utils/validation/useValidationStore'
 import { Chip } from '@heroui/chip'
+import { Alert } from '@heroui/react'
 import { Tab, Tabs } from '@heroui/tabs'
+import { useTranslation } from 'react-i18next'
 import General from './General'
 import Notes from './Notes'
 import Products from './Products'
-import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
-import { Alert } from '@heroui/react'
-import { useListValidation } from '@/utils/validation/useListValidation'
-import usePageVisit from '@/utils/validation/usePageVisit'
-import Scores from './Scores'
 import Remediations from './Remediations'
-import { useTranslation } from 'react-i18next'
-import useValidationStore from '@/utils/validation/useValidationStore'
-import StatusIndicator from '@/components/StatusIndicator'
-import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import Scores from './Scores'
+import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
@@ -47,6 +47,7 @@ export default function Vulnerabilities() {
       title={t('nav.vulnerabilities')}
       progress={3}
       onBack={'/product-management'}
+      onContinue={'/tracking'}
     >
       {(hasVisitedPage || listValidation.isTouched) &&
         listValidation.hasErrors && (
@@ -161,7 +162,7 @@ function VulnerabilityForm({
         <Tab
           title={
             <TabTitle
-              title={t('vulnerabilities.general')}
+              title={t('vulnerabilities.general.')}
               csafPaths={[
                 `${prefix}/cve`,
                 `${prefix}/cwe/name`,
@@ -185,7 +186,7 @@ function VulnerabilityForm({
         <Tab
           title={
             <TabTitle
-              title={t('vulnerabilities.products')}
+              title={t('vulnerabilities.products.title')}
               csafPrefix={`${prefix}/products`}
             />
           }
