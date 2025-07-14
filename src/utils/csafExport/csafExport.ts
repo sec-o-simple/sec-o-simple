@@ -150,7 +150,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           remediations: vulnerability.remediations?.map((remediation) => ({
             category: remediation.category,
             date: remediation.date || undefined,
-            details: remediation.details || undefined,
+            details: remediation.details,
             url: remediation.url || undefined,
             product_ids: remediation.productIds.map((id) =>
               pidGenerator.getPid(id),
