@@ -9,11 +9,7 @@ import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 import { Alert, Chip } from '@heroui/react'
-import {
-  calculateBaseScore,
-  calculateQualScore,
-  validate,
-} from 'cvss4'
+import { calculateBaseScore, calculateQualScore, parseVersion } from 'cvss4'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TProductTreeBranch } from '../products/types/tProductTreeBranch'
@@ -154,13 +150,22 @@ function ScoreForm({
 
   const handleChange = (newValue: string) => {
     try {
-      const result = validate(newValue)
+      const version = parseVersion(newValue)
+      if (!version || version === '3.0') {
+        throw new Error('Invalid CVSS vector string')
+      }
+      const baseScore = calculateBaseScore(newValue)
+      const baseSeverity = calculateQualScore(baseScore)
+      if (!baseScore || !baseSeverity) {
+        throw new Error('Invalid CVSS vector string')
+      }
       onChange({
         ...score,
         vectorString: newValue,
-        cvssVersion: result.versionStr as TCvssVersion,
+        cvssVersion: version as TCvssVersion,
       })
     } catch (e) {
+      console.error('Invalid CVSS vector string:', e)
       onChange({ ...score, vectorString: newValue, cvssVersion: null })
     }
   }
