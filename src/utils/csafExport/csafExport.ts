@@ -133,7 +133,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
               'under_investigation',
             ),
           }).filter(([, value]) => value !== undefined)
-          return obj.length > 0 ? Object.fromEntries(obj) : undefined
+          return obj.length > 0 ? Object.fromEntries(obj) : {}
         }
 
         return {
