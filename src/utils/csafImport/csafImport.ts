@@ -40,7 +40,7 @@ export function parseCSAFDocument(
   csafDocument: DeepPartial<TCSAFDocument>,
 ): SOSDraft | undefined {
   const idGenerator = new IdGenerator()
-  const sosDocumentType: TSOSDocumentType = 'CSAFImport'
+  const sosDocumentType: TSOSDocumentType = 'Import'
 
   const defaultDocumentInformation = getDefaultDocumentInformation()
   const defaultRevisionHistoryEntry = getDefaultRevisionHistoryEntry()
