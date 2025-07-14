@@ -1,5 +1,4 @@
 import { useCSAFExport } from '@/utils/csafExport/csafExport'
-import { useSOSExport } from '@/utils/sosDraft'
 import useDocumentStore from '@/utils/useDocumentStore'
 import useValidationStore from '@/utils/validation/useValidationStore'
 import {
@@ -7,7 +6,6 @@ import {
   faCircleExclamation,
   faEye,
   faFileExport,
-  faSave,
   faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -101,7 +99,6 @@ function ValidationErrorList() {
 export default function TopBarLayout() {
   const { t } = useTranslation()
   const navigate = useNavigate()
-  const { exportSOSDocument } = useSOSExport()
   const { exportCSAFDocument } = useCSAFExport()
   const {
     isValid,
@@ -142,10 +139,6 @@ export default function TopBarLayout() {
             <FontAwesomeIcon icon={faEye} />
             {t('preview')}
           </Button>
-          <Button color="secondary" onPress={exportSOSDocument}>
-            <FontAwesomeIcon icon={faSave} />
-            {t('export.draft')}
-          </Button>
           <Tooltip
             content={t('export.error', {
               errorCount: messages.length,
@@ -153,14 +146,17 @@ export default function TopBarLayout() {
             isDisabled={isValid && !isValidating}
           >
             <div>
-              <Button
+              <ConfirmButton
+                confirmText={t('export.invalidExportConfirm')}
+                confirmTitle={t('export.invalidExport')}
+                onConfirm={exportCSAFDocument}
+                skipConfirm={isValid && !isValidating}
                 color="primary"
-                onPress={exportCSAFDocument}
-                // isDisabled={!isValid || isValidating}
+                fullWidth={false}
               >
                 <FontAwesomeIcon icon={faFileExport} />
                 {t('export.csaf')}
-              </Button>
+              </ConfirmButton>
             </div>
           </Tooltip>
           <ValidationErrorList />

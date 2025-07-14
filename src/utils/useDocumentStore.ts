@@ -10,6 +10,8 @@ import { TCSAFDocument } from './csafExport/csafExport'
 import { DeepPartial } from './deepPartial'
 
 export const sosDocumentTypes = [
+  // Used for importing CSAF documents
+  'Import',
   'Software',
   'HardwareSoftware',
   'HardwareFirmware',

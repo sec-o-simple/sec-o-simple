@@ -8,9 +8,12 @@ import {
   getDefaultVulnerabilityProduct,
   TVulnerabilityProduct,
 } from './types/tVulnerabilityProduct'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
+import { Alert } from '@heroui/react'
 
 export default function Products({
   vulnerability,
+  vulnerabilityIndex,
   onChange,
 }: {
   vulnerability: TVulnerability
@@ -28,8 +31,20 @@ export default function Products({
     [productsListState.data],
   )
 
+  const validation = useFieldValidation(
+    `/vulnerabilities/${vulnerabilityIndex}/product_status`,
+  )
+
   return (
     <VSplit className="gap-2">
+      {validation.hasErrors && (
+        <Alert color="danger">
+          {validation.errorMessages.map((m) => (
+            <p key={m.path}>{m.message}</p>
+          ))}
+        </Alert>
+      )}
+
       {productsListState.data.map((vulnerabilityProduct) => (
         <VulnerabilityProduct
           key={vulnerabilityProduct.id}

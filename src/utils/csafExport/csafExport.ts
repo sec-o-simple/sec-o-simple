@@ -4,8 +4,8 @@ import { TVulnerabilityProduct } from '@/routes/vulnerabilities/types/tVulnerabi
 import _ from 'lodash'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
+import useValidationStore from '../validation/useValidationStore'
 import generateRelationships from './generateRelationships'
-import { getFilename } from './helpers'
 import { retrieveLatestVersion } from './latestVersion'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
@@ -135,7 +135,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
               'under_investigation',
             ),
           }).filter(([, value]) => value !== undefined)
-          return obj.length > 0 ? Object.fromEntries(obj) : undefined
+          return obj.length > 0 ? Object.fromEntries(obj) : {}
         }
 
         return {
@@ -171,6 +171,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
 
 export function useCSAFExport() {
   const documentStore = useDocumentStore()
+  const { isValid } = useValidationStore()
 
   const exportCSAFDocument = () => {
     let csafDocument = createCSAFDocument(documentStore)
@@ -179,10 +180,11 @@ export function useCSAFExport() {
     // Our created CSAF document has priority, and is handled as the base
     csafDocument = _.merge({}, documentStore.importedCSAFDocument, csafDocument)
 
-    download(
-      `${getFilename(documentStore.documentInformation.id)}.json`,
-      JSON.stringify(csafDocument, null, 2),
-    )
+    const suffix = !isValid ? '_invalid' : ''
+    const id = documentStore.documentInformation.id || 'csaf_document'
+    const filename = id + suffix + '.json'
+
+    download(filename, JSON.stringify(csafDocument, null, 2))
   }
 
   return { exportCSAFDocument }

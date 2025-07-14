@@ -194,6 +194,7 @@ function VulnerabilityForm({
             <TabTitle
               title={t('vulnerabilities.products.title')}
               csafPrefix={`${prefix}/products`}
+              csafPaths={[`${prefix}/product_status`]}
             />
           }
         >

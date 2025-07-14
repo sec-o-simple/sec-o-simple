@@ -29,7 +29,7 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
       linkTo={`product/${product.id}`}
       startContent={
         <Chip color="primary" variant="flat" radius="md" size="lg">
-          {product.type}
+          {product.type ?? t('products.unknownType')}
         </Chip>
       }
       endContent={

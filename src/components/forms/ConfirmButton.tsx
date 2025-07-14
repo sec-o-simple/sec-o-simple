@@ -13,12 +13,14 @@ type ConfirmButtonProps = {
   confirmText: string
   confirmTitle: string
   onConfirm: () => void
+  skipConfirm?: boolean
 } & ButtonProps
 
 export default function ConfirmButton({
   confirmText,
   confirmTitle,
   onConfirm,
+  skipConfirm = false,
   ...props
 }: ConfirmButtonProps) {
   const { t } = useTranslation()
@@ -26,7 +28,7 @@ export default function ConfirmButton({
 
   return (
     <>
-      <Button onPress={onOpen} fullWidth {...props}>
+      <Button onPress={!skipConfirm ? onOpen : onConfirm} fullWidth {...props}>
         {props?.children || t('common.confirm')}
       </Button>
       <Modal isOpen={isOpen} onOpenChange={onOpenChange} size="xl">
