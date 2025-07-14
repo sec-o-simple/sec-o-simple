@@ -2,7 +2,6 @@ import pck from '@/../package.json'
 import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
 import _ from 'lodash'
-import { JSONObject } from '../csafImport/csafImport'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
 import generateRelationships from './generateRelationships'
@@ -14,10 +13,7 @@ import { PidGenerator } from './pidGenerator'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
-export function createCSAFDocument(
-  documentStore: TDocumentStore,
-  useImportedCSAFDoc = false,
-) {
+export function createCSAFDocument(documentStore: TDocumentStore) {
   const pidGenerator = new PidGenerator()
   const currentDate = new Date().toISOString()
   const documentInformation = documentStore.documentInformation
@@ -160,15 +156,6 @@ export function createCSAFDocument(
     ),
   }
 
-  // Merge with imported CSAF document if available
-  if (useImportedCSAFDoc) {
-    const document = _.merge(
-      documentStore.csafDocument,
-      csafDocument,
-    ) as JSONObject
-    return document || {}
-  }
-
   return csafDocument
 }
 
@@ -176,7 +163,8 @@ export function useCSAFExport() {
   const documentStore = useDocumentStore()
 
   const exportCSAFDocument = () => {
-    const csafDocument = createCSAFDocument(documentStore, true)
+    let csafDocument = createCSAFDocument(documentStore)
+    csafDocument = _.merge(documentStore.csafDocument, csafDocument)
 
     download(
       `${getFilename(documentStore.documentInformation.id)}.json`,
