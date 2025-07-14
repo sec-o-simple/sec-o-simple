@@ -144,8 +144,11 @@
       },
       "scores": "Bewertungen",
       "score": {
-        "title": "Bewertung",
+        "title": "CVSS Bewertung",
         "cvss": "CVSS",
+        "vectorStringDescription": "CVSS 3.1 und CVSS 4.0 werden unterstützt",
+        "vectorStringEmptyError": "Der Vektorstring darf nicht leer sein.",
+        "vectorStringInvalidError": "Der eingegebene Vektorstring ist ungültig. Bitte überprüfen Sie das Format.",
         "baseScore": "Basis Bewertung",
         "baseScoreDescription": "Basis Bewertung wird aus dem Vektorstring berechnet",
         "baseSeverity": "Basis Schweregrad",

@@ -146,6 +146,9 @@
       "score": {
         "title": "Score",
         "cvss": "CVSS",
+        "vectorStringDescription": "CVSS 3.1 and CVSS 4.0 are supported",
+        "vectorStringEmptyError": "The vector string cannot be empty.",
+        "vectorStringInvalidError": "The given vector string is not valid. Please check the format.",
         "baseScore": "Base Score",
         "baseScoreDescription": "Base score is calculated from the vector string",
         "baseSeverity": "Base Severity",

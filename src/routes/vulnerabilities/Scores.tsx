@@ -8,14 +8,19 @@ import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
-import { Alert } from '@heroui/react'
-import { calculateBaseScore, calculateQualScore } from 'cvss4'
+import { Alert, Chip } from '@heroui/react'
+import {
+  calculateBaseScore,
+  calculateQualScore,
+  validate,
+} from 'cvss4'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TProductTreeBranch } from '../products/types/tProductTreeBranch'
 import ProductsTagList from './components/ProductsTagList'
 import { TVulnerability } from './types/tVulnerability'
 import {
+  TCvssVersion,
   TVulnerabilityScore,
   getDefaultVulnerabilityScore,
 } from './types/tVulnerabilityScore'
@@ -65,11 +70,12 @@ export default function Scores({
       )}
       <ComponentList
         listState={scoresListState}
-        title={(score) => `CVSS ${score.cvssVersion} Score`}
+        title={() => t('vulnerabilities.score.title')}
         itemLabel={t('vulnerabilities.score.title')}
         itemBgColor="bg-zinc-50"
-        startContent={({ index }) => (
+        startContent={({ index, item }) => (
           <ScoreStartContent
+            item={item}
             csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${index}`}
           />
         )}
@@ -93,10 +99,28 @@ export default function Scores({
   )
 }
 
-function ScoreStartContent({ csafPath }: { csafPath: string }) {
+function ScoreStartContent({
+  item,
+  csafPath,
+}: {
+  item: TVulnerabilityScore
+  csafPath: string
+}) {
   const { hasErrors } = usePrefixValidation(csafPath)
 
-  return <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
+  return (
+    <>
+      <StatusIndicator
+        hasErrors={hasErrors || !item.cvssVersion}
+        hasVisited={true}
+      />
+      {item.cvssVersion && (
+        <Chip color="primary" variant="flat" radius="md" size="lg">
+          Version: {item.cvssVersion}
+        </Chip>
+      )}
+    </>
+  )
 }
 
 function ScoreForm({
@@ -128,17 +152,45 @@ function ScoreForm({
 
   const fieldValidation = useFieldValidation(`${csafPath}/products`)
 
+  const handleChange = (newValue: string) => {
+    try {
+      const result = validate(newValue)
+      onChange({
+        ...score,
+        vectorString: newValue,
+        cvssVersion: result.versionStr as TCvssVersion,
+      })
+    } catch (e) {
+      onChange({ ...score, vectorString: newValue, cvssVersion: null })
+    }
+  }
+
+  const cvssVectorStringPath = score.cvssVersion
+    ? {
+        '3.0': `${csafPath}/cvss_v3/vectorString`,
+        '3.1': `${csafPath}/cvss_v3/vectorString`,
+        '4.0': `${csafPath}/cvss_v4/vectorString`,
+      }[score.cvssVersion]
+    : undefined
+
   return (
     <VSplit>
       <Input
         label="CVSS Vector String"
+        description={t('vulnerabilities.score.vectorStringDescription')}
         isRequired
         isTouched={isTouched}
-        csafPath={`${csafPath}/cvss_v3/vectorString`}
-        value={score.vectorString}
-        onValueChange={(newValue) =>
-          onChange({ ...score, vectorString: newValue })
+        csafPath={cvssVectorStringPath}
+        isInvalid={!cvssVectorStringPath || !score.vectorString.length}
+        errorMessage={
+          !score.vectorString.length
+            ? t('vulnerabilities.score.vectorStringEmptyError')
+            : !cvssVectorStringPath
+              ? t('vulnerabilities.score.vectorStringInvalidError')
+              : ''
         }
+        value={score.vectorString}
+        onValueChange={handleChange}
         autoFocus={true}
         isDisabled={checkReadOnly(score, 'vectorString')}
         placeholder={getPlaceholder(score, 'vectorString')}
