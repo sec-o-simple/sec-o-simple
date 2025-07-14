@@ -31,7 +31,7 @@ export function parseVulnerabilities(
         cve: vulnerability.cve ?? defaultVulnerability.cve,
         cwe: vulnerability.cwe as TCwe | undefined,
         title: vulnerability.title ?? defaultVulnerability.title,
-        notes: vulnerability.notes.map((note) =>
+        notes: vulnerability.notes?.map((note) =>
           parseNote(note as TParsedNote),
         ),
         products: parseVulnerabilityProducts(
@@ -69,7 +69,7 @@ export function parseVulnerabilities(
 
           return {
             id: defaultScore.id,
-            productIds: score.products.map((id) => idGenerator.getId(id)),
+            productIds: score.products?.map((id) => idGenerator.getId(id)),
             cvssVersion: cvssInfos?.version ?? defaultScore.cvssVersion,
             vectorString: cvssInfos?.vectorString ?? defaultScore.vectorString,
           } as TVulnerabilityScore

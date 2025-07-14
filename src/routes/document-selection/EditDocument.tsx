@@ -1,8 +1,32 @@
-import { useCSAFImport } from '@/utils/csafImport/csafImport'
+import { TCSAFDocument } from '@/utils/csafExport/csafExport'
+import {
+  HiddenField,
+  JSONObject,
+  useCSAFImport,
+} from '@/utils/csafImport/csafImport'
+import { DeepPartial } from '@/utils/deepPartial'
 import { useSOSImport } from '@/utils/sosDraft'
+import useDocumentStore from '@/utils/useDocumentStore'
 import { faArrowRight, faEdit } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@heroui/modal'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableColumn,
+  TableHeader,
+  TableRow,
+} from '@heroui/table'
+import { t } from 'i18next'
 import { motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
@@ -12,7 +36,10 @@ export default function EditDocument() {
   const { isSOSDraft, importSOSDocument } = useSOSImport()
   const { isCSAFDocument, isCSAFVersionSupported, importCSAFDocument } =
     useCSAFImport()
-  const [jsonObject, setJsonObject] = useState<object | undefined>()
+  const { setImportedCSAFDocument } = useDocumentStore()
+  const { isOpen, onOpenChange } = useDisclosure()
+  const [hiddenFields, setHiddenFields] = useState<HiddenField[]>([])
+  const [jsonObject, setJsonObject] = useState<JSONObject>()
   const [errorMessage, setErrorMessage] = useState<string | undefined>()
 
   useEffect(() => {
@@ -32,12 +59,24 @@ export default function EditDocument() {
   const importDocument = () => {
     if (jsonObject && !errorMessage) {
       if (isCSAFDocument(jsonObject)) {
-        importCSAFDocument(jsonObject)
+        const hiddenFields = importCSAFDocument(jsonObject)
+        setImportedCSAFDocument(jsonObject as DeepPartial<TCSAFDocument>)
+
+        if (hiddenFields.length > 0) {
+          setHiddenFields(hiddenFields)
+          onOpenChange()
+          return
+        }
       } else {
         importSOSDocument(jsonObject)
       }
+
       navigate('/document-information/')
     }
+  }
+
+  const onConfirm = () => {
+    navigate('/document-information/')
   }
 
   return (
@@ -51,6 +90,55 @@ export default function EditDocument() {
         <FontAwesomeIcon className="text-primary" icon={faEdit} />
         Edit existing document
       </div>
+      <Modal
+        isOpen={isOpen}
+        onOpenChange={onOpenChange}
+        size="4xl"
+        isDismissable={false}
+        isKeyboardDismissDisabled={false}
+      >
+        <ModalContent>
+          {() => (
+            <>
+              <ModalHeader>{t('hiddenFields.title')}</ModalHeader>
+
+              <ModalBody>
+                <p>{t('hiddenFields.description')}</p>
+                <Table>
+                  <TableHeader>
+                    <TableColumn>{t('hiddenFields.column.path')}</TableColumn>
+                    <TableColumn>{t('hiddenFields.column.value')}</TableColumn>
+                  </TableHeader>
+                  <TableBody>
+                    {hiddenFields.map((field, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{field.path}</TableCell>
+                        <TableCell>{JSON.stringify(field.value)}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </ModalBody>
+
+              <ModalFooter>
+                <Button
+                  color="primary"
+                  variant="light"
+                  onPress={() => {
+                    setHiddenFields([])
+                    onOpenChange()
+                  }}
+                >
+                  {t('common.cancel')}
+                </Button>
+                <Button color="primary" onPress={onConfirm}>
+                  {t('common.confirm')}
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
       <div>
         <input
           type="file"

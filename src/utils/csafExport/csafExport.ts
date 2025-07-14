@@ -1,5 +1,7 @@
+import pck from '@/../package.json'
 import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
 import { TVulnerabilityProduct } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
+import _ from 'lodash'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
 import generateRelationships from './generateRelationships'
@@ -7,8 +9,8 @@ import { getFilename } from './helpers'
 import { retrieveLatestVersion } from './latestVersion'
 import { parseNote } from './parseNote'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
-import { PidGenerator } from './pidGenerator'
 import parseScore from './parseScore'
+import { PidGenerator } from './pidGenerator'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
@@ -38,7 +40,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         generator: {
           date: currentDate,
           engine: {
-            version: '0.0.1',
+            version: pck.version,
             name: 'Sec-O-Simple',
           },
         },
@@ -58,7 +60,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           : '1',
         id: documentInformation.id,
       },
-      lang: documentInformation.language,
+      lang: documentInformation.lang,
       title: documentInformation.title,
       publisher: {
         category: documentInformation.publisher.category,
@@ -171,7 +173,11 @@ export function useCSAFExport() {
   const documentStore = useDocumentStore()
 
   const exportCSAFDocument = () => {
-    const csafDocument = createCSAFDocument(documentStore)
+    let csafDocument = createCSAFDocument(documentStore)
+
+    // Merge with existing imported CSAF document if available
+    // Our created CSAF document has priority, and is handled as the base
+    csafDocument = _.merge({}, documentStore.importedCSAFDocument, csafDocument)
 
     download(
       `${getFilename(documentStore.documentInformation.id)}.json`,
