@@ -1,0 +1,278 @@
+{
+  "translation": {
+    "common": {
+      "loading": "Loading...",
+      "error": "Error",
+      "success": "Success",
+      "warning": "Warning",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "edit": "Edit",
+      "delete": "Delete",
+      "create": "Create",
+      "search": "Search",
+      "save": "Save",
+      "close": "Close",
+      "back": "Back",
+      "next": "Next",
+      "ok": "OK",
+      "untitled": "Untitled",
+      "add": "Add {{label}}",
+      "placeholder": "Enter {{label}}",
+      "actions": "Actions"
+    },
+    "preview": "Preview",
+    "newDocument": "New Document",
+    "confirm.newDocument.title": "Create New Document",
+    "confirm.newDocument.body": "Are you sure you want to create a new document? This will reset the current document.",
+    "export": {
+      "draft": "Export",
+      "csaf": "CSAF Export",
+      "error": "{{ errorCount }} errors in the document. Please fix them before exporting."
+    },
+    "nav": {
+      "home": "Home",
+      "products": "Products",
+      "vendors": "Vendors",
+      "document": "Document",
+      "documentInfo": "Document Information",
+      "vulnerabilities": "Vulnerabilities",
+      "documentInformation": {
+        "general": "General",
+        "notes": "Notes",
+        "publisher": "Publisher",
+        "references": "References",
+        "acknowledgments": "Acknowledgements"
+      }
+    },
+    "documentSelection": {
+      "create": "Create document",
+      "selectType": "Select Document Type",
+      "selectTypeDescription": "Choose whether you want to create a new document or edit an existing one",
+      "newDocument": "Create new Document",
+      "existingDocument": "Edit existing Document",
+      "advisory": "Security Advisory",
+      "vex": "VEX Document",
+      "software": "Software",
+      "softAndHardware": "Software and Hardware",
+      "softAndFirmware": "Software and Firmware",
+      "sbom": "SBOM"
+    },
+    "document": {
+      "general": {
+        "title": "Document Title",
+        "id": "Document ID",
+        "state": "Status",
+        "language": "Language",
+        "languages": {
+          "de": "German",
+          "en": "English"
+        },
+        "status": {
+          "draft": "Draft",
+          "final": "Final",
+          "interim": "Interim"
+        },
+        "revisionHistory": {
+          "label": "Revision",
+          "version": "Version",
+          "date": "Date",
+          "description": "Description",
+          "empty": "No revisions added yet"
+        }
+      },
+      "publisher": {
+        "name": "Name of Publisher",
+        "category": "Category of Publisher",
+        "namespace": "Namespace of Publisher",
+        "contactDetails": "Contact Details",
+        "issuingAuthority": "Issuing Authority",
+        "categories": {
+          "coordinator": "Coordinator",
+          "discoverer": "Discoverer",
+          "other": "Other",
+          "translator": "Translator",
+          "user": "User",
+          "vendor": "Vendor"
+        }
+      },
+      "references": {
+        "url": "URL"
+      },
+
+      "acknowledgments": {
+        "title": "Acknowledgements",
+        "acknowledgment": "Acknowledgement",
+        "acknowledgments": "Acknowledgements",
+        "summary": "Summary",
+        "name": "Name",
+        "names": "Acknowledged Names",
+        "organization": "Organization",
+        "empty": "No acknowledgements added yet"
+      }
+    },
+    "vulnerabilities": {
+      "vulnerability": "Vulnerability",
+      "vulnerabilities": "Vulnerabilities",
+      "general": "General",
+      "general.title": "Title",
+      "notes": "Notes",
+      "products": "Products",
+      "scores": "Scores",
+      "score": {
+        "title": "Score",
+        "cvss": "CVSS",
+        "baseScore": "Base Score",
+        "baseScoreDescription": "Base score is calculated from the vector string",
+        "baseSeverity": "Base Severity",
+        "baseSeverityDescription": "Base severity is calculated from the vector string"
+      },
+      "remediations": "Remediations",
+      "remediation": {
+        "title": "Remediation",
+        "category": "Category",
+        "categories": {
+          "mitigation": "Mitigation",
+          "no_fix_planned": "No fix planned",
+          "none_available": "None available",
+          "vendor_fix": "Vendor fix",
+          "workaround": "Workaround"
+        },
+        "date": "Date",
+        "details": "Details",
+        "url": "URL",
+        "products.empty": "No products added"
+      }
+    },
+    "notes": {
+      "title": "Note Title",
+      "note": "Note",
+      "notes": "Notes",
+      "content": "Note Content",
+      "category": "Note Category",
+      "category_plural": "Categories",
+      "categories": {
+        "description": "Description",
+        "details": "Details",
+        "faq": "FAQ",
+        "general": "General",
+        "legal_disclaimer": "Legal Disclaimer",
+        "other": "Other",
+        "summary": "Summary"
+      }
+    },
+
+    "notesTemplates": {
+      "addTemplateButton": "Add predefined Note",
+      "editTemplateButton": "Edit predefined Note",
+      "selectTemplateTitle": "Select predefined Note"
+    },
+
+    "ref": {
+      "references": "References",
+      "reference": "Reference",
+      "summary": "Summary",
+      "url": "URL",
+      "category": "Origin",
+      "categories": {
+        "external": "External",
+        "self": "Self"
+      }
+    },
+    "untitled": {
+      "vendor": "Untitled Vendor",
+      "product_name": "Untitled Product",
+      "product_version": "Untitled Version",
+      "": "Untitled"
+    },
+    "modal": {
+      "edit": "Edit {{label}}"
+    },
+    "vendor": {
+      "label": "Vendor",
+      "name": "Vendor Name",
+      "description": "Vendor Description"
+    },
+    "product_version": {
+      "label": "Version",
+      "name": "Version Name",
+      "description": "Version Description"
+    },
+    "product_name": {
+      "label": "Product",
+      "name": "Product Name",
+      "description": "Product Description",
+      "type": "Product Type"
+    },
+    "products": {
+      "import": {
+        "title": "Add from Database",
+        "description": "Choose one or more products from your existing product database to add to your document.",
+        "database": "database",
+        "warning": "Changes to the added products will not be persisted. To modify, add, or delete products, please visit the",
+        "noVendors": "No vendors found in the database. Please add vendors and products to the database before using this feature.",
+        "searchPlaceholder": "Search vendors and products",
+        "selectedAll": "selected all products",
+        "selected_one": "selected 1 product",
+        "selected_other": "selected {{count}} products",
+        "add_one": "Add 1 product",
+        "add_other": "Add {{count}} products"
+      },
+      "vendors": "Vendors",
+      "products": "Products",
+      "manage": "Product Management",
+      "empty": "You haven't created any {{ type }} product yet.\nYou can add one by creating a vendor and adding a product to it.",
+      "software": "Software",
+      "hardware": "Hardware",
+      "vendor": {
+        "label": "Vendor"
+      },
+      "product": {
+        "label": "Product",
+        "name": "Product Name",
+        "description": "Product Description",
+        "type": "Product Type",
+        "version": {
+          "label": "Version",
+          "empty": "No versions available",
+          "edit": "Edit Product Version",
+          "edit_plural": "Edit Product Versions",
+          "affected": "First affected Version",
+          "fixed": "First fixed Version"
+        }
+      },
+      "relationship": {
+        "label": "Relationships",
+        "empty": "No relationships available",
+        "edit": "Edit Relationship",
+        "edit_plural": "Edit Relationships",
+        "name": "Name",
+        "namePlaceholder": "Relationship Name",
+        "sourceProduct": "Source",
+        "targetProduct": "Target",
+        "version": "Version",
+        "version_plural": "Versions",
+        "category": "Relationship Type",
+        "categoryPlaceholder": "Select relationship type",
+        "categories": {
+          "default_component_of": "Default component of",
+          "external_component_of": "External component of",
+          "installed_on": "Installed on",
+          "installed_with": "Installed with",
+          "optional_component_of": "Optional component of"
+        }
+      }
+    },
+    "validation": {
+      "error": "Error",
+      "error_plural": "Error",
+      "errors": {
+        "title": "Validation Errors",
+        "column": {
+          "path": "Path",
+          "message": "Message"
+        }
+      }
+    }
+  }
+}

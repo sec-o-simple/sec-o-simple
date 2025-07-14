@@ -1,4 +1,4 @@
-import { useFieldValidation } from '@/utils/useFieldValidation'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import {
   DatePicker as HeroUIDatePicker,
   DatePickerProps as HeroUIDatePickerProps,

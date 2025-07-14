@@ -1,19 +1,27 @@
 import WizardStep from '@/components/WizardStep'
-import { useListState } from '@/utils/useListState'
-import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
-import { TDocumentInformation } from './types/tDocumentInformation'
+import { useListState } from '@/utils/useListState'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import usePageVisit from '@/utils/validation/usePageVisit'
 import { Alert } from '@heroui/react'
-import { useListValidation } from '@/utils/useListValidation'
-import usePageVisit from '@/utils/usePageVisit'
+import { useTranslation } from 'react-i18next'
+import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
+import { NotesTemplates } from '../shared/NotesTemplates'
+import { TDocumentInformation } from './types/tDocumentInformation'
 
 export default function Notes() {
+  const { t } = useTranslation()
   const notesListState = useListState<TNote>({
     generator: NoteGenerator,
   })
 
   useDocumentStoreUpdater<TDocumentInformation>({
-    localState: [notesListState.data, () => ({ notes: notesListState.data })],
+    localState: [
+      notesListState.data,
+      () => ({
+        notes: notesListState.data,
+      }),
+    ],
     valueField: 'documentInformation',
     valueUpdater: 'updateDocumentInformation',
     init: (initialData) => notesListState.setData(initialData.notes),
@@ -27,8 +35,8 @@ export default function Notes() {
 
   return (
     <WizardStep
-      title="Document Information - Notes"
-      progress={1.25}
+      title={t('nav.documentInformation.notes')}
+      progress={1.2}
       onBack={'/document-information/general'}
       onContinue={'/document-information/publisher'}
     >
@@ -40,6 +48,12 @@ export default function Notes() {
             ))}
           </Alert>
         )}
+
+      <NotesTemplates
+        notesListState={notesListState}
+        templatePath="document-information.notes_templates"
+      />
+
       <NotesList
         notesListState={notesListState}
         csafPath="/document/notes"

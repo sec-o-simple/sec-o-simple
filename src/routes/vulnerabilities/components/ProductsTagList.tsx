@@ -1,22 +1,28 @@
 import ProductSelect from '@/components/forms/ProductSelect'
 import VSplit from '@/components/forms/VSplit'
 import TagList from '@/routes/products/components/TagList'
-import { useEffect, useState } from 'react'
 import {
   TProductTreeBranchWithParents,
   getFullPTBName,
 } from '@/routes/products/types/tProductTreeBranch'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 export type ProductsTagListProps = {
   products?: string[]
   onChange?: (productIds: string[]) => void
+  error?: string
+  isRequired?: boolean
 }
 
 export default function ProductsTagList({
   products,
   onChange,
+  error,
+  isRequired,
 }: ProductsTagListProps) {
+  const { t } = useTranslation()
   const { findProductTreeBranchWithParents } = useProductTreeBranch()
 
   const initialProducts =
@@ -33,8 +39,12 @@ export default function ProductsTagList({
 
   return (
     <VSplit className="gap-2">
-      <span className="text-sm">Products</span>
+      <span className="text-sm">
+        {t('vulnerabilities.products')} {isRequired ? '*' : ''}
+      </span>
       <ProductSelect
+        isRequired={isRequired}
+        selected={selectedProducts.map((x) => x.id)}
         onAdd={(ptb) =>
           setSelectedProducts([
             ...new Set([
@@ -55,9 +65,11 @@ export default function ProductsTagList({
           }
         />
       )}
+      {error && <span className="text-sm text-red-500">{error}</span>}
+      {/* If no products are selected, show a message */}
       {selectedProducts.length === 0 && (
         <span className="text-center text-neutral-foreground">
-          No products added yet
+          {t('vulnerabilities.remediation.products.empty')}
         </span>
       )}
     </VSplit>

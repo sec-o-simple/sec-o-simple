@@ -7,6 +7,7 @@ import { Autocomplete } from '@/components/forms/Autocomplete'
 import { useMemo } from 'react'
 import { weaknesses } from '@secvisogram/csaf-validator-lib/cwe.js'
 import { AutocompleteItem } from '@heroui/react'
+import { useTranslation } from 'react-i18next'
 
 export default function General({
   vulnerability,
@@ -19,6 +20,7 @@ export default function General({
   onChange: (vulnerability: TVulnerability) => void
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
   const cwes = useMemo<TCwe[]>(() => weaknesses, [])
 
   return (
@@ -49,6 +51,8 @@ export default function General({
           }}
           isDisabled={checkReadOnly(vulnerability, 'cwe')}
           placeholder={getPlaceholder(vulnerability, 'cwe')}
+          maxListboxHeight={400}
+          itemHeight={48}
         >
           {cwes.map((cwe) => (
             <AutocompleteItem
@@ -61,9 +65,10 @@ export default function General({
         </Autocomplete>
       </HSplit>
       <Input
-        label="Title"
+        label={t('vulnerabilities.general.title')}
         csafPath={`/vulnerabilities/${vulnerabilityIndex}/title`}
         isTouched={isTouched}
+        isRequired
         value={vulnerability.title}
         onValueChange={(newValue) =>
           onChange({ ...vulnerability, title: newValue })

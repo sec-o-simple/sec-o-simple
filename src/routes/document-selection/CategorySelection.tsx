@@ -12,6 +12,7 @@ import {
   MButtonRightFinal,
 } from './categorySelection.motions'
 import { DocumentSelectionState } from './DocumentSelection'
+import { useTranslation } from 'react-i18next'
 
 export default function CategorySelection({
   state,
@@ -20,6 +21,8 @@ export default function CategorySelection({
   state: DocumentSelectionState
   onSelect?: (newState: DocumentSelectionState) => void
 }) {
+  const { t } = useTranslation()
+
   return (
     <div className="flex flex-col items-center">
       <AnimatePresence>
@@ -29,25 +32,24 @@ export default function CategorySelection({
             exit={{ height: 0, marginTop: 0, marginBottom: 0 }}
             className="overflow-hidden text-center"
           >
-            <div className="mb-2 text-3xl font-bold">Select Document Type</div>
-            <div>
-              Choose whether you want to create a new document or edit an
-              existing one
+            <div className="mb-2 text-3xl font-bold">
+              {t('documentSelection.selectType')}
             </div>
+            <div>{t('documentSelection.selectTypeDescription')}</div>
           </motion.div>
         )}
       </AnimatePresence>
       <div className="flex">
         <CategoryButton
           icon={faPlus}
-          label="Create new document"
+          label={t('documentSelection.newDocument')}
           state={state}
           onClick={() => onSelect?.('createDocument')}
           isActive={state === 'createDocument'}
         />
         <CategoryButton
           icon={faPenToSquare}
-          label="Edit existing document"
+          label={t('documentSelection.existingDocument')}
           state={state}
           isRightButton
           onClick={() => onSelect?.('editDocument')}

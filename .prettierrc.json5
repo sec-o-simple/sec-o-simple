@@ -10,6 +10,7 @@
   arrowParens: 'always',
   jsxBracketSameLine: false,
   endOfLine: 'lf',
+  plugins: ['prettier-plugin-tailwindcss'],
   overrides: [
     {
       files: '.prettierrc',

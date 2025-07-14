@@ -1,4 +1,4 @@
-import { useFieldValidation } from '@/utils/useFieldValidation'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { Select as HeroUISelect, SelectProps } from '@heroui/select'
 
 export default function Select(

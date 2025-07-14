@@ -21,6 +21,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import { useTranslation } from 'react-i18next'
 
 export type RelationshipEditFormProps = {
   relationship?: TRelationship
@@ -31,6 +32,7 @@ export default function RelationshipEditForm({
   relationship,
   onSave,
 }: RelationshipEditFormProps) {
+  const { t } = useTranslation()
   const { findProductTreeBranch } = useProductTreeBranch()
 
   const [updatedRelationship, setUpdateRelationship] = useState<TRelationship>({
@@ -42,12 +44,14 @@ export default function RelationshipEditForm({
       {(onClose) => (
         <>
           <ModalHeader className="flex flex-col gap-1">
-            Edit Relationship
+            {t('modal.edit', {
+              label: t('products.relationship.label'),
+            })}
           </ModalHeader>
           <ModalBody className="gap-4">
             <div className="flex flex-row gap-2">
               <PTBSelect
-                label="Source Product"
+                label={t('products.relationship.sourceProduct')}
                 className="w-2/3"
                 selectionCategory="product_name"
                 selectedId={updatedRelationship.productId1}
@@ -68,7 +72,7 @@ export default function RelationshipEditForm({
               />
 
               <PTBSelect
-                label="Version"
+                label={t('products.relationship.version')}
                 className="w-1/3"
                 selectionCategory="product_version"
                 selectionMode="multiple"
@@ -97,7 +101,7 @@ export default function RelationshipEditForm({
 
             <div className="flex flex-row gap-2">
               <PTBSelect
-                label="Target Product"
+                label={t('products.relationship.targetProduct')}
                 className="w-2/3"
                 selectionCategory="product_name"
                 selectedId={updatedRelationship.productId2}
@@ -118,7 +122,7 @@ export default function RelationshipEditForm({
               />
 
               <PTBSelect
-                label="Version"
+                label={t('products.relationship.version')}
                 className="w-1/3"
                 selectionCategory="product_version"
                 selectionMode="multiple"
@@ -146,7 +150,7 @@ export default function RelationshipEditForm({
             </div>
 
             <Select
-              label="Relationship Type"
+              label={t('products.relationship.category')}
               selectedKeys={[updatedRelationship.category]}
               onSelectionChange={(selected) => {
                 const category = [...selected][0] as string
@@ -161,16 +165,18 @@ export default function RelationshipEditForm({
               placeholder={
                 relationship
                   ? getPlaceholder(relationship, 'category')
-                  : 'Select a type'
+                  : t('products.relationship.categoryPlaceholder')
               }
             >
               {relationshipCategories.map((category) => (
-                <SelectItem key={category}>{category}</SelectItem>
+                <SelectItem key={category}>
+                  {t(`products.relationship.categories.${category}`)}
+                </SelectItem>
               ))}
             </Select>
 
             <Input
-              label="Description"
+              label={t('products.relationship.name')}
               className="w-full"
               type="text"
               value={updatedRelationship.name}
@@ -181,19 +187,18 @@ export default function RelationshipEditForm({
               placeholder={
                 relationship
                   ? getPlaceholder(relationship, 'name')
-                  : 'Enter the description...'
+                  : t('products.relationship.namePlaceholder')
               }
             />
 
             <div className="flex flex-row items-center justify-around gap-2 rounded-md bg-gray-100 p-4">
               <ProductBox
                 product={
-                  findProductTreeBranch(updatedRelationship.productId1)?.name ??
-                  ''
+                  findProductTreeBranch(updatedRelationship.productId1)?.name
                 }
                 versions={updatedRelationship.product1VersionIds.map((id) => {
                   const version = findProductTreeBranch(id)
-                  return version ? getPTBName(version) : ''
+                  return version ? getPTBName(version) ?? '' : ''
                 })}
               />
 
@@ -204,25 +209,26 @@ export default function RelationshipEditForm({
                   className="text-primary"
                 />
                 <p className="text-sm text-zinc-500">
-                  {updatedRelationship.category}
+                  {t(
+                    `products.relationship.categories.${updatedRelationship.category}`,
+                  )}
                 </p>
               </div>
 
               <ProductBox
                 product={
-                  findProductTreeBranch(updatedRelationship.productId2)?.name ??
-                  ''
+                  findProductTreeBranch(updatedRelationship.productId2)?.name
                 }
                 versions={updatedRelationship.product2VersionIds.map((id) => {
                   const version = findProductTreeBranch(id)
-                  return version ? getPTBName(version) : ''
+                  return version ? getPTBName(version) ?? '' : ''
                 })}
               />
             </div>
           </ModalBody>
           <ModalFooter>
             <Button variant="light" onPress={onClose}>
-              Cancel
+              {t('common.cancel')}
             </Button>
             <Button
               color="primary"
@@ -231,7 +237,7 @@ export default function RelationshipEditForm({
                 onClose()
               }}
             >
-              Save
+              {t('common.save')}
             </Button>
           </ModalFooter>
         </>
@@ -244,19 +250,25 @@ function ProductBox({
   product,
   versions,
 }: {
-  product: string
+  product: string | undefined
   versions: string[]
 }) {
+  const { t } = useTranslation()
   return (
     <div>
       {versions.length > 0 && (
         <div className="flex flex-col items-center rounded-lg border border-gray bg-white p-2 px-4">
           <div className="flex flex-col gap-1">
-            <p key={product}>{product}</p>
+            <p key={product}>
+              {product && product !== '' ? product : t('untitled.product_name')}
+            </p>
           </div>
 
           <p className="text-sm text-zinc-500">
-            Versions: {versions.join(', ')}
+            {t('products.relationship.version', {
+              count: versions.length,
+            })}
+            : {versions.join(', ')}
           </p>
         </div>
       )}

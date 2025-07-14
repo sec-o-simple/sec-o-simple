@@ -12,6 +12,7 @@ import { Button } from '@heroui/button'
 import { Radio, RadioGroup } from '@heroui/react'
 import { motion } from 'motion/react'
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 
 type TDocumentType = {
@@ -22,6 +23,7 @@ type TDocumentType = {
 }
 
 export default function CreateDocument() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const setSOSDocumentType = useDocumentStore(
     (state) => state.setSOSDocumentType,
@@ -40,27 +42,41 @@ export default function CreateDocument() {
       exit={{ opacity: 0 }}
     >
       <DocumentType
-        label="Security Advisory"
+        label={t('documentSelection.advisory')}
         icon={faShieldHalved}
         options={[
-          { label: 'Software', type: 'Software', active: true, default: true },
           {
-            label: 'Hardware and Software',
+            label: t('documentSelection.software'),
+            type: 'Software',
+            active: true,
+            default: true,
+          },
+          {
+            label: t('documentSelection.softAndHardware'),
             active: true,
             type: 'HardwareSoftware',
           },
-          { label: 'Hardware and Firmware', type: 'HardwareFirmware' },
+          {
+            label: t('documentSelection.softAndFirmware'),
+            type: 'HardwareFirmware',
+          },
         ]}
         onCreate={onCreate}
       />
       <DocumentType
-        label="VEX Document"
+        label={t('documentSelection.vex')}
         icon={faFileInvoice}
         options={[
-          { label: 'Software', type: 'VexSoftware' },
-          { label: 'Hardware and Software', type: 'VexHardwareSoftware' },
-          { label: 'Hardware and Firmware', type: 'VexHardwareFirmware' },
-          { label: 'using SBOM', type: 'VexSbom' },
+          { label: t('documentSelection.software'), type: 'VexSoftware' },
+          {
+            label: t('documentSelection.softAndHardware'),
+            type: 'VexHardwareSoftware',
+          },
+          {
+            label: t('documentSelection.softAndFirmware'),
+            type: 'VexHardwareFirmware',
+          },
+          { label: t('documentSelection.sbom'), type: 'VexSbom' },
         ]}
         onCreate={onCreate}
       />
@@ -79,6 +95,7 @@ function DocumentType({
   icon?: FontAwesomeIconProps['icon']
   onCreate?: (documentType: TSOSDocumentType) => void
 }) {
+  const { t } = useTranslation()
   const [type, setType] = useState<TDocumentType | undefined>(
     options.find((x) => x.default),
   )
@@ -112,7 +129,7 @@ function DocumentType({
           onPress={() => onCreate?.(type?.type ?? 'Software')}
           isDisabled={type === undefined}
         >
-          Create Document
+          {t('documentSelection.create')}
         </Button>
       </div>
     </div>

@@ -3,6 +3,7 @@ import CategorySelection from './CategorySelection'
 import CreateDocument from './CreateDocument'
 import EditDocument from './EditDocument'
 import { AnimatePresence } from 'framer-motion'
+import { LanguageSwitcher } from '@/components/forms/LanguageSwitcher'
 
 export type DocumentSelectionState =
   | 'selectNewOrOpen'
@@ -23,6 +24,10 @@ export default function DocumentSelection() {
           {state === 'createDocument' && <CreateDocument />}
           {state === 'editDocument' && <EditDocument />}
         </AnimatePresence>
+      </div>
+
+      <div className="absolute inset-x-0 bottom-4 flex justify-center">
+        <LanguageSwitcher />
       </div>
     </div>
   )

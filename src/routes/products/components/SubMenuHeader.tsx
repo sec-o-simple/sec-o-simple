@@ -26,7 +26,7 @@ export default function SubMenuHeader({
     <div
       {...divProps}
       className={twMerge(
-        'flex justify-between items-center',
+        'flex items-center justify-between',
         divProps.className,
       )}
     >

@@ -3,10 +3,13 @@ import HSplit from '@/components/forms/HSplit'
 import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
+import StatusIndicator from '@/components/StatusIndicator'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 import { Chip } from '@heroui/chip'
 import { SelectItem } from '@heroui/select'
+import { useTranslation } from 'react-i18next'
 import { uid } from 'uid'
 
 export const noteCategories = [
@@ -18,6 +21,7 @@ export const noteCategories = [
   'other',
   'summary',
 ] as const
+
 export type TNoteCategory = (typeof noteCategories)[number]
 
 export type TNote = {
@@ -43,11 +47,13 @@ export function NotesList({
   csafPath: string
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <ComponentList
       listState={notesListState}
       title="title"
-      itemLabel="Note"
+      itemLabel={t('notes.note')}
       content={(note, index) => (
         <NoteForm
           note={note}
@@ -56,16 +62,30 @@ export function NotesList({
           onChange={notesListState.updateDataEntry}
         />
       )}
-      startContent={(note) => <CategoryChip note={note} />}
+      startContent={({ item, index }) => (
+        <NoteStartContent item={item} csafPath={`${csafPath}/${index}`} />
+      )}
     />
   )
 }
 
-function CategoryChip({ note }: { note: TNote }) {
+function NoteStartContent({
+  item,
+  csafPath,
+}: {
+  item: TNote
+  csafPath: string
+}) {
+  const { hasErrors } = usePrefixValidation(csafPath)
+  const { t } = useTranslation()
+
   return (
-    <Chip color="primary" variant="flat" radius="md" size="lg">
-      {note.category}
-    </Chip>
+    <>
+      <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
+      <Chip color="primary" variant="flat" radius="md" size="lg">
+        {t(`notes.categories.${item.category}`)}
+      </Chip>
+    </>
   )
 }
 
@@ -80,15 +100,20 @@ function NoteForm({
   onChange: (note: TNote) => void
   isTouched?: boolean
 }) {
+  const { t } = useTranslation()
+
   return (
     <VSplit className="pt-4">
       <HSplit className="items-start">
         <Select
-          label="Note category"
+          label={t('notes.category')}
           csafPath={`${csafPath}/category`}
           isTouched={isTouched}
+          isRequired
           selectedKeys={[note.category]}
           onSelectionChange={(selected) => {
+            if (!selected.anchorKey) return
+
             onChange({
               ...note,
               category: [...selected][0] as TNoteCategory,
@@ -98,28 +123,30 @@ function NoteForm({
           placeholder={getPlaceholder(note, 'category')}
         >
           {noteCategories.map((key) => (
-            <SelectItem key={key}>{key}</SelectItem>
+            <SelectItem key={key}>{t(`notes.categories.${key}`)}</SelectItem>
           ))}
         </Select>
         <Input
-          label="Title"
+          label={t('notes.title')}
           isTouched={isTouched}
           csafPath={`${csafPath}/title`}
           value={note.title}
           onValueChange={(newValue) => onChange({ ...note, title: newValue })}
           autoFocus={true}
-          isDisabled={checkReadOnly(note, 'title')}
           placeholder={getPlaceholder(note, 'title')}
+          isDisabled={checkReadOnly(note, 'title')}
+          isRequired
         />
       </HSplit>
       <Textarea
-        label="Note Content"
+        label={t('notes.content')}
         isTouched={isTouched}
         csafPath={`${csafPath}/text`}
         value={note.content}
         onValueChange={(newValue) => onChange({ ...note, content: newValue })}
-        isDisabled={checkReadOnly(note, 'content')}
         placeholder={getPlaceholder(note, 'content')}
+        isDisabled={checkReadOnly(note, 'content')}
+        isRequired
       />
     </VSplit>
   )

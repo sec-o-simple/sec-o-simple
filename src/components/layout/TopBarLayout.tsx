@@ -1,14 +1,12 @@
 import { useCSAFExport } from '@/utils/csafExport/csafExport'
-import { useSOSExport } from '@/utils/sosDraft'
 import useDocumentStore from '@/utils/useDocumentStore'
-import useValidationStore from '@/utils/useValidationStore'
+import useValidationStore from '@/utils/validation/useValidationStore'
 import {
   faAdd,
+  faCircleExclamation,
   faEye,
   faFileExport,
-  faSave,
   faShieldHalved,
-  faCircleExclamation,
 } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
@@ -27,15 +25,29 @@ import {
   Tooltip,
   useDisclosure,
 } from '@heroui/react'
+import { useTranslation } from 'react-i18next'
 import { Outlet, useNavigate } from 'react-router'
 import ConfirmButton from '../forms/ConfirmButton'
 
 function ValidationErrorList() {
+  const { t } = useTranslation()
   const { messages } = useValidationStore()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
+      <Button
+        color="danger"
+        variant="light"
+        onPress={onOpen}
+        isDisabled={messages.length === 0}
+      >
+        <FontAwesomeIcon icon={faCircleExclamation} /> {messages.length}{' '}
+        {t('validation.error', {
+          count: messages.length,
+        })}
+      </Button>
+
       <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -46,13 +58,17 @@ function ValidationErrorList() {
           {(onClose) => (
             <>
               <ModalHeader className="flex flex-col gap-1">
-                Validation Errors
+                {t('validation.errors.title')}
               </ModalHeader>
               <ModalBody>
-                <Table aria-label="Example static collection table">
+                <Table>
                   <TableHeader>
-                    <TableColumn>PATH</TableColumn>
-                    <TableColumn>MESSAGE</TableColumn>
+                    <TableColumn>
+                      {t('validation.errors.column.path')}
+                    </TableColumn>
+                    <TableColumn>
+                      {t('validation.errors.column.message')}
+                    </TableColumn>
                   </TableHeader>
                   <TableBody>
                     {messages.map((message, index) => (
@@ -67,31 +83,28 @@ function ValidationErrorList() {
                 </Table>
               </ModalBody>
               <ModalFooter>
-                <Button color="danger" variant="light" onPress={onClose}>
-                  Close
+                <Button color="primary" onPress={onClose}>
+                  {t('common.close')}
                 </Button>
               </ModalFooter>
             </>
           )}
         </ModalContent>
       </Modal>
-      <Button
-        color="danger"
-        variant="light"
-        onPress={onOpen}
-        isDisabled={messages.length === 0}
-      >
-        <FontAwesomeIcon icon={faCircleExclamation} /> {messages.length} Error
-        {messages.length !== 1 ? 's' : ''}
-      </Button>
     </>
   )
 }
 
 export default function TopBarLayout() {
+  const { t } = useTranslation()
   const navigate = useNavigate()
   const { exportCSAFDocument } = useCSAFExport()
-  const { isValid, isValidating, reset: resetValidation } = useValidationStore()
+  const {
+    isValid,
+    messages,
+    isValidating,
+    reset: resetValidation,
+  } = useValidationStore()
   const { reset } = useDocumentStore()
 
   return (
@@ -107,8 +120,8 @@ export default function TopBarLayout() {
             className="ml-4"
             fullWidth={false}
             color="secondary"
-            confirmText="Are you sure you want to create a new document? This will reset the current document."
-            confirmTitle="Create New Document"
+            confirmText={t('confirm.newDocument.body')}
+            confirmTitle={t('confirm.newDocument.title')}
             onConfirm={() => {
               reset()
               resetValidation()
@@ -116,16 +129,19 @@ export default function TopBarLayout() {
             }}
           >
             <FontAwesomeIcon icon={faAdd} />
-            New Document
+            {t('newDocument')}
           </ConfirmButton>
         </div>
+
         <div className="flex gap-3">
           <Button color="secondary" isDisabled={true}>
             <FontAwesomeIcon icon={faEye} />
-            Preview
+            {t('preview')}
           </Button>
           <Tooltip
-            content={!isValid ? 'Document is not valid' : ''}
+            content={t('export.error', {
+              errorCount: messages.length,
+            })}
             isDisabled={isValid && !isValidating}
           >
             <div>
@@ -138,7 +154,7 @@ export default function TopBarLayout() {
                 fullWidth={false}
               >
                 <FontAwesomeIcon icon={faFileExport} />
-                Export CSAF
+                {t('export.csaf')}
               </ConfirmButton>
             </div>
           </Tooltip>

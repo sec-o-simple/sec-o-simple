@@ -3,26 +3,28 @@ import ComponentList from '@/components/forms/ComponentList'
 import VSplit from '@/components/forms/VSplit'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { useListState } from '@/utils/useListState'
-import { faSearch } from '@fortawesome/free-solid-svg-icons'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Chip } from '@heroui/chip'
-import { Input } from '@/components/forms/Input'
 import { Tab, Tabs } from '@heroui/tabs'
 import General from './General'
 import Notes from './Notes'
 import Products from './Products'
 import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
 import { Alert } from '@heroui/react'
-import { useListValidation } from '@/utils/useListValidation'
-import usePageVisit from '@/utils/usePageVisit'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import usePageVisit from '@/utils/validation/usePageVisit'
 import Scores from './Scores'
 import Remediations from './Remediations'
+import { useTranslation } from 'react-i18next'
+import useValidationStore from '@/utils/validation/useValidationStore'
+import StatusIndicator from '@/components/StatusIndicator'
+import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
     generator: getDefaultVulnerability,
   })
 
+  const { t } = useTranslation()
   const hasVisitedPage = usePageVisit()
 
   useDocumentStoreUpdater({
@@ -42,7 +44,7 @@ export default function Vulnerabilities() {
 
   return (
     <WizardStep
-      title="Vulnerabilities"
+      title={t('nav.vulnerabilities')}
       progress={3}
       onBack={'/product-management'}
     >
@@ -54,20 +56,11 @@ export default function Vulnerabilities() {
             ))}
           </Alert>
         )}
-      {/* show search input */}
-      <Input
-        placeholder="Search vulnerabilities"
-        startContent={
-          <FontAwesomeIcon
-            icon={faSearch}
-            className="text-neutral-foreground"
-          />
-        }
-      />
+
       <ComponentList
         listState={vulnerabilitiesListState}
         title="title"
-        itemLabel="Vulnerability"
+        itemLabel={t('vulnerabilities.vulnerability')}
         content={(vulnerability, index) => (
           <VulnerabilityForm
             vulnerability={vulnerability}
@@ -76,11 +69,26 @@ export default function Vulnerabilities() {
             onChange={vulnerabilitiesListState.updateDataEntry}
           />
         )}
-        startContent={(vulnerability) => (
-          <CVEChip vulnerability={vulnerability} />
-        )}
+        startContent={VulnerabilityListStartContent}
       />
     </WizardStep>
+  )
+}
+
+function VulnerabilityListStartContent({
+  item,
+  index,
+}: {
+  item: TVulnerability
+  index: number
+}) {
+  const { hasErrors } = usePrefixValidation(`/vulnerabilities/${index}`)
+
+  return (
+    <>
+      <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
+      <CVEChip vulnerability={item} />
+    </>
   )
 }
 
@@ -91,6 +99,38 @@ function CVEChip({ vulnerability }: { vulnerability: TVulnerability }) {
         {vulnerability.cve}
       </Chip>
     )
+  )
+}
+
+function TabTitle({
+  title,
+  csafPrefix = '',
+  csafPaths = [],
+}: {
+  title: string
+  csafPrefix?: string
+  csafPaths?: string[]
+}) {
+  const messages = useValidationStore((state) => state.messages)
+  const errorPaths = messages
+    .filter((m) => m.severity === 'error')
+    .map((e) => e.path)
+
+  let hasError = false
+
+  if (csafPrefix && csafPrefix.length) {
+    hasError = errorPaths.some((path) => path.startsWith(csafPrefix))
+  }
+
+  if (!hasError && csafPaths.length > 0) {
+    hasError = csafPaths.some((path) => errorPaths.includes(path))
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <StatusIndicator hasErrors={hasError} hasVisited={true} />
+      {title}
+    </div>
   )
 }
 
@@ -105,6 +145,7 @@ function VulnerabilityForm({
   isTouched?: boolean
   onChange: (vulnerability: TVulnerability) => void
 }) {
+  const { t } = useTranslation()
   const tabProps = {
     vulnerability,
     vulnerabilityIndex,
@@ -112,22 +153,63 @@ function VulnerabilityForm({
     onChange,
   }
 
+  const prefix = `/vulnerabilities/${vulnerabilityIndex}`
+
   return (
     <VSplit>
       <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
-        <Tab title="General">
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.general')}
+              csafPaths={[
+                `${prefix}/cve`,
+                `${prefix}/cwe/name`,
+                `${prefix}/title`,
+              ]}
+            />
+          }
+        >
           <General {...tabProps} />
         </Tab>
-        <Tab title="Notes">
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.notes')}
+              csafPrefix={`${prefix}/notes`}
+            />
+          }
+        >
           <Notes {...tabProps} />
         </Tab>
-        <Tab title="Products">
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.products')}
+              csafPrefix={`${prefix}/products`}
+            />
+          }
+        >
           <Products {...tabProps} />
         </Tab>
-        <Tab title="Remediations">
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.remediations')}
+              csafPrefix={`${prefix}/remediations`}
+            />
+          }
+        >
           <Remediations {...tabProps} />
         </Tab>
-        <Tab title="Scores">
+        <Tab
+          title={
+            <TabTitle
+              title={t('vulnerabilities.scores')}
+              csafPrefix={`${prefix}/scores`}
+            />
+          }
+        >
           <Scores {...tabProps} />
         </Tab>
       </Tabs>

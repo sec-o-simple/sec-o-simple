@@ -1,4 +1,9 @@
 {
+  "productDatabase": {
+    "enabled": false,
+    "apiUrl": "http://127.0.0.1:9999",
+    "url": "http://127.0.0.1:3000"
+  },
   "template": {
     "document-information.title": "Test Document",
     "document-information.title.readonly": true,
@@ -18,6 +23,16 @@
         "category": "description",
         "title": "Document Description",
         "content.placeholder": "Enter your description here"
+      }
+    ],
+
+    "document-information.notes_templates": [
+      {
+        "readonly": true,
+        "id": "legaldisclaimer",
+        "category": "legal_disclaimer",
+        "title": "Legal Disclaimer",
+        "content": "This is an example legal disclaimer"
       }
     ],
 
@@ -84,6 +99,16 @@
           }
         ],
         "products": []
+      }
+    ],
+
+    "vulnerabilities.notes_templates": [
+      {
+        "readonly": true,
+        "id": "id",
+        "category": "description",
+        "title": "Vulnerability Description",
+        "content": "This is a description of the vulnerability."
       }
     ]
   }

@@ -12,8 +12,10 @@ import { PTBEditForm } from './components/PTBEditForm'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { Modal, useDisclosure } from '@heroui/modal'
 import { faAdd, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { useTranslation } from 'react-i18next'
 
 export default function VendorList() {
+  const { t } = useTranslation()
   const { rootBranch, updatePTB, deletePTB, getPTBsByCategory } =
     useProductTreeBranch()
 
@@ -56,7 +58,7 @@ export default function VendorList() {
       </Modal>
       <ComponentList
         listState={vendorListState}
-        itemLabel="Vendor"
+        itemLabel={t('products.vendor.label')}
         title="name"
         titleProps={{ className: 'font-bold' }}
         endContent={(item) => (

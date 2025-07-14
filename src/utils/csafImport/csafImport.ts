@@ -1,32 +1,38 @@
 import {
+  TAcknowledgment,
+  TAcknowledgmentName,
+} from '@/routes/document-information/types/tDocumentAcknowledgments'
+import {
   TDocumentInformation,
   getDefaultDocumentInformation,
 } from '@/routes/document-information/types/tDocumentInformation'
-import { SOSDraft, useSOSImport } from '../sosDraft'
-import { TSOSDocumentType } from '../useDocumentStore'
-import { TCSAFDocument } from '../csafExport/csafExport'
 import {
   TDocumentPublisher,
   TPublisherCategory,
 } from '@/routes/document-information/types/tDocumentPublisher'
-import { DeepPartial } from '../deepPartial'
 import {
   TDocumentReference,
   getDefaultDocumentReference,
 } from '@/routes/document-information/types/tDocumentReference'
-import { parseNote } from './parseNote'
-import { TNote } from '@/routes/shared/NotesList'
-import { TParsedNote } from '../csafExport/parseNote'
-import { IdGenerator } from './idGenerator'
+import { getDefaultRevisionHistoryEntry } from '@/routes/document-information/types/tRevisionHistoryEntry'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
-import { parseProductTree } from './parseProductTree'
-import { parseVulnerabilities } from './parseVulnerabilities'
 import {
   CSAFRelationship,
   TRelationship,
 } from '@/routes/products/types/tRelationship'
+import { TNote } from '@/routes/shared/NotesList'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
+import { uid } from 'uid'
+import { TCSAFDocument } from '../csafExport/csafExport'
+import { TParsedNote } from '../csafExport/parseNote'
+import { DeepPartial } from '../deepPartial'
+import { SOSDraft, useSOSImport } from '../sosDraft'
+import { TSOSDocumentType } from '../useDocumentStore'
+import { IdGenerator } from './idGenerator'
+import { parseNote } from './parseNote'
+import { parseProductTree } from './parseProductTree'
 import { parseRelationships } from './parseRelationships'
+import { parseVulnerabilities } from './parseVulnerabilities'
 
 export const supportedCSAFVersions = ['2.0']
 
@@ -38,11 +44,23 @@ export function parseCSAFDocument(
   const sosDocumentType: TSOSDocumentType = 'HardwareSoftware'
 
   const defaultDocumentInformation = getDefaultDocumentInformation()
+  const defaultRevisionHistoryEntry = getDefaultRevisionHistoryEntry()
+
   const csafDoc = csafDocument.document
   const documentInformation: TDocumentInformation = {
     id: csafDoc?.tracking?.id || defaultDocumentInformation.id,
     language: csafDoc?.lang ?? defaultDocumentInformation.language,
+    status:
+      (csafDoc?.tracking?.status as TDocumentInformation['status']) ??
+      defaultDocumentInformation.status,
     title: csafDoc?.title ?? defaultDocumentInformation.title,
+    revisionHistory:
+      csafDoc?.tracking?.revision_history?.map((revision) => ({
+        id: uid(),
+        date: revision?.date ?? defaultRevisionHistoryEntry.date,
+        number: revision?.number ?? defaultRevisionHistoryEntry.number,
+        summary: revision?.summary ?? defaultRevisionHistoryEntry.summary,
+      })) ?? defaultDocumentInformation.revisionHistory,
     publisher: {
       name:
         csafDoc?.publisher?.name ?? defaultDocumentInformation.publisher.name,
@@ -69,8 +87,26 @@ export function parseCSAFDocument(
           id: defaultReference.id,
           summary: reference?.summary ?? defaultReference.summary,
           url: reference?.url ?? defaultReference.url,
+          category:
+            (reference?.category as TDocumentReference['category']) ??
+            defaultReference.category,
         } as TDocumentReference
       }) ?? ([] as TDocumentReference[]),
+    acknowledgments:
+      csafDoc?.acknowledgments?.map((ack) => {
+        return {
+          id: uid(),
+          organization: ack?.organization,
+          summary: ack?.summary ?? '',
+          names:
+            ack?.names?.map((name) => {
+              return {
+                id: uid(),
+                name: name,
+              } as TAcknowledgmentName
+            }) ?? ([] as TAcknowledgmentName[]),
+        } as TAcknowledgment
+      }) ?? ([] as TAcknowledgment[]),
   }
 
   const products: TProductTreeBranch[] = parseProductTree(
