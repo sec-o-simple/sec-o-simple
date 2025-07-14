@@ -60,12 +60,12 @@ export default function ProductManagement() {
           <Tab key="Vendors" title={t('products.vendors')}>
             <VendorList />
           </Tab>
-          {['Software', 'CSAFImport'].includes(sosDocumentType) && (
+          {['Software', 'Import'].includes(sosDocumentType) && (
             <Tab key="Software" title={t('products.software')}>
               <ProductList productType="Software" />
             </Tab>
           )}
-          {['Hardware', 'CSAFImport'].includes(sosDocumentType) && (
+          {['Hardware', 'Import'].includes(sosDocumentType) && (
             <Tab key="Hardware" title={t('products.hardware')}>
               <ProductList productType="Hardware" />
             </Tab>
