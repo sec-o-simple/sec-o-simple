@@ -3,9 +3,9 @@ import {
   getDefaultProductTreeBranch,
 } from '@/routes/products/types/tProductTreeBranch'
 import { TCSAFDocument } from '../csafExport/csafExport'
+import { TParsedProductTreeBranch } from '../csafExport/parseProductTreeBranches'
 import { DeepPartial } from '../deepPartial'
 import { IdGenerator } from './idGenerator'
-import { TParsedProductTreeBranch } from '../csafExport/parseProductTreeBranches'
 
 function convertCSAFProductTreeBranches(
   csafPTBs: TParsedProductTreeBranch[],
@@ -23,7 +23,8 @@ function convertCSAFProductTreeBranches(
           csafPTB.branches ?? [],
           idGenerator,
         ),
-        type: defaultPTB.type,
+        // We don't have a type for imported Files, so we set it to undefined
+        type: undefined,
       } as TProductTreeBranch
     }) || []
   )

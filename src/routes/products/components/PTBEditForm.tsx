@@ -1,22 +1,22 @@
-import {
-  TProductTreeBranch,
-  TProductTreeBranchProductType,
-  productTreeBranchProductTypes,
-} from '../types/tProductTreeBranch'
-import { Button } from '@heroui/button'
 import { Input, Textarea } from '@/components/forms/Input'
-import { useState } from 'react'
+import Select from '@/components/forms/Select'
+import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import useDocumentStore from '@/utils/useDocumentStore'
+import { Button } from '@heroui/button'
 import {
   ModalBody,
   ModalContent,
   ModalFooter,
   ModalHeader,
 } from '@heroui/modal'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import Select from '@/components/forms/Select'
 import { SelectItem } from '@heroui/select'
-import useDocumentStore from '@/utils/useDocumentStore'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import {
+  TProductTreeBranch,
+  TProductTreeBranchProductType,
+  productTreeBranchProductTypes,
+} from '../types/tProductTreeBranch'
 
 export type PTBEditFormProps = {
   ptb?: TProductTreeBranch
@@ -27,7 +27,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
   const { t } = useTranslation()
   const [name, setName] = useState(ptb?.name ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
-  const [type, setType] = useState(ptb?.type ?? 'Software')
+  const [type, setType] = useState(ptb?.type)
   const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
   return (

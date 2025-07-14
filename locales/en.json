@@ -248,6 +248,7 @@
       "empty": "You haven't created any {{ type }} product yet.\nYou can add one by creating a vendor and adding a product to it.",
       "software": "Software",
       "hardware": "Hardware",
+      "unknownType": "Unknown Type",
       "vendor": {
         "label": "Vendor"
       },
