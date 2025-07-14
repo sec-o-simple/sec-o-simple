@@ -47,6 +47,7 @@ export default function Vulnerabilities() {
       title={t('nav.vulnerabilities')}
       progress={3}
       onBack={'/product-management'}
+      onContinue={'/tracking'}
     >
       {(hasVisitedPage || listValidation.isTouched) &&
         listValidation.hasErrors && (

@@ -43,7 +43,8 @@
         "publisher": "Publisher",
         "references": "References",
         "acknowledgments": "Acknowledgements"
-      }
+      },
+      "tracking": "History"
     },
     "documentSelection": {
       "create": "Create document",
@@ -62,7 +63,7 @@
       "general": {
         "title": "Document Title",
         "id": "Document ID",
-        "state": "Status",
+        "state": "Document Status",
         "language": "Language",
         "languages": {
           "de": "German",
@@ -74,6 +75,7 @@
           "interim": "Interim"
         },
         "revisionHistory": {
+          "history": "Revision History",
           "label": "Revision",
           "version": "Version",
           "date": "Date",
