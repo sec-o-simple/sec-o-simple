@@ -1,6 +1,8 @@
 import pck from '@/../package.json'
 import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
+import _ from 'lodash'
+import { JSONObject } from '../csafImport/csafImport'
 import { download } from '../download'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
 import generateRelationships from './generateRelationships'
@@ -158,7 +160,14 @@ export function createCSAFDocument(
     ),
   }
 
-  console.log('Creating CSAF document with ID:', documentStore.csafDocument)
+  // Merge with imported CSAF document if available
+  if (useImportedCSAFDoc) {
+    const document = _.merge(
+      documentStore.csafDocument,
+      csafDocument,
+    ) as JSONObject
+    return document || {}
+  }
 
   return csafDocument
 }
