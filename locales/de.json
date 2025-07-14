@@ -48,6 +48,14 @@
       },
       "tracking": "Historie"
     },
+    "hiddenFields": {
+      "title": "Versteckte Felder",
+      "description": "Die folgenden Felder sind in Sec-O-Simple ausgeblendet, aber im importierten Dokument vorhanden.",
+      "column": {
+        "path": "Pfad",
+        "value": "Wert"
+      }
+    },
     "documentSelection": {
       "create": "Dokument erstellen",
       "selectType": "Dokumenttyp auswählen",

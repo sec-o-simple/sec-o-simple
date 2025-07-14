@@ -69,7 +69,7 @@ export function parseVulnerabilities(
 
           return {
             id: defaultScore.id,
-            productIds: score.products.map((id) => idGenerator.getId(id)),
+            productIds: score.products?.map((id) => idGenerator.getId(id)),
             cvssVersion: cvssInfos?.version ?? defaultScore.cvssVersion,
             vectorString: cvssInfos?.vectorString ?? defaultScore.vectorString,
           } as TVulnerabilityScore

@@ -6,6 +6,8 @@ import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { TRelationship } from '@/routes/products/types/tRelationship'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { create } from 'zustand'
+import { TCSAFDocument } from './csafExport/csafExport'
+import { DeepPartial } from './deepPartial'
 
 export const sosDocumentTypes = [
   // Used for importing CSAF documents
@@ -29,6 +31,9 @@ export type TDocumentStore = {
   products: TProductTreeBranch[]
   relationships: TRelationship[]
   vulnerabilities: TVulnerability[]
+
+  importedCSAFDocument: DeepPartial<TCSAFDocument>
+  setImportedCSAFDocument: (update: DeepPartial<TCSAFDocument>) => void
 
   updateDocumentInformation: (update: TDocumentInformation) => void
   updateProducts: (update: TProductTreeBranch[]) => void
@@ -57,6 +62,12 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
   vulnerabilities: [],
   updateVulnerabilities: (update: TVulnerability[]) =>
     set({ vulnerabilities: update }),
+
+  importedCSAFDocument: {},
+  setImportedCSAFDocument: (update: DeepPartial<TCSAFDocument>) =>
+    set((state) => ({
+      importedCSAFDocument: { ...state.importedCSAFDocument, ...update },
+    })),
 
   reset: () =>
     set({
