@@ -21,9 +21,11 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
     productList: TVulnerabilityProduct[],
     status: string,
   ) => {
-    const products = productList.filter((p) => p.status === status)
+    const products = productList.filter(
+      (p) => p.status === status && p.versions.length > 0,
+    )
     return products.length > 0
-      ? products.map((p) => p.versions.map((v) => pidGenerator.getPid(v)))
+      ? products.flatMap((p) => p.versions.map((v) => pidGenerator.getPid(v)))
       : undefined
   }
 
@@ -106,10 +108,9 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         Object.values(documentStore.products),
         pidGenerator,
       ),
-      relationships: generateRelationships(
-        documentStore.relationships,
-        pidGenerator,
-      ),
+      relationships: documentStore.relationships.length
+        ? generateRelationships(documentStore.relationships, pidGenerator)
+        : undefined,
     },
     vulnerabilities: Object.values(documentStore.vulnerabilities).map(
       (vulnerability) => {
