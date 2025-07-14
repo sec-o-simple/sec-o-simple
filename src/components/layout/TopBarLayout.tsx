@@ -156,7 +156,7 @@ export default function TopBarLayout() {
               <Button
                 color="primary"
                 onPress={exportCSAFDocument}
-                isDisabled={!isValid || isValidating}
+                // isDisabled={!isValid || isValidating}
               >
                 <FontAwesomeIcon icon={faFileExport} />
                 {t('export.csaf')}

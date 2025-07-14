@@ -127,7 +127,19 @@
         "cveNotesFetchedDescription": "{{count}} Notizen erfolgreich geladen und hinzugefügt"
       },
       "notes": "Notizen",
-      "products": "Produkte",
+      "products": {
+        "title": "Produkte",
+        "status": {
+          "first_affected": "Erste betroffene Version",
+          "known_affected": "Bekannte betroffene Version",
+          "known_not_affected": "Bekannte nicht betroffene Version",
+          "last_affected": "Letzte betroffene Version",
+          "first_fixed": "Erste reparierte Version",
+          "fixed": "Reparierte Version",
+          "recommended": "Empfohlene Version",
+          "under_investigation": "In Untersuchung"
+        }
+      },
       "scores": "Bewertungen",
       "score": {
         "title": "Bewertung",

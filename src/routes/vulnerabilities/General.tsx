@@ -112,6 +112,19 @@ export default function General({
 
   return (
     <VSplit>
+      <Input
+        label={t('vulnerabilities.general.title')}
+        csafPath={`/vulnerabilities/${vulnerabilityIndex}/title`}
+        isTouched={isTouched}
+        isRequired
+        value={vulnerability.title}
+        onValueChange={(newValue) =>
+          onChange({ ...vulnerability, title: newValue })
+        }
+        isDisabled={checkReadOnly(vulnerability, 'title')}
+        placeholder={getPlaceholder(vulnerability, 'title')}
+      />
+
       <HSplit>
         <HSplit className="w-full items-end gap-2">
           <Input
@@ -176,18 +189,6 @@ export default function General({
           ))}
         </Autocomplete>
       </HSplit>
-      <Input
-        label={t('vulnerabilities.general.title')}
-        csafPath={`/vulnerabilities/${vulnerabilityIndex}/title`}
-        isTouched={isTouched}
-        isRequired
-        value={vulnerability.title}
-        onValueChange={(newValue) =>
-          onChange({ ...vulnerability, title: newValue })
-        }
-        isDisabled={checkReadOnly(vulnerability, 'title')}
-        placeholder={getPlaceholder(vulnerability, 'title')}
-      />
     </VSplit>
   )
 }
