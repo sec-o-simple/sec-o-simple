@@ -32,7 +32,7 @@ export default function General({
   const cwes = useMemo<TCwe[]>(() => weaknesses, [])
   const config = useConfigStore((state) => state.config)
   const docLanguage = useDocumentStore((state) =>
-    state.documentInformation.language.toLowerCase(),
+    state.documentInformation.lang.toLowerCase(),
   )
   const [cveError, setCVEError] = useState(false)
 
