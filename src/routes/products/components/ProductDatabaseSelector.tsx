@@ -1,26 +1,26 @@
 import { Input } from '@/components/forms/Input'
+import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import { useConfigStore } from '@/utils/useConfigStore'
+import {
+  Vendor as DatabaseVendor,
+  Product,
+  useDatabaseClient,
+} from '@/utils/useDatabaseClient'
+import useDocumentStore from '@/utils/useDocumentStore'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
 import {
   Modal,
-  ModalContent,
-  ModalHeader,
   ModalBody,
+  ModalContent,
   ModalFooter,
+  ModalHeader,
 } from '@heroui/modal'
 import { Accordion, AccordionItem, Alert, Checkbox } from '@heroui/react'
 import { useEffect, useState } from 'react'
-import { Link } from 'react-router'
-import {
-  useDatabaseClient,
-  Product,
-  Vendor as DatabaseVendor,
-} from '@/utils/useDatabaseClient'
-import { useConfigStore } from '@/utils/useConfigStore'
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { useTranslation } from 'react-i18next'
-import useDocumentStore from '@/utils/useDocumentStore'
+import { Link } from 'react-router'
 
 interface Props {
   isOpen: boolean
@@ -135,7 +135,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                   id: version.id,
                   category: 'product_version',
                   name: version.name,
-                  description: version.description,
+                  description: '',
                   subBranches: [],
                 })),
               }

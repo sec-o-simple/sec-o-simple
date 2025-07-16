@@ -33,7 +33,7 @@ export default function Product() {
   }
 
   return (
-    <WizardStep noContentWrapper={true}>
+    <WizardStep progress={2} noContentWrapper={true}>
       <SubMenuHeader
         title={
           product.name
@@ -75,7 +75,6 @@ export default function Product() {
       {product.subBranches.map((version) => (
         <InfoCard
           title={getPTBName(version) ?? t('untitled.product_version')}
-          linkTo={`/product-management/version/${version.id}`}
           key={version.id}
           variant="boxed"
           onEdit={() => {
@@ -83,6 +82,11 @@ export default function Product() {
             onOpen()
           }}
           onDelete={() => deletePTB(version.id)}
+          linkTo={
+            sosDocumentType !== 'Software'
+              ? `/product-management/version/${version.id}`
+              : undefined
+          }
           endContent={
             sosDocumentType !== 'Software' ? (
               <IconButton
@@ -96,9 +100,7 @@ export default function Product() {
               />
             ) : undefined
           }
-        >
-          {version.description && <div>{version.description}</div>}
-        </InfoCard>
+        />
       ))}
     </WizardStep>
   )

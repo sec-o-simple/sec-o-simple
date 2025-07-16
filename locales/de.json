@@ -185,6 +185,7 @@
       "title": "Notiz Titel",
       "note": "Notiz",
       "notes": "Notizen",
+      "productDescription": "Produktbeschreibung für {{productName}}",
       "content": "Notiz Inhalt",
       "category": "Notiz Kategorie",
       "category_plural": "Kategorien",

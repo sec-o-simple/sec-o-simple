@@ -48,13 +48,17 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
               isDisabled={!ptb || checkReadOnly(ptb, 'name')}
               placeholder={ptb ? getPlaceholder(ptb, 'name') : undefined}
             />
-            <Textarea
-              label={t(`${ptb?.category}.description`)}
-              value={description}
-              onValueChange={setDescription}
-              isDisabled={!ptb || checkReadOnly(ptb, 'description')}
-              placeholder={ptb ? getPlaceholder(ptb, 'description') : undefined}
-            />
+            {ptb?.category === 'product_name' && (
+              <Textarea
+                label={t(`${ptb?.category}.description`)}
+                value={description}
+                onValueChange={setDescription}
+                isDisabled={!ptb || checkReadOnly(ptb, 'description')}
+                placeholder={
+                  ptb ? getPlaceholder(ptb, 'description') : undefined
+                }
+              />
+            )}
             {ptb?.category === 'product_name' && (
               <Select
                 label={t(`${ptb?.category}.type`)}

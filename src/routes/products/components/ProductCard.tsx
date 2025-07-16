@@ -26,6 +26,7 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
       title={
         getPTBName(product) ?? t(`untitled.${product.category?.toLowerCase()}`)
       }
+      description={product.description}
       linkTo={`product/${product.id}`}
       startContent={
         <Chip color="primary" variant="flat" radius="md" size="lg">
