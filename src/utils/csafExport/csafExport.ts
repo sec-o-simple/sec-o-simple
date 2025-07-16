@@ -92,6 +92,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
                     ? ack.names?.map((name) => name.name)
                     : undefined,
                 summary: ack.summary || undefined,
+                urls: ack.url ? [ack.url] : undefined,
               }
 
               Object.keys(acknowledgment).forEach((key) => {
