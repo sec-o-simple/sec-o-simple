@@ -105,17 +105,6 @@ function AcknowledgmentForm({
         </Alert>
       )}
 
-      <Textarea
-        label={t('document.acknowledgments.summary')}
-        csafPath={`/document/acknowledgments/${acknowledgmentIndex}/summary`}
-        value={acknowledgment.summary}
-        onValueChange={(newValue) =>
-          onChange({ ...acknowledgment, summary: newValue })
-        }
-        autoFocus={true}
-        isDisabled={checkReadOnly(acknowledgment, 'summary')}
-        placeholder={getPlaceholder(acknowledgment, 'summary')}
-      />
       <Input
         label={t('document.acknowledgments.organization')}
         csafPath={`/document/acknowledgments/${acknowledgmentIndex}/organization`}
@@ -127,6 +116,18 @@ function AcknowledgmentForm({
         placeholder={getPlaceholder(acknowledgment, 'organization')}
       />
 
+      <Textarea
+        label={t('document.acknowledgments.summary')}
+        csafPath={`/document/acknowledgments/${acknowledgmentIndex}/summary`}
+        value={acknowledgment.summary}
+        onValueChange={(newValue) =>
+          onChange({ ...acknowledgment, summary: newValue })
+        }
+        autoFocus={true}
+        isDisabled={checkReadOnly(acknowledgment, 'summary')}
+        placeholder={getPlaceholder(acknowledgment, 'summary')}
+      />
+
       <AcknowledgmentNamesTable
         acknowledgment={acknowledgment}
         acknowledgmentIndex={acknowledgmentIndex}
@@ -136,6 +137,18 @@ function AcknowledgmentForm({
             names: updatedAcknowledgment.names,
           })
         }
+      />
+
+      <Input
+        label={t('document.acknowledgments.url')}
+        csafPath={`/document/acknowledgments/${acknowledgmentIndex}/urls/0`}
+        type="url"
+        value={acknowledgment.url}
+        onValueChange={(newValue) =>
+          onChange({ ...acknowledgment, url: newValue })
+        }
+        isDisabled={checkReadOnly(acknowledgment, 'url')}
+        placeholder={getPlaceholder(acknowledgment, 'url')}
       />
     </VSplit>
   )
