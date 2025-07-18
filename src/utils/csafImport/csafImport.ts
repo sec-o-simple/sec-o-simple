@@ -168,6 +168,7 @@ export function parseCSAFDocument(
           id: uid(),
           organization: ack?.organization,
           summary: ack?.summary ?? '',
+          url: ack?.urls?.[0] ?? '',
           names:
             ack?.names?.map((name) => {
               return {

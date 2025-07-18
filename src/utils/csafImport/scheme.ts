@@ -61,6 +61,7 @@ export default {
         organization: 'string',
         summary: 'string',
         names: ['string'],
+        urls: ['string'],
       },
     ],
   },

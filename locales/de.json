@@ -120,6 +120,7 @@
         "name": "Name",
         "names": "Namen",
         "organization": "Organisation",
+        "url": "URL",
         "empty": "Keine Danksagungen hinzugefügt"
       }
     },

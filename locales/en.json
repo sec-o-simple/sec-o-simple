@@ -120,6 +120,7 @@
         "name": "Name",
         "names": "Acknowledged Names",
         "organization": "Organization",
+        "url": "URL",
         "empty": "No acknowledgements added yet"
       }
     },
