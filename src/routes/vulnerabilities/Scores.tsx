@@ -55,6 +55,12 @@ export default function Scores({
     (p) => p.status === 'known_affected' || p.status === 'under_investigation',
   )
 
+  const getV3Index = (score: TVulnerabilityScore) => {
+    return scoresListState.data
+      .filter((s) => s.cvssVersion === '3.0' || s.cvssVersion === '3.1')
+      .indexOf(score)
+  }
+
   return (
     <>
       {listValidation.hasErrors && (
@@ -75,10 +81,12 @@ export default function Scores({
             csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${index}`}
           />
         )}
-        content={(score, index) => (
+        content={(score) => (
           <ScoreForm
             score={score}
-            csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${index}`}
+            csafPath={`/vulnerabilities/${vulnerabilityIndex}/scores/${getV3Index(
+              score,
+            )}`}
             isTouched={isTouched}
             products={ptbs.filter(
               (p) =>
@@ -216,17 +224,19 @@ function ScoreForm({
         description={t('vulnerabilities.score.baseSeverityDescription')}
         isReadOnly={true}
       />
-      <ProductsTagList
-        isRequired
-        error={
-          fieldValidation.hasErrors
-            ? fieldValidation.errorMessages[0].message
-            : ''
-        }
-        selected={score.productIds}
-        products={ptbs}
-        onChange={(productIds) => onChange({ ...score, productIds })}
-      />
+      {score.cvssVersion !== '4.0' && (
+        <ProductsTagList
+          isRequired
+          error={
+            fieldValidation.hasErrors
+              ? fieldValidation.errorMessages[0].message
+              : ''
+          }
+          selected={score.productIds}
+          products={ptbs}
+          onChange={(productIds) => onChange({ ...score, productIds })}
+        />
+      )}
     </VSplit>
   )
 }

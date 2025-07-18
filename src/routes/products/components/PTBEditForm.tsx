@@ -1,7 +1,6 @@
 import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import useDocumentStore from '@/utils/useDocumentStore'
 import { Button } from '@heroui/button'
 import {
   ModalBody,
@@ -15,8 +14,8 @@ import { useTranslation } from 'react-i18next'
 import {
   TProductTreeBranch,
   TProductTreeBranchProductType,
-  productTreeBranchProductTypes,
 } from '../types/tProductTreeBranch'
+import useDocumentType from '@/utils/useDocumentType'
 
 export type PTBEditFormProps = {
   ptb?: TProductTreeBranch
@@ -28,7 +27,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
   const [name, setName] = useState(ptb?.name ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
   const [type, setType] = useState(ptb?.type)
-  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
+  const { hasHardware, hasSoftware } = useDocumentType()
 
   return (
     <ModalContent>
@@ -72,11 +71,12 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
                 isDisabled={!ptb || checkReadOnly(ptb, 'type')}
                 placeholder={ptb ? getPlaceholder(ptb, 'type') : undefined}
               >
-                {productTreeBranchProductTypes
-                  .filter((type) => [type, 'Import'].includes(sosDocumentType))
-                  .map((type) => (
-                    <SelectItem key={type}>{type}</SelectItem>
-                  ))}
+                {hasSoftware ? (
+                  <SelectItem key="Software">Software</SelectItem>
+                ) : null}
+                {hasHardware ? (
+                  <SelectItem key="Hardware">Hardware</SelectItem>
+                ) : null}
               </Select>
             )}
           </ModalBody>

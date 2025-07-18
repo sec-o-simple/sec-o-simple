@@ -16,16 +16,16 @@ export function parseNotes(documentStore: TDocumentStore): TParsedNote[] {
     documentStore.documentInformation
   const notes = documentInformation.notes.map(parseNote)
 
-  const productNotes = extractAllProducts(
-    Object.values(documentStore.products),
-  )?.map((product) => ({
-    category: 'description',
-    text: product.description || '',
-    title:
-      documentInformation.lang === 'de'
-        ? `Produktbeschreibung für ${product.name}`
-        : `Product description for ${product.name}`,
-  }))
+  const productNotes = extractAllProducts(Object.values(documentStore.products))
+    ?.filter((p) => p.description.length)
+    .map((product) => ({
+      category: 'description',
+      text: product.description || '',
+      title:
+        documentInformation.lang === 'de'
+          ? `Produktbeschreibung für ${product.name}`
+          : `Product description for ${product.name}`,
+    }))
 
   return [...notes, ...productNotes] as TParsedNote[]
 }

@@ -10,7 +10,7 @@ import { retrieveLatestVersion } from './latestVersion'
 import { parseNote } from './parseNote'
 import { parseNotes } from './parseNotes'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
-import parseScore from './parseScore'
+import parseScores from './parseScores'
 import { PidGenerator } from './pidGenerator'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
@@ -139,29 +139,39 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           return obj.length > 0 ? Object.fromEntries(obj) : {}
         }
 
+        const notes = vulnerability.notes.map(parseNote)
+        const remediations = vulnerability.remediations?.map((remediation) => ({
+          category: remediation.category,
+          date: remediation.date || undefined,
+          details: remediation.details,
+          url: remediation.url || undefined,
+          product_ids: remediation.productIds.map((id) =>
+            pidGenerator.getPid(id),
+          ),
+        }))
+        const cvss4References =
+          vulnerability.scores
+            ?.filter((score) => score.cvssVersion === '4.0')
+            .map((score) => ({
+              url: `https://www.first.org/cvss/calculator/4-0#${score.vectorString}`,
+              summary: `CVSS v4.0 Score`,
+              category: 'external',
+            })) || []
+
         return {
           cve: vulnerability.cve || undefined,
           title: vulnerability.title,
+          references: cvss4References.length > 0 ? cvss4References : undefined,
           cwe: vulnerability.cwe
             ? {
                 id: vulnerability.cwe.id,
                 name: vulnerability.cwe.name,
               }
             : undefined,
-          notes: vulnerability.notes.map(parseNote),
+          notes,
           product_status: productStatus(),
-          remediations: vulnerability.remediations?.map((remediation) => ({
-            category: remediation.category,
-            date: remediation.date || undefined,
-            details: remediation.details,
-            url: remediation.url || undefined,
-            product_ids: remediation.productIds.map((id) =>
-              pidGenerator.getPid(id),
-            ),
-          })),
-          scores: vulnerability.scores.map((score) =>
-            parseScore(score, pidGenerator),
-          ),
+          remediations: remediations?.length > 0 ? remediations : undefined,
+          scores: parseScores(vulnerability.scores, pidGenerator),
         }
       },
     ),

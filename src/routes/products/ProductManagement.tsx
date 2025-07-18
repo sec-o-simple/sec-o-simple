@@ -1,6 +1,5 @@
 import WizardStep from '@/components/WizardStep'
 import { useConfigStore } from '@/utils/useConfigStore'
-import useDocumentStore from '@/utils/useDocumentStore'
 import usePageVisit from '@/utils/validation/usePageVisit'
 import { Button } from '@heroui/button'
 import { Tab, Tabs } from '@heroui/tabs'
@@ -9,13 +8,14 @@ import { useTranslation } from 'react-i18next'
 import ProductDatabaseSelector from './components/ProductDatabaseSelector'
 import ProductList from './ProductList'
 import VendorList from './VendorList'
+import useDocumentType from '@/utils/useDocumentType'
 
 export default function ProductManagement() {
   usePageVisit()
   const { t } = useTranslation()
 
   const [selectedTab, setSelectedTab] = useState<string>('Vendors')
-  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
+  const { hasHardware, hasSoftware } = useDocumentType()
   const [modalOpen, setModalOpen] = useState(false)
   const config = useConfigStore((state) => state.config)
 
@@ -60,12 +60,12 @@ export default function ProductManagement() {
           <Tab key="Vendors" title={t('products.vendors')}>
             <VendorList />
           </Tab>
-          {['Software', 'Import'].includes(sosDocumentType) && (
+          {hasSoftware && (
             <Tab key="Software" title={t('products.software')}>
               <ProductList productType="Software" />
             </Tab>
           )}
-          {['Hardware', 'Import'].includes(sosDocumentType) && (
+          {hasHardware && (
             <Tab key="Hardware" title={t('products.hardware')}>
               <ProductList productType="Hardware" />
             </Tab>
