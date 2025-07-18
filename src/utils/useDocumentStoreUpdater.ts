@@ -1,8 +1,8 @@
 import { useEffect } from 'react'
-import useDocumentStore, { TDocumentStore } from './useDocumentStore'
 import { useConfigStore } from './useConfigStore'
-import useValidationStore from './validation/useValidationStore'
+import useDocumentStore, { TDocumentStore } from './useDocumentStore'
 import { validateDocument } from './validation/documentValidator'
+import useValidationStore from './validation/useValidationStore'
 
 type TDocumentStoreFunction<T> = {
   [K in keyof TDocumentStore]: TDocumentStore[K] extends (update: T) => void

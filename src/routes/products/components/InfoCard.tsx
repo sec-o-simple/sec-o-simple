@@ -2,6 +2,7 @@ import HSplit from '@/components/forms/HSplit'
 import IconButton from '@/components/forms/IconButton'
 import VSplit from '@/components/forms/VSplit'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
+import { cn } from '@heroui/theme'
 import { HTMLProps, PropsWithChildren, ReactNode } from 'react'
 import { Link } from 'react-router'
 
@@ -9,6 +10,7 @@ export type InfoCardProps = HTMLProps<HTMLDivElement> &
   PropsWithChildren<{
     variant?: 'boxed' | 'plain'
     title: string
+    description?: string
     startContent?: ReactNode
     endContent?: ReactNode
     linkTo?: string
@@ -22,6 +24,7 @@ export default function InfoCard(props: InfoCardProps) {
   } else {
     const {
       title,
+      description,
       startContent,
       endContent,
       linkTo,
@@ -35,9 +38,15 @@ export default function InfoCard(props: InfoCardProps) {
         <HSplit className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             {startContent}
-            <div className="font-bold">
+            <div
+              className={cn('font-bold', {
+                'hover:underline': linkTo,
+              })}
+            >
               {linkTo ? <Link to={linkTo}>{title}</Link> : title}
             </div>
+
+            <div className="text-neutral-foreground">{description}</div>
           </div>
           <div>
             {endContent}

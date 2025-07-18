@@ -186,6 +186,7 @@
       "title": "Note Title",
       "note": "Note",
       "notes": "Notes",
+      "productDescription": "Product Description for {{productName}}",
       "content": "Note Content",
       "category": "Note Category",
       "category_plural": "Categories",

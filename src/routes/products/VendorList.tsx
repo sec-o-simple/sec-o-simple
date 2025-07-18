@@ -1,18 +1,18 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useListState } from '@/utils/useListState'
 import ComponentList from '@/components/forms/ComponentList'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
+import { useListState } from '@/utils/useListState'
+import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { faAdd, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { Modal, useDisclosure } from '@heroui/modal'
+import { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import ProductCard from './components/ProductCard'
+import { PTBEditForm } from './components/PTBEditForm'
 import {
   TProductTreeBranch,
   getDefaultProductTreeBranch,
 } from './types/tProductTreeBranch'
-import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
-import ProductCard from './components/ProductCard'
-import { useEffect, useMemo, useState } from 'react'
-import { PTBEditForm } from './components/PTBEditForm'
-import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
-import { Modal, useDisclosure } from '@heroui/modal'
-import { faAdd, faEdit } from '@fortawesome/free-solid-svg-icons'
-import { useTranslation } from 'react-i18next'
 
 export default function VendorList() {
   const { t } = useTranslation()
@@ -61,9 +61,6 @@ export default function VendorList() {
         itemLabel={t('products.vendor.label')}
         title="name"
         titleProps={{ className: 'font-bold' }}
-        endContent={(item) => (
-          <div className="text-neutral-foreground">{item.description}</div>
-        )}
         customActions={[
           {
             icon: faAdd,

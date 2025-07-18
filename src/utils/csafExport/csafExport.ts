@@ -8,6 +8,7 @@ import useValidationStore from '../validation/useValidationStore'
 import generateRelationships from './generateRelationships'
 import { retrieveLatestVersion } from './latestVersion'
 import { parseNote } from './parseNote'
+import { parseNotes } from './parseNotes'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
 import parseScore from './parseScore'
 import { PidGenerator } from './pidGenerator'
@@ -31,6 +32,8 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
       ? products.flatMap((p) => p.versions.map((v) => pidGenerator.getPid(v)))
       : undefined
   }
+
+  const notes = parseNotes(documentStore)
 
   const csafDocument = {
     document: {
@@ -70,10 +73,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
         name: documentInformation.publisher.name,
         namespace: documentInformation.publisher.namespace,
       },
-      notes:
-        documentInformation.notes.length > 0
-          ? documentInformation.notes.map(parseNote)
-          : undefined,
+      notes: notes.length > 0 ? notes : undefined,
       references:
         documentInformation.references.length > 0
           ? documentInformation.references?.map((reference) => ({
