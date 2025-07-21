@@ -283,7 +283,7 @@
       },
       "relationship": {
         "label": "Relationships",
-        "empty": "No relationships available",
+        "empty": "No outgoing relationships available",
         "edit": "Edit Relationship",
         "edit_plural": "Edit Relationships",
         "name": "Name",

@@ -1,9 +1,12 @@
+import Breadcrumbs from '@/components/forms/Breadcrumbs'
 import IconButton from '@/components/forms/IconButton'
 import WizardStep from '@/components/WizardStep'
 import useDocumentStore from '@/utils/useDocumentStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import { useRelationships } from '@/utils/useRelationships'
 import { faLink } from '@fortawesome/free-solid-svg-icons'
 import { Modal, useDisclosure } from '@heroui/modal'
+import { BreadcrumbItem } from '@heroui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
@@ -11,14 +14,19 @@ import InfoCard from './components/InfoCard'
 import { PTBEditForm } from './components/PTBEditForm'
 import SubMenuHeader from './components/SubMenuHeader'
 import {
-  TProductTreeBranch,
   getDefaultProductTreeBranch,
   getPTBName,
+  TProductTreeBranch,
 } from './types/tProductTreeBranch'
+import {
+  getDefaultRelationship,
+  TRelationshipCategory,
+} from './types/tRelationship'
 
 export default function Product() {
   const { productId } = useParams()
-  const { findProductTreeBranch, updatePTB, deletePTB } = useProductTreeBranch()
+  const { findProductTreeBranchWithParents, updatePTB, deletePTB } =
+    useProductTreeBranch()
   const navigate = useNavigate()
   const { t } = useTranslation()
 
@@ -26,14 +34,25 @@ export default function Product() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [editingPTB, setEditingPTB] = useState<TProductTreeBranch | undefined>()
   const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
+  const { addOrUpdateRelationship } = useRelationships()
 
-  const product = findProductTreeBranch(productId ?? '')
-  if (!product) {
-    return <>404 not found</>
-  }
+  const product = findProductTreeBranchWithParents(productId ?? '')
+
+  if (!product) return <>404 not found</>
 
   return (
     <WizardStep progress={2} noContentWrapper={true}>
+      <Breadcrumbs>
+        <BreadcrumbItem href="/#/product-management">
+          {product.parent?.name !== ''
+            ? product.parent?.name
+            : t('untitled.vendor')}
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          {product?.name !== '' ? product.name : t('untitled.product_name')}
+        </BreadcrumbItem>
+      </Breadcrumbs>
+
       <SubMenuHeader
         title={
           product.name
@@ -45,15 +64,53 @@ export default function Product() {
           label: t('products.product.version.label'),
         })}
         onAction={() => {
-          // add new version
           const newVersion = getDefaultProductTreeBranch('product_version')
-          updatePTB({
+          const updatedSubBranches = [...product.subBranches, newVersion]
+
+          const updatedVendors = updatePTB({
             ...product,
-            subBranches: [...product.subBranches, newVersion],
+            subBranches: updatedSubBranches,
           })
-          // open edit form for newly added version
+
           setEditingPTB(newVersion)
           onOpen()
+
+          // Add relationships for the new version
+          if (!['Software', 'Hardware'].includes(product.type ?? '')) return
+
+          const isSoftware = product.type === 'Software'
+          const getVersionIds = (branches: TProductTreeBranch[]) =>
+            branches.map((b) => b.id)
+
+          updatedVendors.forEach((vendor) => {
+            vendor.subBranches.forEach((ptb) => {
+              if (ptb.id === productId) return
+
+              const source = isSoftware ? product : ptb
+              const target = isSoftware ? ptb : product
+
+              const sourceVersions = isSoftware
+                ? [newVersion.id]
+                : getVersionIds(ptb.subBranches)
+              const targetVersions = isSoftware
+                ? getVersionIds(ptb.subBranches)
+                : [newVersion.id]
+
+              if (sourceVersions.length === 0 || targetVersions.length === 0)
+                return
+
+              const relationship = {
+                ...getDefaultRelationship(),
+                category: 'installed_on' as TRelationshipCategory,
+                productId1: source.id,
+                product1VersionIds: sourceVersions,
+                productId2: target.id,
+                product2VersionIds: targetVersions,
+              }
+
+              addOrUpdateRelationship(relationship)
+            })
+          })
         }}
       />
       <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>

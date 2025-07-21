@@ -17,7 +17,7 @@ export type ListState<T, IdType = string> = {
   setData: React.Dispatch<React.SetStateAction<T[]>>
   updateDataEntry: (updatedEntry: T) => void
   removeDataEntry: (entry: T) => void
-  addDataEntry: () => IdType | undefined
+  addDataEntry: () => T | undefined
   getId: (entry: T) => IdType
 }
 
@@ -44,7 +44,7 @@ export function useListState<T extends object, IdType = string>(
     const newDataEntry = generator?.()
     if (newDataEntry) {
       setData([...data, newDataEntry])
-      return getId(newDataEntry)
+      return newDataEntry
     }
   }
 

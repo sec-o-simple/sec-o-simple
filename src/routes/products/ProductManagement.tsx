@@ -1,5 +1,6 @@
 import WizardStep from '@/components/WizardStep'
 import { useConfigStore } from '@/utils/useConfigStore'
+import useDocumentType from '@/utils/useDocumentType'
 import usePageVisit from '@/utils/validation/usePageVisit'
 import { Button } from '@heroui/button'
 import { Tab, Tabs } from '@heroui/tabs'
@@ -8,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 import ProductDatabaseSelector from './components/ProductDatabaseSelector'
 import ProductList from './ProductList'
 import VendorList from './VendorList'
-import useDocumentType from '@/utils/useDocumentType'
 
 export default function ProductManagement() {
   usePageVisit()

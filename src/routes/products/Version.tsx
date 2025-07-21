@@ -1,3 +1,4 @@
+import Breadcrumbs from '@/components/forms/Breadcrumbs'
 import WizardStep from '@/components/WizardStep'
 import useDocumentStore from '@/utils/useDocumentStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
@@ -5,6 +6,7 @@ import { useRelationships } from '@/utils/useRelationships'
 import { Accordion, AccordionItem } from '@heroui/accordion'
 import { Chip } from '@heroui/chip'
 import { Modal, useDisclosure } from '@heroui/modal'
+import { BreadcrumbItem } from '@heroui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
@@ -49,7 +51,27 @@ export default function Version() {
   ).filter(([_, relationships]) => relationships.length > 0)
 
   return (
-    <WizardStep noContentWrapper={true}>
+    <WizardStep noContentWrapper={true} progress={2}>
+      <Breadcrumbs>
+        <BreadcrumbItem href="/#/product-management">
+          {productVersion.parent?.parent?.name !== ''
+            ? productVersion.parent?.parent?.name
+            : t('untitled.vendor')}
+        </BreadcrumbItem>
+        <BreadcrumbItem
+          href={`/#/product-management/product/${productVersion.parent?.id}`}
+        >
+          {productVersion.parent?.name !== ''
+            ? productVersion.parent?.name
+            : t('untitled.product_name')}
+        </BreadcrumbItem>
+        <BreadcrumbItem>
+          {productVersion?.name !== ''
+            ? productVersion.name
+            : t('untitled.product_version')}
+        </BreadcrumbItem>
+      </Breadcrumbs>
+
       <SubMenuHeader
         title={
           productVersion.name
@@ -109,16 +131,21 @@ export default function Version() {
           <AccordionItem
             key={category}
             aria-label={category}
-            title={category.replaceAll('_', ' ')}
+            title={t(`products.relationship.categories.${category}`)}
             className="border shadow-none"
           >
             {relationships.map((relationship) => {
               const product = findProductTreeBranch(relationship.productId2)
+
               return product ? (
                 <InfoCard
                   key={relationship.id}
                   variant="plain"
-                  title={product.name ?? t('untitled.product_name')}
+                  title={
+                    product.name !== '' && product.name
+                      ? product.name
+                      : t('untitled.product_name')
+                  }
                   className="border-t py-2"
                   onEdit={() => {
                     setEditingRelationship(relationship)
@@ -134,6 +161,7 @@ export default function Version() {
                   {relationship.product2VersionIds.length > 0 && (
                     <TagList
                       items={relationship.product2VersionIds}
+                      linkGenerator={(x) => `/product-management/version/${x}`}
                       labelGenerator={(x) =>
                         getPTBName(findProductTreeBranch(x)) ??
                         t('untitled.product_version')
