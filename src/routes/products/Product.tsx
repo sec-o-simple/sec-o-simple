@@ -72,6 +72,12 @@ export default function Product() {
             subBranches: updatedSubBranches,
           })
 
+          setEditingPTB(newVersion)
+          onOpen()
+
+          // Add relationships for the new version
+          if (!['Software', 'Hardware'].includes(product.type ?? '')) return
+
           const isSoftware = product.type === 'Software'
           const getVersionIds = (branches: TProductTreeBranch[]) =>
             branches.map((b) => b.id)
@@ -105,9 +111,6 @@ export default function Product() {
               addOrUpdateRelationship(relationship)
             })
           })
-
-          setEditingPTB(newVersion)
-          onOpen()
         }}
       />
       <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
