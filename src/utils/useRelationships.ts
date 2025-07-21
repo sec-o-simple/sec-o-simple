@@ -18,6 +18,14 @@ export function useRelationships() {
     )
   }
 
+  const getRelationshipsByTargetVersion = (
+    targetVersionId: string,
+  ): TRelationship[] => {
+    return globalRelationships.filter((relationship) =>
+      relationship.product2VersionIds.includes(targetVersionId),
+    )
+  }
+
   const sortRelationshipsByCategory = (
     relationships?: TRelationship[],
   ): { [k: string]: TRelationship[] } => {
@@ -54,6 +62,7 @@ export function useRelationships() {
 
   return {
     getRelationshipsBySourceVersion,
+    getRelationshipsByTargetVersion,
     sortRelationshipsByCategory,
     addOrUpdateRelationship,
     deleteRelationship,

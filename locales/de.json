@@ -283,7 +283,7 @@
       },
       "relationship": {
         "label": "Beziehungen",
-        "empty": "Keine Beziehungen vorhanden",
+        "empty": "Keine ausgehenden Beziehungen vorhanden",
         "edit": "Beziehung bearbeiten",
         "edit_plural": "Beziehungen bearbeiten",
         "name": "Name",

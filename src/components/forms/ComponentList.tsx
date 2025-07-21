@@ -33,6 +33,7 @@ export type ComponentListProps<T> = {
   titleProps?: HTMLProps<HTMLDivElement>
   customActions?: CustomAction<T>[]
   itemBgColor?: string
+  postAddAction?: (item: T) => void
   renderTitlePrefix?: (item: T) => ReactNode
 }
 
@@ -46,6 +47,7 @@ export default function ComponentList<T extends object>({
   titleProps,
   customActions,
   itemBgColor,
+  postAddAction,
   ...props
 }: ComponentListProps<T>) {
   const { t } = useTranslation()
@@ -134,10 +136,12 @@ export default function ComponentList<T extends object>({
           label: itemLabel,
         })}
         onPress={() => {
-          const key = listState.addDataEntry()
+          const item = listState.addDataEntry()
           // expand new item
-          if (key) {
-            setExpandedKeys(new Set([...expandedKeys, key]))
+          if (item) {
+            setExpandedKeys(new Set([...expandedKeys, listState.getId(item)]))
+
+            postAddAction?.(item)
           }
         }}
       />

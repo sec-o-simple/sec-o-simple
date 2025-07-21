@@ -4,10 +4,16 @@ import {
   TProductTreeBranchWithParents,
 } from '@/routes/products/types/tProductTreeBranch'
 import useDocumentStore from './useDocumentStore'
+import { useRelationships } from './useRelationships'
 
 export function useProductTreeBranch() {
   const products = Object.values(useDocumentStore((store) => store.products))
   const updateProducts = useDocumentStore((store) => store.updateProducts)
+  const {
+    getRelationshipsBySourceVersion,
+    getRelationshipsByTargetVersion,
+    deleteRelationship,
+  } = useRelationships()
 
   const findProductTreeBranch = (
     id: string,
@@ -94,10 +100,43 @@ export function useProductTreeBranch() {
         : { ...branch, subBranches: branch.subBranches.map(updateBranch) }
     const newProducts = products.map(updateBranch)
     updateProducts(newProducts)
+
+    return newProducts
   }
 
   const deletePTB = (id: string) => {
     updateProducts(getFilteredPTBs((ptb) => ptb.id !== id))
+
+    const deleteAllRelationships = (versionId: string) => {
+      const relationships = getRelationshipsBySourceVersion(versionId)
+      relationships.forEach((relationship) => deleteRelationship(relationship))
+
+      const targetRelationships = getRelationshipsByTargetVersion(versionId)
+      targetRelationships.forEach((relationship) =>
+        deleteRelationship(relationship),
+      )
+    }
+
+    const branch = findProductTreeBranch(id)
+    if (!branch) {
+      console.warn(`ProductTreeBranch with id ${id} not found`)
+      return
+    }
+
+    const category = branch.category
+    if (category === 'vendor') {
+      branch.subBranches.forEach((product) => {
+        product.subBranches.forEach((version) => {
+          deleteAllRelationships(version.id)
+        })
+      })
+    } else if (category === 'product_name') {
+      branch.subBranches.forEach((version) => {
+        deleteAllRelationships(version.id)
+      })
+    } else if (category === 'product_version') {
+      deleteAllRelationships(id)
+    }
   }
 
   return {

@@ -50,6 +50,9 @@ export default function VendorList() {
   // modal variables
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [editingPTB, setEditingPTB] = useState<TProductTreeBranch | undefined>()
+  const [latestAddedPTB, setLatestAddedPTB] = useState<
+    TProductTreeBranch | undefined
+  >()
 
   return (
     <>
@@ -61,17 +64,20 @@ export default function VendorList() {
         itemLabel={t('products.vendor.label')}
         title="name"
         titleProps={{ className: 'font-bold' }}
+        postAddAction={(item) => {
+          setEditingPTB(item)
+          onOpen()
+        }}
         customActions={[
           {
             icon: faAdd,
             onClick: (vendor) => {
+              const defaultBranch = getDefaultProductTreeBranch('product_name')
               vendorListState.updateDataEntry({
                 ...vendor,
-                subBranches: [
-                  ...vendor.subBranches,
-                  getDefaultProductTreeBranch('product_name'),
-                ],
+                subBranches: [...vendor.subBranches, defaultBranch],
               })
+              setLatestAddedPTB(defaultBranch)
             },
           },
           {
@@ -89,6 +95,7 @@ export default function VendorList() {
               className="border-t py-2"
               product={product}
               variant="plain"
+              openEditModal={product.id === latestAddedPTB?.id}
             />
           ))
         }

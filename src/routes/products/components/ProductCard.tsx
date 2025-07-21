@@ -12,12 +12,19 @@ import TagList from './TagList'
 
 export type ProductCardProps = Partial<InfoCardProps> & {
   product: TProductTreeBranch
+  openEditModal?: boolean
 }
 
-export default function ProductCard({ product, ...props }: ProductCardProps) {
+export default function ProductCard({
+  product,
+  openEditModal,
+  ...props
+}: ProductCardProps) {
   const { t } = useTranslation()
-  const { updatePTB, deletePTB } = useProductTreeBranch()
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { updatePTB, deletePTB, findProductTreeBranch } = useProductTreeBranch()
+  const { isOpen, onOpen, onOpenChange } = useDisclosure({
+    defaultOpen: openEditModal,
+  })
   const navigate = useNavigate()
 
   return (
@@ -48,9 +55,14 @@ export default function ProductCard({ product, ...props }: ProductCardProps) {
     >
       {product.subBranches.length > 0 && (
         <TagList
-          items={product.subBranches.map(
-            (version) => getPTBName(version) ?? t('untitled.product_version'),
-          )}
+          items={product.subBranches}
+          linkGenerator={(version) =>
+            `/product-management/version/${version.id}`
+          }
+          labelGenerator={(x) =>
+            getPTBName(findProductTreeBranch(x.id)) ??
+            t('untitled.product_version')
+          }
         />
       )}
       <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
