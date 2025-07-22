@@ -33,8 +33,11 @@ export default function Scores({
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
+  // The scores are sorted by CVSS version, so we can use the index to find the correct score
   const scoresListState = useListState<TVulnerabilityScore>({
-    initialData: vulnerability.scores,
+    initialData: vulnerability.scores.sort((a, b) =>
+      (a.cvssVersion || '4.0').localeCompare(b.cvssVersion || '4.0'),
+    ),
     generator: getDefaultVulnerabilityScore,
   })
 
@@ -57,7 +60,12 @@ export default function Scores({
 
   const getV3Index = (score: TVulnerabilityScore) => {
     return scoresListState.data
-      .filter((s) => s.cvssVersion === '3.0' || s.cvssVersion === '3.1')
+      .filter(
+        (s) =>
+          s.cvssVersion === '3.0' ||
+          s.cvssVersion === '3.1' ||
+          s.cvssVersion === '4.0',
+      )
       .indexOf(score)
   }
 

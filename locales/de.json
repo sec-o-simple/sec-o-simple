@@ -131,7 +131,7 @@
         "": "Allgemein",
         "title": "Title",
         "fetchCve": "Laden",
-        "fetchCveDescription": "Lädt die CVE-Daten von der hinterlegten API",
+        "fetchCVEData": "Lädt die CVE-Daten von der hinterlegten API",
         "cveFetchError": "Fehler beim Laden der CVE-Daten",
         "cveFetchErrorDescription": "Die CVE-Daten konnten nicht geladen werden. Bitte überprüfen Sie die API-URL und die eingegebene CVE-ID.",
         "description": "Beschreibung",
