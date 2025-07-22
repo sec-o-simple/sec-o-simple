@@ -11,6 +11,13 @@
     "document-information.id.placeholder": "Put your ID here",
     "document-information.language": "en",
 
+    "document-information.tlp.label": "amber",
+    "document-information.tlp.label.placeholder": "Select TLP label",
+
+    "document-information.tlp.url": "test",
+    "document-information.tlp.url.placeholder": "https://www.first.org/tlp/",
+    "document-information.tlp.url.readonly": true,
+
     "document-information.notes": [
       {
         "id": "legaldisclaimer",

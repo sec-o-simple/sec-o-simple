@@ -14,6 +14,12 @@ export default {
     csaf_version: 'string',
     // Tracking is added, because it is always generated automatically
     // and not part of the original CSAF document.
+    distribution: {
+      tlp: {
+        label: 'string',
+        url: 'string',
+      },
+    },
     tracking: {
       id: 'string',
       status: 'string',

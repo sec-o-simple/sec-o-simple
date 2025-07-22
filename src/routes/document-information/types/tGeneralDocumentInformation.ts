@@ -5,10 +5,17 @@ export type TGeneralDocumentInformation = {
   id: string
   lang: string
   status: TDocumentStatus
+  tlp?: {
+    label?: TTLPLevel
+    url?: string
+  }
 }
 
 export const documentStatus = ['draft', 'final', 'interim'] as const
 export type TDocumentStatus = (typeof documentStatus)[number]
+
+export const tlpLevel = ['green', 'amber', 'red', 'white'] as const
+export type TTLPLevel = (typeof tlpLevel)[number]
 
 export function getDefaultGeneralDocumentInformation(): TGeneralDocumentInformation {
   return {
@@ -23,7 +30,11 @@ export function getGeneralDocumentInformationTemplateKeys(): TemplateKeys<TGener
   return {
     title: 'document-information.title',
     id: 'document-information.id',
-    lang: 'document-information.lang',
+    lang: 'document-information.language',
     status: 'document-information.tracking.status',
+    tlp: {
+      label: 'document-information.tlp.label',
+      url: 'document-information.tlp.url',
+    },
   }
 }

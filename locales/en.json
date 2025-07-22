@@ -74,6 +74,17 @@
         "title": "Document Title",
         "id": "Document ID",
         "state": "Document Status",
+        "tlp": {
+          "title": "Traffic Light Protocol (TLP)",
+          "label": "TLP-Level",
+          "url": "TLP-URL",
+          "level": {
+            "red": "Red",
+            "amber": "Amber",
+            "green": "Green",
+            "white": "White"
+          }
+        },
         "language": "Language",
         "languages": {
           "de": "German",
