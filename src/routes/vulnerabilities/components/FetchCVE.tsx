@@ -4,7 +4,7 @@ import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useConfigStore } from '@/utils/useConfigStore'
 import useDocumentStore from '@/utils/useDocumentStore'
 import { addToast, Button, Tooltip } from '@heroui/react'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { uid } from 'uid'
 import { TVulnerability } from '../types/tVulnerability'
@@ -86,15 +86,6 @@ export default function FetchCVE({
         })
 
         cna.metrics?.map((metric: any) => {
-          if (metric.cvssV4_0) {
-            vulnerability.scores.push({
-              id: uid(),
-              cvssVersion: '4.0',
-              vectorString: metric.cvssV4_0.vectorString,
-              productIds: [],
-            })
-          }
-
           if (metric.cvssV3_0) {
             vulnerability.scores.push({
               id: uid(),
@@ -103,15 +94,38 @@ export default function FetchCVE({
               productIds: [],
             })
           }
+
+          if (metric.cvssV3_1) {
+            vulnerability.scores.push({
+              id: uid(),
+              cvssVersion: '3.1',
+              vectorString: metric.cvssV3_1.vectorString,
+              productIds: [],
+            })
+          }
+
+          if (metric.cvssV4_0) {
+            vulnerability.scores.push({
+              id: uid(),
+              cvssVersion: '4.0',
+              vectorString: metric.cvssV4_0.vectorString,
+              productIds: [],
+            })
+          }
         })
 
-        addToast({
-          title: t('vulnerabilities.general.cveNotesFetched'),
-          description: t('vulnerabilities.general.cveNotesFetchedDescription', {
-            count: descriptions.length,
-          }),
-          color: 'success',
-        })
+        if (descriptions.length > 0) {
+          addToast({
+            title: t('vulnerabilities.general.cveNotesFetched'),
+            description: t(
+              'vulnerabilities.general.cveNotesFetchedDescription',
+              {
+                count: descriptions.length,
+              },
+            ),
+            color: 'success',
+          })
+        }
       }
     } catch (error) {
       setCVEError(true)
@@ -126,6 +140,10 @@ export default function FetchCVE({
       setFetchingCve(false)
     }
   }
+
+  const fetchDisabled = useMemo(() => {
+    return !vulnerability.cve || !apiUrl || fetchingCve
+  }, [vulnerability.cve, apiUrl, fetchingCve])
 
   return (
     <HSplit className="w-full items-end gap-2">
@@ -152,12 +170,12 @@ export default function FetchCVE({
         <Tooltip
           content={t('vulnerabilities.general.fetchCVEData')}
           showArrow
-          isDisabled={!vulnerability.cve || !apiUrl}
+          isDisabled={fetchDisabled}
         >
           <Button
-            color={!vulnerability.cve || !apiUrl ? 'default' : 'primary'}
+            color={fetchDisabled ? 'default' : 'primary'}
             onPress={fetchCVEData}
-            disabled={!vulnerability.cve || !apiUrl}
+            disabled={fetchDisabled}
             isLoading={fetchingCve}
           >
             {t('vulnerabilities.general.fetchCve')}
