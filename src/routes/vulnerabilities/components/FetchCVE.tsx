@@ -14,6 +14,12 @@ interface CNADescription {
   value: string
 }
 
+interface CNAMetric {
+  cvssV3_0?: { vectorString: string }
+  cvssV3_1?: { vectorString: string }
+  cvssV4_0?: { vectorString: string }
+}
+
 export default function FetchCVE({
   onChange,
   vulnerability,
@@ -85,7 +91,7 @@ export default function FetchCVE({
           })
         })
 
-        cna.metrics?.map((metric: any) => {
+        cna.metrics?.map((metric: CNAMetric) => {
           if (metric.cvssV3_0) {
             vulnerability.scores.push({
               id: uid(),
