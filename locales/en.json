@@ -142,7 +142,7 @@
         "": "General",
         "title": "Title",
         "fetchCve": "Fetch",
-        "fetchCveDescription": "Fetches CVE data from the provided API",
+        "fetchCVEData": "Fetches CVE data from the provided API",
         "cveFetchError": "CVE Fetch Error",
         "cveFetchErrorDescription": "Failed to fetch CVE data. Please check the API URL and the CVE ID.",
         "description": "Description",
