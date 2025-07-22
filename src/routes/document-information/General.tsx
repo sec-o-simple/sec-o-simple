@@ -101,7 +101,7 @@ export default function General() {
                 tlp: { ...localState.tlp, label: [...v][0] as TTLPLevel },
               })
             }
-            csafPath="/document/tlp/label"
+            csafPath="/document/distribution/tlp/label"
             renderValue={(value) => (
               <TLPColor color={value[0].key as TTLPLevel} />
             )}
@@ -115,7 +115,7 @@ export default function General() {
           </Select>
           <Input
             label={t('document.general.tlp.url')}
-            csafPath="/document/tlp/url"
+            csafPath="/document/distribution/tlp/url"
             type="url"
             isTouched={hasVisitedPage}
             value={localState.tlp?.url}
