@@ -77,6 +77,9 @@ export default function General() {
           onSelectionChange={(v) =>
             setLocalState({ ...localState, lang: [...v][0] as string })
           }
+          renderValue={(value) =>
+            t(`document.general.languages.${value[0].key}`)
+          }
           isDisabled={isFieldReadonly('document-information.lang')}
           isRequired
           placeholder={getFieldPlaceholder('document-information.lang')}
