@@ -2,16 +2,20 @@ import WizardStep from '@/components/WizardStep'
 import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
+import VSplit from '@/components/forms/VSplit'
 import { useTemplate } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import usePageVisit from '@/utils/validation/usePageVisit'
 import { SelectItem } from '@heroui/select'
+import { cn } from '@heroui/theme'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TGeneralDocumentInformation,
+  TTLPLevel,
   getDefaultGeneralDocumentInformation,
+  tlpLevel,
 } from './types/tGeneralDocumentInformation'
 
 export default function General() {
@@ -73,12 +77,74 @@ export default function General() {
           placeholder={getFieldPlaceholder('document-information.lang')}
         >
           {['de', 'en'].map((key) => (
-            <SelectItem key={key}>
+            <SelectItem key={key} textValue={key}>
               {t(`document.general.languages.${key}`)}
             </SelectItem>
           ))}
         </Select>
       </HSplit>
+
+      <div className="mt-4">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">
+            {t('document.general.tlp.title')}
+          </h2>
+        </div>
+
+        <VSplit>
+          <Select
+            selectedKeys={[localState.tlp?.label as TTLPLevel]}
+            label={t('document.general.tlp.label')}
+            onSelectionChange={(v) =>
+              setLocalState({
+                ...localState,
+                tlp: { ...localState.tlp, label: [...v][0] as TTLPLevel },
+              })
+            }
+            csafPath="/document/tlp/label"
+            renderValue={(value) => (
+              <TLPColor color={value[0].key as TTLPLevel} />
+            )}
+            placeholder={getFieldPlaceholder('document-information.tlp.label')}
+          >
+            {tlpLevel.map((level) => (
+              <SelectItem key={level}>
+                <TLPColor color={level} />
+              </SelectItem>
+            ))}
+          </Select>
+          <Input
+            label={t('document.general.tlp.url')}
+            csafPath="/document/tlp/url"
+            type="url"
+            isTouched={hasVisitedPage}
+            value={localState.tlp?.url}
+            onValueChange={(url) =>
+              setLocalState({
+                ...localState,
+                tlp: { ...localState.tlp, url },
+              })
+            }
+            isDisabled={isFieldReadonly('document-information.tlp.url')}
+            placeholder={
+              getFieldPlaceholder('document-information.tlp.url') ??
+              'https://www.first.org/tlp/'
+            }
+          />
+        </VSplit>
+      </div>
     </WizardStep>
+  )
+}
+
+function TLPColor({ color }: { color: TTLPLevel }) {
+  const { t } = useTranslation()
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className={cn('size-2 rounded-full', `bg-${color}-500`)} />
+
+      {t(`document.general.tlp.level.${color}`)}
+    </div>
   )
 }

@@ -63,6 +63,12 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
           : '1',
         id: documentInformation.id,
       },
+      distribution: {
+        tlp: {
+          label: documentInformation.tlp?.label?.toUpperCase() ?? undefined,
+          url: documentInformation.tlp?.url ?? undefined,
+        },
+      },
       lang: documentInformation.lang,
       title: documentInformation.title,
       publisher: {
