@@ -15,7 +15,6 @@ interface CNADescription {
 }
 
 interface CNAMetric {
-  cvssV3_0?: { vectorString: string }
   cvssV3_1?: { vectorString: string }
   cvssV4_0?: { vectorString: string }
 }
@@ -92,15 +91,6 @@ export default function FetchCVE({
         })
 
         cna.metrics?.map((metric: CNAMetric) => {
-          if (metric.cvssV3_0) {
-            vulnerability.scores.push({
-              id: uid(),
-              cvssVersion: '3.0',
-              vectorString: metric.cvssV3_0.vectorString,
-              productIds: [],
-            })
-          }
-
           if (metric.cvssV3_1) {
             vulnerability.scores.push({
               id: uid(),
