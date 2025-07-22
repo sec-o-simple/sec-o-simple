@@ -6,6 +6,8 @@ import VSplit from '@/components/forms/VSplit'
 import { useTemplate } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import usePageVisit from '@/utils/validation/usePageVisit'
+import useValidationStore from '@/utils/validation/useValidationStore'
+import { Alert } from '@heroui/react'
 import { SelectItem } from '@heroui/select'
 import { cn } from '@heroui/theme'
 import { useState } from 'react'
@@ -33,6 +35,9 @@ export default function General() {
   const hasVisitedPage = usePageVisit()
   const { t } = useTranslation()
   const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
+  const message = useValidationStore((state) => state.messages).filter(
+    (m) => m.path === `/document/distribution/tlp`,
+  )?.[0]
 
   return (
     <WizardStep
@@ -92,6 +97,12 @@ export default function General() {
         </div>
 
         <VSplit>
+          {message && (
+            <Alert color="danger">
+              <p>{message.message}</p>
+            </Alert>
+          )}
+
           <Select
             selectedKeys={[localState.tlp?.label as TTLPLevel]}
             label={t('document.general.tlp.label')}
