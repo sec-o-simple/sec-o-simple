@@ -14,6 +14,7 @@ import {
   TDocumentReference,
   getDefaultDocumentReference,
 } from '@/routes/document-information/types/tDocumentReference'
+import { TTLPLevel } from '@/routes/document-information/types/tGeneralDocumentInformation'
 import { getDefaultRevisionHistoryEntry } from '@/routes/document-information/types/tRevisionHistoryEntry'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import {
@@ -124,6 +125,10 @@ export function parseCSAFDocument(
       (csafDoc?.tracking?.status as TDocumentInformation['status']) ??
       defaultDocumentInformation.status,
     title: csafDoc?.title ?? defaultDocumentInformation.title,
+    tlp: {
+      label: csafDoc?.distribution?.tlp?.label?.toLowerCase() as TTLPLevel,
+      url: csafDoc?.distribution?.tlp?.url,
+    },
     revisionHistory:
       csafDoc?.tracking?.revision_history?.map((revision) => ({
         id: uid(),

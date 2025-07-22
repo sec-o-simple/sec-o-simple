@@ -2,16 +2,22 @@ import WizardStep from '@/components/WizardStep'
 import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
+import VSplit from '@/components/forms/VSplit'
 import { useTemplate } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import usePageVisit from '@/utils/validation/usePageVisit'
+import useValidationStore from '@/utils/validation/useValidationStore'
+import { Alert } from '@heroui/react'
 import { SelectItem } from '@heroui/select'
+import { cn } from '@heroui/theme'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TGeneralDocumentInformation,
+  TTLPLevel,
   getDefaultGeneralDocumentInformation,
+  tlpLevel,
 } from './types/tGeneralDocumentInformation'
 
 export default function General() {
@@ -29,6 +35,9 @@ export default function General() {
   const hasVisitedPage = usePageVisit()
   const { t } = useTranslation()
   const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
+  const message = useValidationStore((state) => state.messages).filter(
+    (m) => m.path === `/document/distribution/tlp`,
+  )?.[0]
 
   return (
     <WizardStep
@@ -68,17 +77,96 @@ export default function General() {
           onSelectionChange={(v) =>
             setLocalState({ ...localState, lang: [...v][0] as string })
           }
+          renderValue={(value) =>
+            t(`document.general.languages.${value[0].key}`)
+          }
           isDisabled={isFieldReadonly('document-information.lang')}
           isRequired
           placeholder={getFieldPlaceholder('document-information.lang')}
         >
           {['de', 'en'].map((key) => (
-            <SelectItem key={key}>
+            <SelectItem key={key} textValue={key}>
               {t(`document.general.languages.${key}`)}
             </SelectItem>
           ))}
         </Select>
       </HSplit>
+
+      <div className="mt-4">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-semibold">
+            {t('document.general.tlp.title')}
+          </h2>
+        </div>
+
+        <VSplit>
+          {message && (
+            <Alert color="danger">
+              <p>{message.message}</p>
+            </Alert>
+          )}
+
+          <Select
+            selectedKeys={[localState.tlp?.label as TTLPLevel]}
+            label={t('document.general.tlp.label')}
+            onSelectionChange={(v) =>
+              setLocalState({
+                ...localState,
+                tlp: { ...localState.tlp, label: [...v][0] as TTLPLevel },
+              })
+            }
+            csafPath="/document/distribution/tlp/label"
+            renderValue={(value) => (
+              <TLPColor color={value[0].key as TTLPLevel} />
+            )}
+            placeholder={getFieldPlaceholder('document-information.tlp.label')}
+          >
+            {tlpLevel.map((level) => (
+              <SelectItem key={level}>
+                <TLPColor color={level} />
+              </SelectItem>
+            ))}
+          </Select>
+          <Input
+            label={t('document.general.tlp.url')}
+            csafPath="/document/distribution/tlp/url"
+            type="url"
+            isTouched={hasVisitedPage}
+            value={localState.tlp?.url}
+            onValueChange={(url) =>
+              setLocalState({
+                ...localState,
+                tlp: { ...localState.tlp, url },
+              })
+            }
+            isDisabled={isFieldReadonly('document-information.tlp.url')}
+            placeholder={
+              getFieldPlaceholder('document-information.tlp.url') ??
+              'https://www.first.org/tlp/'
+            }
+          />
+        </VSplit>
+      </div>
     </WizardStep>
+  )
+}
+
+function TLPColor({ color }: { color: TTLPLevel }) {
+  const { t } = useTranslation()
+
+  const backgroundColor =
+    {
+      white: 'bg-zinc-200',
+      green: 'bg-green-500',
+      amber: 'bg-amber-500',
+      red: 'bg-red-500',
+    }[color] || 'bg-zinc-200'
+
+  return (
+    <div className="flex items-center gap-2">
+      <div className={cn('size-2 rounded-full', backgroundColor)} />
+
+      {t(`document.general.tlp.level.${color}`)}
+    </div>
   )
 }

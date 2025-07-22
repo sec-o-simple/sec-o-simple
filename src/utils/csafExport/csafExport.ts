@@ -35,6 +35,8 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
 
   const notes = parseNotes(documentStore)
 
+  const hasTLP = documentInformation.tlp?.label || documentInformation.tlp?.url
+
   const csafDocument = {
     document: {
       category: 'csaf_security_advisory',
@@ -62,6 +64,14 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
             )
           : '1',
         id: documentInformation.id,
+      },
+      distribution: {
+        tlp: hasTLP
+          ? {
+              label: documentInformation.tlp?.label?.toUpperCase() || undefined,
+              url: documentInformation.tlp?.url || undefined,
+            }
+          : undefined,
       },
       lang: documentInformation.lang,
       title: documentInformation.title,
