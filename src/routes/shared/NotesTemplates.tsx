@@ -46,7 +46,12 @@ export function NotesTemplates({
           {t('notesTemplates.addTemplateButton')}
         </Button>
       </div>
-      <Modal isOpen={isOpen} size="xl" onOpenChange={onOpenChange}>
+      <Modal
+        isOpen={isOpen}
+        size="xl"
+        onOpenChange={onOpenChange}
+        scrollBehavior="inside"
+      >
         <ModalContent>
           {(onClose) => (
             <>
