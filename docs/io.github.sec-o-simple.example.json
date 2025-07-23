@@ -56,7 +56,8 @@
       {
         "id": "examplereference",
         "summary": "Example Reference",
-        "url": "https://example.com"
+        "url": "https://example.com",
+        "origin": "external"
       }
     ],
 

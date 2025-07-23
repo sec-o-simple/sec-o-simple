@@ -111,7 +111,9 @@ function ReferenceForm({
         isDisabled={checkReadOnly(reference, 'category')}
       >
         {['external', 'self'].map((key) => (
-          <SelectItem key={key}>{t(`ref.categories.${key}`)}</SelectItem>
+          <SelectItem key={key} textValue={key}>
+            {t(`ref.categories.${key}`)}
+          </SelectItem>
         ))}
       </Select>
       <Textarea
