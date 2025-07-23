@@ -1,5 +1,6 @@
 import { TNote } from '@/routes/shared/NotesList'
 import { TemplateKeys } from '@/utils/template'
+import i18next from 'i18next'
 import { uid } from 'uid'
 import { TAcknowledgment } from './tDocumentAcknowledgments'
 import {
@@ -35,7 +36,7 @@ export function getDefaultDocumentInformation(): TDocumentInformation {
         id: uid(),
         date: new Date().toISOString(),
         number: '1',
-        summary: 'Initial revision',
+        summary: i18next.t('document.general.revisionHistory.initialRevision'),
       },
     ],
   }

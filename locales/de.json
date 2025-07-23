@@ -96,6 +96,7 @@
           "interim": "Zwischenstand"
         },
         "revisionHistory": {
+          "initialRevision": "Erste Revision",
           "history": "Revisionsverlauf",
           "label": "Revision",
           "version": "Version",

@@ -96,6 +96,7 @@
           "interim": "Interim"
         },
         "revisionHistory": {
+          "initialRevision": "Initial Revision",
           "history": "Revision History",
           "label": "Revision",
           "version": "Version",
