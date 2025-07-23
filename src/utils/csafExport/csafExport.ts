@@ -3,6 +3,7 @@ import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocu
 import { TVulnerabilityProduct } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
 import _ from 'lodash'
 import { download } from '../download'
+import { TConfig, useConfigStore } from '../useConfigStore'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
 import useValidationStore from '../validation/useValidationStore'
 import generateRelationships from './generateRelationships'
@@ -15,7 +16,10 @@ import { PidGenerator } from './pidGenerator'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
-export function createCSAFDocument(documentStore: TDocumentStore) {
+export function createCSAFDocument(
+  documentStore: TDocumentStore,
+  config?: TConfig,
+) {
   const pidGenerator = new PidGenerator()
   const currentDate = new Date().toISOString()
   const documentInformation = documentStore.documentInformation
@@ -33,7 +37,7 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
       : undefined
   }
 
-  const notes = parseNotes(documentStore)
+  const notes = parseNotes(documentStore, config)
 
   const hasTLP = documentInformation.tlp?.label || documentInformation.tlp?.url
 
@@ -193,9 +197,10 @@ export function createCSAFDocument(documentStore: TDocumentStore) {
 export function useCSAFExport() {
   const documentStore = useDocumentStore()
   const { isValid } = useValidationStore()
+  const config = useConfigStore((state) => state.config)
 
   const exportCSAFDocument = () => {
-    let csafDocument = createCSAFDocument(documentStore)
+    let csafDocument = createCSAFDocument(documentStore, config)
 
     // Merge with existing imported CSAF document if available
     // Our created CSAF document has priority, and is handled as the base
