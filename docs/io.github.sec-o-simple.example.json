@@ -1,5 +1,5 @@
 {
-  "$schema": "./template-schema.json",
+  "$schema": "../../docs/template-schema.json",
   "productDatabase": {
     "enabled": false,
     "apiUrl": "http://127.0.0.1:9999",
