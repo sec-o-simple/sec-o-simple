@@ -118,8 +118,7 @@ export function useTemplateInitializer() {
   const updateVulnerabilities = useDocumentStore(
     (state) => state.updateVulnerabilities,
   )
-  const { getTemplateValue, getTemplateData, getTemplateDefaultObject } =
-    useTemplate()
+  const { getTemplateValue, getTemplateData } = useTemplate()
 
   // apply template to document state
   useEffect(() => {
