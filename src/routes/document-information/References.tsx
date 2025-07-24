@@ -108,6 +108,10 @@ function ReferenceForm({
             category: [...selected][0] as TReferenceCategory,
           })
         }}
+        renderValue={(selected) => {
+          if (!selected[0].key) return ''
+          return t(`ref.categories.${selected[0].key}`)
+        }}
         isDisabled={checkReadOnly(reference, 'category')}
       >
         {['external', 'self'].map((key) => (

@@ -4,7 +4,7 @@ import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
 import StatusIndicator from '@/components/StatusIndicator'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import { checkReadOnly, getPlaceholder, useTemplate } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 import useValidationStore from '@/utils/validation/useValidationStore'
@@ -33,12 +33,19 @@ export type TNote = {
   title: string
 }
 
-export const NoteGenerator = (): TNote => ({
-  id: uid(),
-  title: '',
-  category: 'description',
-  content: '',
-})
+export function useNoteGenerator(): TNote {
+  const { getTemplateDefaultObject } = useTemplate()
+  const defaultNote = getTemplateDefaultObject<TNote>(
+    'document-information.notes.default',
+  )
+
+  return {
+    id: uid(),
+    title: defaultNote.title || '',
+    category: defaultNote.category || 'description',
+    content: defaultNote.content || '',
+  }
+}
 
 export function NotesList({
   notesListState,

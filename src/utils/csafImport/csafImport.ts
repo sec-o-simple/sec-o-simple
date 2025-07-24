@@ -22,7 +22,9 @@ import {
   TRelationship,
 } from '@/routes/products/types/tRelationship'
 import { TNote } from '@/routes/shared/NotesList'
+import { useRemediationGenerator } from '@/routes/vulnerabilities/types/tRemediation'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
+import { useVulnerabilityProductGenerator } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
 import { uid } from 'uid'
 import { TCSAFDocument } from '../csafExport/csafExport'
 import { TParsedNote } from '../csafExport/parseNote'
@@ -110,6 +112,10 @@ function isObject(value: JSONValue): value is JSONObject {
 
 export function parseCSAFDocument(
   csafDocument: DeepPartial<TCSAFDocument>,
+  vulnerabilityProductGenerator: ReturnType<
+    typeof useVulnerabilityProductGenerator
+  >,
+  remediationGenerator: ReturnType<typeof useRemediationGenerator>,
 ): SOSDraft | undefined {
   const idGenerator = new IdGenerator()
   const sosDocumentType: TSOSDocumentType = 'Import'
@@ -200,6 +206,8 @@ export function parseCSAFDocument(
     csafDocument as TCSAFDocument,
     idGenerator,
     products,
+    vulnerabilityProductGenerator,
+    remediationGenerator,
   )
 
   return {
@@ -239,7 +247,11 @@ export function useCSAFImport() {
   }
 
   const importCSAFDocument = (csafDocument: JSONObject): HiddenField[] => {
-    const sosDocument = parseCSAFDocument(csafDocument)
+    const sosDocument = parseCSAFDocument(
+      csafDocument,
+      useVulnerabilityProductGenerator(),
+      useRemediationGenerator(),
+    )
     if (sosDocument) {
       importSOSDraft(sosDocument)
       return getGroupedHiddenFields(secOSimpleScheme, csafDocument)

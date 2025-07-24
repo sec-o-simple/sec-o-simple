@@ -1,15 +1,15 @@
 import AddItemButton from '@/components/forms/AddItemButton'
 import VSplit from '@/components/forms/VSplit'
 import { useListState } from '@/utils/useListState'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
+import { Alert } from '@heroui/react'
 import { useEffect } from 'react'
 import VulnerabilityProduct from './components/VulnerabilityProduct'
 import { TVulnerability } from './types/tVulnerability'
 import {
-  getDefaultVulnerabilityProduct,
   TVulnerabilityProduct,
+  useVulnerabilityProductGenerator,
 } from './types/tVulnerabilityProduct'
-import { useFieldValidation } from '@/utils/validation/useFieldValidation'
-import { Alert } from '@heroui/react'
 
 export default function Products({
   vulnerability,
@@ -20,9 +20,10 @@ export default function Products({
   vulnerabilityIndex: number
   onChange: (vulnerability: TVulnerability) => void
 }) {
+  const productGenerator = useVulnerabilityProductGenerator()
   const productsListState = useListState<TVulnerabilityProduct>({
     initialData: vulnerability.products,
-    generator: getDefaultVulnerabilityProduct,
+    generator: productGenerator,
   })
 
   useEffect(
@@ -58,7 +59,7 @@ export default function Products({
           productsListState.setData((prev) => [
             ...prev,
             {
-              ...getDefaultVulnerabilityProduct(),
+              ...productGenerator,
               productId:
                 productsListState.data[productsListState.data.length - 1]
                   ?.productId,

@@ -21,8 +21,8 @@ import ProductsTagList from './components/ProductsTagList'
 import {
   TRemediation,
   TRemediationCategory,
-  getDefaultRemediation,
   remediationCategories,
+  useRemediationGenerator,
 } from './types/tRemediation'
 import { TVulnerability } from './types/tVulnerability'
 
@@ -38,9 +38,11 @@ export default function Remediations({
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
+
+  const remediationGenerator = useRemediationGenerator()
   const remediationsListState = useListState<TRemediation>({
     initialData: vulnerability.remediations,
-    generator: getDefaultRemediation,
+    generator: remediationGenerator,
   })
 
   useEffect(

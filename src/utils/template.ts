@@ -92,7 +92,12 @@ export function useTemplate() {
     return value
   }
 
+  function getTemplateDefaultObject<T extends object>(key: string): T {
+    return getTemplateValue<T>(`${key}.default`, {} as T)
+  }
+
   return {
+    getTemplateDefaultObject,
     getTemplateValue,
     getTemplateData,
     isFieldReadonly,
@@ -113,7 +118,8 @@ export function useTemplateInitializer() {
   const updateVulnerabilities = useDocumentStore(
     (state) => state.updateVulnerabilities,
   )
-  const { getTemplateValue, getTemplateData } = useTemplate()
+  const { getTemplateValue, getTemplateData, getTemplateDefaultObject } =
+    useTemplate()
 
   // apply template to document state
   useEffect(() => {
