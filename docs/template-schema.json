@@ -7,8 +7,20 @@
         "enabled": { "type": "boolean" },
         "apiUrl": { "type": "string", "format": "uri" },
         "url": { "type": "string", "format": "uri" }
-      },
-      "required": ["enabled", "apiUrl", "url"]
+      }
+    },
+    "exportTexts": {
+      "type": "object",
+      "properties": {
+        "productDescription": {
+          "type": "object",
+          "properties": {
+            "de": { "type": "string" },
+            "en": { "type": "string" }
+          },
+          "required": ["de", "en"]
+        }
+      }
     },
     "cveApiUrl": { "type": "string", "format": "uri" },
     "template": {

@@ -7,6 +7,8 @@ This document describes the configuration options for the system, including API 
 
 ### Product Database
 
+**Root Path:** `productDatabase`
+
 | Key        | Description                               | Example Value              |
 |------------|-------------------------------------------|----------------------------|
 | `enabled`  | Enable/disable the internal product DB    | `true` / `false`           |
@@ -18,6 +20,17 @@ This document describes the configuration options for the system, including API 
 | Key         | Example Value                          |
 |-------------|----------------------------------------|
 | `cveApiUrl` | `https://cveawg.mitre.org/api/cve`     |
+
+### Export Texts
+
+**Root Path:** `exportTexts.productDescription`
+
+These texts are used as a prefix to export product descriptions
+
+| Key         | Example Value                          |
+|-------------|----------------------------------------|
+| `de` | `Produktbeschreibung für`     |
+| `en` | `Product description for`     |
 
 ---
 
