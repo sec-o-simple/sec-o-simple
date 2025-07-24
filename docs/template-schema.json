@@ -1,0 +1,274 @@
+{
+  "type": "object",
+  "properties": {
+    "productDatabase": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean" },
+        "apiUrl": { "type": "string", "format": "uri" },
+        "url": { "type": "string", "format": "uri" }
+      },
+      "required": ["enabled", "apiUrl", "url"]
+    },
+    "cveApiUrl": { "type": "string", "format": "uri" },
+    "template": {
+      "type": "object",
+      "properties": {
+        "document-information.title": { "type": "string" },
+        "document-information.title.readonly": { "type": "boolean" },
+        "document-information.id.placeholder": { "type": "string" },
+        "document-information.tracking.status": {
+          "type": "string",
+          "enum": ["draft", "final", "interim"]
+        },
+        "document-information.language": {
+          "type": "string",
+          "enum": ["en", "de"]
+        },
+
+        "document-information.tlp.label": { "type": "string" },
+        "document-information.tlp.label.placeholder": { "type": "string" },
+
+        "document-information.tlp.url": { "type": "string" },
+        "document-information.tlp.url.placeholder": { "type": "string" },
+        "document-information.tlp.url.readonly": { "type": "boolean" },
+
+        "document-information.notes.default": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "enum": [
+                "faq",
+                "general",
+                "details",
+                "description",
+                "legal_disclaimer"
+              ]
+            }
+          },
+          "required": ["category"]
+        },
+
+        "document-information.notes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "category": { "type": "string" },
+              "title": { "type": "string" },
+              "content": { "type": "string" },
+              "content.placeholder": { "type": "string" },
+              "readonly": { "type": "boolean" }
+            },
+            "required": ["id"]
+          }
+        },
+
+        "document-information.notes_templates": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "properties": {
+              "readonly": { "type": "boolean" },
+              "id": { "type": "string" },
+              "category": {
+                "type": "string",
+                "enum": [
+                  "faq",
+                  "general",
+                  "details",
+                  "description",
+                  "legal_disclaimer"
+                ]
+              },
+              "title": { "type": "string" },
+              "content": { "type": "string" }
+            },
+            "required": ["id"]
+          }
+        },
+
+        "document-information.publisher.readonly": { "type": "boolean" },
+        "document-information.publisher.name": { "type": "string" },
+        "document-information.publisher.category": {
+          "type": "string",
+          "enum": [
+            "vendor",
+            "other",
+            "coordinator",
+            "discoverer",
+            "translator",
+            "user"
+          ]
+        },
+        "document-information.publisher.namespace": { "type": "string" },
+        "document-information.publisher.contactDetails": { "type": "string" },
+        "document-information.publisher.contactDetails.readonly": {
+          "type": "boolean"
+        },
+        "document-information.publisher.issuingAuthority": { "type": "string" },
+
+        "document-information.references": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "summary": { "type": "string" },
+              "url": { "type": "string", "format": "uri" },
+              "origin": { "type": "string", "enum": ["self", "external"] }
+            },
+            "required": ["id"]
+          }
+        },
+
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "readonly": { "type": "boolean" },
+              "id": { "type": "string" },
+              "category": { "type": "string", "const": "vendor" },
+              "name": { "type": "string" },
+              "subBranches": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "string" },
+                    "readonly": { "type": "boolean" },
+                    "category": { "type": "string", "const": "product_name" },
+                    "name": { "type": "string" },
+                    "description": { "type": "string" },
+                    "type": { "type": "string" },
+                    "subBranches": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "string" },
+                          "readonly": { "type": "boolean" },
+                          "category": {
+                            "type": "string",
+                            "const": "product_version"
+                          },
+                          "name": { "type": "string" }
+                        },
+                        "required": ["id", "category"]
+                      }
+                    }
+                  },
+                  "required": ["id", "category", "subBranches"]
+                }
+              }
+            },
+            "required": ["id", "category", "subBranches"]
+          }
+        },
+
+        "vulnerabilities.notes.default": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "content": { "type": "string" },
+            "category": {
+              "type": "string",
+              "enum": [
+                "faq",
+                "general",
+                "details",
+                "description",
+                "legal_disclaimer"
+              ]
+            }
+          }
+        },
+
+        "vulnerabilities.products.default": {
+          "type": "object",
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": [
+                "known_affected",
+                "known_not_affected",
+                "fixed",
+                "under_investigation"
+              ]
+            }
+          },
+          "required": ["status"]
+        },
+
+        "vulnerabilities.remediations.default": {
+          "type": "object",
+          "properties": {
+            "category": {
+              "type": "string",
+              "enum": [
+                "mitigation",
+                "no_fix_planned",
+                "none_available",
+                "vendor_fix",
+                "workaround"
+              ]
+            }
+          },
+          "required": ["category"]
+        },
+
+        "vulnerabilities": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "readonly": { "type": "boolean" },
+              "cve": { "type": "string" },
+              "cwe": { "type": "string" },
+              "title": { "type": "string" },
+              "notes": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "readonly": { "type": "boolean" },
+                    "id": { "type": "string" },
+                    "category": { "type": "string" },
+                    "title": { "type": "string" },
+                    "content": { "type": "string" }
+                  },
+                  "required": ["id"]
+                }
+              },
+              "products": { "type": "array" }
+            },
+            "required": ["id", "notes", "products"]
+          }
+        },
+
+        "vulnerabilities.notes_templates": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "properties": {
+              "readonly": { "type": "boolean" },
+              "id": { "type": "string" },
+              "category": { "type": "string" },
+              "title": { "type": "string" },
+              "content": { "type": "string" }
+            },
+            "required": ["id"]
+          }
+        }
+      }
+    }
+  },
+  "required": ["template"]
+}

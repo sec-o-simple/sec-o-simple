@@ -3,7 +3,11 @@ import { useListState } from '@/utils/useListState'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { Alert } from '@heroui/react'
 import { useEffect } from 'react'
-import { NotesList, TNote, useNoteGenerator } from '../shared/NotesList'
+import {
+  NotesList,
+  TNote,
+  useVulnerabilityNoteGenerator,
+} from '../shared/NotesList'
 import { NotesTemplates } from '../shared/NotesTemplates'
 import { TVulnerability } from './types/tVulnerability'
 
@@ -18,7 +22,7 @@ export default function Notes({
   onChange: (vulnerability: TVulnerability) => void
   isTouched?: boolean
 }) {
-  const noteGenerator = useNoteGenerator()
+  const noteGenerator = useVulnerabilityNoteGenerator()
   const notesListState = useListState<TNote>({
     initialData: vulnerability.notes,
     generator: noteGenerator,

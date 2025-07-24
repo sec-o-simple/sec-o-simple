@@ -1,112 +1,139 @@
 # Configuration Documentation
 
 This document describes the configuration options for the system, including API endpoints, document templates, products, and vulnerability definitions.
-
 ---
 
-## Product Database
+## API Endpoints
 
-| Key          | Description                      | Value               |
-|--------------|----------------------------------|---------------------|
-| `enabled`    | Whether the product DB is active | `false`             |
-| `apiUrl`     | Internal API URL                 | `http://127.0.0.1:9999` |
-| `url`        | Web interface URL                | `http://127.0.0.1:3000` |
+### Product Database
 
----
+| Key        | Description                               | Example Value              |
+|------------|-------------------------------------------|----------------------------|
+| `enabled`  | Enable/disable the internal product DB    | `true` / `false`           |
+| `apiUrl`   | Internal API endpoint for product access  | `http://127.0.0.1:9999`    |
+| `url`      | Web interface for managing products       | `http://127.0.0.1:3000`    |
 
-## CVE API
+### CVE API
 
-| Key        | Value                                 |
-|------------|---------------------------------------|
-| `cveApiUrl`| `https://cveawg.mitre.org/api/cve`    |
+| Key         | Example Value                          |
+|-------------|----------------------------------------|
+| `cveApiUrl` | `https://cveawg.mitre.org/api/cve`     |
 
 ---
 
 ## Template Configuration
 
-### Field Configuration
+**Root Path:** `template`
 
-With the given suffixes fields can be configured further.
+### Generic Field Modifiers
 
-| Key                                    | Description                           |
-|----------------------------------------|---------------------------------------|
-| `{path}.placeholder`                   | Placeholder for field                 |
-| `{path}.readonly`                      | If field is readonly                  |
+The following suffixes can be appended to most fields to enhance configurability:
+
+| Suffix               | Description                         |
+|----------------------|-------------------------------------|
+| `.placeholder`       | UI placeholder text for the field   |
+| `.readonly`          | Marks the field as read-only        |
 
 ### Document Information
 
-Path: `document-information`
+**Path:** `document-information`
 
-| Key                                    | Description                           | Values     |
-|----------------------------------------|---------------------------------------|------------|
-| `title`                                | Document title                        | -          |
-| `tracking.status`                      | Document status                       | `draft`, `interim`, `final`|
-| `language`                             | Document language                     | `en`, `de` |
-| `tlp.label`                            | TLP label                             | -          |
-| `tlp.url`                              | URL for TLP information               | -          | 
+| Key                          | Description                   | Values                        |
+|------------------------------|-------------------------------|-------------------------------|
+| `title`                      | Document title                | `string`                      |
+| `tracking.status`            | Document status               | `draft`, `interim`, `final`   |
+| `language`                   | Document language             | `en`, `de`                    |
+| `tlp.label`                  | TLP label                     | `string`                      |
+| `tlp.url`                    | TLP reference URL             | `string`                      |
 
-#### Notes (Default)
+### Notes (Default)
 
-Path: `document-information.notes.default`
+**Path:** `document-information.notes.default`
 
-| Key        | Description                         | Values |
-|------------|-------------------------------------|--------|
-| `title`    | Default title for new notes         | -      |
-| `content`  | Default content for new notes       | -      |
-| `category` | Default category for new notes      | [TNoteCategory] |
+| Key         | Description                          | Allowed Values                                               |
+|-------------|--------------------------------------|--------------------------------------------------------------|
+| `title`     | Default note title                   | `string`                                                     |
+| `content`   | Default content                      | `string`                                                     |
+| `category`  | Default note type                    | `description`, `details`, `faq`, `general`, `legal_disclaimer`, `other`, `summary` |
 
+### Note Templates
 
-#### Notes Templates
+**Path:** `document-information.notes_templates[]`
 
-Same as **Legal Disclaimer** above.
+| Key        | Description             | Values                                                            |
+|------------|-------------------------|-------------------------------------------------------------------|
+| `id`       | Note ID.                | `string`                                                          |
+| `title`    | Note title              | `string`                                                          |
+| `content`  | Note content            | `string`                                                          |
+| `category` | Note type               | `description`, `details`, `faq`, `general`, `legal_disclaimer`, `summary` |
+| `readonly` | If the note is locked   | `true`, `false`                                                   |
 
 ---
 
 ### Publisher Information
 
-Path: `document-information.publisher`
+**Path:** `document-information.publisher`
 
-| Key                            | Description                           |
-|--------------------------------|---------------------------------------|
-| `readonly`                     | If publisher section is readonly      |
-| `name`                         | Publisher name                        |
-| `category`                     | Publisher category                    |
-| `namespace`                    | Publisher namespace URL               |
-| `contactDetails`               | Contact information                   |
-| `issuingAuthority`             | Issuing authority                     |
-
----
+| Key                        | Description                         | Values                                          |
+|----------------------------|-------------------------------------|-------------------------------------------------|
+| `readonly`                 | If publisher block is read-only     | `true`, `false`                                 |
+| `name`                     | Publisher name                      | `string`                                        |
+| `category`                 | Publisher category                      | `coordinator`, `discoverer`, `other`, `translator`, `user`, `vendor` |
+| `namespace`                | Publisher namespace URI                      | `string`                                  |
+| `contactDetails`          | Contact information                | `string`                                        |
+| `issuingAuthority`        | Issuing organization               | `string`                                        |
 
 ### References
 
-- **Example Reference**
-  - `id`: `examplereference`
-  - `summary`: `"Example Reference"`
-  - `url`: `"https://example.com"`
-  - `origin`: `"external"`
+**Path:** `document-information.references[]`
+
+| Key       | Description             | Values                       |
+|-----------|-------------------------|------------------------------|
+| `id`      | Reference ID            | `string`                     |
+| `summary` | Summary of reference    | `string`                     |
+| `url`     | Link to reference       | `string`                     |
+| `origin`  | Source of reference     | `self`, `external`           |
 
 ---
 
 ## Products
 
-A hierarchical list of vendors, products, and versions.
+### Vendors
 
-- **Vendor: Example vendor**
-  - `id`: `vendor1`
-  - `category`: `vendor`
-  - `readonly`: `true`
+**Path:** `products[]`
 
-  - **Product: Product A**
-    - `id`: `product1`
-    - `category`: `product_name`
-    - `type`: `Software`
-    - `readonly`: `true`
+| Key         | Description              | Values        |
+|-------------|--------------------------|---------------|
+| `id`        | Vendor ID                | `string`      |
+| `category`  | Type (must be `vendor`)  | `vendor`      |
+| `name`      | Vendor name              | `string`      |
+| `readonly`  | Read-only flag           | `boolean`     |
+| `subBranches` | Contained products     | `array`       |
 
-    - **Version: 1.0.0**
-      - `id`: `version1`
-      - `category`: `product_version`
-      - `description`: `"Initial product version"`
-      - `readonly`: `true`
+### Products
+
+**Path:** `products[].subBranches[]`
+
+| Key           | Description           | Values                      |
+|----------------|-----------------------|------------------------------|
+| `id`          | Product ID            | `string`                    |
+| `category`    | Must be `product_name`| `product_name`              |
+| `name`        | Product name          | `string`                    |
+| `description` | Short description     | `string`                    |
+| `type`        | Product type          | `software`, `hardware`      |
+| `readonly`    | Read-only flag        | `boolean`                   |
+| `subBranches` | Product versions      | `array`                     |
+
+### Versions
+
+**Path:** `products[].subBranches[].subBranches[]`
+
+| Key        | Description             | Values             |
+|------------|-------------------------|--------------------|
+| `id`       | Version ID              | `string`           |
+| `category` | Must be `product_version`| `product_version`  |
+| `name`     | Version name            | `string`           |
+| `readonly` | Read-only flag.         | `boolean`          |
 
 ---
 
@@ -114,60 +141,80 @@ A hierarchical list of vendors, products, and versions.
 
 ### Defaults
 
-#### Products (Default)
+#### Notes
 
-Path: `vulnerabilities.products.default`
+**Path:** `vulnerabilities.notes.default`
 
-| Key        | Description                         | Values                     |
-|------------|-------------------------------------|----------------------------|
-| `status`   | Default status for prodcuts         | `known_affected`, `known_not_affected`, `fixed`, `under_investigation` |
+| Key        | Description              | Values                                    |
+|------------|--------------------------|-------------------------------------------|
+| `title`    | Default note title       | `string`                                  |
+| `content`  | Default content          | `string`                                  |
+| `category` | Note category            | `description`, `details`, `faq`, `general`, `legal_disclaimer`, `summary` |
 
+#### Products
 
-#### Remediations (Default)
+**Path:** `vulnerabilities.products.default`
 
-Path: `vulnerabilities.remediations.default`
+| Key      | Description                | Values                                    |
+|----------|----------------------------|-------------------------------------------|
+| `status` | Default product status     | `known_affected`, `known_not_affected`, `fixed`, `under_investigation` |
 
-| Key        | Description                         | Values                     |
-|------------|-------------------------------------|----------------------------|
-| `category` | Default category for remediations   | `mitigation`, `no_fix_planned`, `none_available`, `vendor_fix`, `workaround` |
+#### Remediations
+
+**Path:** `vulnerabilities.remediations.default`
+
+| Key        | Description                  | Values                                          |
+|------------|------------------------------|-------------------------------------------------|
+| `category` | Default remediation category     | `mitigation`, `no_fix_planned`, `none_available`, `vendor_fix`, `workaround` |
 
 ---
 
 ### Defined Vulnerabilities
 
-Path: `vulnerabilities.[]`
+**Path:** `vulnerabilities[]`
 
-- **Vulnerability 1**
-  - `id`: `v1`
-  - `readonly`: `true`
-  - `cve`: `CVE-2025-30073`
-  - `cwe`: `CWE1`
-  - `title`: `"Vulnerability 1"`
+| Key        | Description                  | Values                |
+|------------|------------------------------|------------------------|
+| `id`       | Vulnerability ID             | `string`               |
+| `readonly` | If is readonly               | `boolean`              |
+| `cve`      | CVE-ID                       | `string`               |
+| `cwe`      | CWE-ID                       | `string`               |
+| `title`    | Vulnerability title          | `string`               |
+| `notes`    | Notes (array)                | `object[]`             |
+| `products` | Products (array)             | `object[]`             |
 
-  - **Notes**
-    - `id`: `description`
-    - `category`: `description`
-    - `title`: `"Vulnerability Description"`
-    - `content`: Description of transaction reference reuse vulnerability in OPC cardsystems Webapp Aufwertung 2.1.0.
+#### Notes (within vulnerability)
+
+**Path:** `vulnerabilities[].notes[]`
+
+| Key        | Description             | Values                  |
+|------------|-------------------------|--------------------------|
+| `id`       | Note ID                 | `string`                |
+| `title`    | Note title              | `string`                |
+| `content`  | Note content            | `string`                |
+| `category` | Note type               | Same as global `category`|
+| `readonly` | Read-only flag          | `boolean`               |
+
+#### Product Status (within vulnerability)
+
+Each key refers to an array of product IDs:
+
+- `vulnerabilities[].products[].known_affected[]`
+- `vulnerabilities[].products[].known_not_affected[]`
+- `vulnerabilities[].products[].fixed[]`
+- `vulnerabilities[].products[].under_investigation[]`
 
 ---
 
 ### Vulnerability Note Templates
 
-Path: `vulnerabilities.notes_templates`
+**Path:** `vulnerabilities.notes_templates[]`
 
-| Key        | Description                      | Value               |
-|------------|----------------------------------|---------------------|
-| `id`       | ID of Note                       | -             |
-| `category` | Category of Note                 |  |
-| `title`    | Title of Note                    | - |
-| `content`  | Content of Note                  | - |
+| Key        | Description             | Values                                                 |
+|------------|-------------------------|--------------------------------------------------------|
+| `id`       | Note ID                 | `string`                                               |
+| `title`    | Note title              | `string`                                               |
+| `content`  | Note content            | `string`                                               |
+| `category` | Note type               | `description`, `details`, `faq`, `general`, `legal_disclaimer`, `summary` |
+| `readonly` | Lock flag               | `boolean`                                              |
 
-
-- **Template**
-  - `id`: `id`
-  - `category`: `description`
-  - `title`: `"Vulnerability Description"`
-  - `content`: `"This is a description of the vulnerability."`
-  
-[TNoteCategory]: description, details, faq, general, legal_disclaimer, other, summary

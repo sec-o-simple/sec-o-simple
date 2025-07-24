@@ -36,8 +36,20 @@ export type TNote = {
 export function useNoteGenerator(): TNote {
   const { getTemplateDefaultObject } = useTemplate()
   const defaultNote = getTemplateDefaultObject<TNote>(
-    'document-information.notes.default',
+    'document-information.notes',
   )
+
+  return {
+    id: uid(),
+    title: defaultNote.title || '',
+    category: defaultNote.category || 'description',
+    content: defaultNote.content || '',
+  }
+}
+
+export function useVulnerabilityNoteGenerator(): TNote {
+  const { getTemplateDefaultObject } = useTemplate()
+  const defaultNote = getTemplateDefaultObject<TNote>('vulnerabilities.notes')
 
   return {
     id: uid(),
