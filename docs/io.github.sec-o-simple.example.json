@@ -6,6 +6,12 @@
     "url": "http://127.0.0.1:3000"
   },
   "cveApiUrl": "https://cveawg.mitre.org/api/cve",
+  "exportTexts": {
+    "productDescription": {
+      "de": "Produktbeschreibung für ",
+      "en": "Product description for "
+    }
+  },
   "template": {
     "document-information.title": "Test Document",
     "document-information.title.readonly": true,
