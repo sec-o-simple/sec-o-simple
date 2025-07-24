@@ -221,6 +221,8 @@ export function parseCSAFDocument(
 
 export function useCSAFImport() {
   const { importSOSDraft } = useSOSImport()
+  const vulnerabilityProductGenerator = useVulnerabilityProductGenerator()
+  const remediationGenerator = useRemediationGenerator()
 
   const getCSAFDocumentVersion = (
     documentObject: object,
@@ -249,8 +251,8 @@ export function useCSAFImport() {
   const importCSAFDocument = (csafDocument: JSONObject): HiddenField[] => {
     const sosDocument = parseCSAFDocument(
       csafDocument,
-      useVulnerabilityProductGenerator(),
-      useRemediationGenerator(),
+      vulnerabilityProductGenerator,
+      remediationGenerator,
     )
     if (sosDocument) {
       importSOSDraft(sosDocument)
