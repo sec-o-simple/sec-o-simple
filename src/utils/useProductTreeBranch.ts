@@ -85,7 +85,18 @@ export function useProductTreeBranch() {
   const getSelectablePTBs = (): TProductTreeBranch[] => {
     // this function returns all ProductTreeBranches that can be referenced e.g. in Vulnerablility Scores
     // later product groups might be added to this
-    return getPTBsByCategory('product_version')
+    return getPTBsByCategory('product_version').map((ptb) => {
+      const version = findProductTreeBranchWithParents(ptb.id)
+      const product = version?.parent
+      const vendor = product?.parent
+
+      return {
+        ...ptb,
+        name: `${vendor?.name ?? ''} ${product?.name ?? ''} ${
+          version?.name ?? ''
+        }`,
+      }
+    })
   }
 
   const addPTB = (ptb: TProductTreeBranch) => {
