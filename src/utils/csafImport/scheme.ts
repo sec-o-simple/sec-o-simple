@@ -114,7 +114,10 @@ export default {
     {
       id: 'string',
       cve: 'string',
-      cwe: 'string',
+      cwe: {
+        id: 'string',
+        name: 'string',
+      },
       title: 'string',
       notes: [
         {

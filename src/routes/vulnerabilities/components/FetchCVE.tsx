@@ -82,9 +82,9 @@ export default function FetchCVE({
         descriptions?.map((desc: CNADescription, index: number) => {
           vulnerability.notes.push({
             id: uid(),
-            title: `${t('vulnerabilities.general.description')} - ${
-              vulnerability.cve
-            } - ${index + 1}`,
+            title: `${t('vulnerabilities.general.description', {
+              lng: docLanguage,
+            })} - ${vulnerability.cve} - ${index + 1}`,
             content: desc.value,
             category: 'description',
           })

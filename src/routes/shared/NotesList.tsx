@@ -4,10 +4,12 @@ import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
 import StatusIndicator from '@/components/StatusIndicator'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import { checkReadOnly, getPlaceholder, useTemplate } from '@/utils/template'
 import { ListState } from '@/utils/useListState'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
+import useValidationStore from '@/utils/validation/useValidationStore'
 import { Chip } from '@heroui/chip'
+import { Alert } from '@heroui/react'
 import { SelectItem } from '@heroui/select'
 import { useTranslation } from 'react-i18next'
 import { uid } from 'uid'
@@ -31,12 +33,31 @@ export type TNote = {
   title: string
 }
 
-export const NoteGenerator = (): TNote => ({
-  id: uid(),
-  title: '',
-  category: 'description',
-  content: '',
-})
+export function useNoteGenerator(): TNote {
+  const { getTemplateDefaultObject } = useTemplate()
+  const defaultNote = getTemplateDefaultObject<TNote>(
+    'document-information.notes',
+  )
+
+  return {
+    id: uid(),
+    title: defaultNote.title || '',
+    category: defaultNote.category || 'description',
+    content: defaultNote.content || '',
+  }
+}
+
+export function useVulnerabilityNoteGenerator(): TNote {
+  const { getTemplateDefaultObject } = useTemplate()
+  const defaultNote = getTemplateDefaultObject<TNote>('vulnerabilities.notes')
+
+  return {
+    id: uid(),
+    title: defaultNote.title || '',
+    category: defaultNote.category || 'description',
+    content: defaultNote.content || '',
+  }
+}
 
 export function NotesList({
   notesListState,
@@ -58,6 +79,7 @@ export function NotesList({
       content={(note, index) => (
         <NoteForm
           note={note}
+          noteIndex={index}
           csafPath={`${csafPath}/${index}`}
           isTouched={isTouched}
           onChange={notesListState.updateDataEntry}
@@ -77,12 +99,17 @@ function NoteStartContent({
   item: TNote
   csafPath: string
 }) {
-  const { hasErrors } = usePrefixValidation(csafPath)
   const { t } = useTranslation()
+  const { hasErrors } = usePrefixValidation(csafPath)
+
+  // Check if there is a validation message for this path
+  const message = useValidationStore((state) =>
+    state.messages.find((m) => m.path === csafPath),
+  )
 
   return (
     <>
-      <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
+      <StatusIndicator hasErrors={hasErrors || !!message} hasVisited={true} />
       <Chip color="primary" variant="flat" radius="md" size="lg">
         {t(`notes.categories.${item.category}`)}
       </Chip>
@@ -92,19 +119,31 @@ function NoteStartContent({
 
 function NoteForm({
   note,
+  noteIndex,
   csafPath,
   onChange,
   isTouched = false,
 }: {
   note: TNote
+  noteIndex?: number
   csafPath: string
   onChange: (note: TNote) => void
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
 
+  const message = useValidationStore((state) => state.messages).filter(
+    (m) => m.path === `/document/notes/${noteIndex}`,
+  )?.[0]
+
   return (
     <VSplit className="pt-4">
+      {message?.severity === 'error' && (
+        <Alert color="danger" className="mb-4">
+          <p>{message.message}</p>
+        </Alert>
+      )}
+
       <HSplit className="items-start">
         <Select
           label={t('notes.category')}

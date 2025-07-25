@@ -108,10 +108,16 @@ function ReferenceForm({
             category: [...selected][0] as TReferenceCategory,
           })
         }}
+        renderValue={(selected) => {
+          if (!selected[0].key) return ''
+          return t(`ref.categories.${selected[0].key}`)
+        }}
         isDisabled={checkReadOnly(reference, 'category')}
       >
         {['external', 'self'].map((key) => (
-          <SelectItem key={key}>{t(`ref.categories.${key}`)}</SelectItem>
+          <SelectItem key={key} textValue={key}>
+            {t(`ref.categories.${key}`)}
+          </SelectItem>
         ))}
       </Select>
       <Textarea

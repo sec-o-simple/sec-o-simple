@@ -14,7 +14,7 @@ export type TGeneralDocumentInformation = {
 export const documentStatus = ['draft', 'final', 'interim'] as const
 export type TDocumentStatus = (typeof documentStatus)[number]
 
-export const tlpLevel = ['green', 'amber', 'red', 'white'] as const
+export const tlpLevel = ['GREEN', 'AMBER', 'RED', 'WHITE'] as const
 export type TTLPLevel = (typeof tlpLevel)[number]
 
 export function getDefaultGeneralDocumentInformation(): TGeneralDocumentInformation {
