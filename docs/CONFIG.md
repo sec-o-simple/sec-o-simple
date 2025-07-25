@@ -1,7 +1,6 @@
 # Configuration Documentation
 
 This document describes the configuration options for the system, including API endpoints, document templates, products, and vulnerability definitions.
----
 
 ## API Endpoints
 
