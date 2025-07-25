@@ -1,5 +1,6 @@
 import { TDocumentInformation } from '@/routes/document-information/types/tDocumentInformation'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import { TConfig } from '../useConfigStore'
 import { TDocumentStore } from '../useDocumentStore'
 import { parseNote, TParsedNote } from './parseNote'
 
@@ -11,21 +12,32 @@ function extractAllProducts(
   })
 }
 
-export function parseNotes(documentStore: TDocumentStore): TParsedNote[] {
+export function parseNotes(
+  documentStore: TDocumentStore,
+  config?: TConfig,
+): TParsedNote[] {
+  const productDescription = config?.exportTexts?.productDescription ?? {
+    en: 'Product description for',
+    de: 'Produktbeschreibung für',
+  }
   const documentInformation: TDocumentInformation =
     documentStore.documentInformation
   const notes = documentInformation.notes.map(parseNote)
 
   const productNotes = extractAllProducts(Object.values(documentStore.products))
     ?.filter((p) => p.description.length)
-    .map((product) => ({
-      category: 'description',
-      text: product.description || '',
-      title:
-        documentInformation.lang === 'de'
-          ? `Produktbeschreibung für ${product.name}`
-          : `Product description for ${product.name}`,
-    }))
+    .map((product) => {
+      const title =
+        documentInformation.lang === 'en'
+          ? `${productDescription.en} ${product.name}`
+          : `${productDescription.de} ${product.name}`
+
+      return {
+        category: 'description',
+        text: product.description || '',
+        title: title,
+      }
+    })
 
   return [...notes, ...productNotes] as TParsedNote[]
 }

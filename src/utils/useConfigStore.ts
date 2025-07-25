@@ -16,6 +16,12 @@ export type TConfig = {
     url?: string
     apiUrl?: string
   }
+  exportTexts?: {
+    productDescription?: {
+      en: string
+      de: string
+    }
+  }
   cveApiUrl?: string
   template: { [key: string]: unknown }
 }

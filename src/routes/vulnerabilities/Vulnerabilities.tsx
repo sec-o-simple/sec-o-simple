@@ -215,7 +215,7 @@ function VulnerabilityForm({
             <TabTitle
               title={t('vulnerabilities.scores')}
               csafPrefix={`${prefix}/scores`}
-              hasError={vulnerability.scores.some(
+              hasError={vulnerability.scores?.some(
                 (score) => !score.cvssVersion,
               )}
             />

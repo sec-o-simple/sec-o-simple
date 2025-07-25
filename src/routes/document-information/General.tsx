@@ -119,7 +119,11 @@ export default function General() {
             renderValue={(value) => (
               <TLPColor color={value[0].key as TTLPLevel} />
             )}
-            placeholder={getFieldPlaceholder('document-information.tlp.label')}
+            placeholder={
+              getFieldPlaceholder(
+                'document-information.tlp.label.placeholder',
+              ) ?? t('document.general.tlp.label.placeholder')
+            }
           >
             {tlpLevel.map((level) => (
               <SelectItem key={level}>
@@ -152,21 +156,19 @@ export default function General() {
 }
 
 function TLPColor({ color }: { color: TTLPLevel }) {
-  const { t } = useTranslation()
-
   const backgroundColor =
     {
-      white: 'bg-zinc-200',
-      green: 'bg-green-500',
-      amber: 'bg-amber-500',
-      red: 'bg-red-500',
+      WHITE: 'bg-zinc-200',
+      GREEN: 'bg-green-500',
+      AMBER: 'bg-amber-500',
+      RED: 'bg-red-500',
     }[color] || 'bg-zinc-200'
 
   return (
     <div className="flex items-center gap-2">
       <div className={cn('size-2 rounded-full', backgroundColor)} />
 
-      {t(`document.general.tlp.level.${color}`)}
+      {color}
     </div>
   )
 }

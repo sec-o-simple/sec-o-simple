@@ -8,7 +8,7 @@ export type UseListStateProps<T, IdType> = {
   initialData?: T[]
   idKey?: DynamicObjectValueKey<T, IdType>
   /** Generator function to create a new element */
-  generator?: () => T
+  generator?: T | (() => T)
   onRemove?: (entry: T) => void
 }
 
@@ -41,10 +41,10 @@ export function useListState<T extends object, IdType = string>(
   /** adds a new data entry to the state
    *  returns the id of the new data entry */
   const addDataEntry = () => {
-    const newDataEntry = generator?.()
-    if (newDataEntry) {
-      setData([...data, newDataEntry])
-      return newDataEntry
+    const entry = typeof generator === 'function' ? generator() : generator
+    if (entry) {
+      setData([...data, entry])
+      return entry
     }
   }
 

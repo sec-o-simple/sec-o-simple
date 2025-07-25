@@ -1,13 +1,14 @@
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import {
   TRemediation,
-  getDefaultRemediation,
+  useRemediationGenerator,
 } from '@/routes/vulnerabilities/types/tRemediation'
 import {
   TCwe,
   TVulnerability,
   getDefaultVulnerability,
 } from '@/routes/vulnerabilities/types/tVulnerability'
+import { useVulnerabilityProductGenerator } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
 import {
   TVulnerabilityScore,
   getDefaultVulnerabilityScore,
@@ -22,6 +23,10 @@ export function parseVulnerabilities(
   csafDocument: TCSAFDocument,
   idGenerator: IdGenerator,
   ptbs: TProductTreeBranch[],
+  vulnerabilityProductGenerator: ReturnType<
+    typeof useVulnerabilityProductGenerator
+  >,
+  remediationGenerator: ReturnType<typeof useRemediationGenerator>,
 ): TVulnerability[] {
   return (
     csafDocument.vulnerabilities?.map((vulnerability) => {
@@ -38,9 +43,10 @@ export function parseVulnerabilities(
           vulnerability.product_status,
           idGenerator,
           ptbs,
+          vulnerabilityProductGenerator,
         ),
         remediations: vulnerability.remediations?.map((remediation) => {
-          const defaultRemediation = getDefaultRemediation()
+          const defaultRemediation = remediationGenerator
           return {
             id: defaultRemediation.id,
             category: remediation.category ?? defaultRemediation.category,

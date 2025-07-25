@@ -6,11 +6,11 @@ export default function parseScores(
   scores: TVulnerabilityScore[],
   pidGenerator: PidGenerator,
 ) {
-  const v3scores = scores.filter(
+  const v3scores = scores?.filter(
     (score) => score.cvssVersion === '3.0' || score.cvssVersion === '3.1',
   )
 
-  return v3scores.length
+  return v3scores?.length
     ? v3scores.map((score) => {
         let baseScore = 0
         let baseSeverity = ''

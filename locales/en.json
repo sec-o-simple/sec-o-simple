@@ -77,13 +77,8 @@
         "tlp": {
           "title": "Traffic Light Protocol (TLP)",
           "label": "TLP-Level",
-          "url": "TLP-URL",
-          "level": {
-            "red": "Red",
-            "amber": "Amber",
-            "green": "Green",
-            "white": "White"
-          }
+          "label.placeholder": "Select TLP label",
+          "url": "TLP-URL"
         },
         "language": "Language",
         "languages": {
@@ -96,6 +91,7 @@
           "interim": "Interim"
         },
         "revisionHistory": {
+          "initialRevision": "Initial Revision",
           "history": "Revision History",
           "label": "Revision",
           "version": "Version",

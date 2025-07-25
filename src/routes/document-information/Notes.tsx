@@ -5,14 +5,16 @@ import { useListValidation } from '@/utils/validation/useListValidation'
 import usePageVisit from '@/utils/validation/usePageVisit'
 import { Alert } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
-import { NoteGenerator, NotesList, TNote } from '../shared/NotesList'
+import { NotesList, TNote, useNoteGenerator } from '../shared/NotesList'
 import { NotesTemplates } from '../shared/NotesTemplates'
 import { TDocumentInformation } from './types/tDocumentInformation'
 
 export default function Notes() {
   const { t } = useTranslation()
+
+  const noteGenerator = useNoteGenerator()
   const notesListState = useListState<TNote>({
-    generator: NoteGenerator,
+    generator: noteGenerator,
   })
 
   useDocumentStoreUpdater<TDocumentInformation>({

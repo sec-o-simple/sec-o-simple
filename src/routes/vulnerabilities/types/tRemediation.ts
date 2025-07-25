@@ -1,3 +1,4 @@
+import { useTemplate } from '@/utils/template'
 import { uid } from 'uid'
 
 export const remediationCategories = [
@@ -19,10 +20,15 @@ export type TRemediation = {
   productIds: string[]
 }
 
-export function getDefaultRemediation(): TRemediation {
+export function useRemediationGenerator(): TRemediation {
+  const { getTemplateDefaultObject } = useTemplate()
+  const defaultRemediation = getTemplateDefaultObject<TRemediation>(
+    'vulnerabilities.remediations',
+  )
+
   return {
     id: uid(),
-    category: 'mitigation',
+    category: defaultRemediation.category || 'mitigation',
     productIds: [],
   }
 }
