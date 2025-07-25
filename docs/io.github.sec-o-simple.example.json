@@ -19,7 +19,7 @@
     "document-information.tracking.status": "final",
     "document-information.language": "de",
 
-    "document-information.tlp.label": "amber",
+    "document-information.tlp.label": "AMBER",
     "document-information.tlp.label.placeholder": "Select TLP label",
 
     "document-information.tlp.url": "test",
