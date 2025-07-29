@@ -5,6 +5,7 @@ import {
   Vendor as DatabaseVendor,
   IdentificationHelper,
   Product,
+  ProductVersion,
   useDatabaseClient,
 } from '@/utils/useDatabaseClient'
 import useDocumentStore from '@/utils/useDocumentStore'
@@ -80,7 +81,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
   // Helper function to map database identification helpers to CSAF format
   const mapIdentificationHelper = (helper: IdentificationHelper) => {
     const metadata = JSON.parse(helper.metadata)
-    
+
     switch (helper.category) {
       case 'cpe':
         return { cpe: metadata.cpe }
@@ -94,13 +95,15 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
         return { x_generic_uris: metadata.uris }
       case 'hashes':
         return {
-          hashes: metadata.file_hashes.map((hash: {
-            items: { algorithm: string; value: string }[]
-            filename: string
-          }) => ({
-            file_hashes: hash.items,
-            filename: hash.filename,
-          }))
+          hashes: metadata.file_hashes.map(
+            (hash: {
+              items: { algorithm: string; value: string }[]
+              filename: string
+            }) => ({
+              file_hashes: hash.items,
+              filename: hash.filename,
+            }),
+          ),
         }
       case 'purl':
         return { purl: metadata.purl }
@@ -112,13 +115,16 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
   }
 
   // Helper function to create a product version branch
-  const createProductVersionBranch = async (version: any): Promise<TProductTreeBranch | null> => {
+  const createProductVersionBranch = async (
+    version: ProductVersion,
+  ): Promise<TProductTreeBranch | null> => {
     try {
       const helpers = await client.fetchIdentificationHelpers(version.id)
       const mappedHelpers = helpers.map(mapIdentificationHelper)
-      const identificationHelper = mappedHelpers.length > 0 
-        ? Object.assign({}, ...mappedHelpers) 
-        : undefined
+      const identificationHelper =
+        mappedHelpers.length > 0
+          ? Object.assign({}, ...mappedHelpers)
+          : undefined
 
       return {
         id: version.id,
@@ -129,23 +135,29 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
         identificationHelper,
       }
     } catch (error) {
-      console.error(`Failed to create version branch for ${version.name}:`, error)
+      console.error(
+        `Failed to create version branch for ${version.name}:`,
+        error,
+      )
       return null
     }
   }
 
   // Helper function to create a product branch with its versions
-  const createProductBranch = async (product: Product): Promise<TProductTreeBranch> => {
+  const createProductBranch = async (
+    product: Product,
+  ): Promise<TProductTreeBranch> => {
     const versions = await client.fetchProductVersions(product.id)
     const versionResults = await Promise.allSettled(
-      versions.map(createProductVersionBranch)
+      versions.map(createProductVersionBranch),
     )
-    
+
     const validVersionBranches = versionResults
-      .filter((result): result is PromiseFulfilledResult<TProductTreeBranch> => 
-        result.status === 'fulfilled' && result.value !== null
+      .filter(
+        (result): result is PromiseFulfilledResult<TProductTreeBranch> =>
+          result.status === 'fulfilled' && result.value !== null,
       )
-      .map(result => result.value)
+      .map((result) => result.value)
 
     return {
       id: product.id,
@@ -160,22 +172,26 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
   // Helper function to find or create a vendor branch
   const getOrCreateVendorBranch = (vendor: Vendor): TProductTreeBranch => {
     const existingVendor = products.find(
-      (branch) => branch.category === 'vendor' && branch.id === vendor.id
+      (branch) => branch.category === 'vendor' && branch.id === vendor.id,
     )
 
-    return existingVendor || {
-      id: vendor.id,
-      category: 'vendor',
-      name: vendor.name,
-      description: vendor.description || '',
-      subBranches: [],
-    }
+    return (
+      existingVendor || {
+        id: vendor.id,
+        category: 'vendor',
+        name: vendor.name,
+        description: vendor.description || '',
+        subBranches: [],
+      }
+    )
   }
 
   // Helper function to process products for a vendor
-  const processVendorProducts = async (vendor: Vendor): Promise<TProductTreeBranch | null> => {
+  const processVendorProducts = async (
+    vendor: Vendor,
+  ): Promise<TProductTreeBranch | null> => {
     const selectedVendorProducts = vendor.products.filter((product) =>
-      selectedProducts.includes(product.id)
+      selectedProducts.includes(product.id),
     )
 
     if (selectedVendorProducts.length === 0) {
@@ -188,7 +204,8 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
     for (const product of selectedVendorProducts) {
       // Skip if product already exists under this vendor
       const productExists = vendorBranch.subBranches.some(
-        (branch) => branch.category === 'product_name' && branch.id === product.id
+        (branch) =>
+          branch.category === 'product_name' && branch.id === product.id,
       )
 
       if (productExists) {
@@ -218,7 +235,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
 
       // Process all vendors in parallel
       const vendorResults = await Promise.allSettled(
-        vendors.map(processVendorProducts)
+        vendors.map(processVendorProducts),
       )
 
       // Update the products list with processed vendors
@@ -226,7 +243,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
         if (result.status === 'fulfilled' && result.value) {
           const processedVendor = result.value
           const existingVendorIndex = updatedProducts.findIndex(
-            (branch) => branch.id === processedVendor.id
+            (branch) => branch.id === processedVendor.id,
           )
 
           if (existingVendorIndex >= 0) {
@@ -310,8 +327,8 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                             ? selectedAllProducts
                               ? t('products.import.selectedAll')
                               : t('products.import.selected', {
-                                count: selectedProductCount,
-                              })
+                                  count: selectedProductCount,
+                                })
                             : ''
                         }
                         startContent={
