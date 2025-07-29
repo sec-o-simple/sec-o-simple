@@ -1,5 +1,7 @@
 # Sec-O-Simple
 
+[![CI Tests](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/ci-tests.yml)
+
 Further information can be found in the [Documentation](./docs)
 
 ## Development
@@ -43,6 +45,23 @@ The webapp is now accessible at [http://localhost:8080](http://localhost:8080)
 ### Testing
 
 ```sh
-# Run automated tests
+# Run tests in watch mode
 npm test
+
+# Run tests once
+npm run test:run
+
+# Run tests with coverage report
+npm run test:coverage
+
+# Run tests with UI (optional)
+npm run test:ui
 ```
+
+The project maintains a minimum code coverage threshold of 70% for:
+- Branches
+- Functions  
+- Lines
+- Statements
+
+Coverage reports are automatically generated during CI/CD and available as artifacts in the GitHub Actions workflow. You can also view coverage reports locally by running `npm run test:coverage` and opening the generated HTML report in `coverage/index.html`.
