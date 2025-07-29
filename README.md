@@ -1,6 +1,8 @@
 # Sec-O-Simple
 
-[![CI Tests](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/ci-tests.yml/badge.svg)](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/ci-tests.yml)
+[![Tests](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/tests.yml/badge.svg)](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/tests.yml)
+[![Lint](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/lint.yml/badge.svg)](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/lint.yml)
+[![Build](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/build.yml/badge.svg)](https://github.com/sec-o-simple/sec-o-simple/actions/workflows/build.yml)
 
 Further information can be found in the [Documentation](./docs)
 
