@@ -1,6 +1,7 @@
 import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import useDocumentType from '@/utils/useDocumentType'
 import { Button } from '@heroui/button'
 import {
   ModalBody,
@@ -15,18 +16,22 @@ import {
   TProductTreeBranch,
   TProductTreeBranchProductType,
 } from '../types/tProductTreeBranch'
-import useDocumentType from '@/utils/useDocumentType'
 
-export type PTBEditFormProps = {
+export type PTBCreateEditFormProps = {
   ptb?: TProductTreeBranch
   onSave?: (updatedPtb: TProductTreeBranch) => void
+  category?: string
 }
 
-export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
+export function PTBCreateEditForm({
+  ptb,
+  onSave,
+  category,
+}: PTBCreateEditFormProps) {
   const { t } = useTranslation()
   const [name, setName] = useState(ptb?.name ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
-  const [type, setType] = useState(ptb?.type)
+  const [type, setType] = useState(ptb?.type ?? 'Software')
   const { hasHardware, hasSoftware } = useDocumentType()
 
   return (
@@ -34,33 +39,37 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
       {(onClose) => (
         <>
           <ModalHeader>
-            {t('modal.edit', {
-              label: t(`${ptb?.category}.label`),
-            })}
+            {ptb?.id
+              ? t('modal.edit', {
+                  label: t(`${category}.label`),
+                })
+              : t('modal.create', {
+                  label: t(`${category}.label`),
+                })}
           </ModalHeader>
           <ModalBody>
             <Input
-              label={t(`${ptb?.category}.name`)}
+              label={t(`${category}.name`)}
               autoFocus
               value={name}
               onValueChange={setName}
-              isDisabled={!ptb || checkReadOnly(ptb, 'name')}
+              isDisabled={ptb ? checkReadOnly(ptb, 'name') : false}
               placeholder={ptb ? getPlaceholder(ptb, 'name') : undefined}
             />
-            {ptb?.category === 'product_name' && (
+            {category === 'product_name' && (
               <Textarea
-                label={t(`${ptb?.category}.description`)}
+                label={t(`${category}.description`)}
                 value={description}
                 onValueChange={setDescription}
-                isDisabled={!ptb || checkReadOnly(ptb, 'description')}
+                isDisabled={ptb ? checkReadOnly(ptb, 'description') : false}
                 placeholder={
                   ptb ? getPlaceholder(ptb, 'description') : undefined
                 }
               />
             )}
-            {ptb?.category === 'product_name' && (
+            {category === 'product_name' && (
               <Select
-                label={t(`${ptb?.category}.type`)}
+                label={t(`${category}.type`)}
                 selectedKeys={[type ?? '']}
                 onChange={(e) => {
                   if (!e.target.value) {
@@ -68,7 +77,7 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
                   }
                   setType(e.target.value as TProductTreeBranchProductType)
                 }}
-                isDisabled={!ptb || checkReadOnly(ptb, 'type')}
+                isDisabled={ptb ? checkReadOnly(ptb, 'type') : false}
                 placeholder={ptb ? getPlaceholder(ptb, 'type') : undefined}
               >
                 {hasSoftware ? (
@@ -87,9 +96,12 @@ export function PTBEditForm({ ptb, onSave }: PTBEditFormProps) {
             <Button
               color="primary"
               onPress={() => {
-                if (ptb) {
-                  onSave?.({ ...ptb, name, description, type })
-                }
+                onSave?.({
+                  ...ptb,
+                  name,
+                  description,
+                  type,
+                } as TProductTreeBranch)
                 onClose()
               }}
             >

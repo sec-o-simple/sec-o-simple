@@ -11,7 +11,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
 import InfoCard from './components/InfoCard'
-import { PTBEditForm } from './components/PTBEditForm'
+import { PTBCreateEditForm } from './components/PTBEditForm'
 import SubMenuHeader from './components/SubMenuHeader'
 import {
   getDefaultProductTreeBranch,
@@ -33,6 +33,7 @@ export default function Product() {
   // modal variables
   const { isOpen, onOpen, onOpenChange } = useDisclosure()
   const [editingPTB, setEditingPTB] = useState<TProductTreeBranch | undefined>()
+
   const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
   const { addOrUpdateRelationship } = useRelationships()
 
@@ -63,58 +64,79 @@ export default function Product() {
         actionTitle={t('common.add', {
           label: t('products.product.version.label'),
         })}
-        onAction={() => {
-          const newVersion = getDefaultProductTreeBranch('product_version')
-          const updatedSubBranches = [...product.subBranches, newVersion]
-
-          const updatedVendors = updatePTB({
-            ...product,
-            subBranches: updatedSubBranches,
-          })
-
-          setEditingPTB(newVersion)
-          onOpen()
-
-          // Add relationships for the new version
-          if (!['Software', 'Hardware'].includes(product.type ?? '')) return
-
-          const isSoftware = product.type === 'Software'
-          const getVersionIds = (branches: TProductTreeBranch[]) =>
-            branches.map((b) => b.id)
-
-          updatedVendors.forEach((vendor) => {
-            vendor.subBranches.forEach((ptb) => {
-              if (ptb.id === productId) return
-
-              const source = isSoftware ? product : ptb
-              const target = isSoftware ? ptb : product
-
-              const sourceVersions = isSoftware
-                ? [newVersion.id]
-                : getVersionIds(ptb.subBranches)
-              const targetVersions = isSoftware
-                ? getVersionIds(ptb.subBranches)
-                : [newVersion.id]
-
-              if (sourceVersions.length === 0 || targetVersions.length === 0)
-                return
-
-              const relationship = {
-                ...getDefaultRelationship(),
-                category: 'installed_on' as TRelationshipCategory,
-                productId1: source.id,
-                product1VersionIds: sourceVersions,
-                productId2: target.id,
-                product2VersionIds: targetVersions,
-              }
-
-              addOrUpdateRelationship(relationship)
-            })
-          })
-        }}
+        onAction={() => onOpen()}
       />
-      <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
-        <PTBEditForm ptb={editingPTB} onSave={(ptb) => updatePTB(ptb)} />
+      <Modal
+        size="xl"
+        isOpen={isOpen}
+        onOpenChange={() => {
+          onOpenChange()
+          setEditingPTB(undefined)
+        }}
+      >
+        <PTBCreateEditForm
+          ptb={editingPTB}
+          category="product_version"
+          onSave={(ptb) => {
+            if (ptb.id) {
+              updatePTB(ptb)
+            } else {
+              const newVersion = {
+                ...getDefaultProductTreeBranch('product_version'),
+                ...ptb,
+              }
+              const updatedSubBranches = [...product.subBranches, newVersion]
+
+              const updatedVendors = updatePTB({
+                ...product,
+                subBranches: updatedSubBranches,
+              })
+
+              setEditingPTB(newVersion)
+              onOpen()
+
+              // Add relationships for the new version
+              if (!['Software', 'Hardware'].includes(product.type ?? '')) return
+
+              const isSoftware = product.type === 'Software'
+              const getVersionIds = (branches: TProductTreeBranch[]) =>
+                branches.map((b) => b.id)
+
+              updatedVendors.forEach((vendor) => {
+                vendor.subBranches.forEach((ptb) => {
+                  if (ptb.id === productId) return
+
+                  const source = isSoftware ? product : ptb
+                  const target = isSoftware ? ptb : product
+
+                  const sourceVersions = isSoftware
+                    ? [newVersion.id]
+                    : getVersionIds(ptb.subBranches)
+                  const targetVersions = isSoftware
+                    ? getVersionIds(ptb.subBranches)
+                    : [newVersion.id]
+
+                  if (
+                    sourceVersions.length === 0 ||
+                    targetVersions.length === 0
+                  )
+                    return
+
+                  const relationship = {
+                    ...getDefaultRelationship(),
+                    category: 'installed_on' as TRelationshipCategory,
+                    productId1: source.id,
+                    product1VersionIds: sourceVersions,
+                    productId2: target.id,
+                    product2VersionIds: targetVersions,
+                  }
+
+                  addOrUpdateRelationship(relationship)
+                })
+              })
+            }
+          }}
+        />
       </Modal>
       <div className="font-bold">
         {t('products.relationship.version', {
