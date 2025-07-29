@@ -20,14 +20,14 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     globals: true,
-    setupFiles: ['./src/test/setup.ts'],
+    setupFiles: ['./tests/setup.ts'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'json-summary', 'html', 'lcov'],
       reportOnFailure: true,
       exclude: [
         'node_modules/',
-        'src/test/',
+        'tests/',
         '**/*.d.ts',
         '**/*.config.*',
         'dist/',
