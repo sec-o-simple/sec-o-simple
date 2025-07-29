@@ -93,7 +93,8 @@
                 "id": "version1",
                 "readonly": true,
                 "category": "product_version",
-                "name": "1.0.0"
+                "name": "1.0.0",
+                "subBranches": []
               }
             ]
           }
