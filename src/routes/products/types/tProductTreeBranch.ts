@@ -14,11 +14,31 @@ export const productTreeBranchProductTypes = ['Software', 'Hardware'] as const
 export type TProductTreeBranchProductType =
   (typeof productTreeBranchProductTypes)[number]
 
+export type TProductIdentificationHelper = {
+  hashes?: {
+    file_hashes: {
+      algorithm: string
+      value: string
+    }[]
+    filename: string
+  }[]
+  purl?: string
+  cpe?: string
+  model_numbers?: string[]
+  sbom_urls?: string[]
+  serial_numbers?: string[]
+  x_generic_uris?: {
+    namespace: string
+    uri: string
+  }[]
+}
+
 export type TProductTreeBranch = {
   id: string
   category: TProductTreeBranchCategory
   name: string
   description: string
+  identificationHelper?: TProductIdentificationHelper
   subBranches: TProductTreeBranch[]
   type?: TProductTreeBranchProductType
 }
