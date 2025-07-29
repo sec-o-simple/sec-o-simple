@@ -232,22 +232,23 @@
       "": "Untitled"
     },
     "modal": {
-      "edit": "Edit {{label}}"
+      "edit": "Edit {{label}}",
+      "create": "Create {{label}}"
     },
     "vendor": {
       "label": "Vendor",
-      "name": "Vendor Name",
-      "description": "Vendor Description"
+      "name": "Name",
+      "description": "Description"
     },
     "product_version": {
       "label": "Version",
-      "name": "Version Name",
-      "description": "Version Description"
+      "name": "Name",
+      "description": "Description"
     },
     "product_name": {
       "label": "Product",
-      "name": "Product Name",
-      "description": "Product Description",
+      "name": "Name",
+      "description": "Description",
       "type": "Product Type"
     },
     "products": {
@@ -272,7 +273,9 @@
       "hardware": "Hardware",
       "unknownType": "Unknown Type",
       "vendor": {
-        "label": "Vendor"
+        "label": "Vendor",
+        "addProduct": "Add Product",
+        "edit": "Edit Vendor"
       },
       "product": {
         "label": "Product",

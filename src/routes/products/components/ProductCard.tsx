@@ -2,12 +2,10 @@ import IconButton from '@/components/forms/IconButton'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { faCodeFork } from '@fortawesome/free-solid-svg-icons'
 import { Chip } from '@heroui/chip'
-import { Modal, useDisclosure } from '@heroui/modal'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { TProductTreeBranch, getPTBName } from '../types/tProductTreeBranch'
 import InfoCard, { InfoCardProps } from './InfoCard'
-import { PTBEditForm } from './PTBEditForm'
 import TagList from './TagList'
 
 export type ProductCardProps = Partial<InfoCardProps> & {
@@ -17,14 +15,11 @@ export type ProductCardProps = Partial<InfoCardProps> & {
 
 export default function ProductCard({
   product,
-  openEditModal,
+  onEdit,
   ...props
 }: ProductCardProps) {
   const { t } = useTranslation()
-  const { updatePTB, deletePTB, findProductTreeBranch } = useProductTreeBranch()
-  const { isOpen, onOpen, onOpenChange } = useDisclosure({
-    defaultOpen: openEditModal,
-  })
+  const { deletePTB, findProductTreeBranch } = useProductTreeBranch()
   const navigate = useNavigate()
 
   return (
@@ -49,7 +44,7 @@ export default function ProductCard({
           onPress={() => navigate(`product/${product.id}`)}
         />
       }
-      onEdit={onOpen}
+      onEdit={onEdit}
       onDelete={() => deletePTB(product.id)}
       {...props}
     >
@@ -65,14 +60,6 @@ export default function ProductCard({
           }
         />
       )}
-      <Modal size="xl" isOpen={isOpen} onOpenChange={onOpenChange}>
-        <PTBEditForm
-          ptb={product}
-          onSave={(ptb) => {
-            updatePTB(ptb)
-          }}
-        />
-      </Modal>
     </InfoCard>
   )
 }
