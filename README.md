@@ -46,3 +46,12 @@ The webapp is now accessible at [http://localhost:8080](http://localhost:8080)
 # Run automated tests
 npm test
 ```
+
+### Run with Docker
+
+If you'd like to run the production build using Docker:
+
+```bash
+docker-compose up --build
+
+```
