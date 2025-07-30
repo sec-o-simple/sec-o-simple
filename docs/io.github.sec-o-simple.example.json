@@ -1,5 +1,5 @@
 {
-  "$schema": "./config-schema.json",
+  "$schema": "https://raw.githubusercontent.com/sec-o-simple/sec-o-simple/main/docs/config-schema.json",
   "productDatabase": {
     "enabled": false,
     "apiUrl": "http://127.0.0.1:9999",
@@ -93,7 +93,8 @@
                 "id": "version1",
                 "readonly": true,
                 "category": "product_version",
-                "name": "1.0.0"
+                "name": "1.0.0",
+                "subBranches": []
               }
             ]
           }

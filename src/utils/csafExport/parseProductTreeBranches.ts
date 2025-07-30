@@ -1,4 +1,5 @@
 import {
+  TProductIdentificationHelper,
   TProductTreeBranch,
   TProductTreeBranchCategory,
 } from '@/routes/products/types/tProductTreeBranch'
@@ -10,6 +11,7 @@ export type TParsedProductTreeBranch = {
   product?: {
     name: string
     product_id: string
+    product_identification_helper?: TProductIdentificationHelper
   }
   branches?: TParsedProductTreeBranch[]
 }
@@ -33,6 +35,7 @@ export function parseProductTreeBranches(
       pbObj['product'] = {
         name: branch.name,
         product_id: pidGenerator.getPid(branch.id),
+        product_identification_helper: branch.identificationHelper,
       }
     }
 

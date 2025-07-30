@@ -16,6 +16,7 @@ import IconButton from './IconButton'
 
 export type CustomAction<T> = {
   icon: FontAwesomeIconProps['icon']
+  tooltip?: string
   onClick: (item: T) => void
   notAffectedByReadonly?: boolean
 }
@@ -33,7 +34,7 @@ export type ComponentListProps<T> = {
   titleProps?: HTMLProps<HTMLDivElement>
   customActions?: CustomAction<T>[]
   itemBgColor?: string
-  postAddAction?: (item: T) => void
+  addEntry?: () => void
   renderTitlePrefix?: (item: T) => ReactNode
 }
 
@@ -47,11 +48,13 @@ export default function ComponentList<T extends object>({
   titleProps,
   customActions,
   itemBgColor,
-  postAddAction,
+  addEntry,
   ...props
 }: ComponentListProps<T>) {
   const { t } = useTranslation()
-  const [expandedKeys, setExpandedKeys] = useState<Selection>(new Set([]))
+  const [expandedKeys, setExpandedKeys] = useState<Selection>(
+    new Set(listState.data.map((item) => listState.getId(item))),
+  )
 
   return (
     <div className="flex flex-col gap-2">
@@ -104,6 +107,7 @@ export default function ComponentList<T extends object>({
                         <IconButton
                           key={i}
                           icon={action.icon}
+                          tooltip={action.tooltip}
                           onPress={() => action.onClick(item)}
                           isDisabled={
                             !action.notAffectedByReadonly && checkReadOnly(item)
@@ -112,6 +116,9 @@ export default function ComponentList<T extends object>({
                       ))}
                     <IconButton
                       icon={faTrash}
+                      tooltip={t('common.delete', {
+                        label: itemLabel,
+                      })}
                       onPress={() =>
                         onDelete
                           ? onDelete?.(item)
@@ -136,12 +143,14 @@ export default function ComponentList<T extends object>({
           label: itemLabel,
         })}
         onPress={() => {
+          if (addEntry) {
+            addEntry()
+            return
+          }
+
           const item = listState.addDataEntry()
-          // expand new item
           if (item) {
             setExpandedKeys(new Set([...expandedKeys, listState.getId(item)]))
-
-            postAddAction?.(item)
           }
         }}
       />

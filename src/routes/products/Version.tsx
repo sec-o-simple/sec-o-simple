@@ -1,4 +1,5 @@
 import Breadcrumbs from '@/components/forms/Breadcrumbs'
+import VSplit from '@/components/forms/VSplit'
 import WizardStep from '@/components/WizardStep'
 import useDocumentStore from '@/utils/useDocumentStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
@@ -134,43 +135,51 @@ export default function Version() {
             title={t(`products.relationship.categories.${category}`)}
             className="border shadow-none"
           >
-            {relationships.map((relationship) => {
-              const product = findProductTreeBranch(relationship.productId2)
+            <VSplit>
+              {relationships.map((relationship) => {
+                const product = findProductTreeBranch(relationship.productId2)
 
-              return product ? (
-                <InfoCard
-                  key={relationship.id}
-                  variant="plain"
-                  title={
-                    product.name !== '' && product.name
-                      ? product.name
-                      : t('untitled.product_name')
-                  }
-                  className="border-t py-2"
-                  onEdit={() => {
-                    setEditingRelationship(relationship)
-                    onOpen()
-                  }}
-                  onDelete={() => deleteRelationship(relationship)}
-                  startContent={
-                    <Chip color="primary" variant="flat" radius="md" size="lg">
-                      {product.type}
-                    </Chip>
-                  }
-                >
-                  {relationship.product2VersionIds.length > 0 && (
-                    <TagList
-                      items={relationship.product2VersionIds}
-                      linkGenerator={(x) => `/product-management/version/${x}`}
-                      labelGenerator={(x) =>
-                        getPTBName(findProductTreeBranch(x)) ??
-                        t('untitled.product_version')
-                      }
-                    />
-                  )}
-                </InfoCard>
-              ) : undefined
-            })}
+                return product ? (
+                  <InfoCard
+                    key={relationship.id}
+                    variant="boxed"
+                    title={
+                      product.name !== '' && product.name
+                        ? product.name
+                        : t('untitled.product_name')
+                    }
+                    onEdit={() => {
+                      setEditingRelationship(relationship)
+                      onOpen()
+                    }}
+                    onDelete={() => deleteRelationship(relationship)}
+                    startContent={
+                      <Chip
+                        color="primary"
+                        variant="flat"
+                        radius="md"
+                        size="lg"
+                      >
+                        {product.type}
+                      </Chip>
+                    }
+                  >
+                    {relationship.product2VersionIds.length > 0 && (
+                      <TagList
+                        items={relationship.product2VersionIds}
+                        linkGenerator={(x) =>
+                          `/product-management/version/${x}`
+                        }
+                        labelGenerator={(x) =>
+                          getPTBName(findProductTreeBranch(x)) ??
+                          t('untitled.product_version')
+                        }
+                      />
+                    )}
+                  </InfoCard>
+                ) : undefined
+              })}
+            </VSplit>
           </AccordionItem>
         ))}
       </Accordion>

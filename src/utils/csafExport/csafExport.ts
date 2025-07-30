@@ -73,7 +73,7 @@ export function createCSAFDocument(
         tlp: hasTLP
           ? {
               label: documentInformation.tlp?.label?.toUpperCase() || undefined,
-              url: documentInformation.tlp?.url || undefined,
+              url: 'https://www.first.org/tlp/',
             }
           : undefined,
       },

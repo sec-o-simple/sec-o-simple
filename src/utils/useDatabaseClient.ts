@@ -24,6 +24,12 @@ export interface ProductVersion {
   description: string
 }
 
+export interface IdentificationHelper {
+  id: string
+  category: string
+  metadata: string
+}
+
 const client = axios.create({
   headers: {
     'Content-Type': 'application/json',
@@ -63,10 +69,21 @@ export function useDatabaseClient() {
     [],
   )
 
+  const fetchIdentificationHelpers = useCallback(
+    async (versionId: string): Promise<IdentificationHelper[]> => {
+      const response = await client.get<IdentificationHelper[]>(
+        `/product-versions/${versionId}/identification-helpers`,
+      )
+      return response.data
+    },
+    [],
+  )
+
   return {
     url: config.productDatabase.url,
     fetchVendors,
     fetchProducts,
     fetchProductVersions,
+    fetchIdentificationHelpers,
   }
 }
