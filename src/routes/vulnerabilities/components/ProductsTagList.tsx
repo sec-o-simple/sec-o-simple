@@ -29,12 +29,11 @@ export default function ProductsTagList({
   const { getSelectableRefs } = useProductTreeBranch()
   const selectableRefs = getSelectableRefs()
 
-  const initialProducts =
-    selected
-      ?.map((x) =>
-        selectableRefs.find((ptb) => ptb.full_product_name.product_id === x),
-      )
-      .filter((x) => x !== undefined) ?? []
+  const initialProducts: TSelectableFullProductName[] = (
+    selected?.map((x) =>
+      selectableRefs.find((ptb) => ptb.full_product_name.product_id === x),
+    ) ?? []
+  ).filter((x): x is TSelectableFullProductName => x !== undefined)
 
   const [selectedProducts, setSelectedProducts] = useState(
     initialProducts ?? [],

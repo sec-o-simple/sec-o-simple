@@ -31,11 +31,9 @@ import {
 import { uid } from 'uid'
 import { TCSAFDocument } from '../csafExport/csafExport'
 import { TParsedNote } from '../csafExport/parseNote'
-import { PidGenerator } from '../csafExport/pidGenerator'
 import { DeepPartial } from '../deepPartial'
 import { SOSDraft, useSOSImport } from '../sosDraft'
 import { TSOSDocumentType } from '../useDocumentStore'
-import { IdGenerator } from './idGenerator'
 import { parseNote } from './parseNote'
 import { parseProductTree } from './parseProductTree'
 import { parseRelationships } from './parseRelationships'
@@ -119,10 +117,6 @@ export function parseCSAFDocument(
   generateVulnerabilityProduct: () => TVulnerabilityProduct,
   remediationGenerator: ReturnType<typeof useRemediationGenerator>,
 ): SOSDraft | undefined {
-  const idGenerator = new IdGenerator()
-  const ridGenerator = new PidGenerator()
-  ridGenerator.prefix = 'CSAFRID'
-
   const sosDocumentType: TSOSDocumentType = 'Import'
 
   const defaultDocumentInformation = getDefaultDocumentInformation()
