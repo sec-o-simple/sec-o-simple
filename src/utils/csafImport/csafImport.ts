@@ -24,10 +24,14 @@ import {
 import { TNote } from '@/routes/shared/NotesList'
 import { useRemediationGenerator } from '@/routes/vulnerabilities/types/tRemediation'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
-import { useVulnerabilityProductGenerator } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
+import {
+  TVulnerabilityProduct,
+  useVulnerabilityProductGenerator,
+} from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
 import { uid } from 'uid'
 import { TCSAFDocument } from '../csafExport/csafExport'
 import { TParsedNote } from '../csafExport/parseNote'
+import { PidGenerator } from '../csafExport/pidGenerator'
 import { DeepPartial } from '../deepPartial'
 import { SOSDraft, useSOSImport } from '../sosDraft'
 import { TSOSDocumentType } from '../useDocumentStore'
@@ -112,16 +116,21 @@ function isObject(value: JSONValue): value is JSONObject {
 
 export function parseCSAFDocument(
   csafDocument: DeepPartial<TCSAFDocument>,
-  vulnerabilityProductGenerator: ReturnType<
-    typeof useVulnerabilityProductGenerator
-  >,
+  generateVulnerabilityProduct: () => TVulnerabilityProduct,
   remediationGenerator: ReturnType<typeof useRemediationGenerator>,
 ): SOSDraft | undefined {
   const idGenerator = new IdGenerator()
+  const ridGenerator = new PidGenerator()
+  ridGenerator.prefix = 'CSAFRID'
+
   const sosDocumentType: TSOSDocumentType = 'Import'
 
   const defaultDocumentInformation = getDefaultDocumentInformation()
   const defaultRevisionHistoryEntry = getDefaultRevisionHistoryEntry()
+
+  const hasTLP =
+    csafDocument.document?.distribution?.tlp?.label !== undefined &&
+    csafDocument.document?.distribution?.tlp?.url !== undefined
 
   const csafDoc = csafDocument.document
   const documentInformation: TDocumentInformation = {
@@ -131,10 +140,12 @@ export function parseCSAFDocument(
       (csafDoc?.tracking?.status as TDocumentInformation['status']) ??
       defaultDocumentInformation.status,
     title: csafDoc?.title ?? defaultDocumentInformation.title,
-    tlp: {
-      label: csafDoc?.distribution?.tlp?.label?.toLowerCase() as TTLPLevel,
-      url: csafDoc?.distribution?.tlp?.url,
-    },
+    tlp: hasTLP
+      ? {
+          label: csafDoc?.distribution?.tlp?.label?.toLowerCase() as TTLPLevel,
+          url: csafDoc?.distribution?.tlp?.url,
+        }
+      : undefined,
     revisionHistory:
       csafDoc?.tracking?.revision_history?.map((revision) => ({
         id: uid(),
@@ -193,20 +204,16 @@ export function parseCSAFDocument(
 
   const products: TProductTreeBranch[] = parseProductTree(
     csafDocument as TCSAFDocument,
-    idGenerator,
   )
 
   const relationships: TRelationship[] = parseRelationships(
     (csafDocument.product_tree?.relationships ?? []) as CSAFRelationship[],
-    idGenerator,
     products,
   )
 
   const vulnerabilities: TVulnerability[] = parseVulnerabilities(
     csafDocument as TCSAFDocument,
-    idGenerator,
-    products,
-    vulnerabilityProductGenerator,
+    generateVulnerabilityProduct,
     remediationGenerator,
   )
 
@@ -221,7 +228,7 @@ export function parseCSAFDocument(
 
 export function useCSAFImport() {
   const { importSOSDraft } = useSOSImport()
-  const vulnerabilityProductGenerator = useVulnerabilityProductGenerator()
+  const { generateVulnerabilityProduct } = useVulnerabilityProductGenerator()
   const remediationGenerator = useRemediationGenerator()
 
   const getCSAFDocumentVersion = (
@@ -251,7 +258,7 @@ export function useCSAFImport() {
   const importCSAFDocument = (csafDocument: JSONObject): HiddenField[] => {
     const sosDocument = parseCSAFDocument(
       csafDocument,
-      vulnerabilityProductGenerator,
+      generateVulnerabilityProduct,
       remediationGenerator,
     )
     if (sosDocument) {

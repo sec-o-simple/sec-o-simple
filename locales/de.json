@@ -170,7 +170,8 @@
         "baseScore": "Basis Bewertung",
         "baseScoreDescription": "Basis Bewertung wird aus dem Vektorstring berechnet",
         "baseSeverity": "Basis Schweregrad",
-        "baseSeverityDescription": "Basis Schweregrad wird aus dem Vektorstring berechnet"
+        "baseSeverityDescription": "Basis Schweregrad wird aus dem Vektorstring berechnet",
+        "productsDescription": "Wählen Sie die betroffenen Produkte oder diejenigen aus, die derzeit untersucht werden"
       },
       "remediations": "Behebungen",
       "remediation": {
@@ -186,7 +187,8 @@
         "date": "Datum",
         "details": "Details",
         "url": "URL",
-        "products.empty": "Keine Produkte hinzugefügt"
+        "products.empty": "Keine Produkte hinzugefügt",
+        "productsDescription": "Wählen Sie die betroffenen Produkte aus"
       }
     },
     "notes": {
@@ -309,7 +311,8 @@
           "external_component_of": "Externe Komponente von",
           "installed_on": "Installiert auf",
           "installed_with": "Installiert mit",
-          "optional_component_of": "Optionale Komponente von"
+          "optional_component_of": "Optionale Komponente von",
+          "product_version": "Produktversionen"
         }
       }
     },

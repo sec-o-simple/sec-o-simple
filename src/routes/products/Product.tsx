@@ -10,6 +10,7 @@ import { BreadcrumbItem } from '@heroui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
+import { uid } from 'uid'
 import InfoCard from './components/InfoCard'
 import { PTBCreateEditForm } from './components/PTBEditForm'
 import SubMenuHeader from './components/SubMenuHeader'
@@ -126,9 +127,14 @@ export default function Product() {
                     ...getDefaultRelationship(),
                     category: 'installed_on' as TRelationshipCategory,
                     productId1: source.id,
-                    product1VersionIds: sourceVersions,
                     productId2: target.id,
-                    product2VersionIds: targetVersions,
+                    relationships: sourceVersions.flatMap((v1) =>
+                      targetVersions.map((v2) => ({
+                        product1VersionId: v1,
+                        product2VersionId: v2,
+                        relationshipId: uid(),
+                      })),
+                    ),
                   }
 
                   addOrUpdateRelationship(relationship)

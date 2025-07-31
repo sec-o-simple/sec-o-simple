@@ -4,7 +4,10 @@ import VSplit from '@/components/forms/VSplit'
 import StatusIndicator from '@/components/StatusIndicator'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useListState } from '@/utils/useListState'
-import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
+import {
+  TSelectableFullProductName,
+  useProductTreeBranch,
+} from '@/utils/useProductTreeBranch'
 import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
@@ -12,7 +15,6 @@ import { Alert, Chip } from '@heroui/react'
 import { calculateBaseScore, calculateQualScore, parseVersion } from 'cvss4'
 import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { TProductTreeBranch } from '../products/types/tProductTreeBranch'
 import ProductsTagList from './components/ProductsTagList'
 import { TVulnerability } from './types/tVulnerability'
 import {
@@ -33,6 +35,8 @@ export default function Scores({
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
+  const { getSelectableRefs } = useProductTreeBranch()
+  const refs = getSelectableRefs()
   // The scores are sorted by CVSS version, so we can use the index to find the correct score
   const scoresListState = useListState<TVulnerabilityScore>({
     initialData: vulnerability.scores?.sort((a, b) =>
@@ -52,8 +56,6 @@ export default function Scores({
     scoresListState.data,
   )
 
-  const { getSelectablePTBs } = useProductTreeBranch()
-  const ptbs = getSelectablePTBs()
   const knownAffectedOrInvestigationProducts = vulnerability.products.filter(
     (p) => p.status === 'known_affected' || p.status === 'under_investigation',
   )
@@ -96,12 +98,11 @@ export default function Scores({
               score,
             )}`}
             isTouched={isTouched}
-            products={ptbs.filter(
-              (p) =>
-                knownAffectedOrInvestigationProducts.some((product) =>
-                  product.versions.some((v) => v === p.id),
-                ),
-              ptbs,
+            products={refs?.filter((p) =>
+              knownAffectedOrInvestigationProducts.some(
+                (product) =>
+                  product.productId === p.full_product_name.product_id,
+              ),
             )}
             onChange={scoresListState.updateDataEntry}
           />
@@ -145,7 +146,7 @@ function ScoreForm({
   score: TVulnerabilityScore
   csafPath: string
   onChange: (note: TVulnerabilityScore) => void
-  products?: TProductTreeBranch[]
+  products?: TSelectableFullProductName[]
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
@@ -240,6 +241,7 @@ function ScoreForm({
               ? fieldValidation.errorMessages[0].message
               : ''
           }
+          description={t('vulnerabilities.score.productsDescription')}
           selected={score.productIds}
           products={ptbs}
           onChange={(productIds) => onChange({ ...score, productIds })}

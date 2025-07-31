@@ -107,6 +107,10 @@ export default {
         category: 'string',
         product_reference: 'string',
         relates_to_product_reference: 'string',
+        full_product_name: {
+          name: 'string',
+          product_id: 'string',
+        },
       },
     ],
   },

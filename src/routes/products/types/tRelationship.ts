@@ -15,8 +15,11 @@ export type TRelationship = {
   category: TRelationshipCategory
   productId1: string
   productId2: string
-  product1VersionIds: string[]
-  product2VersionIds: string[]
+  relationships?: {
+    product1VersionId: string
+    product2VersionId: string
+    relationshipId: string
+  }[]
   name: string
 }
 
@@ -26,8 +29,7 @@ export function getDefaultRelationship(): TRelationship {
     category: 'installed_on',
     productId1: '',
     productId2: '',
-    product1VersionIds: [],
-    product2VersionIds: [],
+    relationships: [],
     name: '',
   }
 }
