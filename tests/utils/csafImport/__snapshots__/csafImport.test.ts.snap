@@ -1,0 +1,159 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`csafImport > parseCSAFDocument > should handle empty/undefined fields gracefully and match snapshot 1`] = `
+{
+  "documentInformation": {
+    "acknowledgments": [],
+    "id": "PARTIAL-001",
+    "lang": "de",
+    "notes": [],
+    "publisher": {
+      "category": "coordinator",
+      "contactDetails": "default@example.com",
+      "issuingAuthority": "Default Authority",
+      "name": "Test Coordinator",
+      "namespace": "https://default.example.com",
+    },
+    "references": [],
+    "revisionHistory": [],
+    "status": "draft",
+    "title": "Teilweise gefülltes Dokument",
+    "tlp": {
+      "label": "green",
+      "url": undefined,
+    },
+  },
+  "products": [],
+  "relationships": [],
+  "sosDocumentType": "Import",
+  "vulnerabilities": [],
+}
+`;
+
+exports[`csafImport > parseCSAFDocument > should parse a complete CSAF document and match snapshot 1`] = `
+{
+  "documentInformation": {
+    "acknowledgments": [
+      {
+        "id": "mock-uid-123",
+        "names": [
+          {
+            "id": "mock-uid-123",
+            "name": "Alice Security",
+          },
+          {
+            "id": "mock-uid-123",
+            "name": "Bob Researcher",
+          },
+        ],
+        "organization": "Security Research Team",
+        "summary": "Discovered the vulnerability",
+        "url": "https://example.com/researchers",
+      },
+      {
+        "id": "mock-uid-123",
+        "names": [
+          {
+            "id": "mock-uid-123",
+            "name": "Charlie Hunter",
+          },
+        ],
+        "organization": "Bug Bounty Program",
+        "summary": "Reported through bug bounty",
+        "url": "https://example.com/bounty",
+      },
+    ],
+    "id": "TEST-2023-001",
+    "lang": "en",
+    "notes": [
+      {
+        "category": "description",
+        "content": "This is a test advisory description",
+        "id": "mock-note-id",
+        "title": "Description",
+      },
+      {
+        "category": "summary",
+        "content": "Brief summary of the issue",
+        "id": "mock-note-id",
+        "title": "Summary",
+      },
+    ],
+    "publisher": {
+      "category": "vendor",
+      "contactDetails": "security@example.com",
+      "issuingAuthority": "Security Team",
+      "name": "Test Vendor",
+      "namespace": "https://example.com",
+    },
+    "references": [
+      {
+        "category": "external",
+        "id": "mock-uid-123",
+        "summary": "Vendor Advisory",
+        "url": "https://example.com/advisory",
+      },
+      {
+        "category": "self",
+        "id": "mock-uid-123",
+        "summary": "This Document",
+        "url": "https://example.com/self",
+      },
+    ],
+    "revisionHistory": [
+      {
+        "date": "2023-01-01T00:00:00.000Z",
+        "id": "mock-uid-123",
+        "number": "1.0.0",
+        "summary": "Initial release",
+      },
+      {
+        "date": "2023-02-01T00:00:00.000Z",
+        "id": "mock-uid-123",
+        "number": "1.1.0",
+        "summary": "Updated advisory",
+      },
+    ],
+    "status": "final",
+    "title": "Test Security Advisory",
+    "tlp": {
+      "label": "white",
+      "url": "https://example.com/tlp",
+    },
+  },
+  "products": [],
+  "relationships": [],
+  "sosDocumentType": "Import",
+  "vulnerabilities": [],
+}
+`;
+
+exports[`csafImport > parseCSAFDocument > should parse a minimal CSAF document and match snapshot 1`] = `
+{
+  "documentInformation": {
+    "acknowledgments": [],
+    "id": "MINIMAL-001",
+    "lang": "en",
+    "notes": [],
+    "publisher": {
+      "category": "vendor",
+      "contactDetails": "default@example.com",
+      "issuingAuthority": "Default Authority",
+      "name": "Default Publisher",
+      "namespace": "https://default.example.com",
+    },
+    "references": [],
+    "revisionHistory": [],
+    "status": "draft",
+    "title": "Default Title",
+    "tlp": {
+      "label": undefined,
+      "url": undefined,
+    },
+  },
+  "products": [],
+  "relationships": [],
+  "sosDocumentType": "Import",
+  "vulnerabilities": [],
+}
+`;
