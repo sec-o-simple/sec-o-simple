@@ -54,10 +54,9 @@ export default function ProductsTagList({
         products={products}
         isRequired={isRequired}
         selected={selectedProducts.map((x) => x.full_product_name.product_id)}
-        onAdd={(ptb) => {
-          console.log('Adding product', ptb)
+        onAdd={(ptb) =>
           setSelectedProducts([...new Set([...selectedProducts, ptb])])
-        }}
+        }
       />
       {selectedProducts.length > 0 && (
         <TagList
