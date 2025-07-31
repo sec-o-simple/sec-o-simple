@@ -34,7 +34,8 @@ export type useDocumentStoreUpdaterProps<T> = {
 export function useDocumentValidation() {
   const documentStore = useDocumentStore()
   const config = useConfigStore((store) => store.config)
-  const { getRelationshipFullProductName } = useProductTreeBranch()
+  const { getFullProductName, getRelationshipFullProductName } =
+    useProductTreeBranch()
   const setValidationState = useValidationStore(
     (state) => state.setValidationState,
   )
@@ -50,6 +51,7 @@ export function useDocumentValidation() {
         setIsValidating(true)
         const result = await validateDocument(
           documentStore,
+          getFullProductName,
           getRelationshipFullProductName,
           config,
         )

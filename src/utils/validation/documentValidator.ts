@@ -15,6 +15,7 @@ export interface ValidationResult {
 
 export async function validateDocument(
   documentStore: TDocumentStore,
+  getFullProductName: (id: string) => string,
   getRelationshipFullProductName: (
     sourceVersionId: string,
     targetVersionId: string,
@@ -25,6 +26,7 @@ export async function validateDocument(
   try {
     const csafDocument = createCSAFDocument(
       documentStore,
+      getFullProductName,
       getRelationshipFullProductName,
       config,
     )

@@ -17,6 +17,7 @@ export type TParsedProductTreeBranch = {
 
 export function parseProductTreeBranches(
   branches: TProductTreeBranch[],
+  getFullProductName: (id: string) => string,
 ): TParsedProductTreeBranch[] {
   return branches.map((branch) => {
     const pbObj: TParsedProductTreeBranch = {
@@ -25,10 +26,13 @@ export function parseProductTreeBranches(
     }
 
     if (branch.subBranches.length > 0) {
-      pbObj['branches'] = parseProductTreeBranches(branch.subBranches)
+      pbObj['branches'] = parseProductTreeBranches(
+        branch.subBranches,
+        getFullProductName,
+      )
     } else {
       pbObj['product'] = {
-        name: branch.name,
+        name: getFullProductName(branch.id),
         product_id: branch.id,
         product_identification_helper: branch.identificationHelper,
       }

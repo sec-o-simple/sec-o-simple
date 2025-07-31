@@ -17,6 +17,7 @@ export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
 export function createCSAFDocument(
   documentStore: TDocumentStore,
+  getFullProductName: (id: string) => string,
   getRelationshipFullProductName: (
     sourceVersionId: string,
     targetVersionId: string,
@@ -31,6 +32,7 @@ export function createCSAFDocument(
   const notes = parseNotes(documentStore, config)
   const productTree = parseProductTreeBranches(
     Object.values(documentStore.products),
+    getFullProductName,
   )
 
   const filterProductStatus = (
@@ -210,12 +212,14 @@ export function createCSAFDocument(
 export function useCSAFExport() {
   const documentStore = useDocumentStore()
   const { isValid } = useValidationStore()
-  const { getRelationshipFullProductName } = useProductTreeBranch()
+  const { getRelationshipFullProductName, getFullProductName } =
+    useProductTreeBranch()
   const config = useConfigStore((store) => store.config)
 
   const exportCSAFDocument = () => {
     let csafDocument = createCSAFDocument(
       documentStore,
+      getFullProductName,
       getRelationshipFullProductName,
       config,
     )
