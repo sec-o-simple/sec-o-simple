@@ -1,6 +1,6 @@
-import { useCallback, useEffect } from 'react'
-import { useConfigStore } from './useConfigStore'
 import axios from 'axios'
+import { useCallback, useEffect } from 'react'
+import useProductDatabase from './useProductDatabase'
 
 export interface Vendor {
   id: string
@@ -37,13 +37,13 @@ const client = axios.create({
 })
 
 export function useDatabaseClient() {
-  const config = useConfigStore((state) => state.config)
+  const { apiUrl: apiUrlDomain, url, enabled } = useProductDatabase()
 
-  if (!config?.productDatabase?.enabled || !config?.productDatabase?.apiUrl) {
+  if (!enabled || !apiUrlDomain) {
     throw new Error('Product database is not enabled in the configuration.')
   }
 
-  const apiUrl = `${config.productDatabase.apiUrl}/api/v1`
+  const apiUrl = `${apiUrlDomain}/api/v1`
 
   useEffect(() => {
     client.defaults.baseURL = apiUrl
@@ -80,7 +80,7 @@ export function useDatabaseClient() {
   )
 
   return {
-    url: config.productDatabase.url,
+    url: url,
     fetchVendors,
     fetchProducts,
     fetchProductVersions,

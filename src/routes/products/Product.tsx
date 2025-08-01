@@ -15,7 +15,6 @@ import { PTBCreateEditForm } from './components/PTBEditForm'
 import SubMenuHeader from './components/SubMenuHeader'
 import {
   getDefaultProductTreeBranch,
-  getPTBName,
   TProductTreeBranch,
 } from './types/tProductTreeBranch'
 import {
@@ -25,7 +24,7 @@ import {
 
 export default function Product() {
   const { productId } = useParams()
-  const { findProductTreeBranchWithParents, updatePTB, deletePTB } =
+  const { findProductTreeBranchWithParents, updatePTB, deletePTB, getPTBName } =
     useProductTreeBranch()
   const navigate = useNavigate()
   const { t } = useTranslation()
@@ -41,6 +40,8 @@ export default function Product() {
 
   if (!product) return <>404 not found</>
 
+  const { name } = getPTBName(product)
+
   return (
     <WizardStep progress={2} noContentWrapper={true}>
       <Breadcrumbs>
@@ -50,14 +51,14 @@ export default function Product() {
             : t('untitled.vendor')}
         </BreadcrumbItem>
         <BreadcrumbItem>
-          {product?.name !== '' ? product.name : t('untitled.product_name')}
+          {name !== '' ? name : t('untitled.product_name')}
         </BreadcrumbItem>
       </Breadcrumbs>
 
       <SubMenuHeader
         title={
-          product.name
-            ? t('products.product.label') + ' ' + getPTBName(product)
+          name !== ''
+            ? t('products.product.label') + ' ' + name
             : t('untitled.product_name')
         }
         backLink={'/product-management'}
@@ -153,7 +154,7 @@ export default function Product() {
 
       {product.subBranches.map((version) => (
         <InfoCard
-          title={getPTBName(version) ?? t('untitled.product_version')}
+          title={getPTBName(version).name ?? t('untitled.product_version')}
           key={version.id}
           variant="boxed"
           onEdit={() => {

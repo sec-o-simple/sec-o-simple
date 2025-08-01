@@ -4,7 +4,7 @@ import { faCodeFork } from '@fortawesome/free-solid-svg-icons'
 import { Chip } from '@heroui/chip'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
-import { TProductTreeBranch, getPTBName } from '../types/tProductTreeBranch'
+import { TProductTreeBranch } from '../types/tProductTreeBranch'
 import InfoCard, { InfoCardProps } from './InfoCard'
 import TagList from './TagList'
 
@@ -19,15 +19,14 @@ export default function ProductCard({
   ...props
 }: ProductCardProps) {
   const { t } = useTranslation()
-  const { deletePTB, findProductTreeBranch } = useProductTreeBranch()
+  const { deletePTB, getPTBName } = useProductTreeBranch()
   const navigate = useNavigate()
+  const { name } = getPTBName(product)
 
   return (
     <InfoCard
       variant="boxed"
-      title={
-        getPTBName(product) ?? t(`untitled.${product.category?.toLowerCase()}`)
-      }
+      title={name ?? t('untitled.product_version')}
       description={product.description}
       linkTo={`product/${product.id}`}
       startContent={
@@ -44,6 +43,7 @@ export default function ProductCard({
           onPress={() => navigate(`product/${product.id}`)}
         />
       }
+      disabled={true}
       onEdit={onEdit}
       onDelete={() => deletePTB(product.id)}
       {...props}
@@ -55,8 +55,7 @@ export default function ProductCard({
             `/product-management/version/${version.id}`
           }
           labelGenerator={(x) =>
-            getPTBName(findProductTreeBranch(x.id)) ??
-            t('untitled.product_version')
+            getPTBName(x).name ?? t('untitled.product_version')
           }
         />
       )}

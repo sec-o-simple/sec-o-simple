@@ -21,8 +21,11 @@ import { TRelationship, getDefaultRelationship } from './types/tRelationship'
 export default function Version() {
   const { t } = useTranslation()
   const { productVersionId } = useParams()
-  const { findProductTreeBranch, findProductTreeBranchWithParents } =
-    useProductTreeBranch()
+  const {
+    findProductTreeBranch,
+    findProductTreeBranchWithParents,
+    getVersionName,
+  } = useProductTreeBranch()
   const {
     getRelationshipsBySourceVersion,
     sortRelationshipsByCategory,
@@ -43,6 +46,7 @@ export default function Version() {
   if (!productVersion) {
     return <>404 not found</>
   }
+  const { name } = getVersionName(productVersion)
 
   const relationshipsByCategory = Object.entries(
     sortRelationshipsByCategory(
@@ -75,10 +79,8 @@ export default function Version() {
 
       <SubMenuHeader
         title={
-          productVersion.name
-            ? `${t('products.product.version.label')} ${getPTBName(
-                productVersion,
-              )}`
+          name
+            ? `${t('products.product.version.label')} ${name}`
             : t('untitled.product_version')
         }
         backLink={

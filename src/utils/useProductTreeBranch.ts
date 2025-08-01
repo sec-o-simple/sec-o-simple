@@ -3,12 +3,16 @@ import {
   TProductTreeBranchCategory,
   TProductTreeBranchWithParents,
 } from '@/routes/products/types/tProductTreeBranch'
+import { useTranslation } from 'react-i18next'
 import useDocumentStore from './useDocumentStore'
+import useProductDatabase from './useProductDatabase'
 import { useRelationships } from './useRelationships'
 
 export function useProductTreeBranch() {
+  const { t } = useTranslation()
   const products = Object.values(useDocumentStore((store) => store.products))
   const updateProducts = useDocumentStore((store) => store.updateProducts)
+  const { enabled: pdbEnabled } = useProductDatabase()
   const {
     getRelationshipsBySourceVersion,
     getRelationshipsByTargetVersion,
@@ -65,6 +69,29 @@ export function useProductTreeBranch() {
       }
     }
     return matchingBranches
+  }
+
+  const getPTBName = (
+    branch: TProductTreeBranch,
+  ): {
+    isReadonly?: boolean
+    name?: string
+  } => {
+    let isNameReadonly = !pdbEnabled && !!branch.identificationHelper
+    let name = isNameReadonly ? branch.productName : branch.name
+
+    if (!branch) {
+      return { name: 'unknown product tree branch', isReadonly: true }
+    }
+
+    if (!name) {
+      name = t('untitled.product_version')
+    }
+
+    return {
+      name: name,
+      isReadonly: isNameReadonly,
+    }
   }
 
   const getPTBsByCategory = (
@@ -146,6 +173,7 @@ export function useProductTreeBranch() {
     getFilteredPTBs,
     getPTBsByCategory,
     getSelectablePTBs,
+    getPTBName,
     addPTB,
     updatePTB,
     deletePTB,
