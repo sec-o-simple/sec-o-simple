@@ -16,6 +16,7 @@ function convertCSAFProductTreeBranches(
         id: csafPTB.product?.product_id ?? defaultPTB.id,
         category: csafPTB.category,
         name: csafPTB.name || defaultPTB.name,
+        productName: csafPTB.product?.name,
         description: csafPTB.product?.name ?? defaultPTB.description,
         identificationHelper: csafPTB.product?.product_identification_helper,
         subBranches: convertCSAFProductTreeBranches(csafPTB.branches ?? []),

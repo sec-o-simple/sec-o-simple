@@ -266,7 +266,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} size="xl" scrollBehavior="inside">
       <ModalContent>
         {(onClose) => (
           <>

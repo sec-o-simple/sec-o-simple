@@ -4,6 +4,28 @@ interface JSONObject {
 }
 interface JSONArray extends Array<JSONValue> {}
 
+const IdentificationHelper = {
+  hashes: [
+    {
+      file_hashes: [{ algorithm: 'string', value: 'string' }],
+      filename: 'string',
+    },
+  ],
+  sbom_urls: ['string'],
+  purl: 'string',
+  model_numbers: ['string'],
+  serial_numbers: ['string'],
+  cpe: 'string',
+  filename: 'string',
+  x_generic_uris: [
+    {
+      namespace: 'string',
+      uri: 'string',
+    },
+  ],
+  skus: ['string'],
+}
+
 export default {
   document: {
     lang: 'string',
@@ -78,6 +100,10 @@ export default {
       {
         category: 'string',
         name: 'string',
+
+        product: {
+          product_identification_helper: IdentificationHelper,
+        },
         branches: [
           // Product Names
           {
@@ -86,6 +112,7 @@ export default {
             product: {
               name: 'string',
               product_id: 'string',
+              product_identification_helper: IdentificationHelper,
             },
             branches: [
               // Product Versions
@@ -95,6 +122,7 @@ export default {
                 product: {
                   name: 'string',
                   product_id: 'string',
+                  product_identification_helper: IdentificationHelper,
                 },
               },
             ],

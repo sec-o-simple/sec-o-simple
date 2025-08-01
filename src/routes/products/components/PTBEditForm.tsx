@@ -2,6 +2,7 @@ import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import useDocumentType from '@/utils/useDocumentType'
+import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { Button } from '@heroui/button'
 import {
   ModalBody,
@@ -29,7 +30,11 @@ export function PTBCreateEditForm({
   category,
 }: PTBCreateEditFormProps) {
   const { t } = useTranslation()
-  const [name, setName] = useState(ptb?.name ?? '')
+  const { getPTBName } = useProductTreeBranch()
+  const { name: ptbName, isReadonly } = ptb
+    ? getPTBName(ptb)
+    : { name: '', isReadonly: false }
+  const [name, setName] = useState(ptbName ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
   const [type, setType] = useState(ptb?.type ?? 'Software')
   const { hasHardware, hasSoftware } = useDocumentType()
@@ -51,9 +56,11 @@ export function PTBCreateEditForm({
             <Input
               label={t(`${category}.name`)}
               autoFocus
-              value={name}
+              value={name ?? ''}
               onValueChange={setName}
-              isDisabled={ptb ? checkReadOnly(ptb, 'name') : false}
+              isDisabled={
+                ptb ? checkReadOnly(ptb, 'name') || isReadonly : isReadonly
+              }
               placeholder={ptb ? getPlaceholder(ptb, 'name') : undefined}
             />
             {category === 'product_name' && (

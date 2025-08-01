@@ -31,6 +31,7 @@ export default function InfoCard(props: InfoCardProps) {
       onEdit,
       onDelete,
       children,
+      disabled,
       ...divProps
     } = props
     return (
@@ -50,8 +51,20 @@ export default function InfoCard(props: InfoCardProps) {
           </div>
           <div>
             {endContent}
-            {onEdit && <IconButton icon={faEdit} onPress={onEdit} />}
-            {onDelete && <IconButton icon={faTrash} onPress={onDelete} />}
+            {onEdit && (
+              <IconButton
+                icon={faEdit}
+                onPress={onEdit}
+                isDisabled={disabled}
+              />
+            )}
+            {onDelete && (
+              <IconButton
+                icon={faTrash}
+                onPress={onDelete}
+                isDisabled={disabled}
+              />
+            )}
           </div>
         </HSplit>
         {children}
