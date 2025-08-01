@@ -1,0 +1,45 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`FetchCVE > should match snapshot 1`] = `
+<div
+  class="w-full items-end gap-2"
+  data-testid="hsplit"
+>
+  <div
+    data-testid="input"
+  >
+    <label
+      for="input-field"
+    >
+      CVE ID
+    </label>
+    <input
+      data-csaf-path="/vulnerabilities/0/cve"
+      data-invalid="false"
+      data-testid="input-field"
+      data-touched="true"
+      id="input-field"
+      placeholder="Enter CVE ID"
+      value="CVE-2023-1234"
+    />
+    <button
+      data-testid="clear-button"
+    >
+      Clear
+    </button>
+  </div>
+  <div
+    data-content="Fetch CVE Data"
+    data-disabled="false"
+    data-testid="tooltip"
+  >
+    <button
+      data-color="primary"
+      data-loading="false"
+      data-testid="fetch-button"
+    >
+      Fetch CVE
+    </button>
+  </div>
+</div>
+`;

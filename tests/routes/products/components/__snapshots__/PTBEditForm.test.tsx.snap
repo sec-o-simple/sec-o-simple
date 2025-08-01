@@ -1,0 +1,164 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`PTBCreateEditForm > should render create form and match snapshot 1`] = `
+<div>
+  <div
+    data-testid="modal-content"
+  >
+    <div
+      data-testid="modal-header"
+    >
+      modal.create product_name.label
+    </div>
+    <div
+      data-testid="modal-body"
+    >
+      <input
+        data-testid="input"
+        label="product_name.name"
+        value=""
+      />
+      <textarea
+        data-testid="textarea"
+        label="product_name.description"
+      />
+      <select
+        data-testid="select"
+        label="product_name.type"
+        selectedkeys="Software"
+      >
+        <option
+          data-testid="select-item"
+        >
+          Software
+        </option>
+        <option
+          data-testid="select-item"
+        >
+          Hardware
+        </option>
+      </select>
+    </div>
+    <div
+      data-testid="modal-footer"
+    >
+      <button
+        data-testid="button"
+        variant="light"
+      >
+        common.cancel
+      </button>
+      <button
+        color="primary"
+        data-testid="button"
+      >
+        common.save
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PTBCreateEditForm > should render edit form with existing PTB and match snapshot 1`] = `
+<div>
+  <div
+    data-testid="modal-content"
+  >
+    <div
+      data-testid="modal-header"
+    >
+      modal.edit product_name.label
+    </div>
+    <div
+      data-testid="modal-body"
+    >
+      <input
+        data-testid="input"
+        label="product_name.name"
+        placeholder="Placeholder text"
+        value="Test Product"
+      />
+      <textarea
+        data-testid="textarea"
+        label="product_name.description"
+        placeholder="Placeholder text"
+      >
+        Test product description
+      </textarea>
+      <select
+        data-testid="select"
+        label="product_name.type"
+        placeholder="Placeholder text"
+        selectedkeys="Software"
+      >
+        <option
+          data-testid="select-item"
+        >
+          Software
+        </option>
+        <option
+          data-testid="select-item"
+        >
+          Hardware
+        </option>
+      </select>
+    </div>
+    <div
+      data-testid="modal-footer"
+    >
+      <button
+        data-testid="button"
+        variant="light"
+      >
+        common.cancel
+      </button>
+      <button
+        color="primary"
+        data-testid="button"
+      >
+        common.save
+      </button>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`PTBCreateEditForm > should render vendor form (without description and type fields) and match snapshot 1`] = `
+<div>
+  <div
+    data-testid="modal-content"
+  >
+    <div
+      data-testid="modal-header"
+    >
+      modal.edit vendor.label
+    </div>
+    <div
+      data-testid="modal-body"
+    >
+      <input
+        data-testid="input"
+        label="vendor.name"
+        placeholder="Placeholder text"
+        value="Test Vendor"
+      />
+    </div>
+    <div
+      data-testid="modal-footer"
+    >
+      <button
+        data-testid="button"
+        variant="light"
+      >
+        common.cancel
+      </button>
+      <button
+        color="primary"
+        data-testid="button"
+      >
+        common.save
+      </button>
+    </div>
+  </div>
+</div>
+`;

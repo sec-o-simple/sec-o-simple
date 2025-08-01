@@ -1,0 +1,154 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CreateDocument > should render correctly with both document types 1`] = `
+<div>
+  <div>
+    <div
+      animate="[object Object]"
+      class="flex justify-between gap-8"
+      exit="[object Object]"
+      initial="[object Object]"
+    >
+      <div
+        class="relative flex w-96 flex-col gap-6 rounded-xl border-2 bg-content1 p-6"
+      >
+        <div
+          class="flex items-center gap-2 text-xl font-bold"
+        >
+          <span
+            class="text-primary"
+            data-testid="icon"
+          >
+            icon
+          </span>
+          Advisory
+        </div>
+        <div
+          class="grow"
+        >
+          <div
+            data-testid="radio-group"
+            data-value="Software"
+          >
+            <label>
+              <input
+                data-testid="radio-Software"
+                type="radio"
+                value="Software"
+              />
+              Software
+            </label>
+            <label>
+              <input
+                data-testid="radio-HardwareSoftware"
+                type="radio"
+                value="HardwareSoftware"
+              />
+              Software and Hardware
+            </label>
+            <label>
+              <input
+                data-testid="radio-HardwareFirmware"
+                disabled=""
+                type="radio"
+                value="HardwareFirmware"
+              />
+              Software and Firmware
+            </label>
+          </div>
+        </div>
+        <div
+          class="self-end"
+        >
+          <button
+            data-color="primary"
+            data-testid="button"
+          >
+            Create
+            <span
+              data-testid="icon"
+            >
+              icon
+            </span>
+          </button>
+        </div>
+      </div>
+      <div
+        class="relative flex w-96 flex-col gap-6 rounded-xl border-2 bg-content1 p-6"
+      >
+        <div
+          class="flex items-center gap-2 text-xl font-bold"
+        >
+          <span
+            class="text-primary"
+            data-testid="icon"
+          >
+            icon
+          </span>
+          VEX
+        </div>
+        <div
+          class="grow"
+        >
+          <div
+            data-testid="radio-group"
+          >
+            <label>
+              <input
+                data-testid="radio-VexSoftware"
+                disabled=""
+                type="radio"
+                value="VexSoftware"
+              />
+              Software
+            </label>
+            <label>
+              <input
+                data-testid="radio-VexHardwareSoftware"
+                disabled=""
+                type="radio"
+                value="VexHardwareSoftware"
+              />
+              Software and Hardware
+            </label>
+            <label>
+              <input
+                data-testid="radio-VexHardwareFirmware"
+                disabled=""
+                type="radio"
+                value="VexHardwareFirmware"
+              />
+              Software and Firmware
+            </label>
+            <label>
+              <input
+                data-testid="radio-VexSbom"
+                disabled=""
+                type="radio"
+                value="VexSbom"
+              />
+              SBOM
+            </label>
+          </div>
+        </div>
+        <div
+          class="self-end"
+        >
+          <button
+            data-color="primary"
+            data-testid="button"
+            disabled=""
+          >
+            Create
+            <span
+              data-testid="icon"
+            >
+              icon
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;

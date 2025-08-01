@@ -1,0 +1,62 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`RevisionHistoryTable > should render correctly with empty state 1`] = `
+<div>
+  <div
+    class="mt-4"
+  >
+    <div
+      class="mb-4 flex items-center justify-between"
+    >
+      <h2
+        class="text-lg font-semibold"
+      >
+        Revision History
+      </h2>
+      <button
+        data-color="primary"
+        data-testid="add-button"
+        data-variant="light"
+      >
+        Add Revision
+      </button>
+    </div>
+    <table
+      data-testid="table"
+    >
+      <thead
+        data-testid="table-header"
+      >
+        <th
+          data-testid="table-column"
+          data-width="20%"
+        >
+          Version
+        </th>
+        <th
+          data-testid="table-column"
+          data-width="20%"
+        >
+          Date
+        </th>
+        <th
+          data-testid="table-column"
+          data-width="30%"
+        >
+          Description
+        </th>
+        <th
+          data-testid="table-column"
+          data-width="10%"
+        >
+          Actions
+        </th>
+      </thead>
+      <tbody
+        data-empty-content="No revisions available"
+        data-testid="table-body"
+      />
+    </table>
+  </div>
+</div>
+`;

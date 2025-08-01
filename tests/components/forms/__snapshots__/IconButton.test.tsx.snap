@@ -1,0 +1,74 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`IconButton > Button states > should render disabled state 1`] = `
+<div
+  data-tooltip="Disabled button"
+>
+  <button
+    class="rounded-full text-neutral-foreground"
+    data-icon-only="true"
+    data-variant="light"
+    disabled=""
+  >
+    <span
+      data-icon="plus"
+      data-testid="fa-icon"
+    >
+      plus
+    </span>
+  </button>
+</div>
+`;
+
+exports[`IconButton > should render icon button with FontAwesome icon 1`] = `
+<div>
+  <button
+    class="rounded-full text-neutral-foreground"
+    data-icon-only="true"
+    data-variant="light"
+  >
+    <span
+      data-icon="plus"
+      data-testid="fa-icon"
+    >
+      plus
+    </span>
+  </button>
+</div>
+`;
+
+exports[`IconButton > should render with tooltip when provided 1`] = `
+<div
+  data-tooltip="Edit item"
+>
+  <button
+    class="rounded-full text-neutral-foreground"
+    data-icon-only="true"
+    data-variant="light"
+  >
+    <span
+      data-icon="pen-to-square"
+      data-testid="fa-icon"
+    >
+      pen-to-square
+    </span>
+  </button>
+</div>
+`;
+
+exports[`IconButton > should render without tooltip when not provided 1`] = `
+<div>
+  <button
+    class="rounded-full text-neutral-foreground"
+    data-icon-only="true"
+    data-variant="light"
+  >
+    <span
+      data-icon="trash"
+      data-testid="fa-icon"
+    >
+      trash
+    </span>
+  </button>
+</div>
+`;

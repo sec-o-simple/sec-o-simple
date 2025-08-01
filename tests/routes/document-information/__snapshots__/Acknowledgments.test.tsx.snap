@@ -1,0 +1,61 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Acknowledgments > Component Rendering > should render with empty acknowledgments list 1`] = `
+<div
+  data-testid="wizard-step"
+>
+  <h1
+    data-testid="wizard-title"
+  >
+    Acknowledgments
+  </h1>
+  <div
+    data-progress="1.8"
+    data-testid="progress"
+  />
+  <div
+    data-testid="navigation"
+  >
+    <a
+      data-testid="back-link"
+      href="/document-information/references"
+    >
+      Back
+    </a>
+    <a
+      data-testid="continue-link"
+      href="/product-management"
+    >
+      Continue
+    </a>
+  </div>
+  <div
+    data-testid="wizard-content"
+  >
+    <div
+      data-testid="component-list"
+    >
+      <div
+        data-testid="list-title"
+      >
+        organization
+      </div>
+      <div
+        data-testid="item-label"
+      >
+        Acknowledgment
+      </div>
+      <div
+        data-testid="item-bg-color"
+      >
+        bg-zinc-50
+      </div>
+      <button
+        data-testid="add-item"
+      >
+        Add Item
+      </button>
+    </div>
+  </div>
+</div>
+`;

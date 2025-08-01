@@ -1,6 +1,7 @@
 node_modules/
 dist/
 tests/screenshots
+coverage/
 
 logs
 *.log

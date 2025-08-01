@@ -1,0 +1,53 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`AcknowledgmentNamesTable > Component Rendering > should render with empty names list 1`] = `
+<div
+  class="mt-4"
+>
+  <div
+    class="mb-4 flex items-center justify-between"
+  >
+    <h2
+      class="text-lg font-semibold"
+    >
+      Names
+    </h2>
+    <button
+      data-color="primary"
+      data-testid="add-button"
+      data-variant="light"
+    >
+      <span
+        data-testid="font-awesome-icon"
+      >
+        add
+      </span>
+      Add Name
+    </button>
+  </div>
+  <table
+    data-testid="table"
+  >
+    <thead
+      data-testid="table-header"
+    >
+      <th
+        data-testid="table-column"
+        data-width="20%"
+      >
+        Name
+      </th>
+      <th
+        data-testid="table-column"
+        data-width="10%"
+      >
+        Actions
+      </th>
+    </thead>
+    <tbody
+      data-empty-content="No names added yet"
+      data-testid="table-body"
+    />
+  </table>
+</div>
+`;

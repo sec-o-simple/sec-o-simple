@@ -1,0 +1,53 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`DatePicker > Snapshots > should render default state 1`] = `
+<input
+  data-classnames="{"inputWrapper":"border-1 shadow-none"}"
+  data-error-message=""
+  data-is-invalid="false"
+  data-label-placement="outside"
+  data-testid="hero-datepicker"
+  data-value=""
+  data-variant="bordered"
+  type="date"
+/>
+`;
+
+exports[`DatePicker > Snapshots > should render with error state 1`] = `
+<input
+  data-classnames="{"inputWrapper":"border-1 shadow-none"}"
+  data-error-message="Required field"
+  data-is-invalid="true"
+  data-label-placement="outside"
+  data-testid="hero-datepicker"
+  data-value=""
+  data-variant="bordered"
+  type="date"
+/>
+`;
+
+exports[`DatePicker > Snapshots > should render with value 1`] = `
+<input
+  data-classnames="{"inputWrapper":"border-1 shadow-none"}"
+  data-error-message=""
+  data-is-invalid="false"
+  data-label-placement="outside"
+  data-testid="hero-datepicker"
+  data-value="[object Object]"
+  data-variant="bordered"
+  type="date"
+/>
+`;
+
+exports[`DatePicker > should render with default props 1`] = `
+<input
+  data-classnames="{"inputWrapper":"border-1 shadow-none"}"
+  data-error-message=""
+  data-is-invalid="false"
+  data-label-placement="outside"
+  data-testid="hero-datepicker"
+  data-value=""
+  data-variant="bordered"
+  type="date"
+/>
+`;
