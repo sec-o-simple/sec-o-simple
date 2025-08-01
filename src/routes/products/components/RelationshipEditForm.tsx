@@ -88,11 +88,19 @@ export default function RelationshipEditForm({
                 allowedIds={findProductTreeBranch(
                   updatedRelationship.productId1,
                 )?.subBranches.map((x) => x.id)}
-                selectedIds={updatedRelationship.product1VersionIds}
+                selectedIds={
+                  updatedRelationship.relationships?.map(
+                    (rel) => rel.product1VersionId,
+                  ) ?? []
+                }
                 onSelect={(ptbs) =>
                   setUpdateRelationship({
                     ...updatedRelationship,
-                    product1VersionIds: ptbs.map((x) => x.id),
+                    relationships: ptbs.map((x) => ({
+                      product1VersionId: x.id,
+                      product2VersionId: updatedRelationship.productId2,
+                      relationshipId: updatedRelationship.id,
+                    })),
                   })
                 }
                 isDisabled={
@@ -138,11 +146,19 @@ export default function RelationshipEditForm({
                 allowedIds={findProductTreeBranch(
                   updatedRelationship.productId2,
                 )?.subBranches.map((x) => x.id)}
-                selectedIds={updatedRelationship.product2VersionIds}
+                selectedIds={
+                  updatedRelationship.relationships?.map(
+                    (rel) => rel.product2VersionId,
+                  ) ?? []
+                }
                 onSelect={(ptbs) =>
                   setUpdateRelationship({
                     ...updatedRelationship,
-                    product2VersionIds: ptbs.map((x) => x.id),
+                    relationships: ptbs.map((x) => ({
+                      product1VersionId: updatedRelationship.productId1,
+                      product2VersionId: x.id,
+                      relationshipId: updatedRelationship.id,
+                    })),
                   })
                 }
                 isDisabled={
@@ -205,10 +221,12 @@ export default function RelationshipEditForm({
                 product={
                   findProductTreeBranch(updatedRelationship.productId1)?.name
                 }
-                versions={updatedRelationship.product1VersionIds.map((id) => {
-                  const version = findProductTreeBranch(id)
-                  return version ? getPTBName(version) ?? '' : ''
-                })}
+                versions={
+                  updatedRelationship.relationships?.map((rel) => {
+                    const version = findProductTreeBranch(rel.product1VersionId)
+                    return version ? getPTBName(version) ?? '' : ''
+                  }) ?? []
+                }
               />
 
               <div className="flex flex-col items-center space-y-2">
@@ -228,10 +246,12 @@ export default function RelationshipEditForm({
                 product={
                   findProductTreeBranch(updatedRelationship.productId2)?.name
                 }
-                versions={updatedRelationship.product2VersionIds.map((id) => {
-                  const version = findProductTreeBranch(id)
-                  return version ? getPTBName(version) ?? '' : ''
-                })}
+                versions={
+                  updatedRelationship.relationships?.map((rel) => {
+                    const version = findProductTreeBranch(rel.product2VersionId)
+                    return version ? getPTBName(version) ?? '' : ''
+                  }) ?? []
+                }
               />
             </div>
           </ModalBody>

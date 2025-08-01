@@ -42,8 +42,14 @@ export function useConfigInitializer() {
   const updateConfig = useConfigStore((state) => state.updateConfig)
 
   const loadConfig = async () => {
-    await fetch(`.well-known/appspecific/${CONFIG_NAME}`)
+    await fetch(`/.well-known/appspecific/${CONFIG_NAME}`)
       .then((res) => {
+        if (!res.ok) {
+          throw new Error(
+            `Failed to fetch config: ${res.status} ${res.statusText}`,
+          )
+        }
+
         return res.json() as Promise<TConfig>
       })
       .then((configJSON) => updateConfig(configJSON))

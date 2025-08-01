@@ -1,13 +1,14 @@
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
-import { SelectItem } from '@heroui/select'
+import { TSelectableFullProductName } from '@/utils/useProductTreeBranch'
+import { AutocompleteItem } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
-import Select from './Select'
+import { Autocomplete } from './Autocomplete'
 
 export type ProductSelectProps = {
-  products?: TProductTreeBranch[]
-  onAdd?: (product: TProductTreeBranch) => void
+  products?: TSelectableFullProductName[]
+  onAdd?: (product: TSelectableFullProductName) => void
   isRequired?: boolean
   selected?: string[]
+  description?: string
 }
 
 export default function ProductSelect({
@@ -15,18 +16,21 @@ export default function ProductSelect({
   onAdd,
   isRequired,
   selected = [],
+  description = '',
 }: ProductSelectProps) {
   const { t } = useTranslation()
 
   return (
-    <Select
+    <Autocomplete
+      description={description}
       placeholder={t('common.add', {
         label: t('products.product.label') as string,
       })}
-      selectedKeys={[]}
       onSelectionChange={(selected) => {
-        const productId = [...selected][0] as string
-        const ptb = ptbs.find((x) => x.id === productId)
+        const productId = selected as string
+        const ptb = ptbs.find(
+          (x) => x.full_product_name.product_id === productId,
+        )
         if (ptb) {
           onAdd?.(ptb)
         }
@@ -34,10 +38,12 @@ export default function ProductSelect({
       isRequired={isRequired}
     >
       {ptbs
-        .filter((p) => !selected.includes(p.id))
+        .filter((p) => !selected.includes(p.full_product_name.product_id))
         .map((p) => (
-          <SelectItem key={p.id}>{p.name}</SelectItem>
+          <AutocompleteItem key={p.full_product_name.product_id}>
+            {p.full_product_name.name}
+          </AutocompleteItem>
         ))}
-    </Select>
+    </Autocomplete>
   )
 }
