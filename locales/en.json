@@ -170,7 +170,8 @@
         "baseScore": "Base Score",
         "baseScoreDescription": "Base score is calculated from the vector string",
         "baseSeverity": "Base Severity",
-        "baseSeverityDescription": "Base severity is calculated from the vector string"
+        "baseSeverityDescription": "Base severity is calculated from the vector string",
+        "productsDescription": "Select the affected products or those currently under investigation"
       },
       "remediations": "Remediations",
       "remediation": {
@@ -186,7 +187,8 @@
         "date": "Date",
         "details": "Details",
         "url": "URL",
-        "products.empty": "No products added"
+        "products.empty": "No products added",
+        "productsDescription": "Select the affected products"
       }
     },
     "notes": {
@@ -309,7 +311,8 @@
           "external_component_of": "External component of",
           "installed_on": "Installed on",
           "installed_with": "Installed with",
-          "optional_component_of": "Optional component of"
+          "optional_component_of": "Optional component of",
+          "product_version": "Versions"
         }
       }
     },

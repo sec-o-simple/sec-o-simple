@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useConfigStore } from './useConfigStore'
 import useDocumentStore, { TDocumentStore } from './useDocumentStore'
+import { useProductTreeBranch } from './useProductTreeBranch'
 import { validateDocument } from './validation/documentValidator'
 import useValidationStore from './validation/useValidationStore'
 
@@ -32,6 +33,9 @@ export type useDocumentStoreUpdaterProps<T> = {
 
 export function useDocumentValidation() {
   const documentStore = useDocumentStore()
+  const config = useConfigStore((store) => store.config)
+  const { getFullProductName, getRelationshipFullProductName } =
+    useProductTreeBranch()
   const setValidationState = useValidationStore(
     (state) => state.setValidationState,
   )
@@ -45,7 +49,12 @@ export function useDocumentValidation() {
     const validate = async () => {
       try {
         setIsValidating(true)
-        const result = await validateDocument(documentStore)
+        const result = await validateDocument(
+          documentStore,
+          getFullProductName,
+          getRelationshipFullProductName,
+          config,
+        )
         setValidationState({
           isValid: result.isValid,
           messages: result.messages,

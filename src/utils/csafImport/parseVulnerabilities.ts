@@ -1,4 +1,3 @@
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import {
   TRemediation,
   useRemediationGenerator,
@@ -8,24 +7,19 @@ import {
   TVulnerability,
   getDefaultVulnerability,
 } from '@/routes/vulnerabilities/types/tVulnerability'
-import { useVulnerabilityProductGenerator } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
+import { TVulnerabilityProduct } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
 import {
   TVulnerabilityScore,
   getDefaultVulnerabilityScore,
 } from '@/routes/vulnerabilities/types/tVulnerabilityScore'
 import { TCSAFDocument } from '../csafExport/csafExport'
 import { TParsedNote } from '../csafExport/parseNote'
-import { IdGenerator } from './idGenerator'
 import { parseNote } from './parseNote'
 import { parseVulnerabilityProducts } from './parseVulnerabilityProducts'
 
 export function parseVulnerabilities(
   csafDocument: TCSAFDocument,
-  idGenerator: IdGenerator,
-  ptbs: TProductTreeBranch[],
-  vulnerabilityProductGenerator: ReturnType<
-    typeof useVulnerabilityProductGenerator
-  >,
+  vulnerabilityProductGenerator: () => TVulnerabilityProduct,
   remediationGenerator: ReturnType<typeof useRemediationGenerator>,
 ): TVulnerability[] {
   return (
@@ -41,8 +35,6 @@ export function parseVulnerabilities(
         ),
         products: parseVulnerabilityProducts(
           vulnerability.product_status,
-          idGenerator,
-          ptbs,
           vulnerabilityProductGenerator,
         ),
         remediations: vulnerability.remediations?.map((remediation) => {
@@ -53,9 +45,7 @@ export function parseVulnerabilities(
             date: remediation.date ?? defaultRemediation.date,
             details: remediation.details ?? defaultRemediation.details,
             url: remediation.url ?? defaultRemediation.url,
-            productIds: remediation.product_ids.map((id) =>
-              idGenerator.getId(id),
-            ),
+            productIds: remediation.product_ids,
           } as TRemediation
         }),
         scores: vulnerability.scores?.map((score) => {
@@ -75,7 +65,7 @@ export function parseVulnerabilities(
 
           return {
             id: defaultScore.id,
-            productIds: score.products?.map((id) => idGenerator.getId(id)),
+            productIds: score.products,
             cvssVersion: cvssInfos?.version ?? defaultScore.cvssVersion,
             vectorString: cvssInfos?.vectorString ?? defaultScore.vectorString,
           } as TVulnerabilityScore

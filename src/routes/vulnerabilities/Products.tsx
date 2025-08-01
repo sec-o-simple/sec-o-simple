@@ -20,10 +20,10 @@ export default function Products({
   vulnerabilityIndex: number
   onChange: (vulnerability: TVulnerability) => void
 }) {
-  const productGenerator = useVulnerabilityProductGenerator()
+  const { generateVulnerabilityProduct } = useVulnerabilityProductGenerator()
   const productsListState = useListState<TVulnerabilityProduct>({
     initialData: vulnerability.products,
-    generator: productGenerator,
+    generator: generateVulnerabilityProduct(),
   })
 
   useEffect(
@@ -59,7 +59,7 @@ export default function Products({
           productsListState.setData((prev) => [
             ...prev,
             {
-              ...productGenerator,
+              ...generateVulnerabilityProduct(),
               productId:
                 productsListState.data[productsListState.data.length - 1]
                   ?.productId,

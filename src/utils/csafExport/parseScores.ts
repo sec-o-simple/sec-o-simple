@@ -1,11 +1,7 @@
 import { TVulnerabilityScore } from '@/routes/vulnerabilities/types/tVulnerabilityScore'
 import { calculateBaseScore, calculateQualScore } from 'cvss4'
-import { PidGenerator } from './pidGenerator'
 
-export default function parseScores(
-  scores: TVulnerabilityScore[],
-  pidGenerator: PidGenerator,
-) {
+export default function parseScores(scores: TVulnerabilityScore[]) {
   const v3scores = scores?.filter(
     (score) => score.cvssVersion === '3.0' || score.cvssVersion === '3.1',
   )
@@ -30,7 +26,7 @@ export default function parseScores(
             baseScore,
             baseSeverity,
           },
-          products: score.productIds.map((id) => pidGenerator.getPid(id)),
+          products: score.productIds,
         }
       })
     : undefined

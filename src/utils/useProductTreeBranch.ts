@@ -8,9 +8,20 @@ import useDocumentStore from './useDocumentStore'
 import useProductDatabase from './useProductDatabase'
 import { useRelationships } from './useRelationships'
 
+export type TSelectableFullProductName = {
+  category: string
+  full_product_name: {
+    name: string
+    product_id: string
+  }
+}
+
 export function useProductTreeBranch() {
   const { t } = useTranslation()
   const products = Object.values(useDocumentStore((store) => store.products))
+  const relationships = Object.values(
+    useDocumentStore((store) => store.relationships),
+  )
   const updateProducts = useDocumentStore((store) => store.updateProducts)
   const { enabled: pdbEnabled } = useProductDatabase()
   const {
@@ -109,10 +120,81 @@ export function useProductTreeBranch() {
     return matchingBranches
   }
 
-  const getSelectablePTBs = (): TProductTreeBranch[] => {
+  const getFullProductName = (versionId: string): string => {
+    const version = findProductTreeBranchWithParents(versionId)
+    const product = version?.parent
+    const vendor = product?.parent
+    return `${vendor?.name ?? ''} ${product?.name ?? ''} ${version?.name ?? ''}`
+  }
+
+  const getRelationshipFullProductName = (
+    sourceVersionId: string,
+    targetVersionId: string,
+    category: string,
+  ): string => {
+    const name = [
+      getFullProductName(sourceVersionId),
+      category.replaceAll('_', ' ').toLowerCase(),
+      getFullProductName(targetVersionId),
+    ].join(' ')
+
+    return name
+  }
+
+  const getSelectableRefs = (): TSelectableFullProductName[] => {
     // this function returns all ProductTreeBranches that can be referenced e.g. in Vulnerablility Scores
     // later product groups might be added to this
-    return getPTBsByCategory('product_version')
+    const ptbs: TSelectableFullProductName[] = [
+      ...getPTBsByCategory('product_version').map((v) => {
+        const fullProductName = getFullProductName(v.id)
+        return {
+          category: v.category,
+          full_product_name: {
+            name: fullProductName,
+            product_id: v.id,
+          },
+        }
+      }),
+      ...relationships.flatMap((relationship) => {
+        return (
+          relationship.relationships?.flatMap((rel) => {
+            return {
+              category: relationship.category,
+              full_product_name: {
+                name: getRelationshipFullProductName(
+                  rel.product1VersionId,
+                  rel.product2VersionId,
+                  relationship.category,
+                ),
+                product_id: rel.relationshipId,
+              },
+            }
+          }) ?? []
+        )
+      }),
+    ]
+
+    return ptbs.sort((a, b) =>
+      a.full_product_name.name.localeCompare(b.full_product_name.name),
+    ) as TSelectableFullProductName[]
+  }
+
+  const getGroupedSelectableRefs = (): {
+    [key: string]: TSelectableFullProductName[]
+  } => {
+    const groups: { [key: string]: TSelectableFullProductName[] } = {}
+    const selectableRefs = getSelectableRefs()
+
+    selectableRefs.map((ref) => {
+      const existingGroup = groups[ref.category]
+      if (existingGroup) {
+        existingGroup.push(ref)
+      } else {
+        groups[ref.category] = [ref]
+      }
+    })
+
+    return groups
   }
 
   const addPTB = (ptb: TProductTreeBranch) => {
@@ -170,10 +252,13 @@ export function useProductTreeBranch() {
     rootBranch: products,
     findProductTreeBranch,
     findProductTreeBranchWithParents,
+    getFullProductName,
+    getRelationshipFullProductName,
     getFilteredPTBs,
     getPTBsByCategory,
-    getSelectablePTBs,
     getPTBName,
+    getSelectableRefs,
+    getGroupedSelectableRefs,
     addPTB,
     updatePTB,
     deletePTB,

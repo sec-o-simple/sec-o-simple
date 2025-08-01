@@ -13,16 +13,22 @@ export function useRelationships() {
   const getRelationshipsBySourceVersion = (
     sourceVersionId: string,
   ): TRelationship[] => {
-    return globalRelationships.filter((relationship) =>
-      relationship.product1VersionIds.includes(sourceVersionId),
+    return globalRelationships.filter(
+      (relationship) =>
+        relationship.relationships?.some(
+          (rel) => rel.product1VersionId === sourceVersionId,
+        ),
     )
   }
 
   const getRelationshipsByTargetVersion = (
     targetVersionId: string,
   ): TRelationship[] => {
-    return globalRelationships.filter((relationship) =>
-      relationship.product2VersionIds.includes(targetVersionId),
+    return globalRelationships.filter(
+      (relationship) =>
+        relationship.relationships?.some(
+          (rel) => rel.product2VersionId === targetVersionId,
+        ),
     )
   }
 
@@ -43,6 +49,8 @@ export function useRelationships() {
   }
 
   const addOrUpdateRelationship = (relationship: TRelationship) => {
+    relationship
+
     if (globalRelationships.find((x) => x.id === relationship.id)) {
       updateRelationships(
         globalRelationships.map((x) =>

@@ -99,7 +99,13 @@ export default function Version() {
           // add new relationship
           const newRelationship = getDefaultRelationship()
           newRelationship.productId1 = productVersion.parent?.id ?? ''
-          newRelationship.product1VersionIds = [productVersion.id]
+          newRelationship.relationships = [
+            {
+              product1VersionId: productVersion.id,
+              product2VersionId: '',
+              relationshipId: newRelationship.id,
+            },
+          ]
           setEditingRelationship(newRelationship)
           onOpen()
         }}
@@ -138,12 +144,12 @@ export default function Version() {
             className="border shadow-none"
           >
             <VSplit>
-              {relationships.map((relationship) => {
-                const product = findProductTreeBranch(relationship.productId2)
+              {relationships.map((rel) => {
+                const product = findProductTreeBranch(rel.productId2)
 
                 return product ? (
                   <InfoCard
-                    key={relationship.id}
+                    key={rel.id}
                     variant="boxed"
                     title={
                       product.name !== '' && product.name
@@ -151,10 +157,10 @@ export default function Version() {
                         : t('untitled.product_name')
                     }
                     onEdit={() => {
-                      setEditingRelationship(relationship)
+                      setEditingRelationship(rel)
                       onOpen()
                     }}
-                    onDelete={() => deleteRelationship(relationship)}
+                    onDelete={() => deleteRelationship(rel)}
                     startContent={
                       <Chip
                         color="primary"
@@ -166,9 +172,11 @@ export default function Version() {
                       </Chip>
                     }
                   >
-                    {relationship.product2VersionIds.length > 0 && (
+                    {rel.relationships && rel.relationships.length > 0 && (
                       <TagList
-                        items={relationship.product2VersionIds}
+                        items={rel.relationships.map(
+                          (rel) => rel.product2VersionId,
+                        )}
                         linkGenerator={(x) =>
                           `/product-management/version/${x}`
                         }

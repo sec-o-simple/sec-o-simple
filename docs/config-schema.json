@@ -168,9 +168,13 @@
                             "type": "string",
                             "const": "product_version"
                           },
-                          "name": { "type": "string" }
+                          "name": { "type": "string" },
+                          "subBranches": {
+                            "type": "array",
+                            "const": []
+                          }
                         },
-                        "required": ["id", "category"]
+                        "required": ["id", "category", "subBranches"]
                       }
                     }
                   },
