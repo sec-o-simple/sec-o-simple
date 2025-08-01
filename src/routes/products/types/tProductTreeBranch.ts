@@ -72,13 +72,3 @@ export function getPTBName(branch?: TProductTreeBranch) {
 
   return null
 }
-
-export function getFullPTBName(branch: TProductTreeBranchWithParents) {
-  let nameParts = []
-  let current: TProductTreeBranchWithParents | null = branch
-  while (current !== null) {
-    nameParts.push(getPTBName(current))
-    current = current.parent
-  }
-  return nameParts.reverse().join(' ')
-}

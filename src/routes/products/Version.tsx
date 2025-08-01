@@ -15,7 +15,6 @@ import InfoCard from './components/InfoCard'
 import RelationshipEditForm from './components/RelationshipEditForm'
 import SubMenuHeader from './components/SubMenuHeader'
 import TagList from './components/TagList'
-import { getPTBName } from './types/tProductTreeBranch'
 import { TRelationship, getDefaultRelationship } from './types/tRelationship'
 
 export default function Version() {
@@ -24,7 +23,7 @@ export default function Version() {
   const {
     findProductTreeBranch,
     findProductTreeBranchWithParents,
-    getVersionName,
+    getPTBName,
   } = useProductTreeBranch()
   const {
     getRelationshipsBySourceVersion,
@@ -46,7 +45,7 @@ export default function Version() {
   if (!productVersion) {
     return <>404 not found</>
   }
-  const { name } = getVersionName(productVersion)
+  const { name } = getPTBName(productVersion)
 
   const relationshipsByCategory = Object.entries(
     sortRelationshipsByCategory(
@@ -180,10 +179,19 @@ export default function Version() {
                         linkGenerator={(x) =>
                           `/product-management/version/${x}`
                         }
-                        labelGenerator={(x) =>
-                          getPTBName(findProductTreeBranch(x)) ??
-                          t('untitled.product_version')
-                        }
+                        labelGenerator={(x) => {
+                          const findProductTreeBranch =
+                            findProductTreeBranchWithParents(x)
+
+                          if (!findProductTreeBranch) {
+                            return t('untitled.product_version')
+                          }
+
+                          return (
+                            getPTBName(findProductTreeBranch).name ??
+                            t('untitled.product_version')
+                          )
+                        }}
                       />
                     )}
                   </InfoCard>

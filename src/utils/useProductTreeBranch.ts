@@ -121,10 +121,16 @@ export function useProductTreeBranch() {
   }
 
   const getFullProductName = (versionId: string): string => {
-    const version = findProductTreeBranchWithParents(versionId)
-    const product = version?.parent
-    const vendor = product?.parent
-    return `${vendor?.name ?? ''} ${product?.name ?? ''} ${version?.name ?? ''}`
+    const ptb = findProductTreeBranchWithParents(versionId)
+
+    let nameParts = []
+    let current: TProductTreeBranchWithParents | null = ptb || null
+    while (current !== null) {
+      nameParts.push(current.name)
+      current = current.parent
+    }
+
+    return nameParts.reverse().join(' ')
   }
 
   const getRelationshipFullProductName = (
