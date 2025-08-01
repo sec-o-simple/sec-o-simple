@@ -1,13 +1,11 @@
 import { useConfigStore } from './useConfigStore'
 
 export default function useProductDatabase() {
-  const productDatabase = useConfigStore(
-    (state) => state.config?.productDatabase,
-  )
+  const pDB = useConfigStore((state) => state.config?.productDatabase)
 
   return {
-    enabled: productDatabase?.enabled ?? false,
-    apiUrl: productDatabase?.apiUrl ?? '',
-    url: productDatabase?.url ?? '',
+    enabled: (pDB?.enabled && pDB?.url && pDB?.apiUrl) ?? false,
+    apiUrl: pDB?.apiUrl ?? '',
+    url: pDB?.url ?? '',
   }
 }
