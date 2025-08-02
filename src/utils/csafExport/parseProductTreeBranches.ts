@@ -1,8 +1,8 @@
 import {
+  TProductIdentificationHelper,
   TProductTreeBranch,
   TProductTreeBranchCategory,
 } from '@/routes/products/types/tProductTreeBranch'
-import { PidGenerator } from './pidGenerator'
 
 export type TParsedProductTreeBranch = {
   category: TProductTreeBranchCategory
@@ -10,13 +10,14 @@ export type TParsedProductTreeBranch = {
   product?: {
     name: string
     product_id: string
+    product_identification_helper?: TProductIdentificationHelper
   }
   branches?: TParsedProductTreeBranch[]
 }
 
 export function parseProductTreeBranches(
   branches: TProductTreeBranch[],
-  pidGenerator: PidGenerator,
+  getFullProductName: (id: string) => string,
 ): TParsedProductTreeBranch[] {
   return branches.map((branch) => {
     const pbObj: TParsedProductTreeBranch = {
@@ -27,12 +28,13 @@ export function parseProductTreeBranches(
     if (branch.subBranches.length > 0) {
       pbObj['branches'] = parseProductTreeBranches(
         branch.subBranches,
-        pidGenerator,
+        getFullProductName,
       )
     } else {
       pbObj['product'] = {
-        name: branch.name,
-        product_id: pidGenerator.getPid(branch.id),
+        name: getFullProductName(branch.id),
+        product_id: branch.id,
+        product_identification_helper: branch.identificationHelper,
       }
     }
 

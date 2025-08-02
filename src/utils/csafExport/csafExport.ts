@@ -5,41 +5,63 @@ import _ from 'lodash'
 import { download } from '../download'
 import { TConfig, useConfigStore } from '../useConfigStore'
 import useDocumentStore, { TDocumentStore } from '../useDocumentStore'
+import { useProductTreeBranch } from '../useProductTreeBranch'
 import useValidationStore from '../validation/useValidationStore'
-import generateRelationships from './generateRelationships'
 import { retrieveLatestVersion } from './latestVersion'
 import { parseNote } from './parseNote'
 import { parseNotes } from './parseNotes'
 import { parseProductTreeBranches } from './parseProductTreeBranches'
 import parseScores from './parseScores'
-import { PidGenerator } from './pidGenerator'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
 export function createCSAFDocument(
   documentStore: TDocumentStore,
+  getFullProductName: (id: string) => string,
+  getRelationshipFullProductName: (
+    sourceVersionId: string,
+    targetVersionId: string,
+    category: string,
+  ) => string,
   config?: TConfig,
 ) {
-  const pidGenerator = new PidGenerator()
   const currentDate = new Date().toISOString()
   const documentInformation = documentStore.documentInformation
   const revisionHistory = documentInformation.revisionHistory || []
 
+  const notes = parseNotes(documentStore, config)
+  const productTree = parseProductTreeBranches(
+    Object.values(documentStore.products),
+    getFullProductName,
+  )
+
   const filterProductStatus = (
     productList: TVulnerabilityProduct[],
     status: string,
-  ) => {
-    const products = productList.filter(
-      (p) => p.status === status && p.versions.length > 0,
-    )
-    return products.length > 0
-      ? products.flatMap((p) => p.versions.map((v) => pidGenerator.getPid(v)))
-      : undefined
+  ): string[] | undefined => {
+    const filteredProducts = productList.filter((p) => p.status === status)
+
+    if (filteredProducts.length === 0) return undefined
+    return filteredProducts.flatMap((p) => p.productId)
   }
 
-  const notes = parseNotes(documentStore, config)
-
-  const hasTLP = documentInformation.tlp?.label || documentInformation.tlp?.url
+  const relationships = documentStore.relationships
+    .map((relationship) => {
+      return relationship.relationships?.map((rel) => ({
+        category: relationship.category,
+        product_reference: rel.product1VersionId,
+        relates_to_product_reference: rel.product2VersionId,
+        full_product_name: {
+          name: getRelationshipFullProductName(
+            rel.product1VersionId,
+            rel.product2VersionId,
+            relationship.category,
+          ),
+          product_id: rel.relationshipId,
+        },
+      }))
+    })
+    .flat()
 
   const csafDocument = {
     document: {
@@ -70,10 +92,10 @@ export function createCSAFDocument(
         id: documentInformation.id,
       },
       distribution: {
-        tlp: hasTLP
+        tlp: documentInformation.tlp
           ? {
               label: documentInformation.tlp?.label?.toUpperCase() || undefined,
-              url: documentInformation.tlp?.url || undefined,
+              url: 'https://www.first.org/tlp/',
             }
           : undefined,
       },
@@ -121,13 +143,8 @@ export function createCSAFDocument(
           : undefined,
     },
     product_tree: {
-      branches: parseProductTreeBranches(
-        Object.values(documentStore.products),
-        pidGenerator,
-      ),
-      relationships: documentStore.relationships.length
-        ? generateRelationships(documentStore.relationships, pidGenerator)
-        : undefined,
+      branches: productTree,
+      relationships: relationships.length > 0 ? relationships : undefined,
     },
     vulnerabilities: Object.values(documentStore.vulnerabilities).map(
       (vulnerability) => {
@@ -159,9 +176,7 @@ export function createCSAFDocument(
           date: remediation.date || undefined,
           details: remediation.details,
           url: remediation.url || undefined,
-          product_ids: remediation.productIds.map((id) =>
-            pidGenerator.getPid(id),
-          ),
+          product_ids: remediation.productIds,
         }))
         const cvss4References =
           vulnerability.scores
@@ -185,7 +200,7 @@ export function createCSAFDocument(
           notes,
           product_status: productStatus(),
           remediations: remediations?.length > 0 ? remediations : undefined,
-          scores: parseScores(vulnerability.scores, pidGenerator),
+          scores: parseScores(vulnerability.scores),
         }
       },
     ),
@@ -197,10 +212,17 @@ export function createCSAFDocument(
 export function useCSAFExport() {
   const documentStore = useDocumentStore()
   const { isValid } = useValidationStore()
-  const config = useConfigStore((state) => state.config)
+  const { getRelationshipFullProductName, getFullProductName } =
+    useProductTreeBranch()
+  const config = useConfigStore((store) => store.config)
 
   const exportCSAFDocument = () => {
-    let csafDocument = createCSAFDocument(documentStore, config)
+    let csafDocument = createCSAFDocument(
+      documentStore,
+      getFullProductName,
+      getRelationshipFullProductName,
+      config,
+    )
 
     // Merge with existing imported CSAF document if available
     // Our created CSAF document has priority, and is handled as the base

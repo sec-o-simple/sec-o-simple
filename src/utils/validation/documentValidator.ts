@@ -3,6 +3,7 @@ import { createCSAFDocument } from '../csafExport/csafExport'
 
 import * as basic from '@secvisogram/csaf-validator-lib/basic.js'
 import validate from '@secvisogram/csaf-validator-lib/validate.js'
+import { TConfig } from '../useConfigStore'
 import { ValidationMessage } from './useValidationStore'
 
 const tests: unknown[] = [...Object.values(basic)]
@@ -14,9 +15,21 @@ export interface ValidationResult {
 
 export async function validateDocument(
   documentStore: TDocumentStore,
+  getFullProductName: (id: string) => string,
+  getRelationshipFullProductName: (
+    sourceVersionId: string,
+    targetVersionId: string,
+    category: string,
+  ) => string,
+  config?: TConfig,
 ): Promise<ValidationResult> {
   try {
-    const csafDocument = createCSAFDocument(documentStore)
+    const csafDocument = createCSAFDocument(
+      documentStore,
+      getFullProductName,
+      getRelationshipFullProductName,
+      config,
+    )
     const result = await validate(tests, csafDocument)
 
     // Collect all messages with their severity
