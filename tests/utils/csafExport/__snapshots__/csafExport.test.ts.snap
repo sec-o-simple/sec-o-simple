@@ -21,7 +21,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
     "distribution": {
       "tlp": {
         "label": "WHITE",
-        "url": "https://example.com/tlp",
+        "url": "https://www.first.org/tlp/",
       },
     },
     "lang": "en",
@@ -89,16 +89,18 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
                 "category": "product_version",
                 "name": "1.0.0",
                 "product": {
-                  "name": "1.0.0",
-                  "product_id": "CSAFPID-0001",
+                  "name": "Test Vendor Test Application 1.0.0",
+                  "product_id": "version-1",
+                  "product_identification_helper": undefined,
                 },
               },
               {
                 "category": "product_version",
                 "name": "2.0.0",
                 "product": {
-                  "name": "2.0.0",
-                  "product_id": "CSAFPID-0002",
+                  "name": "Test Vendor Test Application 2.0.0",
+                  "product_id": "version-2",
+                  "product_identification_helper": undefined,
                 },
               },
             ],
@@ -114,11 +116,11 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
       {
         "category": "default_component_of",
         "full_product_name": {
-          "name": "Test Application v1.0.0 on Linux",
-          "product_id": "CSAFRID-0001",
+          "name": "Test Vendor Test Application 1.0.0 default component of linux-v1",
+          "product_id": "rel-1",
         },
-        "product_reference": "CSAFPID-0001",
-        "relates_to_product_reference": "CSAFPID-0003",
+        "product_reference": "version-1",
+        "relates_to_product_reference": "linux-v1",
       },
     ],
   },
@@ -138,10 +140,10 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
       ],
       "product_status": {
         "fixed": [
-          "CSAFPID-0005",
+          undefined,
         ],
         "known_affected": [
-          "CSAFPID-0004",
+          undefined,
         ],
       },
       "references": [
@@ -157,7 +159,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
           "date": "2023-02-15T00:00:00.000Z",
           "details": "Update to version 2.0.0 or later",
           "product_ids": [
-            "CSAFPID-0001",
+            "version-1",
           ],
           "url": "https://example.com/update-guide",
         },
@@ -171,7 +173,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
             "version": "3.1",
           },
           "products": [
-            "CSAFPID-0001",
+            "version-1",
           ],
         },
       ],
@@ -246,7 +248,7 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
     "distribution": {
       "tlp": {
         "label": "WHITE",
-        "url": "https://example.com/tlp",
+        "url": "https://www.first.org/tlp/",
       },
     },
     "lang": "en",
@@ -314,16 +316,18 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
                 "category": "product_version",
                 "name": "1.0.0",
                 "product": {
-                  "name": "1.0.0",
-                  "product_id": "CSAFPID-0001",
+                  "name": "Test Vendor Test Application 1.0.0",
+                  "product_id": "version-1",
+                  "product_identification_helper": undefined,
                 },
               },
               {
                 "category": "product_version",
                 "name": "2.0.0",
                 "product": {
-                  "name": "2.0.0",
-                  "product_id": "CSAFPID-0002",
+                  "name": "Test Vendor Test Application 2.0.0",
+                  "product_id": "version-2",
+                  "product_identification_helper": undefined,
                 },
               },
             ],
@@ -339,11 +343,11 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
       {
         "category": "default_component_of",
         "full_product_name": {
-          "name": "Test Application v1.0.0 on Linux",
-          "product_id": "CSAFRID-0001",
+          "name": "Test Vendor Test Application 1.0.0 default component of linux-v1",
+          "product_id": "rel-1",
         },
-        "product_reference": "CSAFPID-0001",
-        "relates_to_product_reference": "CSAFPID-0003",
+        "product_reference": "version-1",
+        "relates_to_product_reference": "linux-v1",
       },
     ],
   },

@@ -48,6 +48,16 @@ vi.mock('../../../src/utils/useProductTreeBranch', () => ({
   useProductTreeBranch: () => ({
     findProductTreeBranch: mockFindProductTreeBranch,
     findProductTreeBranchWithParents: mockFindProductTreeBranchWithParents,
+    getSelectableRefs: vi.fn(() => [
+      {
+        id: 'version-1',
+        fullProductName: 'Test Vendor / Test Product / Version 1.0',
+      },
+      {
+        id: 'version-2', 
+        fullProductName: 'Another Vendor / Related Product / Version 2.0',
+      },
+    ]),
   }),
 }))
 
@@ -228,8 +238,7 @@ vi.mock('../../../src/routes/products/types/tRelationship', () => ({
     category: 'installed_on',
     productId1: '',
     productId2: '',
-    product1VersionIds: [],
-    product2VersionIds: [],
+    relationships: [],
     name: '',
   })),
 }))
@@ -264,8 +273,13 @@ describe('Version', () => {
     category: 'installed_on',
     productId1: 'product-1',
     productId2: 'product-2',
-    product1VersionIds: ['version-1'],
-    product2VersionIds: ['version-2'],
+    relationships: [
+      {
+        product1VersionId: 'version-1',
+        product2VersionId: 'version-2',
+        relationshipId: 'rel-1-version-1-version-2'
+      }
+    ],
     name: 'Test Relationship',
   }
 
@@ -598,7 +612,7 @@ describe('Version', () => {
     it('should handle relationships without product2VersionIds', () => {
       const relationshipWithoutVersions = {
         ...mockRelationship,
-        product2VersionIds: [],
+        relationships: [],
       }
       
       mockGetRelationshipsBySourceVersion.mockReturnValue([relationshipWithoutVersions])

@@ -102,8 +102,13 @@ describe('csafExport', () => {
         category: 'default_component_of',
         productId1: 'product-1',
         productId2: 'linux-os',
-        product1VersionIds: ['version-1'],
-        product2VersionIds: ['linux-v1'],
+        relationships: [
+          {
+            product1VersionId: 'version-1',
+            product2VersionId: 'linux-v1',
+            relationshipId: 'rel-1',
+          },
+        ],
         name: 'Test Application v1.0.0 on Linux',
       },
     ],
@@ -170,6 +175,38 @@ describe('csafExport', () => {
     reset: vi.fn(),
   } as any)
 
+  // Mock helper functions
+  const mockGetFullProductName = (versionId: string): string => {
+    // Find the version in mock data and construct full product name
+    const mockStore = createMockDocumentStore()
+    const productBranches = Object.values(mockStore.products)
+    for (const vendor of productBranches) {
+      if (vendor && typeof vendor === 'object' && 'subBranches' in vendor) {
+        for (const product of vendor.subBranches || []) {
+          if (product && typeof product === 'object' && 'subBranches' in product) {
+            for (const version of product.subBranches || []) {
+              if (version && typeof version === 'object' && 'id' in version && version.id === versionId) {
+                return `${vendor.name} ${product.name} ${version.name}`
+              }
+            }
+          }
+        }
+      }
+    }
+    return versionId // fallback to ID if not found
+  }
+
+  const mockGetRelationshipFullProductName = (
+    sourceVersionId: string,
+    targetVersionId: string,
+    category: string,
+  ): string => {
+    const sourceName = mockGetFullProductName(sourceVersionId)
+    const targetName = mockGetFullProductName(targetVersionId)
+    const categoryFormatted = category.replaceAll('_', ' ').toLowerCase()
+    return `${sourceName} ${categoryFormatted} ${targetName}`
+  }
+
   it('should create a CSAF document with complete data', () => {
     const mockStore = createMockDocumentStore()
     const mockConfig = { 
@@ -177,7 +214,12 @@ describe('csafExport', () => {
       productDatabase: { enabled: false }
     }
     
-    const result = createCSAFDocument(mockStore, mockConfig)
+    const result = createCSAFDocument(
+      mockStore, 
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      mockConfig
+    )
     
     expect(result).toMatchSnapshot()
   })
@@ -198,10 +240,15 @@ describe('csafExport', () => {
     minimalStore.relationships = []
     minimalStore.vulnerabilities = {} as any
     
-    const result = createCSAFDocument(minimalStore, { 
-      template: {},
-      productDatabase: { enabled: false }
-    })
+    const result = createCSAFDocument(
+      minimalStore, 
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      { 
+        template: {},
+        productDatabase: { enabled: false }
+      }
+    )
     
     expect(result).toMatchSnapshot()
   })
@@ -222,10 +269,15 @@ describe('csafExport', () => {
       },
     } as any
     
-    const result = createCSAFDocument(storeWithBasicVuln, { 
-      template: {},
-      productDatabase: { enabled: false }
-    })
+    const result = createCSAFDocument(
+      storeWithBasicVuln, 
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      { 
+        template: {},
+        productDatabase: { enabled: false }
+      }
+    )
     
     expect(result).toMatchSnapshot()
   })

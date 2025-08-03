@@ -302,6 +302,22 @@ describe('Remediations', () => {
       getFilteredPTBs: vi.fn(),
       getPTBsByCategory: vi.fn(),
       getSelectablePTBs: () => mockPTBs,
+      getSelectableRefs: vi.fn(() => [
+        {
+          category: 'product_version',
+          full_product_name: {
+            name: 'Product 1',
+            product_id: 'product1'
+          }
+        },
+        {
+          category: 'product_version',
+          full_product_name: {
+            name: 'Product 2',
+            product_id: 'product2'
+          }
+        }
+      ]),
       addPTB: vi.fn(),
       updatePTB: vi.fn(),
       deletePTB: vi.fn()

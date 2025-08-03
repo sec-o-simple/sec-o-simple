@@ -45,6 +45,16 @@ vi.mock('../../../src/utils/useProductTreeBranch', () => ({
     findProductTreeBranchWithParents: mockFindProductTreeBranchWithParents,
     updatePTB: mockUpdatePTB,
     deletePTB: mockDeletePTB,
+    getSelectableRefs: vi.fn(() => [
+      {
+        id: 'version-1',
+        fullProductName: 'Test Vendor / Test Product / Version 1.0',
+      },
+      {
+        id: 'version-2', 
+        fullProductName: 'Another Vendor / Related Product / Version 2.0',
+      },
+    ]),
   }),
 }))
 
@@ -241,9 +251,9 @@ describe('Product', () => {
       id: 'default-relationship-id',
       category: 'installed_on',
       productId1: '',
-      product1VersionIds: [],
       productId2: '',
-      product2VersionIds: [],
+      relationships: [],
+      name: '',
     })
     
     mockFindProductTreeBranchWithParents.mockReturnValue(createMockProduct())
@@ -738,9 +748,17 @@ describe('Product', () => {
         expect.objectContaining({
           category: 'installed_on',
           productId1: 'software-product', // Software is source
-          product1VersionIds: ['default-id'], // New version ID
           productId2: 'hardware-product', // Hardware is target
-          product2VersionIds: ['hw-version-1', 'hw-version-2'],
+          relationships: [
+            expect.objectContaining({
+              product1VersionId: 'default-id', // New version ID
+              product2VersionId: 'hw-version-1',
+            }),
+            expect.objectContaining({
+              product1VersionId: 'default-id', // New version ID
+              product2VersionId: 'hw-version-2',
+            }),
+          ],
         })
       )
     })
@@ -777,9 +795,17 @@ describe('Product', () => {
         expect.objectContaining({
           category: 'installed_on',
           productId1: 'software-product', // Software is still source
-          product1VersionIds: ['sw-version-1', 'sw-version-2'],
           productId2: 'hardware-product', // Hardware is still target
-          product2VersionIds: ['default-id'], // New version ID
+          relationships: [
+            expect.objectContaining({
+              product1VersionId: 'sw-version-1',
+              product2VersionId: 'default-id', // New version ID
+            }),
+            expect.objectContaining({
+              product1VersionId: 'sw-version-2',
+              product2VersionId: 'default-id', // New version ID
+            }),
+          ],
         })
       )
     })

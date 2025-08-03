@@ -18,10 +18,7 @@ exports[`csafImport > parseCSAFDocument > should handle empty/undefined fields g
     "revisionHistory": [],
     "status": "draft",
     "title": "Teilweise gefülltes Dokument",
-    "tlp": {
-      "label": "green",
-      "url": undefined,
-    },
+    "tlp": undefined,
   },
   "products": [],
   "relationships": [],
@@ -146,10 +143,7 @@ exports[`csafImport > parseCSAFDocument > should parse a minimal CSAF document a
     "revisionHistory": [],
     "status": "draft",
     "title": "Default Title",
-    "tlp": {
-      "label": undefined,
-      "url": undefined,
-    },
+    "tlp": undefined,
   },
   "products": [],
   "relationships": [],

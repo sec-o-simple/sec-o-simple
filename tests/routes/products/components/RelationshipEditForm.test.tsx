@@ -142,6 +142,7 @@ vi.mock('@/components/forms/PTBSelect', () => ({
           React.createElement('option', { 
             key: ptb.id, 
             value: ptb.id,
+            selected: isMultiple ? currentSelection.includes(ptb.id) : currentSelection[0] === ptb.id
           }, ptb.name)
         )
     ])
@@ -289,8 +290,13 @@ const mockRelationship: TRelationship = {
   category: 'installed_on',
   productId1: 'product-1',
   productId2: 'product-2',
-  product1VersionIds: ['version-1-1'],
-  product2VersionIds: ['version-2-1'],
+  relationships: [
+    {
+      product1VersionId: 'version-1-1',
+      product2VersionId: 'version-2-1',
+      relationshipId: 'rel-1',
+    },
+  ],
   name: 'Test Relationship',
 }
 
@@ -472,8 +478,13 @@ describe('RelationshipEditForm', () => {
           category: 'installed_on',
           productId1: 'product-1',
           productId2: 'product-2',
-          product1VersionIds: ['version-1-1'],
-          product2VersionIds: ['version-2-1'],
+          relationships: [
+            {
+              product1VersionId: 'version-1-1',
+              product2VersionId: 'version-2-1',
+              relationshipId: 'rel-1',
+            },
+          ],
           name: 'Test Relationship',
         })
       )
@@ -543,6 +554,13 @@ describe('RelationshipEditForm', () => {
       const relationshipWithEmptyProduct = {
         ...mockRelationship,
         productId1: '', // Empty product ID
+        relationships: [
+          {
+            product1VersionId: 'version-1-1',
+            product2VersionId: 'version-2-1',
+            relationshipId: 'rel-1',
+          },
+        ],
       }
       
       renderComponent({ relationship: relationshipWithEmptyProduct })
@@ -554,8 +572,7 @@ describe('RelationshipEditForm', () => {
     it('should handle products with no versions', () => {
       const relationshipWithNoVersions = {
         ...mockRelationship,
-        product1VersionIds: [],
-        product2VersionIds: [],
+        relationships: [],
       }
       
       renderComponent({ relationship: relationshipWithNoVersions })
@@ -626,8 +643,7 @@ describe('RelationshipEditForm', () => {
         category: 'installed_on' as const,
         productId1: '',
         productId2: '',
-        product1VersionIds: [],
-        product2VersionIds: [],
+        relationships: [],
         name: '',
       }
 
@@ -719,8 +735,7 @@ describe('RelationshipEditForm', () => {
     it('should handle empty version arrays', () => {
       const relationshipWithEmptyVersions = {
         ...mockRelationship,
-        product1VersionIds: [],
-        product2VersionIds: [],
+        relationships: [],
       }
 
       renderComponent({ relationship: relationshipWithEmptyVersions })
@@ -731,8 +746,13 @@ describe('RelationshipEditForm', () => {
     it('should handle single version selection', () => {
       const relationshipWithSingleVersion = {
         ...mockRelationship,
-        product1VersionIds: ['version-1-1'],
-        product2VersionIds: ['version-2-1'],
+        relationships: [
+          {
+            product1VersionId: 'version-1-1',
+            product2VersionId: 'version-2-1',
+            relationshipId: 'rel-1',
+          },
+        ],
       }
 
       renderComponent({ relationship: relationshipWithSingleVersion })
@@ -745,8 +765,18 @@ describe('RelationshipEditForm', () => {
     it('should handle multiple version selection', () => {
       const relationshipWithMultipleVersions = {
         ...mockRelationship,
-        product1VersionIds: ['version-1-1', 'version-1-2'],
-        product2VersionIds: ['version-2-1'],
+        relationships: [
+          {
+            product1VersionId: 'version-1-1',
+            product2VersionId: 'version-2-1',
+            relationshipId: 'rel-1',
+          },
+          {
+            product1VersionId: 'version-1-2',
+            product2VersionId: 'version-2-1',
+            relationshipId: 'rel-1',
+          },
+        ],
       }
 
       renderComponent({ relationship: relationshipWithMultipleVersions })
@@ -798,8 +828,18 @@ describe('RelationshipEditForm', () => {
         category: 'optional_component_of' as const,
         productId1: 'non-existent-1',
         productId2: 'non-existent-2',
-        product1VersionIds: ['non-existent-version-1', 'non-existent-version-2'],
-        product2VersionIds: ['non-existent-version-3'],
+        relationships: [
+          {
+            product1VersionId: 'non-existent-version-1',
+            product2VersionId: 'non-existent-version-3',
+            relationshipId: 'extreme-rel',
+          },
+          {
+            product1VersionId: 'non-existent-version-2',
+            product2VersionId: 'non-existent-version-3',
+            relationshipId: 'extreme-rel',
+          },
+        ],
         name: 'Very Long Relationship Name That Should Not Break The UI Layout And Formatting',
       }
 

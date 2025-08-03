@@ -85,6 +85,7 @@ describe('useProductTreeBranch', () => {
     mockUseDocumentStore.mockImplementation((selector) => {
       const mockStore = {
         products: Object.fromEntries(mockProducts.map(p => [p.id, p])),
+        relationships: {}, // Empty relationships object
         updateProducts: mockUpdateProducts,
       }
       return selector(mockStore)
@@ -102,9 +103,12 @@ describe('useProductTreeBranch', () => {
         rootBranch: expect.any(Array),
         findProductTreeBranch: expect.any(Function),
         findProductTreeBranchWithParents: expect.any(Function),
+        getFullProductName: expect.any(Function),
+        getRelationshipFullProductName: expect.any(Function),
         getFilteredPTBs: expect.any(Function),
         getPTBsByCategory: expect.any(Function),
-        getSelectablePTBs: expect.any(Function),
+        getSelectableRefs: expect.any(Function),
+        getGroupedSelectableRefs: expect.any(Function),
         addPTB: expect.any(Function),
         updatePTB: expect.any(Function),
         deletePTB: expect.any(Function),
@@ -353,22 +357,22 @@ describe('useProductTreeBranch', () => {
     })
   })
 
-  describe('getSelectablePTBs', () => {
+  describe('getSelectableRefs', () => {
     it('should return all product versions', () => {
       const { result } = renderHook(() => useProductTreeBranch())
 
-      const selectablePTBs = result.current.getSelectablePTBs()
+      const selectableRefs = result.current.getSelectableRefs()
       
-      expect(selectablePTBs).toHaveLength(3)
-      expect(selectablePTBs.every(ptb => ptb.category === 'product_version')).toBe(true)
+      expect(selectableRefs).toHaveLength(3)
+      expect(selectableRefs.every(ref => ref.category === 'product_version')).toBe(true)
     })
 
     it('should return versions from all products', () => {
       const { result } = renderHook(() => useProductTreeBranch())
 
-      const selectablePTBs = result.current.getSelectablePTBs()
+      const selectableRefs = result.current.getSelectableRefs()
       
-      expect(selectablePTBs.map(ptb => ptb.name)).toEqual(['Version 1.0', 'Version 2.0', 'Version 1.0'])
+      expect(selectableRefs.map(ref => ref.full_product_name.name)).toEqual(['Vendor A Product A Version 1.0', 'Vendor A Product A Version 2.0', 'Vendor B Product B Version 1.0'])
     })
   })
 
@@ -595,6 +599,7 @@ describe('useProductTreeBranch', () => {
       mockUseDocumentStore.mockImplementation((selector) => {
         const mockStore = {
           products: {},
+          relationships: {},
           updateProducts: mockUpdateProducts,
         }
         return selector(mockStore)
@@ -603,7 +608,7 @@ describe('useProductTreeBranch', () => {
       const { result } = renderHook(() => useProductTreeBranch())
 
       expect(result.current.rootBranch).toEqual([])
-      expect(result.current.getSelectablePTBs()).toEqual([])
+      expect(result.current.getSelectableRefs()).toEqual([])
       expect(result.current.findProductTreeBranch('any-id')).toBeUndefined()
     })
 
@@ -616,6 +621,7 @@ describe('useProductTreeBranch', () => {
       mockUseDocumentStore.mockImplementation((selector) => {
         const mockStore = {
           products: { 'complex-vendor': complexVendor },
+          relationships: {},
           updateProducts: mockUpdateProducts,
         }
         return selector(mockStore)
@@ -704,6 +710,7 @@ describe('useProductTreeBranch', () => {
       mockUseDocumentStore.mockImplementation((selector) => {
         const mockStore = {
           products: { 'empty-vendor': vendorWithoutProducts },
+          relationships: {},
           updateProducts: mockUpdateProducts,
         }
         return selector(mockStore)
@@ -712,7 +719,7 @@ describe('useProductTreeBranch', () => {
       const { result: newResult } = renderHook(() => useProductTreeBranch())
 
       expect(newResult.current.getPTBsByCategory('product_name')).toEqual([])
-      expect(newResult.current.getSelectablePTBs()).toEqual([])
+      expect(newResult.current.getSelectableRefs()).toEqual([])
     })
   })
 })
