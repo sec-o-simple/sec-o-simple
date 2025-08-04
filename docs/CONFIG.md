@@ -2,7 +2,7 @@
 
 This document describes the configuration options for the system, including API endpoints, document templates, products, and vulnerability definitions.
 
-# Setup
+## Setup
 
 Copy the example JSON File to start configuring sec-o-simple.
 

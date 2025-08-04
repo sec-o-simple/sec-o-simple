@@ -12,16 +12,15 @@
 - [Developing](#developing)
   - [Local Development Setup](#local-development-setup)
   - [Branching & Pull Request Policy](#branching--pull-request-policy)
-- [Developer Guide, Architecture and Technical Design](#developer-guide-architecture-and-technical-design)
+- [Architecture Overview](#architecture-overview)
+- [Developer Guide](#developer-guide)
   - [Code & Module Organization](#code--module-organization)
-- [Security Considerations](#security-considerations)
   - [Input Validation](#input-validation)
   - [Invalid Document Export](#invalid-document-export)
 - [Contributing](#contributing)
 - [Dependencies](#dependencies)
-- [Configuration Summary](#configuration-summary)
-- [Breakdown / References](#breakdown--references)
 - [License](#license)
+- [Security Considerations](#security-considerations)
 <!-- /TOC -->
 
 ## Introduction
@@ -34,10 +33,9 @@ These instructions explain what a user must do to obtain, configure, and run the
 
 ### Prerequisites
 
-- **Git** – to clone the repository.  
-- **Node.js** 20 or higher (LTS recommended).  
-- **NPM** (comes bundled with Node.js).  
-- Recommended: modern browser (e.g., Chromium-based or Firefox).  
+- [Git](https://github.com)
+- [Node.js](https://nodejs.org/) 20 or higher
+- [NPM](https://www.npmjs.com/package/npm)
 
 ### Clone & Setup
 
@@ -64,7 +62,6 @@ Optional helpful commands:
 ```sh
 npm run lint      # run linting (if configured)
 npm run lint:fix  # fix linting issues
-npm run format    # format code (if configured)
 npm test          # run automated tests
 ```
 
@@ -78,8 +75,6 @@ npm run preview
 Built artifacts are output to the production directory (e.g., `dist`). Preview locally with the provided script.
 
 ## Developing
-
-This section describes how developers contribute and work on the codebase.
 
 ### Local Development Setup
 
@@ -119,7 +114,7 @@ in order to prevent large merge conflicts.
 
 ## Architecture Overview
 
-A frontend-only application built with **React.js**, styled with **Tailwind CSS**, and composed via **HeroUI**. Local state is managed with **Zustand** where appropriate, and all external input is validated through the **csaf-validator-lib**.
+A frontend-only application built with **React.js**, styled with **Tailwind CSS**, and composed via **HeroUI**. Local state is managed with **Zustand** where appropriate, and all input is validated through the **csaf-validator-lib**.
 
 ### Tech Stack
 
@@ -134,29 +129,14 @@ A frontend-only application built with **React.js**, styled with **Tailwind CSS*
 - **Validation:**  
   - `csaf-validator-lib` — used for validating input 
 
-### High-Level Architecture
-
-_Install Mermaid-Extension for this architecture_
-```mermaid
-flowchart TD
-  A[User Browser] --> B[React + HeroUI Components]
-  B --> C[Input Layers / Forms]
-  C --> D[csaf-validator-lib]
-  D --> E[Validated Payloads]
-  B --> G[Zustand Store]
-  G --> B
-```
-
 ## Developer Guide
 
 ### Code & Module Organization
 
 - `src/` — application source code (components, services, utilities).  
 - `tests/` — automated test suites (unit/integration).  
-- `./docs/` — supplemental documentation (schema, config, well-known).  
+- `docs/` — supplemental documentation (schema, config, well-known).  
 - `package.json` / `package-lock.json` — scripts and dependency management.
-
-## Security Considerations
 
 ### Input Validation
 
@@ -170,26 +150,9 @@ In sec-o-simple the document can be exported at any point, if the document is in
 
 Please refer to this [document](CONTRIBUTING.md).
 
-Key guidelines:
-
-- Fork or branch off `main`.  
-- Use descriptive branch names (`feat/...`, `fix/...`).  
-- Ensure linting and automated tests pass before submitting.  
-- Open a pull request using the template
-- Address reviewer feedback promptly
-
 ## Dependencies
 
 Primary dependencies are declared in `package.json`. 
-
-Highlights include:
-
-- **Node.js 20+** — runtime environment  
-- **Vite** — build and development tooling  
-- **HeroUI** and **Tailwind CSS** — UI component framework and utility-first styling
-- **ESLint / Prettier** — code quality enforcement  
-- **Testing frameworks** — for unit/integration testing  
-
 Run the following to surface known vulnerabilities:
 
 ```sh
@@ -197,19 +160,6 @@ npm audit
 ```
 
 The lockfile (`package-lock.json`) ensures repeatable installs.
-
-## Configuration Summary
-
-For project-specific configuration refer to `./docs/configuration.md`.
-
-## Breakdown / References
-
-- `./docs/` — extended documentation (architecture, security, usage, etc.)  
-- `./CONTRIBUTING.md` — contribution guidelines  
-- `./.github/` — CI workflows, issue/PR templates  
-- `./src/` — source code  
-- `./locales/` — translation files for english and german
-- `./tests/` — automated test suites  
 
 ## License
 

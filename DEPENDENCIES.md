@@ -34,10 +34,3 @@ This project is frontend-only. Dependencies are categorized into runtime (what s
 | `postcss`, `autoprefixer` | CSS processing pipeline required by Tailwind. |
 | `cypress` | End-to-end testing framework. |
 | `@types/*` (e.g., `@types/react`, `@types/react-dom`, `@types/node`) | Type definitions for TypeScript interoperability with external libraries. |
-
-### Notes
-
-- **State management:** Zustand provides shared or persistent state; Used for global management of form data.  
-- **Validation:** All input flows are validated by the csaf-validator-lib library to prevent invalid data propagation.  
-- **Styling:** Tailwind CSS is the styling foundation; class composition is normalized via `tailwind-merge`.  
-- **Developer ergonomics:** ESLint and Prettier enforce consistency; Vite delivers fast feedback and builds.
