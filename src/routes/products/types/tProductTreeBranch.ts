@@ -37,6 +37,7 @@ export type TProductTreeBranch = {
   id: string
   category: TProductTreeBranchCategory
   name: string
+  productName?: string
   description: string
   identificationHelper?: TProductIdentificationHelper
   subBranches: TProductTreeBranch[]
@@ -64,19 +65,10 @@ export function getPTBName(branch?: TProductTreeBranch) {
   if (!branch) {
     return 'unknown product tree branch'
   }
+
   if (branch.name) {
     return branch.name
   }
 
   return null
-}
-
-export function getFullPTBName(branch: TProductTreeBranchWithParents) {
-  let nameParts = []
-  let current: TProductTreeBranchWithParents | null = branch
-  while (current !== null) {
-    nameParts.push(getPTBName(current))
-    current = current.parent
-  }
-  return nameParts.reverse().join(' ')
 }

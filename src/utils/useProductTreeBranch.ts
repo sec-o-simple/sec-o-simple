@@ -3,6 +3,7 @@ import {
   TProductTreeBranchCategory,
   TProductTreeBranchWithParents,
 } from '@/routes/products/types/tProductTreeBranch'
+import { useTranslation } from 'react-i18next'
 import useDocumentStore from './useDocumentStore'
 import { useRelationships } from './useRelationships'
 
@@ -15,12 +16,12 @@ export type TSelectableFullProductName = {
 }
 
 export function useProductTreeBranch() {
+  const { t } = useTranslation()
   const products = Object.values(useDocumentStore((store) => store.products))
   const relationships = Object.values(
     useDocumentStore((store) => store.relationships),
   )
   const updateProducts = useDocumentStore((store) => store.updateProducts)
-
   const {
     getRelationshipsBySourceVersion,
     getRelationshipsByTargetVersion,
@@ -79,6 +80,37 @@ export function useProductTreeBranch() {
     return matchingBranches
   }
 
+  const getPTBName = (
+    branch: TProductTreeBranch,
+  ): {
+    isReadonly?: boolean
+    name?: string
+  } => {
+    let isNameReadonly = false
+    let name = branch.name
+
+    if (
+      branch.category === 'product_version' &&
+      branch.productName !== undefined &&
+      getFullProductName(branch.id) !== branch.productName
+    ) {
+      isNameReadonly = true
+      name = branch.productName
+    } else if (!!branch.identificationHelper) {
+      isNameReadonly = true
+      name = getFullProductName(branch.id)
+    }
+
+    if (!name) {
+      name = t('untitled.product_version')
+    }
+
+    return {
+      name,
+      isReadonly: isNameReadonly,
+    }
+  }
+
   const getPTBsByCategory = (
     category: TProductTreeBranchCategory,
     startingBranches?: TProductTreeBranch[],
@@ -95,10 +127,16 @@ export function useProductTreeBranch() {
   }
 
   const getFullProductName = (versionId: string): string => {
-    const version = findProductTreeBranchWithParents(versionId)
-    const product = version?.parent
-    const vendor = product?.parent
-    return `${vendor?.name ?? ''} ${product?.name ?? ''} ${version?.name ?? ''}`
+    const ptb = findProductTreeBranchWithParents(versionId)
+
+    let nameParts = []
+    let current: TProductTreeBranchWithParents | null = ptb || null
+    while (current !== null) {
+      nameParts.push(current.name)
+      current = current.parent
+    }
+
+    return nameParts.reverse().join(' ')
   }
 
   const getRelationshipFullProductName = (
@@ -230,6 +268,7 @@ export function useProductTreeBranch() {
     getRelationshipFullProductName,
     getFilteredPTBs,
     getPTBsByCategory,
+    getPTBName,
     getSelectableRefs,
     getGroupedSelectableRefs,
     addPTB,

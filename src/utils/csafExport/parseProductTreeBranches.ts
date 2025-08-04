@@ -32,7 +32,7 @@ export function parseProductTreeBranches(
       )
     } else {
       pbObj['product'] = {
-        name: getFullProductName(branch.id),
+        name: branch.productName ?? getFullProductName(branch.id),
         product_id: branch.id,
         product_identification_helper: branch.identificationHelper,
       }
