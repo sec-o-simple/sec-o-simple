@@ -29,8 +29,6 @@ _Placeholder for BSI Description_
 
 ## Getting started
 
-These instructions explain what a user must do to obtain, configure, and run the tool.
-
 ### Prerequisites
 
 - [Git](https://github.com)
