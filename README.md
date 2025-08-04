@@ -1,48 +1,108 @@
 # Sec-O-Simple
 
-Further information can be found in the [Documentation](./docs)
+<!-- TOC depthfrom:2 depthto:3 -->
+- [Sec-O-Simple](#sec-o-simple)
+- [Introduction](#introduction)
+- [Getting started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Clone & Setup](#clone--setup)
+  - [Configuration](#configuration)
+  - [Running Locally](#running-locally)
+  - [Building for Production](#building-for-production)
+- [Architecture Overview](#architecture-overview)
+- [Contributing](#contributing)
+- [Dependencies](#dependencies)
+- [License](#license)
+- [Security Considerations](#security-considerations)
+<!-- /TOC -->
 
-## Development
+## Introduction
 
-### Branch policy
+_Placeholder for BSI Description_
 
-When working on new features or fixing bugs, create a new branch based on main
-and give it a meaningful name. Rebase or merge main regularly into your branch
-in order to prevent large merge conflicts.
-
-Naming examples:
-
-- feat/navigation-redesign
-- fix/excessive-loading-time
+## Getting started
 
 ### Prerequisites
 
+- [Git](https://github.com)
 - [Node.js](https://nodejs.org/) 20 or higher
 - [NPM](https://www.npmjs.com/package/npm)
 
-### Project setup
+### Clone & Setup
 
 ```sh
-# Clone repository
 git clone git@github.com:sec-o-simple/sec-o-simple.git
 cd sec-o-simple
-
-# Install NPM dependencies
 npm install
 ```
 
-### Run server
+### Configuration
+
+Further information about the configuration can be found in the [Configuration](./docs/CONFIG.md)
+
+### Running Locally
 
 ```sh
-# Start vite development server
 npm run dev
 ```
 
-The webapp is now accessible at [http://localhost:8080](http://localhost:8080)
+By default, the webapp is accessible at: [http://localhost:8080](http://localhost:8080)
 
-### Testing
+Optional helpful commands:
 
 ```sh
-# Run automated tests
-npm test
+npm run lint      # run linting (if configured)
+npm run lint:fix  # fix linting issues
+npm test          # run automated tests
 ```
+
+### Building for Production
+
+```sh
+npm run build
+npm run preview
+```
+
+Built artifacts are output to the production directory (e.g., `dist`). Preview locally with the provided script.
+
+## Architecture Overview
+
+A frontend-only application built with **React.js**, styled with **Tailwind CSS**, and composed via **HeroUI**. Local state is managed with **Zustand** where appropriate, and all input is validated through the **csaf-validator-lib**.
+
+### Code & Module Organization
+
+- `src/` — application source code (components, services, utilities).  
+- `tests/` — automated test suites (unit/integration).  
+- `docs/` — supplemental documentation (schema, config, well-known).  
+- `package.json` / `package-lock.json` — scripts and dependency management.
+
+### Tech Stack
+
+- **UI / Presentation:**  
+  - React.js  
+  - Tailwind CSS  
+  - HeroUI (design system / component library)  
+
+- **State Management:**  
+  - Zustand — lightweight, composable global/local state store
+
+- **Validation:**  
+  - `csaf-validator-lib` — used for validating input 
+
+## Contributing
+
+Please refer to this [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Dependencies
+
+Regarding dependencies please refer to [`DEPENDENCIES.md`](DEPENDENCIES.md).
+
+## License
+
+This project is licensed under the [Apache License](./LICENSE).  
+
+## Security Considerations
+
+Please refer to [`SECURITY-CONSIDERATIONS.md`](SECURITY-CONSIDERATIONS.md) for details about how product-database addresses the [OWASP Top 10 Web Application Security Risks](https://owasp.org/www-project-top-ten/).
+
+[(back to top)](#bsi-secvisogram-csaf-20-web-editor)
