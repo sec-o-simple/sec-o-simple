@@ -1,0 +1,130 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ComponentList > should match snapshot 1`] = `
+<div
+  class="flex flex-col gap-2"
+>
+  <div
+    data-selection-mode="multiple"
+    data-testid="accordion"
+    data-variant="splitted"
+  >
+    <div
+      data-testid="accordion-item"
+    >
+      <div
+        data-testid="start-content"
+      >
+        <div
+          class="flex items-center justify-between"
+        >
+          <div
+            class="flex items-center gap-4"
+          >
+            <div
+              class="max-w-xl overflow-hidden text-ellipsis text-nowrap"
+            >
+              Test Item 1
+            </div>
+          </div>
+          <div>
+            <div
+              data-testid="tooltip"
+              title="Delete Test Item"
+            >
+              <button
+                class="rounded-full text-neutral-foreground"
+                data-isdisabled="false"
+                data-isicononly="true"
+                data-isinvalid="false"
+                data-testid="hero-button"
+                data-variant="light"
+              >
+                <span
+                  data-icon="trash"
+                  data-testid="fa-icon"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        data-testid="accordion-content"
+      >
+        <div
+          data-testid="content-0"
+        >
+          Content for 
+          Test Item 1
+        </div>
+      </div>
+    </div>
+    <div
+      data-testid="accordion-item"
+    >
+      <div
+        data-testid="start-content"
+      >
+        <div
+          class="flex items-center justify-between"
+        >
+          <div
+            class="flex items-center gap-4"
+          >
+            <div
+              class="max-w-xl overflow-hidden text-ellipsis text-nowrap"
+            >
+              Test Item 2
+            </div>
+          </div>
+          <div>
+            <div
+              data-testid="tooltip"
+              title="Delete Test Item"
+            >
+              <button
+                class="rounded-full text-neutral-foreground"
+                data-isdisabled="false"
+                data-isicononly="true"
+                data-isinvalid="false"
+                data-testid="hero-button"
+                data-variant="light"
+              >
+                <span
+                  data-icon="trash"
+                  data-testid="fa-icon"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        data-testid="accordion-content"
+      >
+        <div
+          data-testid="content-1"
+        >
+          Content for 
+          Test Item 2
+        </div>
+      </div>
+    </div>
+  </div>
+  <button
+    class="border-dashed border-primary text-primary"
+    data-isdisabled="false"
+    data-isicononly="false"
+    data-isinvalid="false"
+    data-testid="hero-button"
+    data-variant="bordered"
+  >
+    <span
+      data-icon="add"
+      data-testid="fa-icon"
+    />
+    Add Test Item
+  </button>
+</div>
+`;

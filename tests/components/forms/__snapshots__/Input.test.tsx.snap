@@ -1,0 +1,39 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Input > should handle invalid state correctly 1`] = `
+<input
+  data-classnames="{"inputWrapper":"border-1 shadow-none"}"
+  data-errormessage=""
+  data-isinvalid="true"
+  data-labelplacement="outside"
+  data-testid="hero-input"
+  data-variant="bordered"
+  placeholder=" "
+  value=""
+/>
+`;
+
+exports[`Input > should render with default props 1`] = `
+<input
+  data-classnames="{"inputWrapper":"border-1 shadow-none"}"
+  data-errormessage=""
+  data-isinvalid="false"
+  data-labelplacement="outside"
+  data-testid="hero-input"
+  data-variant="bordered"
+  placeholder=" "
+  value=""
+/>
+`;
+
+exports[`Textarea > should render with default props 1`] = `
+<textarea
+  data-classnames="{"inputWrapper":"border-1 shadow-none"}"
+  data-errormessage=""
+  data-isinvalid="false"
+  data-labelplacement="outside"
+  data-testid="hero-textarea"
+  data-variant="bordered"
+  placeholder=" "
+/>
+`;

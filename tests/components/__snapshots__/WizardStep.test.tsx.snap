@@ -1,0 +1,50 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`WizardStep > should render with progress bar and content 1`] = `
+<div
+  class="flex max-w-5xl flex-col gap-4 p-8"
+>
+  <div
+    data-progress="1"
+    data-testid="progress-bar"
+  >
+    <span
+      data-testid="section-0"
+    >
+      Document
+    </span>
+    <span
+      data-testid="section-1"
+    >
+      Products
+    </span>
+    <span
+      data-testid="section-2"
+    >
+      Vulnerabilities
+    </span>
+    <span
+      data-testid="section-3"
+    >
+      Tracking
+    </span>
+  </div>
+  <div
+    class="flex flex-col gap-2 rounded-lg border-1 border-default-200 bg-content1 p-8"
+  >
+    <div
+      class="mb-4 text-xl font-semibold"
+    >
+      Test Step
+    </div>
+    <div>
+      Test content
+    </div>
+  </div>
+  <div
+    class="flex justify-between"
+  >
+    <div />
+  </div>
+</div>
+`;

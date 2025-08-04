@@ -1,0 +1,367 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`csafExport > should create a CSAF document with complete data 1`] = `
+{
+  "document": {
+    "acknowledgments": [
+      {
+        "names": [
+          "Alice Security",
+          "Bob Researcher",
+        ],
+        "organization": "Security Research Org",
+        "summary": "Discovered the vulnerability",
+        "urls": [
+          "https://example.com/researchers",
+        ],
+      },
+    ],
+    "category": "csaf_security_advisory",
+    "csaf_version": "2.0",
+    "distribution": {
+      "tlp": {
+        "label": "WHITE",
+        "url": "https://www.first.org/tlp/",
+      },
+    },
+    "lang": "en",
+    "notes": [
+      {
+        "category": "description",
+        "text": "This is a test security advisory",
+        "title": "Description",
+      },
+      {
+        "category": "description",
+        "text": "A sample test application for security testing",
+        "title": "Product description for Test Application",
+      },
+    ],
+    "publisher": {
+      "category": "vendor",
+      "contact_details": "security@example.com",
+      "issuing_authority": "Security Team",
+      "name": "Test Publisher",
+      "namespace": "https://example.com",
+    },
+    "references": [
+      {
+        "category": "external",
+        "summary": "Vendor Advisory",
+        "url": "https://example.com/advisory",
+      },
+    ],
+    "title": "Test Security Advisory",
+    "tracking": {
+      "current_release_date": "2023-02-01T00:00:00.000Z",
+      "generator": {
+        "date": "2023-07-31T12:00:00.000Z",
+        "engine": {
+          "name": "Sec-O-Simple",
+          "version": "0.0.1",
+        },
+      },
+      "id": "test-document-id",
+      "initial_release_date": "2023-01-01T00:00:00.000Z",
+      "revision_history": [
+        {
+          "date": "2023-01-01T00:00:00.000Z",
+          "number": "1.0.0",
+          "summary": "Initial release",
+        },
+        {
+          "date": "2023-02-01T00:00:00.000Z",
+          "number": "1.1.0",
+          "summary": "Security update",
+        },
+      ],
+      "status": "final",
+      "version": "1.1.0",
+    },
+  },
+  "product_tree": {
+    "branches": [
+      {
+        "branches": [
+          {
+            "branches": [
+              {
+                "category": "product_version",
+                "name": "1.0.0",
+                "product": {
+                  "name": "Test Vendor Test Application 1.0.0",
+                  "product_id": "version-1",
+                  "product_identification_helper": undefined,
+                },
+              },
+              {
+                "category": "product_version",
+                "name": "2.0.0",
+                "product": {
+                  "name": "Test Vendor Test Application 2.0.0",
+                  "product_id": "version-2",
+                  "product_identification_helper": undefined,
+                },
+              },
+            ],
+            "category": "product_name",
+            "name": "Test Application",
+          },
+        ],
+        "category": "vendor",
+        "name": "Test Vendor",
+      },
+    ],
+    "relationships": [
+      {
+        "category": "default_component_of",
+        "full_product_name": {
+          "name": "Test Vendor Test Application 1.0.0 default component of linux-v1",
+          "product_id": "rel-1",
+        },
+        "product_reference": "version-1",
+        "relates_to_product_reference": "linux-v1",
+      },
+    ],
+  },
+  "vulnerabilities": [
+    {
+      "cve": "CVE-2023-12345",
+      "cwe": {
+        "id": "CWE-79",
+        "name": "Improper Neutralization of Input During Web Page Generation",
+      },
+      "notes": [
+        {
+          "category": "description",
+          "text": "A cross-site scripting vulnerability exists in the application",
+          "title": "Vulnerability Description",
+        },
+      ],
+      "product_status": {
+        "fixed": [
+          undefined,
+        ],
+        "known_affected": [
+          undefined,
+        ],
+      },
+      "references": [
+        {
+          "category": "external",
+          "summary": "CVSS v4.0 Score",
+          "url": "https://www.first.org/cvss/calculator/4-0#CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+        },
+      ],
+      "remediations": [
+        {
+          "category": "mitigation",
+          "date": "2023-02-15T00:00:00.000Z",
+          "details": "Update to version 2.0.0 or later",
+          "product_ids": [
+            "version-1",
+          ],
+          "url": "https://example.com/update-guide",
+        },
+      ],
+      "scores": [
+        {
+          "cvss_v3": {
+            "baseScore": 6.1,
+            "baseSeverity": "MEDIUM",
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+            "version": "3.1",
+          },
+          "products": [
+            "version-1",
+          ],
+        },
+      ],
+      "title": "Cross-site Scripting Vulnerability",
+    },
+  ],
+}
+`;
+
+exports[`csafExport > should create a CSAF document with minimal data 1`] = `
+{
+  "document": {
+    "acknowledgments": undefined,
+    "category": "csaf_security_advisory",
+    "csaf_version": "2.0",
+    "distribution": {
+      "tlp": undefined,
+    },
+    "lang": "en",
+    "notes": undefined,
+    "publisher": {
+      "category": "vendor",
+      "contact_details": "security@example.com",
+      "issuing_authority": "Security Team",
+      "name": "Test Publisher",
+      "namespace": "https://example.com",
+    },
+    "references": undefined,
+    "title": "Test Security Advisory",
+    "tracking": {
+      "current_release_date": "2023-07-31T12:00:00.000Z",
+      "generator": {
+        "date": "2023-07-31T12:00:00.000Z",
+        "engine": {
+          "name": "Sec-O-Simple",
+          "version": "0.0.1",
+        },
+      },
+      "id": "test-document-id",
+      "initial_release_date": "2023-07-31T12:00:00.000Z",
+      "revision_history": [],
+      "status": "final",
+      "version": "1",
+    },
+  },
+  "product_tree": {
+    "branches": [],
+    "relationships": undefined,
+  },
+  "vulnerabilities": [],
+}
+`;
+
+exports[`csafExport > should handle vulnerabilities without optional fields 1`] = `
+{
+  "document": {
+    "acknowledgments": [
+      {
+        "names": [
+          "Alice Security",
+          "Bob Researcher",
+        ],
+        "organization": "Security Research Org",
+        "summary": "Discovered the vulnerability",
+        "urls": [
+          "https://example.com/researchers",
+        ],
+      },
+    ],
+    "category": "csaf_security_advisory",
+    "csaf_version": "2.0",
+    "distribution": {
+      "tlp": {
+        "label": "WHITE",
+        "url": "https://www.first.org/tlp/",
+      },
+    },
+    "lang": "en",
+    "notes": [
+      {
+        "category": "description",
+        "text": "This is a test security advisory",
+        "title": "Description",
+      },
+      {
+        "category": "description",
+        "text": "A sample test application for security testing",
+        "title": "Product description for Test Application",
+      },
+    ],
+    "publisher": {
+      "category": "vendor",
+      "contact_details": "security@example.com",
+      "issuing_authority": "Security Team",
+      "name": "Test Publisher",
+      "namespace": "https://example.com",
+    },
+    "references": [
+      {
+        "category": "external",
+        "summary": "Vendor Advisory",
+        "url": "https://example.com/advisory",
+      },
+    ],
+    "title": "Test Security Advisory",
+    "tracking": {
+      "current_release_date": "2023-02-01T00:00:00.000Z",
+      "generator": {
+        "date": "2023-07-31T12:00:00.000Z",
+        "engine": {
+          "name": "Sec-O-Simple",
+          "version": "0.0.1",
+        },
+      },
+      "id": "test-document-id",
+      "initial_release_date": "2023-01-01T00:00:00.000Z",
+      "revision_history": [
+        {
+          "date": "2023-01-01T00:00:00.000Z",
+          "number": "1.0.0",
+          "summary": "Initial release",
+        },
+        {
+          "date": "2023-02-01T00:00:00.000Z",
+          "number": "1.1.0",
+          "summary": "Security update",
+        },
+      ],
+      "status": "final",
+      "version": "1.1.0",
+    },
+  },
+  "product_tree": {
+    "branches": [
+      {
+        "branches": [
+          {
+            "branches": [
+              {
+                "category": "product_version",
+                "name": "1.0.0",
+                "product": {
+                  "name": "Test Vendor Test Application 1.0.0",
+                  "product_id": "version-1",
+                  "product_identification_helper": undefined,
+                },
+              },
+              {
+                "category": "product_version",
+                "name": "2.0.0",
+                "product": {
+                  "name": "Test Vendor Test Application 2.0.0",
+                  "product_id": "version-2",
+                  "product_identification_helper": undefined,
+                },
+              },
+            ],
+            "category": "product_name",
+            "name": "Test Application",
+          },
+        ],
+        "category": "vendor",
+        "name": "Test Vendor",
+      },
+    ],
+    "relationships": [
+      {
+        "category": "default_component_of",
+        "full_product_name": {
+          "name": "Test Vendor Test Application 1.0.0 default component of linux-v1",
+          "product_id": "rel-1",
+        },
+        "product_reference": "version-1",
+        "relates_to_product_reference": "linux-v1",
+      },
+    ],
+  },
+  "vulnerabilities": [
+    {
+      "cve": undefined,
+      "cwe": undefined,
+      "notes": [],
+      "product_status": {},
+      "references": undefined,
+      "remediations": undefined,
+      "scores": undefined,
+      "title": "Basic Vulnerability",
+    },
+  ],
+}
+`;

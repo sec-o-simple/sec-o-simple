@@ -1,0 +1,65 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Select > Snapshots > should render default state 1`] = `
+<select
+  data-classnames="{"trigger":"border-1 shadow-none"}"
+  data-error-message=""
+  data-is-invalid="false"
+  data-testid="hero-select"
+  labelplacement="outside"
+  placeholder=" "
+  variant="bordered"
+>
+  <option>
+    Test
+  </option>
+</select>
+`;
+
+exports[`Select > Snapshots > should render with custom variant 1`] = `
+<select
+  data-classnames="{"trigger":"border-1 shadow-none"}"
+  data-error-message=""
+  data-is-invalid="false"
+  data-testid="hero-select"
+  labelplacement="outside"
+  placeholder=" "
+  variant="flat"
+>
+  <option>
+    Test
+  </option>
+</select>
+`;
+
+exports[`Select > Snapshots > should render with error state 1`] = `
+<select
+  data-classnames="{"trigger":"border-1 shadow-none"}"
+  data-error-message="Required field"
+  data-is-invalid="true"
+  data-testid="hero-select"
+  labelplacement="outside"
+  placeholder=" "
+  variant="bordered"
+>
+  <option>
+    Test
+  </option>
+</select>
+`;
+
+exports[`Select > should render with default props 1`] = `
+<select
+  data-classnames="{"trigger":"border-1 shadow-none"}"
+  data-error-message=""
+  data-is-invalid="false"
+  data-testid="hero-select"
+  labelplacement="outside"
+  placeholder=" "
+  variant="bordered"
+>
+  <option>
+    Test
+  </option>
+</select>
+`;
