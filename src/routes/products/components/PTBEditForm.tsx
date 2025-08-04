@@ -1,6 +1,9 @@
 import { Input, Textarea } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import {
+  checkReadOnly as checkTemplateReadonly,
+  getPlaceholder,
+} from '@/utils/template'
 import useDocumentType from '@/utils/useDocumentType'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { Button } from '@heroui/button'
@@ -34,7 +37,7 @@ export function PTBCreateEditForm({
   const { name: ptbName, isReadonly } = ptb
     ? getPTBName(ptb)
     : { name: '', isReadonly: false }
-  const [name, setName] = useState(ptbName ?? '')
+  const [name, setName] = useState(ptb?.name ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
   const [type, setType] = useState(ptb?.type ?? 'Software')
   const { hasHardware, hasSoftware } = useDocumentType()
@@ -56,10 +59,10 @@ export function PTBCreateEditForm({
             <Input
               label={t(`${category}.name`)}
               autoFocus
-              value={name ?? ''}
+              value={isReadonly ? ptbName ?? '' : name}
               onValueChange={setName}
               isDisabled={
-                ptb ? checkReadOnly(ptb, 'name') || isReadonly : isReadonly
+                ptb ? checkTemplateReadonly(ptb, 'name') || isReadonly : false
               }
               placeholder={ptb ? getPlaceholder(ptb, 'name') : undefined}
             />
@@ -68,7 +71,9 @@ export function PTBCreateEditForm({
                 label={t(`${category}.description`)}
                 value={description}
                 onValueChange={setDescription}
-                isDisabled={ptb ? checkReadOnly(ptb, 'description') : false}
+                isDisabled={
+                  ptb ? checkTemplateReadonly(ptb, 'description') : false
+                }
                 placeholder={
                   ptb ? getPlaceholder(ptb, 'description') : undefined
                 }
@@ -84,7 +89,7 @@ export function PTBCreateEditForm({
                   }
                   setType(e.target.value as TProductTreeBranchProductType)
                 }}
-                isDisabled={ptb ? checkReadOnly(ptb, 'type') : false}
+                isDisabled={ptb ? checkTemplateReadonly(ptb, 'type') : false}
                 placeholder={ptb ? getPlaceholder(ptb, 'type') : undefined}
               >
                 {hasSoftware ? (
