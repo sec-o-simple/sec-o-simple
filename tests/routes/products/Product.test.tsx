@@ -45,6 +45,7 @@ vi.mock('../../../src/utils/useProductTreeBranch', () => ({
     findProductTreeBranchWithParents: mockFindProductTreeBranchWithParents,
     updatePTB: mockUpdatePTB,
     deletePTB: mockDeletePTB,
+    getPTBName: mockGetPTBName,
     getSelectableRefs: vi.fn(() => [
       {
         id: 'version-1',
@@ -246,7 +247,24 @@ describe('Product', () => {
       subBranches: [],
       type: category === 'product_name' ? 'Software' : undefined,
     }))
-    mockGetPTBName.mockImplementation((product) => product?.name || 'Default Name')
+    mockGetPTBName.mockImplementation((product) => {
+      if (!product) return { name: 'Default Name' }
+      
+      // For product versions, use untitled.product_version when name is empty
+      if (product.category === 'product_version') {
+        return { 
+          name: product.name || 'Untitled Version',
+          isReadonly: false
+        }
+      }
+      
+      // For other categories (like product_name), just return the name as-is
+      // The component will handle the untitled logic
+      return { 
+        name: product.name,
+        isReadonly: false
+      }
+    })
     mockGetDefaultRelationship.mockReturnValue({
       id: 'default-relationship-id',
       category: 'installed_on',
@@ -694,7 +712,7 @@ describe('Product', () => {
     })
 
     it('should handle empty version name fallback', () => {
-      mockGetPTBName.mockReturnValue(null)
+      mockGetPTBName.mockReturnValue({ name: null })
 
       const product = createMockProduct({
         subBranches: [createMockVersion('v1', '')]

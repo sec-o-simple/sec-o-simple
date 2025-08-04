@@ -38,6 +38,22 @@ vi.mock('react-i18next', () => ({
 // Mock custom hooks
 const mockFindProductTreeBranch = vi.fn()
 const mockFindProductTreeBranchWithParents = vi.fn()
+const mockGetPTBName = vi.fn((product: any) => {
+  let fallbackName = 'Untitled Product'
+  
+  if (product.category === 'vendor') {
+    fallbackName = 'Untitled Vendor'
+  } else if (product.category === 'product_version') {
+    fallbackName = 'Untitled Version'
+  } else if (product.category === 'product_name') {
+    fallbackName = 'Untitled Product'
+  }
+  
+  return {
+    name: product.name || fallbackName,
+    isReadonly: false
+  }
+})
 const mockGetRelationshipsBySourceVersion = vi.fn()
 const mockSortRelationshipsByCategory = vi.fn()
 const mockAddOrUpdateRelationship = vi.fn()
@@ -48,6 +64,7 @@ vi.mock('../../../src/utils/useProductTreeBranch', () => ({
   useProductTreeBranch: () => ({
     findProductTreeBranch: mockFindProductTreeBranch,
     findProductTreeBranchWithParents: mockFindProductTreeBranchWithParents,
+    getPTBName: mockGetPTBName,
     getSelectableRefs: vi.fn(() => [
       {
         id: 'version-1',
@@ -228,10 +245,6 @@ vi.mock('../../../src/routes/products/components/TagList', () => ({
 }))
 
 // Mock utility functions
-vi.mock('../../../src/routes/products/types/tProductTreeBranch', () => ({
-  getPTBName: vi.fn((ptb: any) => ptb?.name || 'Test Name'),
-}))
-
 vi.mock('../../../src/routes/products/types/tRelationship', () => ({
   getDefaultRelationship: vi.fn(() => ({
     id: 'new-relationship-id',
@@ -298,6 +311,7 @@ describe('Version', () => {
     // Setup default mock returns
     mockUseParams.mockReturnValue({ productVersionId: 'version-1' })
     mockFindProductTreeBranchWithParents.mockReturnValue(mockProductVersion)
+    mockGetPTBName.mockClear()
     mockGetRelationshipsBySourceVersion.mockReturnValue([mockRelationship])
     mockSortRelationshipsByCategory.mockReturnValue({
       installed_on: [mockRelationship]

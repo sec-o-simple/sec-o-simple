@@ -84,6 +84,7 @@ describe('parseProductTree', () => {
         id: 'default-vendor-id',
         category: 'vendor',
         name: 'Test Vendor',
+        productName: undefined,
         description: 'Default vendor description',
         identificationHelper: undefined,
         subBranches: [],
@@ -118,6 +119,7 @@ describe('parseProductTree', () => {
         id: 'prod-123',
         category: 'product_name',
         name: 'Test Product',
+        productName: 'Product Description',
         description: 'Product Description',
         identificationHelper: {
           cpe: 'cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*'
@@ -150,6 +152,7 @@ describe('parseProductTree', () => {
         id: 'default-product_version-id',
         category: 'product_version',
         name: 'Default product_version name', // Should use default because name is empty
+        productName: undefined,
         description: 'Default product_version description', // Should use default because product.name is missing
         identificationHelper: undefined,
         subBranches: [],
@@ -199,6 +202,7 @@ describe('parseProductTree', () => {
         id: 'default-vendor-id',
         category: 'vendor',
         name: 'Parent Vendor',
+        productName: undefined,
         description: 'Default vendor description',
         identificationHelper: undefined,
         subBranches: [
@@ -206,6 +210,7 @@ describe('parseProductTree', () => {
             id: 'child-prod-123',
             category: 'product_name',
             name: 'Child Product',
+            productName: 'Child Product Description',
             description: 'Child Product Description',
             identificationHelper: undefined,
             subBranches: [],
@@ -215,6 +220,7 @@ describe('parseProductTree', () => {
             id: 'default-product_version-id',
             category: 'product_version',
             name: 'Child Version',
+            productName: undefined,
             description: 'Default product_version description',
             identificationHelper: undefined,
             subBranches: [
@@ -222,6 +228,7 @@ describe('parseProductTree', () => {
                 id: 'grandchild-prod-456',
                 category: 'product_name',
                 name: 'Grandchild Product',
+                productName: undefined,
                 description: 'Default product_name description',
                 identificationHelper: undefined,
                 subBranches: [],
@@ -366,6 +373,7 @@ describe('parseProductTree', () => {
         id: 'default-vendor-id', // Should use default when product_id is undefined
         category: 'vendor',
         name: 'Default vendor name', // Should use default when name is undefined/falsy
+        productName: undefined,
         description: 'Default vendor description', // Should use default when product.name is undefined
         identificationHelper: null,
         subBranches: [],

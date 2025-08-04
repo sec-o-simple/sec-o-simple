@@ -20,6 +20,22 @@ vi.mock('../../../../src/components/forms/IconButton', () => ({
 
 // Create mock functions for useProductTreeBranch
 const mockDeletePTB = vi.fn()
+const mockGetPTBName = vi.fn((product: any) => {
+  let fallbackName = 'Untitled Product'
+  
+  if (product.category === 'vendor') {
+    fallbackName = 'Untitled Vendor'
+  } else if (product.category === 'product_version') {
+    fallbackName = 'Untitled Version'
+  } else if (product.category === 'product_name') {
+    fallbackName = 'Untitled Product'
+  }
+  
+  return {
+    name: product.name || fallbackName,
+    isReadonly: false
+  }
+})
 const mockFindProductTreeBranch = vi.fn((id: string) => ({
   id,
   name: `Found Product ${id}`,
@@ -31,6 +47,7 @@ const mockFindProductTreeBranch = vi.fn((id: string) => ({
 vi.mock('../../../../src/utils/useProductTreeBranch', () => ({
   useProductTreeBranch: () => ({
     deletePTB: mockDeletePTB,
+    getPTBName: mockGetPTBName,
     findProductTreeBranch: mockFindProductTreeBranch
   })
 }))
@@ -183,6 +200,7 @@ describe('ProductCard', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockDeletePTB.mockClear()
+    mockGetPTBName.mockClear()
     mockFindProductTreeBranch.mockClear()
     mockNavigate.mockClear()
   })
@@ -355,11 +373,11 @@ describe('ProductCard', () => {
       expect(link1).toHaveTextContent('/product-management/version/sub-2')
     })
 
-    it('should generate correct labels for subBranches using findProductTreeBranch', () => {
+    it('should generate correct labels for subBranches using getPTBName', () => {
       renderWithRouter(<ProductCard product={mockProductWithSubBranches} />)
       
-      expect(screen.getByTestId('tag-item-0')).toHaveTextContent('Found Product sub-1')
-      expect(screen.getByTestId('tag-item-1')).toHaveTextContent('Found Product sub-2')
+      expect(screen.getByTestId('tag-item-0')).toHaveTextContent('Version 1.0')
+      expect(screen.getByTestId('tag-item-1')).toHaveTextContent('Version 2.0')
     })
 
     it('should handle empty subBranches array', () => {
@@ -419,31 +437,35 @@ describe('ProductCard', () => {
       expect(iconButton).toHaveAttribute('title', 'Edit Versions')
     })
 
-    it('should call findProductTreeBranch for each subBranch', () => {
+    it('should call getPTBName for each subBranch', () => {
       renderWithRouter(<ProductCard product={mockProductWithSubBranches} />)
       
-      expect(mockFindProductTreeBranch).toHaveBeenCalledWith('sub-1')
-      expect(mockFindProductTreeBranch).toHaveBeenCalledWith('sub-2')
+      expect(mockGetPTBName).toHaveBeenCalledWith(mockProductWithSubBranches.subBranches[0])
+      expect(mockGetPTBName).toHaveBeenCalledWith(mockProductWithSubBranches.subBranches[1])
     })
 
-    it('should handle fallback when findProductTreeBranch returns product without name', () => {
-      // Mock findProductTreeBranch to return a product without name for one call
-      mockFindProductTreeBranch.mockImplementation((id: string) => {
-        if (id === 'sub-1') {
+    it('should handle fallback when getPTBName returns product without name', () => {
+      // Mock getPTBName to return a product without name for one call
+      mockGetPTBName.mockImplementation((product: any) => {
+        if (product.id === 'sub-1') {
           return {
-            id,
-            name: '', // Empty name should trigger fallback
-            category: 'product_version' as const,
-            description: 'Found description',
-            subBranches: [],
+            name: null, // null name should trigger fallback
+            isReadonly: false
           }
         }
+        let fallbackName = 'Untitled Product'
+        
+        if (product.category === 'vendor') {
+          fallbackName = 'Untitled Vendor'
+        } else if (product.category === 'product_version') {
+          fallbackName = 'Untitled Version'
+        } else if (product.category === 'product_name') {
+          fallbackName = 'Untitled Product'
+        }
+        
         return {
-          id,
-          name: `Found Product ${id}`,
-          category: 'product_version' as const,
-          description: 'Found description',
-          subBranches: [],
+          name: product.name || fallbackName,
+          isReadonly: false
         }
       })
       
@@ -452,7 +474,7 @@ describe('ProductCard', () => {
       // First tag should show fallback text
       expect(screen.getByTestId('tag-item-0')).toHaveTextContent('Untitled Version')
       // Second tag should show normal name
-      expect(screen.getByTestId('tag-item-1')).toHaveTextContent('Found Product sub-2')
+      expect(screen.getByTestId('tag-item-1')).toHaveTextContent('Version 2.0')
     })
   })
 

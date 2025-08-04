@@ -7,6 +7,9 @@ const mockClient = vi.hoisted(() => ({
   defaults: { baseURL: '' },
 }))
 
+// Create mock for useProductDatabase in hoisted scope
+const mockUseProductDatabase = vi.hoisted(() => vi.fn())
+
 // Mock axios with the hoisted mock client
 vi.mock('axios', () => ({
   default: {
@@ -14,8 +17,10 @@ vi.mock('axios', () => ({
   },
 }))
 
-// Mock useConfigStore
-vi.mock('../../src/utils/useConfigStore')
+// Mock useProductDatabase
+vi.mock('../../src/utils/useProductDatabase', () => ({
+  default: mockUseProductDatabase,
+}))
 
 // Import types and functions after mocking
 import axios from 'axios'
@@ -26,26 +31,22 @@ import {
   type ProductVersion, 
   type IdentificationHelper 
 } from '../../src/utils/useDatabaseClient'
-import { useConfigStore } from '../../src/utils/useConfigStore'
 
 const mockedAxios = vi.mocked(axios)
-const mockUseConfigStore = vi.mocked(useConfigStore)
 
 describe('useDatabaseClient', () => {
   const mockConfig = {
-    productDatabase: {
-      enabled: true,
-      apiUrl: 'https://api.example.com',
-      url: 'https://example.com',
-    },
+    enabled: true,
+    apiUrl: 'https://api.example.com',
+    url: 'https://example.com',
   }
 
   beforeEach(() => {
     vi.clearAllMocks()
     mockClient.defaults.baseURL = '' // Reset baseURL
     
-    // Mock useConfigStore to return our mock config
-    mockUseConfigStore.mockReturnValue(mockConfig as any)
+    // Mock useProductDatabase to return our mock config
+    mockUseProductDatabase.mockReturnValue(mockConfig)
   })
 
   afterEach(() => {
@@ -54,12 +55,11 @@ describe('useDatabaseClient', () => {
 
   describe('initialization', () => {
     it('should throw error when product database is not enabled', () => {
-      mockUseConfigStore.mockReturnValue({
-        productDatabase: {
-          enabled: false,
-          apiUrl: 'https://api.example.com',
-        },
-      } as any)
+      mockUseProductDatabase.mockReturnValue({
+        enabled: false,
+        apiUrl: 'https://api.example.com',
+        url: 'https://example.com',
+      })
 
       expect(() => {
         renderHook(() => useDatabaseClient())
@@ -67,12 +67,11 @@ describe('useDatabaseClient', () => {
     })
 
     it('should throw error when product database apiUrl is missing', () => {
-      mockUseConfigStore.mockReturnValue({
-        productDatabase: {
-          enabled: true,
-          apiUrl: '',
-        },
-      } as any)
+      mockUseProductDatabase.mockReturnValue({
+        enabled: true,
+        apiUrl: '',
+        url: 'https://example.com',
+      })
 
       expect(() => {
         renderHook(() => useDatabaseClient())
@@ -80,7 +79,11 @@ describe('useDatabaseClient', () => {
     })
 
     it('should throw error when product database config is missing', () => {
-      mockUseConfigStore.mockReturnValue({} as any)
+      mockUseProductDatabase.mockReturnValue({
+        enabled: false,
+        apiUrl: '',
+        url: '',
+      })
 
       expect(() => {
         renderHook(() => useDatabaseClient())
@@ -88,7 +91,11 @@ describe('useDatabaseClient', () => {
     })
 
     it('should throw error when config is null', () => {
-      mockUseConfigStore.mockReturnValue(null as any)
+      mockUseProductDatabase.mockReturnValue({
+        enabled: false,
+        apiUrl: '',
+        url: '',
+      })
 
       expect(() => {
         renderHook(() => useDatabaseClient())
@@ -105,13 +112,11 @@ describe('useDatabaseClient', () => {
       const { rerender } = renderHook(() => useDatabaseClient())
 
       // Change the apiUrl
-      mockUseConfigStore.mockReturnValue({
-        productDatabase: {
-          enabled: true,
-          apiUrl: 'https://new-api.example.com',
-          url: 'https://example.com',
-        },
-      } as any)
+      mockUseProductDatabase.mockReturnValue({
+        enabled: true,
+        apiUrl: 'https://new-api.example.com',
+        url: 'https://example.com',
+      })
 
       rerender()
 
@@ -376,31 +381,27 @@ describe('useDatabaseClient', () => {
     })
 
     it('should handle undefined config properties gracefully', () => {
-      mockUseConfigStore.mockReturnValue({
-        productDatabase: {
-          enabled: true,
-          apiUrl: 'https://api.example.com',
-          // missing url property
-        },
-      } as any)
+      mockUseProductDatabase.mockReturnValue({
+        enabled: true,
+        apiUrl: 'https://api.example.com',
+        url: '', // empty url
+      })
 
       const { result } = renderHook(() => useDatabaseClient())
       
-      expect(result.current.url).toBeUndefined()
+      expect(result.current.url).toBe('')
     })
 
     it('should handle config with undefined productDatabase url', () => {
-      mockUseConfigStore.mockReturnValue({
-        productDatabase: {
-          enabled: true,
-          apiUrl: 'https://api.example.com',
-          url: undefined,
-        },
-      } as any)
+      mockUseProductDatabase.mockReturnValue({
+        enabled: true,
+        apiUrl: 'https://api.example.com',
+        url: '', // empty url
+      })
 
       const { result } = renderHook(() => useDatabaseClient())
       
-      expect(result.current.url).toBeUndefined()
+      expect(result.current.url).toBe('')
     })
   })
 })

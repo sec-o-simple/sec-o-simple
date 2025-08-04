@@ -107,6 +107,7 @@ describe('useProductTreeBranch', () => {
         getRelationshipFullProductName: expect.any(Function),
         getFilteredPTBs: expect.any(Function),
         getPTBsByCategory: expect.any(Function),
+        getPTBName: expect.any(Function),
         getSelectableRefs: expect.any(Function),
         getGroupedSelectableRefs: expect.any(Function),
         addPTB: expect.any(Function),
@@ -418,7 +419,7 @@ describe('useProductTreeBranch', () => {
         'related_to'
       )
       
-      expect(relationshipName).toBe('   related to   ')
+      expect(relationshipName).toBe(' related to ')
     })
   })
 
@@ -938,7 +939,7 @@ describe('useProductTreeBranch', () => {
 
       const fullName = result.current.getFullProductName('non-existent')
       
-      expect(fullName).toBe('  ')
+      expect(fullName).toBe('')
     })
 
     it('should handle version with missing parent product', () => {
@@ -958,7 +959,7 @@ describe('useProductTreeBranch', () => {
 
       const fullName = result.current.getFullProductName('orphan-version')
       
-      expect(fullName).toBe('  Orphan Version')
+      expect(fullName).toBe('Orphan Version')
     })
 
     it('should handle version with missing vendor (grandparent)', () => {
@@ -980,7 +981,7 @@ describe('useProductTreeBranch', () => {
 
       const fullName = result.current.getFullProductName('orphan-version')
       
-      expect(fullName).toBe(' Orphan Product Orphan Version')
+      expect(fullName).toBe('Orphan Product Orphan Version')
     })
   })
 

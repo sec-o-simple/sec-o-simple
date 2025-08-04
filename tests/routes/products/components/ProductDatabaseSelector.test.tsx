@@ -264,7 +264,7 @@ describe('ProductDatabaseSelector', () => {
       })
 
       expect(screen.getByTestId('modal')).toBeInTheDocument()
-      expect(screen.getByTestId('modal')).toHaveAttribute('data-size', 'lg')
+      expect(screen.getByTestId('modal')).toHaveAttribute('data-size', 'xl')
       expect(screen.getByTestId('modal-header')).toHaveTextContent('Import Products')
       expect(screen.getByTestId('modal-body')).toHaveTextContent('Select products to import from the database')
     })
