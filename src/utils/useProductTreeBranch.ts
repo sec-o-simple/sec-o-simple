@@ -98,6 +98,7 @@ export function useProductTreeBranch() {
       name = branch.productName
     } else if (!!branch.identificationHelper) {
       isNameReadonly = true
+      name = getFullProductName(branch.id)
     }
 
     if (!name) {
