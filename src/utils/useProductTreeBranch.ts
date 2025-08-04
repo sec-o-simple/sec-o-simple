@@ -5,7 +5,6 @@ import {
 } from '@/routes/products/types/tProductTreeBranch'
 import { useTranslation } from 'react-i18next'
 import useDocumentStore from './useDocumentStore'
-import useProductDatabase from './useProductDatabase'
 import { useRelationships } from './useRelationships'
 
 export type TSelectableFullProductName = {
@@ -23,7 +22,6 @@ export function useProductTreeBranch() {
     useDocumentStore((store) => store.relationships),
   )
   const updateProducts = useDocumentStore((store) => store.updateProducts)
-  const { enabled: pdbEnabled } = useProductDatabase()
   const {
     getRelationshipsBySourceVersion,
     getRelationshipsByTargetVersion,
@@ -88,11 +86,18 @@ export function useProductTreeBranch() {
     isReadonly?: boolean
     name?: string
   } => {
-    let isNameReadonly = !pdbEnabled && !!branch.identificationHelper
-    let name = isNameReadonly ? branch.productName : branch.name
+    let isNameReadonly = false
+    let name = branch.name
 
-    if (!branch) {
-      return { name: 'unknown product tree branch', isReadonly: true }
+    if (
+      branch.category === 'product_version' &&
+      branch.productName !== undefined &&
+      getFullProductName(branch.id) !== branch.productName
+    ) {
+      isNameReadonly = true
+      name = branch.productName
+    } else if (!!branch.identificationHelper) {
+      isNameReadonly = true
     }
 
     if (!name) {
@@ -100,7 +105,7 @@ export function useProductTreeBranch() {
     }
 
     return {
-      name: name,
+      name,
       isReadonly: isNameReadonly,
     }
   }
