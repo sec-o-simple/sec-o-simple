@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { renderHook } from '@testing-library/react'
 
-// Set up mocks
-const mockClient = {
+// Create mock client in hoisted scope
+const mockClient = vi.hoisted(() => ({
   get: vi.fn(),
   defaults: { baseURL: '' },
-}
+}))
 
-// Mock axios first
+// Mock axios with the hoisted mock client
 vi.mock('axios', () => ({
   default: {
     create: vi.fn(() => mockClient),

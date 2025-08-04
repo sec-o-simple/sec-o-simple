@@ -304,6 +304,21 @@ describe('useProductTreeBranch', () => {
       
       expect(filtered).toHaveLength(0)
     })
+
+    it('should handle recursive filtering with null return values', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      // Create a filter that matches vendors but ensures recursive calls return null-ish values
+      const filtered = result.current.getFilteredPTBs((ptb) => {
+        // Only match vendors to test the null coalescing in recursive calls
+        return ptb.category === 'vendor'
+      })
+      
+      expect(filtered).toHaveLength(2)
+      // Each vendor should have empty subBranches since products don't match the filter
+      expect(filtered[0].subBranches).toEqual([])
+      expect(filtered[1].subBranches).toEqual([])
+    })
   })
 
   describe('getPTBsByCategory', () => {
@@ -357,6 +372,56 @@ describe('useProductTreeBranch', () => {
     })
   })
 
+  describe('getRelationshipFullProductName', () => {
+    it('should generate correct relationship full product name', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const relationshipName = result.current.getRelationshipFullProductName(
+        'version-1',
+        'version-2',
+        'installed_on'
+      )
+      
+      expect(relationshipName).toBe('Vendor A Product A Version 1.0 installed on Vendor A Product A Version 2.0')
+    })
+
+    it('should handle different relationship categories', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const relationshipName = result.current.getRelationshipFullProductName(
+        'version-1',
+        'version-3',
+        'depends_on'
+      )
+      
+      expect(relationshipName).toBe('Vendor A Product A Version 1.0 depends on Vendor B Product B Version 1.0')
+    })
+
+    it('should replace underscores with spaces in category name', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const relationshipName = result.current.getRelationshipFullProductName(
+        'version-1',
+        'version-2',
+        'installed_with'
+      )
+      
+      expect(relationshipName).toBe('Vendor A Product A Version 1.0 installed with Vendor A Product A Version 2.0')
+    })
+
+    it('should handle empty or undefined version ids gracefully', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const relationshipName = result.current.getRelationshipFullProductName(
+        'non-existent-1',
+        'non-existent-2',
+        'related_to'
+      )
+      
+      expect(relationshipName).toBe('   related to   ')
+    })
+  })
+
   describe('getSelectableRefs', () => {
     it('should return all product versions', () => {
       const { result } = renderHook(() => useProductTreeBranch())
@@ -373,6 +438,199 @@ describe('useProductTreeBranch', () => {
       const selectableRefs = result.current.getSelectableRefs()
       
       expect(selectableRefs.map(ref => ref.full_product_name.name)).toEqual(['Vendor A Product A Version 1.0', 'Vendor A Product A Version 2.0', 'Vendor B Product B Version 1.0'])
+    })
+
+    it('should include relationships in selectable refs', () => {
+      // Setup relationships data
+      const mockRelationships = {
+        'group-1': {
+          category: 'installed_on',
+          relationships: [
+            {
+              product1VersionId: 'version-1',
+              product2VersionId: 'version-2',
+              relationshipId: 'rel-1'
+            },
+            {
+              product1VersionId: 'version-2',
+              product2VersionId: 'version-3',
+              relationshipId: 'rel-2'
+            }
+          ]
+        }
+      }
+
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: Object.fromEntries(mockProducts.map(p => [p.id, p])),
+          relationships: mockRelationships,
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const selectableRefs = result.current.getSelectableRefs()
+      
+      // Should have 3 versions + 2 relationships = 5 total
+      expect(selectableRefs).toHaveLength(5)
+      
+      // Check that relationships are included
+      const relationshipRefs = selectableRefs.filter(ref => ref.category === 'installed_on')
+      expect(relationshipRefs).toHaveLength(2)
+      expect(relationshipRefs[0].full_product_name.product_id).toBe('rel-1')
+      expect(relationshipRefs[1].full_product_name.product_id).toBe('rel-2')
+    })
+
+    it('should handle relationships with undefined relationships array', () => {
+      const mockRelationships = {
+        'group-1': {
+          category: 'installed_on',
+          relationships: undefined
+        }
+      }
+
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: Object.fromEntries(mockProducts.map(p => [p.id, p])),
+          relationships: mockRelationships,
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const selectableRefs = result.current.getSelectableRefs()
+      
+      // Should only have the 3 versions, no relationships
+      expect(selectableRefs).toHaveLength(3)
+      expect(selectableRefs.every(ref => ref.category === 'product_version')).toBe(true)
+    })
+
+    it('should sort selectable refs alphabetically by name', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const selectableRefs = result.current.getSelectableRefs()
+      
+      const names = selectableRefs.map(ref => ref.full_product_name.name)
+      const sortedNames = [...names].sort()
+      expect(names).toEqual(sortedNames)
+    })
+  })
+
+  describe('getGroupedSelectableRefs', () => {
+    it('should group selectable refs by category', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const groupedRefs = result.current.getGroupedSelectableRefs()
+      
+      expect(groupedRefs).toHaveProperty('product_version')
+      expect(groupedRefs.product_version).toHaveLength(3)
+      expect(groupedRefs.product_version.every(ref => ref.category === 'product_version')).toBe(true)
+    })
+
+    it('should group multiple categories correctly', () => {
+      // Setup relationships to create multiple categories
+      const mockRelationships = {
+        'group-1': {
+          category: 'installed_on',
+          relationships: [
+            {
+              product1VersionId: 'version-1',
+              product2VersionId: 'version-2',
+              relationshipId: 'rel-1'
+            }
+          ]
+        },
+        'group-2': {
+          category: 'depends_on',
+          relationships: [
+            {
+              product1VersionId: 'version-2',
+              product2VersionId: 'version-3',
+              relationshipId: 'rel-2'
+            }
+          ]
+        }
+      }
+
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: Object.fromEntries(mockProducts.map(p => [p.id, p])),
+          relationships: mockRelationships,
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const groupedRefs = result.current.getGroupedSelectableRefs()
+      
+      expect(groupedRefs).toHaveProperty('product_version')
+      expect(groupedRefs).toHaveProperty('installed_on')
+      expect(groupedRefs).toHaveProperty('depends_on')
+      
+      expect(groupedRefs.product_version).toHaveLength(3)
+      expect(groupedRefs.installed_on).toHaveLength(1)
+      expect(groupedRefs.depends_on).toHaveLength(1)
+    })
+
+    it('should handle empty results', () => {
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: {},
+          relationships: {},
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const groupedRefs = result.current.getGroupedSelectableRefs()
+      
+      expect(groupedRefs).toEqual({})
+    })
+
+    it('should add new items to existing category groups', () => {
+      // Setup multiple relationships of the same category
+      const mockRelationships = {
+        'group-1': {
+          category: 'installed_on',
+          relationships: [
+            {
+              product1VersionId: 'version-1',
+              product2VersionId: 'version-2',
+              relationshipId: 'rel-1'
+            },
+            {
+              product1VersionId: 'version-2',
+              product2VersionId: 'version-3',
+              relationshipId: 'rel-2'
+            }
+          ]
+        }
+      }
+
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: Object.fromEntries(mockProducts.map(p => [p.id, p])),
+          relationships: mockRelationships,
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const groupedRefs = result.current.getGroupedSelectableRefs()
+      
+      expect(groupedRefs).toHaveProperty('installed_on')
+      expect(groupedRefs.installed_on).toHaveLength(2)
+      expect(groupedRefs.installed_on.every(ref => ref.category === 'installed_on')).toBe(true)
     })
   })
 
@@ -666,6 +924,66 @@ describe('useProductTreeBranch', () => {
     })
   })
 
+  describe('getFullProductName', () => {
+    it('should return correct full product name for version', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const fullName = result.current.getFullProductName('version-1')
+      
+      expect(fullName).toBe('Vendor A Product A Version 1.0')
+    })
+
+    it('should handle missing version gracefully', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const fullName = result.current.getFullProductName('non-existent')
+      
+      expect(fullName).toBe('  ')
+    })
+
+    it('should handle version with missing parent product', () => {
+      // Create a version without proper parent structure
+      const orphanVersion = createMockVersion('orphan-version', 'Orphan Version')
+      
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: { 'orphan-version': orphanVersion },
+          relationships: {},
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const fullName = result.current.getFullProductName('orphan-version')
+      
+      expect(fullName).toBe('  Orphan Version')
+    })
+
+    it('should handle version with missing vendor (grandparent)', () => {
+      // Create a product with version but no vendor parent
+      const orphanProduct = createMockProduct('orphan-product', 'Orphan Product', [
+        createMockVersion('orphan-version', 'Orphan Version')
+      ])
+      
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: { 'orphan-product': orphanProduct },
+          relationships: {},
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const fullName = result.current.getFullProductName('orphan-version')
+      
+      expect(fullName).toBe(' Orphan Product Orphan Version')
+    })
+  })
+
   describe('Edge Cases', () => {
     it('should handle circular references gracefully in filter operations', () => {
       const { result } = renderHook(() => useProductTreeBranch())
@@ -720,6 +1038,73 @@ describe('useProductTreeBranch', () => {
 
       expect(newResult.current.getPTBsByCategory('product_name')).toEqual([])
       expect(newResult.current.getSelectableRefs()).toEqual([])
+    })
+
+    it('should handle complex relationship structures in getSelectableRefs', () => {
+      const mockRelationships = {
+        'group-1': {
+          category: 'installed_on',
+          relationships: [
+            {
+              product1VersionId: 'version-1',
+              product2VersionId: 'version-2',
+              relationshipId: 'rel-1'
+            }
+          ]
+        },
+        'group-2': {
+          category: 'depends_on',
+          relationships: []
+        },
+        'group-3': {
+          category: 'related_to',
+          relationships: null
+        }
+      }
+
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: Object.fromEntries(mockProducts.map(p => [p.id, p])),
+          relationships: mockRelationships,
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const selectableRefs = result.current.getSelectableRefs()
+      
+      // Should handle empty and null relationship arrays gracefully
+      expect(selectableRefs).toHaveLength(4) // 3 versions + 1 relationship
+      const relationshipRefs = selectableRefs.filter(ref => ref.category === 'installed_on')
+      expect(relationshipRefs).toHaveLength(1)
+    })
+
+    it('should handle malformed relationship data gracefully', () => {
+      const mockRelationships = {
+        'group-1': {
+          category: 'installed_on'
+          // Missing relationships property entirely
+        }
+      }
+
+      mockUseDocumentStore.mockImplementation((selector) => {
+        const mockStore = {
+          products: Object.fromEntries(mockProducts.map(p => [p.id, p])),
+          relationships: mockRelationships,
+          updateProducts: mockUpdateProducts,
+        }
+        return selector(mockStore)
+      })
+
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const selectableRefs = result.current.getSelectableRefs()
+      
+      // Should only return versions, no relationships
+      expect(selectableRefs).toHaveLength(3)
+      expect(selectableRefs.every(ref => ref.category === 'product_version')).toBe(true)
     })
   })
 })
