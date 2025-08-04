@@ -2,6 +2,15 @@
 
 This project is frontend-only. Dependencies are categorized into runtime (what ships with the app) and development/tooling.
 
+Primary dependencies are declared in `package.json`. 
+Run the following to surface known vulnerabilities:
+
+```sh
+npm audit
+```
+
+The lockfile (`package-lock.json`) ensures repeatable installs.
+
 ### Runtime / Production Dependencies
 
 | Package | Purpose |

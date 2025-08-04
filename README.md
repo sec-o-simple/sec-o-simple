@@ -9,14 +9,7 @@
   - [Configuration](#configuration)
   - [Running Locally](#running-locally)
   - [Building for Production](#building-for-production)
-- [Developing](#developing)
-  - [Local Development Setup](#local-development-setup)
-  - [Branching & Pull Request Policy](#branching--pull-request-policy)
 - [Architecture Overview](#architecture-overview)
-- [Developer Guide](#developer-guide)
-  - [Code & Module Organization](#code--module-organization)
-  - [Input Validation](#input-validation)
-  - [Invalid Document Export](#invalid-document-export)
 - [Contributing](#contributing)
 - [Dependencies](#dependencies)
 - [License](#license)
@@ -98,26 +91,15 @@ A frontend-only application built with **React.js**, styled with **Tailwind CSS*
 
 ## Contributing
 
-Please refer to this [document](CONTRIBUTING.md).
+Please refer to this [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## Dependencies
 
-Primary dependencies are declared in `package.json`. 
-Run the following to surface known vulnerabilities:
-
-```sh
-npm audit
-```
-
-The lockfile (`package-lock.json`) ensures repeatable installs.
+Regarding dependencies please refer to [`DEPENDENCIES.md`](DEPENDENCIES.md).
 
 ## License
 
 This project is licensed under the [Apache License](./LICENSE).  
-
-## Dependencies
-
-Regarding dependencies please refer to [this](DEPENDENCIES.md).
 
 ## Security Considerations
 
