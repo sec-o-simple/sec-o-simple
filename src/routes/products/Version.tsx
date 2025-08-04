@@ -15,14 +15,16 @@ import InfoCard from './components/InfoCard'
 import RelationshipEditForm from './components/RelationshipEditForm'
 import SubMenuHeader from './components/SubMenuHeader'
 import TagList from './components/TagList'
-import { getPTBName } from './types/tProductTreeBranch'
 import { TRelationship, getDefaultRelationship } from './types/tRelationship'
 
 export default function Version() {
   const { t } = useTranslation()
   const { productVersionId } = useParams()
-  const { findProductTreeBranch, findProductTreeBranchWithParents } =
-    useProductTreeBranch()
+  const {
+    findProductTreeBranch,
+    findProductTreeBranchWithParents,
+    getPTBName,
+  } = useProductTreeBranch()
   const {
     getRelationshipsBySourceVersion,
     sortRelationshipsByCategory,
@@ -43,6 +45,7 @@ export default function Version() {
   if (!productVersion) {
     return <>404 not found</>
   }
+  const { name } = getPTBName(productVersion)
 
   const relationshipsByCategory = Object.entries(
     sortRelationshipsByCategory(
@@ -75,10 +78,8 @@ export default function Version() {
 
       <SubMenuHeader
         title={
-          productVersion.name
-            ? `${t('products.product.version.label')} ${getPTBName(
-                productVersion,
-              )}`
+          name
+            ? `${t('products.product.version.label')} ${name}`
             : t('untitled.product_version')
         }
         backLink={
@@ -178,10 +179,19 @@ export default function Version() {
                         linkGenerator={(x) =>
                           `/product-management/version/${x}`
                         }
-                        labelGenerator={(x) =>
-                          getPTBName(findProductTreeBranch(x)) ??
-                          t('untitled.product_version')
-                        }
+                        labelGenerator={(x) => {
+                          const findProductTreeBranch =
+                            findProductTreeBranchWithParents(x)
+
+                          if (!findProductTreeBranch) {
+                            return t('untitled.product_version')
+                          }
+
+                          return (
+                            getPTBName(findProductTreeBranch).name ??
+                            t('untitled.product_version')
+                          )
+                        }}
                       />
                     )}
                   </InfoCard>
