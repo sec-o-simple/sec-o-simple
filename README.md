@@ -99,7 +99,7 @@ This section describes how developers contribute and work on the codebase.
    ```sh
    npm test
    npm run lint
-   npm run format
+   npm run lint:fix
    ```
 
 ### Branching & Pull Request Policy
