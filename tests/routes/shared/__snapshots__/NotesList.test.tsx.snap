@@ -50,25 +50,39 @@ exports[`NotesList > should match snapshot 1`] = `
             <select
               data-testid="select-input"
             >
-              <option>
+              <option
+                value="description"
+              >
                 Description
               </option>
-              <option>
+              <option
+                value="details"
+              >
                 Details
               </option>
-              <option>
+              <option
+                value="faq"
+              >
                 FAQ
               </option>
-              <option>
+              <option
+                value="general"
+              >
                 General
               </option>
-              <option>
+              <option
+                value="legal_disclaimer"
+              >
                 Legal Disclaimer
               </option>
-              <option>
+              <option
+                value="other"
+              >
                 Other
               </option>
-              <option>
+              <option
+                value="summary"
+              >
                 Summary
               </option>
             </select>
