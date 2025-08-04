@@ -96,16 +96,6 @@ A frontend-only application built with **React.js**, styled with **Tailwind CSS*
 - **Validation:**  
   - `csaf-validator-lib` — used for validating input 
 
-## Developer Guide
-
-### Input Validation
-
-The form is validated using the rules of ```csaf-validator-lib```.
-
-### Invalid Document Export
-
-In sec-o-simple the document can be exported at any point, if the document is invalid at this point a suffix of ```_invalid``` is appended.
-
 ## Contributing
 
 Please refer to this [document](CONTRIBUTING.md).
