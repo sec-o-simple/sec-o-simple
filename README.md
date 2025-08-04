@@ -72,47 +72,16 @@ npm run preview
 
 Built artifacts are output to the production directory (e.g., `dist`). Preview locally with the provided script.
 
-## Developing
-
-### Local Development Setup
-
-1. Clone and install dependencies:
-   ```sh
-   git clone git@github.com:sec-o-simple/sec-o-simple.git
-   cd sec-o-simple
-   npm install
-   ```
-
-2. Start development server:
-   ```sh
-   npm run dev
-   ```
-
-3. Run quality and test checks before committing:
-   ```sh
-   npm test
-   npm run lint
-   npm run lint:fix
-   ```
-
-### Branching & Pull Request Policy
-
-When working on new features or fixing bugs, create a new branch based on main
-and give it a meaningful name. Rebase or merge main regularly into your branch
-in order to prevent large merge conflicts.
-
-- Base all work off of the `main` branch.  
-- Use descriptive branch names:  
-  - Features: `feat/<description>` (e.g., `feat/navigation-redesign`)  
-  - Fixes: `fix/<description>` (e.g., `fix/excessive-loading-time`)  
-- Rebase or merge `main` frequently to avoid large conflicts.  
-- Pull requests must follow the [Template](https://raw.githubusercontent.com/sec-o-simple/sec-o-simple/refs/heads/main/.github/pull_request_template.md)
-
-- Commit messages should be clear and imperative.  
-
 ## Architecture Overview
 
 A frontend-only application built with **React.js**, styled with **Tailwind CSS**, and composed via **HeroUI**. Local state is managed with **Zustand** where appropriate, and all input is validated through the **csaf-validator-lib**.
+
+### Code & Module Organization
+
+- `src/` — application source code (components, services, utilities).  
+- `tests/` — automated test suites (unit/integration).  
+- `docs/` — supplemental documentation (schema, config, well-known).  
+- `package.json` / `package-lock.json` — scripts and dependency management.
 
 ### Tech Stack
 
@@ -128,13 +97,6 @@ A frontend-only application built with **React.js**, styled with **Tailwind CSS*
   - `csaf-validator-lib` — used for validating input 
 
 ## Developer Guide
-
-### Code & Module Organization
-
-- `src/` — application source code (components, services, utilities).  
-- `tests/` — automated test suites (unit/integration).  
-- `docs/` — supplemental documentation (schema, config, well-known).  
-- `package.json` / `package-lock.json` — scripts and dependency management.
 
 ### Input Validation
 

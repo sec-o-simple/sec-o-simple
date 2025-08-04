@@ -11,7 +11,22 @@ Please submit all contributions and issues to the specific repositories:
 - [Sec-O-Simple CSAF Wizard](https://github.com/sec-o-simple/sec-o-simple)
 - [Product Database](https://github.com/sec-o-simple/product-database)
 
-## Pull Request Process
+## Branching & Pull Request Policy
+
+When working on new features or fixing bugs, create a new branch based on main
+and give it a meaningful name. Rebase or merge main regularly into your branch
+in order to prevent large merge conflicts.
+
+- Base all work off of the `main` branch.  
+- Use descriptive branch names:  
+  - Features: `feat/<description>` (e.g., `feat/navigation-redesign`)  
+  - Fixes: `fix/<description>` (e.g., `fix/excessive-loading-time`)  
+- Rebase or merge `main` frequently to avoid large conflicts.  
+- Pull requests must follow the [Template](https://raw.githubusercontent.com/sec-o-simple/sec-o-simple/refs/heads/main/.github/pull_request_template.md)
+
+- Commit messages should be clear and imperative.  
+
+### Pull Request Process
 
 The process described here has several goals:
 
