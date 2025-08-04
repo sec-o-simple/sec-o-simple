@@ -43,7 +43,6 @@ export default function ProductCard({
           onPress={() => navigate(`product/${product.id}`)}
         />
       }
-      disabled={true}
       onEdit={onEdit}
       onDelete={() => deletePTB(product.id)}
       {...props}
