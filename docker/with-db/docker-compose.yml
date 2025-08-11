@@ -1,0 +1,43 @@
+services:
+  database-api:
+    image: ghcr.io/sec-o-simple/product-database-server:latest
+    container_name: product-database-server
+    volumes:
+      - ./data:/data
+    environment:
+      - CORS_ORIGIN=http://localhost:8080,http://127.0.0.1:8080
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:9999/api/v1/health || exit 1"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+  database-client:
+    image: ghcr.io/sec-o-simple/product-database-client:latest
+    container_name: product-database-client
+    ports:
+      - 8081:80
+    environment:
+      - API_UPSTREAM_URL=http://database-api:9999
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:80 || exit 1"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      database-api:
+        condition: service_healthy
+  sec-o-simple:
+    image: ghcr.io/sec-o-simple/sec-o-simple:latest
+    container_name: sec-o-simple
+    ports:
+      - 8080:80
+    healthcheck:
+      test: ["CMD-SHELL", "wget -O /dev/null http://localhost:80 || exit 1"]
+      interval: 1m30s
+      timeout: 30s
+      retries: 5
+      start_period: 30s
+    volumes:
+      - ./io.github.sec-o-simple.json:/usr/share/nginx/html/.well-known/appspecific/io.github.sec-o-simple.json:ro

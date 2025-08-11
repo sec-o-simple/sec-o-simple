@@ -2,18 +2,24 @@
 
 <!-- TOC depthfrom:2 depthto:3 -->
 - [Sec-O-Simple](#sec-o-simple)
-- [Introduction](#introduction)
-- [Getting started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Clone & Setup](#clone--setup)
-  - [Configuration](#configuration)
-  - [Running Locally](#running-locally)
-  - [Building for Production](#building-for-production)
-- [Architecture Overview](#architecture-overview)
-- [Contributing](#contributing)
-- [Dependencies](#dependencies)
-- [License](#license)
-- [Security Considerations](#security-considerations)
+  - [Introduction](#introduction)
+  - [Getting started](#getting-started)
+    - [Prerequisites](#prerequisites)
+    - [Clone \& Setup](#clone--setup)
+    - [Configuration](#configuration)
+    - [Running Locally](#running-locally)
+    - [Building for Production](#building-for-production)
+  - [Run with Docker](#run-with-docker)
+    - [Basic Usage](#basic-usage)
+    - [Custom Configuration with .well-known File](#custom-configuration-with-well-known-file)
+    - [Including Product Database](#including-product-database)
+  - [Architecture Overview](#architecture-overview)
+    - [Code \& Module Organization](#code--module-organization)
+    - [Tech Stack](#tech-stack)
+  - [Contributing](#contributing)
+  - [Dependencies](#dependencies)
+  - [License](#license)
+  - [Security Considerations](#security-considerations)
 <!-- /TOC -->
 
 ## Introduction
@@ -64,6 +70,39 @@ npm run preview
 ```
 
 Built artifacts are output to the production directory (e.g., `dist`). Preview locally with the provided script.
+
+## Run with Docker
+
+### Basic Usage
+
+```bash
+docker run -p 8080:80 ghcr.io/sec-o-simple/sec-o-simple:latest
+```
+
+The application will be available at [http://localhost:8080](http://localhost:8080).
+
+### Custom Configuration with .well-known File
+
+To provide your own application-specific configuration, mount a custom `.well-known/appspecific/io.github.sec-o-simple.json` file:
+
+```bash
+# See docs/io.github.sec-o-simple.example.json for an example configuration
+docker run -p 8080:80 \
+  -v /path/to/your/io.github.sec-o-simple.json:/usr/share/nginx/html/.well-known/appspecific/io.github.sec-o-simple.json:ro \
+  ghcr.io/sec-o-simple/sec-o-simple:latest
+```
+
+See [./docs/CONFIG.md](./docs/CONFIG.md) for more details on the configuration options available.
+
+### Including Product Database
+
+We provide a pre-configured Docker Compose setup that includes both the Sec-O-Simple application and an integrated product database. For production usage, you might need to add a reverse proxy and update the configuration accordingly.
+
+```bash
+git clone git@github.com:sec-o-simple/sec-o-simple.git
+cd sec-o-simple
+docker compose -f docker/with-db/docker-compose.yml up
+```
 
 ## Architecture Overview
 
