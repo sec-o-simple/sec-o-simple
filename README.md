@@ -92,6 +92,8 @@ docker run -p 8080:80 \
   ghcr.io/sec-o-simple/sec-o-simple:latest
 ```
 
+See [./docs/CONFIG.md](./docs/CONFIG.md) for more details on the configuration options available.
+
 ### Including Product Database
 
 We provide a pre-configured Docker Compose setup that includes both the Sec-O-Simple application and an integrated product database. For production usage, you might need to add a reverse proxy and update the configuration accordingly.
