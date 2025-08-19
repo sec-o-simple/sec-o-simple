@@ -131,22 +131,6 @@ export default function General() {
               </SelectItem>
             ))}
           </Select>
-
-          <Input
-            label={t('document.general.tlp.url')}
-            csafPath="/document/distribution/tlp/url"
-            type="url"
-            isTouched={hasVisitedPage}
-            value={localState.tlp?.url || ''}
-            onValueChange={(url) =>
-              setLocalState({
-                ...localState,
-                tlp: { ...localState.tlp, url },
-              })
-            }
-            isDisabled={isFieldReadonly('document-information.tlp.url')}
-            placeholder={getFieldPlaceholder('document-information.tlp.url')}
-          />
         </VSplit>
       </div>
     </WizardStep>
