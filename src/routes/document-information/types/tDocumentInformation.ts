@@ -39,6 +39,9 @@ export function getDefaultDocumentInformation(): TDocumentInformation {
         summary: i18next.t('document.general.revisionHistory.initialRevision'),
       },
     ],
+    tlp: {
+      label: undefined,
+    },
   }
 }
 

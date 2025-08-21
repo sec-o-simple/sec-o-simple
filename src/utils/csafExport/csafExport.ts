@@ -91,14 +91,14 @@ export function createCSAFDocument(
           : '1',
         id: documentInformation.id,
       },
-      distribution: {
-        tlp: documentInformation.tlp
-          ? {
+      distribution: documentInformation.tlp
+        ? {
+            tlp: {
               label: documentInformation.tlp?.label?.toUpperCase() || undefined,
               url: 'https://www.first.org/tlp/',
-            }
-          : undefined,
-      },
+            },
+          }
+        : undefined,
       lang: documentInformation.lang,
       title: documentInformation.title,
       publisher: {

@@ -38,7 +38,10 @@
           "enum": ["en", "de"]
         },
 
-        "document-information.tlp.label": { "type": "string" },
+        "document-information.tlp.label": {
+          "type": "string",
+          "enum": ["GREEN", "AMBER", "RED", "WHITE"]
+        },
         "document-information.tlp.label.placeholder": { "type": "string" },
 
         "document-information.tlp.url": { "type": "string" },
@@ -246,8 +249,14 @@
               "id": { "type": "string" },
               "readonly": { "type": "boolean" },
               "cve": { "type": "string" },
-              "cwe": { "type": "string" },
               "title": { "type": "string" },
+              "cwe": {
+                "type": "object",
+                "properties": {
+                  "id": { "type": "string" },
+                  "name": { "type": "string" }
+                }
+              },
               "notes": {
                 "type": "array",
                 "items": {

@@ -124,20 +124,23 @@ export function useTemplateInitializer() {
   useEffect(() => {
     if (config) {
       initialize(UpdatePriority.Low, () => {
-        const documentInformation = getTemplateData(
-          getDocumentInformationTemplateKeys(),
-          getDefaultDocumentInformation(),
-        )
-        updateDocumentInformation(documentInformation)
-        updateProducts(getTemplateValue<TProductTreeBranch[]>('products', []))
-        updateRelationships(
-          getTemplateValue<TRelationship[]>('relationships', []),
-        )
-        updateVulnerabilities(
-          getTemplateValue<TVulnerability[]>('vulnerabilities', []),
-        )
+        initializeTemplateData()
       })
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config])
+
+  function initializeTemplateData() {
+    const documentInformation = getTemplateData(
+      getDocumentInformationTemplateKeys(),
+      getDefaultDocumentInformation(),
+    )
+    updateDocumentInformation(documentInformation)
+    updateProducts(getTemplateValue<TProductTreeBranch[]>('products', []))
+    updateRelationships(getTemplateValue<TRelationship[]>('relationships', []))
+    updateVulnerabilities(
+      getTemplateValue<TVulnerability[]>('vulnerabilities', []),
+    )
+  }
+
+  return { initializeTemplateData }
 }
