@@ -1,4 +1,5 @@
 import { useCSAFExport } from '@/utils/csafExport/csafExport'
+import { useTemplateInitializer } from '@/utils/template'
 import useDocumentStore from '@/utils/useDocumentStore'
 import useValidationStore from '@/utils/validation/useValidationStore'
 import {
@@ -107,6 +108,8 @@ export default function TopBarLayout() {
     reset: resetValidation,
   } = useValidationStore()
   const { reset } = useDocumentStore()
+  const { initializeTemplateData: reloadTemplateData } =
+    useTemplateInitializer()
 
   return (
     <div className="flex h-screen flex-col">
@@ -126,6 +129,7 @@ export default function TopBarLayout() {
             onConfirm={() => {
               reset()
               resetValidation()
+              reloadTemplateData()
               navigate('/')
             }}
           >

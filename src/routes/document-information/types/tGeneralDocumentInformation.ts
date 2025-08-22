@@ -34,6 +34,7 @@ export function getGeneralDocumentInformationTemplateKeys(): TemplateKeys<TGener
     status: 'document-information.tracking.status',
     tlp: {
       label: 'document-information.tlp.label',
+      url: 'document-information.tlp.url',
     },
   }
 }

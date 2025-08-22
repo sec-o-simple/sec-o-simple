@@ -97,7 +97,7 @@ function ReferenceForm({
     <VSplit>
       <Select
         label={t('ref.category')}
-        csafPath="/document/publisher/category"
+        csafPath={`/document/references/${referenceIndex}/category`}
         selectedKeys={[reference.category]}
         isRequired
         onSelectionChange={(selected) => {

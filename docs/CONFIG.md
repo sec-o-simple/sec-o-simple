@@ -63,8 +63,7 @@ The following suffixes can be appended to most fields to enhance configurability
 | `title`                      | Document title                | `string`                      |
 | `tracking.status`            | Document status               | `draft`, `interim`, `final`   |
 | `language`                   | Document language             | `en`, `de`                    |
-| `tlp.label`                  | TLP label                     | `string`                      |
-| `tlp.url`                    | TLP reference URL             | `string`                      |
+| `tlp.label`                  | TLP label                     | `AMBER`, `GREEN`, `RED`, `WHITE`                      |
 
 ### Notes (Default)
 
@@ -112,7 +111,7 @@ The following suffixes can be appended to most fields to enhance configurability
 | `id`      | Reference ID            | `string`                     |
 | `summary` | Summary of reference    | `string`                     |
 | `url`     | Link to reference       | `string`                     |
-| `origin`  | Source of reference     | `self`, `external`           |
+| `category`  | Source of reference     | `self`, `external`           |
 
 ---
 
@@ -198,10 +197,17 @@ The following suffixes can be appended to most fields to enhance configurability
 | `id`       | Vulnerability ID             | `string`               |
 | `readonly` | If is readonly               | `boolean`              |
 | `cve`      | CVE-ID                       | `string`               |
-| `cwe`      | CWE-ID                       | `string`               |
+| `cwe`      | CWE object                   | `object`               |
 | `title`    | Vulnerability title          | `string`               |
 | `notes`    | Notes (array)                | `object[]`             |
 | `products` | Products (array)             | `object[]`             |
+
+**Path:** `vulernabilities[].cwe`
+
+| Key        | Description            | Values                |
+|------------|------------------------|-----------------------|
+| `id`       | ID of CWE              | `string`              |
+| `name`     | CWE Name               | `string`              |
 
 #### Notes (within vulnerability)
 

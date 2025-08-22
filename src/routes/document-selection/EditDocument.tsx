@@ -96,6 +96,7 @@ export default function EditDocument() {
         size="4xl"
         isDismissable={false}
         isKeyboardDismissDisabled={false}
+        scrollBehavior="inside"
       >
         <ModalContent>
           {() => (

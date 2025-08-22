@@ -22,10 +22,6 @@
     "document-information.tlp.label": "AMBER",
     "document-information.tlp.label.placeholder": "Select TLP label",
 
-    "document-information.tlp.url": "test",
-    "document-information.tlp.url.placeholder": "https://www.first.org/tlp/",
-    "document-information.tlp.url.readonly": true,
-
     "document-information.notes.default": {
       "category": "faq"
     },
@@ -70,7 +66,7 @@
         "id": "examplereference",
         "summary": "Example Reference",
         "url": "https://example.com",
-        "origin": "external"
+        "category": "external"
       }
     ],
 
@@ -121,7 +117,10 @@
         "id": "v1",
         "readonly": true,
         "cve": "CVE-2025-30073",
-        "cwe": "CWE1",
+        "cwe": {
+          "id": "CWE-400",
+          "name": "Uncontrolled Resource Consumption"
+        },
         "title": "Vulnerability 1",
         "notes": [
           {
@@ -131,9 +130,7 @@
             "title": "Vulnerability Description",
             "content": "An issue was discovered in OPC cardsystems Webapp Aufwertung 2.1.0. The reference assigned to transactions can be reused. When completing a payment, the first or all transactions with the same reference are completed, depending on timing. This can be used to transfer more money onto employee cards than is paid."
           }
-        ],
-
-        "products": []
+        ]
       }
     ],
 

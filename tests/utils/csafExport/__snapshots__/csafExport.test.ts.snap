@@ -189,9 +189,7 @@ exports[`csafExport > should create a CSAF document with minimal data 1`] = `
     "acknowledgments": undefined,
     "category": "csaf_security_advisory",
     "csaf_version": "2.0",
-    "distribution": {
-      "tlp": undefined,
-    },
+    "distribution": undefined,
     "lang": "en",
     "notes": undefined,
     "publisher": {
