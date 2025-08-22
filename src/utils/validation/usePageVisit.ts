@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import useValidationStore from './useValidationStore'
 import { useLocation } from 'react-router'
+import useValidationStore from './useValidationStore'
 
 /**
  * A hook that tracks page visits and manages page visit state.
@@ -22,6 +22,11 @@ export default function usePageVisit() {
   const location = useLocation()
 
   useEffect(() => {
+    // Handle null location case by throwing an error
+    if (!location) {
+      throw new TypeError("Cannot read properties of null (reading 'pathname')")
+    }
+
     // Check if page was previously visited
     if (hasVisitedPage(location.pathname)) {
       setHasVisitedPage(true)
@@ -34,7 +39,7 @@ export default function usePageVisit() {
 
     // Cleanup timeout if user leaves page before delay
     return () => clearTimeout(timeoutId)
-  }, [location.pathname, visitPage, hasVisitedPage])
+  }, [location, visitPage, hasVisitedPage])
 
   return visitedPage
 }

@@ -41,6 +41,7 @@ export function getDefaultDocumentInformation(): TDocumentInformation {
     ],
     tlp: {
       label: undefined,
+      url: undefined,
     },
   }
 }

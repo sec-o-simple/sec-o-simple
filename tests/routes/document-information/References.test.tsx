@@ -1,21 +1,30 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import References from '../../../src/routes/document-information/References'
 import {
-  TDocumentReference,
   getDefaultDocumentReference,
+  TDocumentReference,
   TReferenceCategory,
 } from '../../../src/routes/document-information/types/tDocumentReference'
-import { TDocumentInformation } from '../../../src/routes/document-information/types/tDocumentInformation'
 
 // Add jest-dom matchers
 import '@testing-library/jest-dom'
 
 // Mock all the dependencies
 vi.mock('@/components/StatusIndicator', () => ({
-  default: ({ hasErrors, hasVisited }: { hasErrors: boolean; hasVisited: boolean }) => (
-    <div data-testid="status-indicator" data-has-errors={hasErrors} data-has-visited={hasVisited}>
+  default: ({
+    hasErrors,
+    hasVisited,
+  }: {
+    hasErrors: boolean
+    hasVisited: boolean
+  }) => (
+    <div
+      data-testid="status-indicator"
+      data-has-errors={hasErrors}
+      data-has-visited={hasVisited}
+    >
       Status Indicator
     </div>
   ),
@@ -39,8 +48,12 @@ vi.mock('@/components/WizardStep', () => ({
       <h1 data-testid="wizard-title">{title}</h1>
       <div data-testid="progress" data-progress={progress}></div>
       <div data-testid="navigation">
-        <a href={onBack} data-testid="back-link">Back</a>
-        <a href={onContinue} data-testid="continue-link">Continue</a>
+        <a href={onBack} data-testid="back-link">
+          Back
+        </a>
+        <a href={onContinue} data-testid="continue-link">
+          Continue
+        </a>
       </div>
       <div data-testid="wizard-content">{children}</div>
     </div>
@@ -67,10 +80,7 @@ vi.mock('@/components/forms/ComponentList', () => ({
       <div data-testid="list-title">{title}</div>
       <div data-testid="item-label">{itemLabel}</div>
       <div data-testid="item-bg-color">{itemBgColor}</div>
-      <button
-        data-testid="add-item"
-        onClick={() => listState.addDataEntry()}
-      >
+      <button data-testid="add-item" onClick={() => listState.addDataEntry()}>
         Add Item
       </button>
       {listState.data.map((item: TDocumentReference, index: number) => (
@@ -197,7 +207,7 @@ vi.mock('@/components/forms/Select', () => ({
             value: e.target.value,
             writable: true,
             enumerable: false,
-            configurable: true
+            configurable: true,
           })
           onSelectionChange(selection as any)
         }}
@@ -208,31 +218,42 @@ vi.mock('@/components/forms/Select', () => ({
       >
         {children}
         {/* Add a hidden option to allow any value for testing */}
-        <option value="invalid" style={{ display: 'none' }}>Invalid</option>
+        <option value="invalid" style={{ display: 'none' }}>
+          Invalid
+        </option>
       </select>
       <div data-testid="rendered-value">
-        {renderValue(selectedKeys.map(key => ({ key })))}
+        {renderValue(selectedKeys.map((key) => ({ key })))}
       </div>
     </div>
   ),
 }))
 
 vi.mock('@heroui/react', () => ({
-  Alert: ({ color, children }: { color: string; children: React.ReactNode }) => (
+  Alert: ({
+    color,
+    children,
+  }: {
+    color: string
+    children: React.ReactNode
+  }) => (
     <div data-testid="alert" data-color={color}>
       {children}
     </div>
   ),
-  SelectItem: ({ 
-    children, 
-    textValue, 
-    ...props 
-  }: { 
-    children: React.ReactNode; 
-    textValue: string;
-    [key: string]: any;
+  SelectItem: ({
+    children,
+    textValue,
+    ...props
+  }: {
+    children: React.ReactNode
+    textValue: string
+    [key: string]: any
   }) => (
-    <option value={props.value || textValue} data-testid={`select-item-${textValue}`}>
+    <option
+      value={props.value || textValue}
+      data-testid={`select-item-${textValue}`}
+    >
       {children}
     </option>
   ),
@@ -246,7 +267,9 @@ vi.mock('@/components/forms/VSplit', () => ({
 
 vi.mock('@/utils/template', () => ({
   checkReadOnly: vi.fn(() => false),
-  getPlaceholder: vi.fn((obj: any, field: string) => `Placeholder for ${field}`),
+  getPlaceholder: vi.fn(
+    (obj: any, field: string) => `Placeholder for ${field}`,
+  ),
 }))
 
 vi.mock('@/utils/useDocumentStoreUpdater')
@@ -318,7 +341,7 @@ describe('References', () => {
 
     const defaultReference = getDefaultDocumentReference()
     mockListState.data = [defaultReference]
-    
+
     // Reset mocks
     vi.mocked(mockListState.setData).mockClear()
     vi.mocked(mockListState.addDataEntry).mockClear()
@@ -348,9 +371,18 @@ describe('References', () => {
 
       expect(screen.getByTestId('wizard-step')).toBeInTheDocument()
       expect(screen.getByTestId('wizard-title')).toHaveTextContent('References')
-      expect(screen.getByTestId('progress')).toHaveAttribute('data-progress', '1.6')
-      expect(screen.getByTestId('back-link')).toHaveAttribute('href', '/document-information/publisher')
-      expect(screen.getByTestId('continue-link')).toHaveAttribute('href', '/document-information/acknowledgments')
+      expect(screen.getByTestId('progress')).toHaveAttribute(
+        'data-progress',
+        '1.6',
+      )
+      expect(screen.getByTestId('back-link')).toHaveAttribute(
+        'href',
+        '/document-information/publisher',
+      )
+      expect(screen.getByTestId('continue-link')).toHaveAttribute(
+        'href',
+        '/document-information/acknowledgments',
+      )
     })
 
     it('should not render alert when validation has no errors', () => {
@@ -364,7 +396,10 @@ describe('References', () => {
       mockListValidation.hasErrors = true
       mockListValidation.errorMessages = [
         { path: '/document/references/0/url', message: 'URL is required' },
-        { path: '/document/references/0/summary', message: 'Summary is required' },
+        {
+          path: '/document/references/0/summary',
+          message: 'Summary is required',
+        },
       ]
 
       render(<References />)
@@ -383,7 +418,9 @@ describe('References', () => {
       expect(componentList).toBeInTheDocument()
       expect(screen.getByTestId('list-title')).toHaveTextContent('summary')
       expect(screen.getByTestId('item-label')).toHaveTextContent('Reference')
-      expect(screen.getByTestId('item-bg-color')).toHaveTextContent('bg-zinc-50')
+      expect(screen.getByTestId('item-bg-color')).toHaveTextContent(
+        'bg-zinc-50',
+      )
     })
 
     it('should render reference items when data exists', () => {
@@ -453,9 +490,15 @@ describe('References', () => {
 
       render(<References />)
 
-      expect(screen.getByTestId('select-field-/document/publisher/category')).toHaveValue('self')
-      expect(screen.getByTestId('textarea-field-/document/references/0/summary')).toHaveValue('Test summary')
-      expect(screen.getByTestId('input-field-/document/references/0/url')).toHaveValue('https://example.com')
+      expect(
+        screen.getByTestId('select-field-/document/references/0/category'),
+      ).toHaveValue('self')
+      expect(
+        screen.getByTestId('textarea-field-/document/references/0/summary'),
+      ).toHaveValue('Test summary')
+      expect(
+        screen.getByTestId('input-field-/document/references/0/url'),
+      ).toHaveValue('https://example.com')
     })
 
     it('should render select options correctly', () => {
@@ -463,7 +506,9 @@ describe('References', () => {
 
       expect(screen.getByTestId('select-item-external')).toBeInTheDocument()
       expect(screen.getByTestId('select-item-self')).toBeInTheDocument()
-      expect(screen.getByTestId('select-item-external')).toHaveTextContent('External')
+      expect(screen.getByTestId('select-item-external')).toHaveTextContent(
+        'External',
+      )
       expect(screen.getByTestId('select-item-self')).toHaveTextContent('Self')
     })
 
@@ -496,11 +541,13 @@ describe('References', () => {
   describe('Form Interactions', () => {
     it('should handle category selection change', async () => {
       const user = userEvent.setup()
-      
+
       render(<References />)
 
-      const categorySelect = screen.getByTestId('select-field-/document/publisher/category')
-      
+      const categorySelect = screen.getByTestId(
+        'select-field-/document/references/0/category',
+      )
+
       // Use fireEvent instead of user.selectOptions since our mock handles it differently
       fireEvent.change(categorySelect, { target: { value: 'self' } })
 
@@ -512,11 +559,13 @@ describe('References', () => {
 
     it('should not update category when anchorKey is missing', async () => {
       const user = userEvent.setup()
-      
+
       render(<References />)
 
-      const categorySelect = screen.getByTestId('select-field-/document/publisher/category')
-      
+      const categorySelect = screen.getByTestId(
+        'select-field-/document/references/0/category',
+      )
+
       // Simulate selection change without anchorKey
       fireEvent.change(categorySelect, { target: { value: '' } })
 
@@ -525,13 +574,17 @@ describe('References', () => {
 
     it('should handle summary text change', async () => {
       const user = userEvent.setup()
-      
+
       render(<References />)
 
-      const summaryTextarea = screen.getByTestId('textarea-field-/document/references/0/summary')
-      
+      const summaryTextarea = screen.getByTestId(
+        'textarea-field-/document/references/0/summary',
+      )
+
       // Instead of typing character by character, directly set the value and trigger change
-      fireEvent.change(summaryTextarea, { target: { value: 'Updated summary' } })
+      fireEvent.change(summaryTextarea, {
+        target: { value: 'Updated summary' },
+      })
 
       expect(mockListState.updateDataEntry).toHaveBeenCalledWith({
         ...mockListState.data[0],
@@ -541,11 +594,13 @@ describe('References', () => {
 
     it('should handle URL input change', async () => {
       const user = userEvent.setup()
-      
+
       render(<References />)
 
-      const urlInput = screen.getByTestId('input-field-/document/references/0/url')
-      
+      const urlInput = screen.getByTestId(
+        'input-field-/document/references/0/url',
+      )
+
       // Instead of typing character by character, directly set the value and trigger change
       fireEvent.change(urlInput, { target: { value: 'https://example.com' } })
 
@@ -557,7 +612,7 @@ describe('References', () => {
 
     it('should call addDataEntry when add button is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<References />)
 
       await user.click(screen.getByTestId('add-item'))
@@ -567,12 +622,14 @@ describe('References', () => {
 
     it('should call removeDataEntry when remove button is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<References />)
 
       await user.click(screen.getByTestId('remove-item-0'))
 
-      expect(mockListState.removeDataEntry).toHaveBeenCalledWith(mockListState.data[0])
+      expect(mockListState.removeDataEntry).toHaveBeenCalledWith(
+        mockListState.data[0],
+      )
     })
   })
 
@@ -580,26 +637,44 @@ describe('References', () => {
     it('should set correct properties for category select', () => {
       render(<References />)
 
-      const categorySelect = screen.getByTestId('select-field-/document/publisher/category')
-      expect(categorySelect).toHaveAttribute('data-csaf-path', '/document/publisher/category')
+      const categorySelect = screen.getByTestId(
+        'select-field-/document/references/0/category',
+      )
+      expect(categorySelect).toHaveAttribute(
+        'data-csaf-path',
+        '/document/references/0/category',
+      )
       expect(categorySelect).toHaveAttribute('required')
     })
 
     it('should set correct properties for summary textarea', () => {
       render(<References />)
 
-      const summaryTextarea = screen.getByTestId('textarea-field-/document/references/0/summary')
-      expect(summaryTextarea).toHaveAttribute('data-csaf-path', '/document/references/0/summary')
+      const summaryTextarea = screen.getByTestId(
+        'textarea-field-/document/references/0/summary',
+      )
+      expect(summaryTextarea).toHaveAttribute(
+        'data-csaf-path',
+        '/document/references/0/summary',
+      )
       expect(summaryTextarea).toHaveAttribute('required')
-      // Note: autofocus may not render as HTML attribute in test environment  
-      expect(summaryTextarea).toHaveAttribute('placeholder', 'Placeholder for summary')
+      // Note: autofocus may not render as HTML attribute in test environment
+      expect(summaryTextarea).toHaveAttribute(
+        'placeholder',
+        'Placeholder for summary',
+      )
     })
 
     it('should set correct properties for URL input', () => {
       render(<References />)
 
-      const urlInput = screen.getByTestId('input-field-/document/references/0/url')
-      expect(urlInput).toHaveAttribute('data-csaf-path', '/document/references/0/url')
+      const urlInput = screen.getByTestId(
+        'input-field-/document/references/0/url',
+      )
+      expect(urlInput).toHaveAttribute(
+        'data-csaf-path',
+        '/document/references/0/url',
+      )
       expect(urlInput).toHaveAttribute('type', 'url')
       expect(urlInput).toHaveAttribute('required')
       expect(urlInput).toHaveAttribute('placeholder', 'Placeholder for url')
@@ -704,7 +779,7 @@ describe('References', () => {
         ...getDefaultDocumentReference(),
         id: 'ref2',
         summary: 'Second reference',
-        url: 'https://second.com',  
+        url: 'https://second.com',
         category: 'self' as TReferenceCategory,
       }
       mockListState.data = [reference1, reference2]
@@ -713,13 +788,21 @@ describe('References', () => {
 
       // Check first reference
       expect(screen.getByTestId('list-item-0')).toBeInTheDocument()
-      expect(screen.getByTestId('textarea-field-/document/references/0/summary')).toHaveValue('First reference')
-      expect(screen.getByTestId('input-field-/document/references/0/url')).toHaveValue('https://first.com')
+      expect(
+        screen.getByTestId('textarea-field-/document/references/0/summary'),
+      ).toHaveValue('First reference')
+      expect(
+        screen.getByTestId('input-field-/document/references/0/url'),
+      ).toHaveValue('https://first.com')
 
       // Check second reference
       expect(screen.getByTestId('list-item-1')).toBeInTheDocument()
-      expect(screen.getByTestId('textarea-field-/document/references/1/summary')).toHaveValue('Second reference')
-      expect(screen.getByTestId('input-field-/document/references/1/url')).toHaveValue('https://second.com')
+      expect(
+        screen.getByTestId('textarea-field-/document/references/1/summary'),
+      ).toHaveValue('Second reference')
+      expect(
+        screen.getByTestId('input-field-/document/references/1/url'),
+      ).toHaveValue('https://second.com')
     })
 
     it('should handle updates to specific reference by index', async () => {
@@ -731,10 +814,14 @@ describe('References', () => {
       render(<References />)
 
       // Update second reference summary
-      const secondSummary = screen.getByTestId('textarea-field-/document/references/1/summary')
-      
+      const secondSummary = screen.getByTestId(
+        'textarea-field-/document/references/1/summary',
+      )
+
       // Instead of typing character by character, directly set the value and trigger change
-      fireEvent.change(secondSummary, { target: { value: 'Updated second summary' } })
+      fireEvent.change(secondSummary, {
+        target: { value: 'Updated second summary' },
+      })
 
       expect(mockListState.updateDataEntry).toHaveBeenCalledWith({
         ...reference2,
@@ -763,17 +850,23 @@ describe('References', () => {
 
       render(<References />)
 
-      expect(screen.getByTestId('textarea-field-/document/references/0/summary')).toHaveValue('')
-      expect(screen.getByTestId('input-field-/document/references/0/url')).toHaveValue('')
+      expect(
+        screen.getByTestId('textarea-field-/document/references/0/summary'),
+      ).toHaveValue('')
+      expect(
+        screen.getByTestId('input-field-/document/references/0/url'),
+      ).toHaveValue('')
     })
 
     it('should handle category selection with invalid values', async () => {
       const user = userEvent.setup()
-      
+
       render(<References />)
 
-      const categorySelect = screen.getByTestId('select-field-/document/publisher/category')
-      
+      const categorySelect = screen.getByTestId(
+        'select-field-/document/references/0/category',
+      )
+
       // Try to select an invalid option
       fireEvent.change(categorySelect, { target: { value: 'invalid' } })
 
@@ -794,7 +887,9 @@ describe('References', () => {
       expect(screen.getByText('Category')).toBeInTheDocument()
       expect(screen.getByText('Summary')).toBeInTheDocument()
       expect(screen.getByText('URL')).toBeInTheDocument()
-      expect(screen.getByTestId('select-item-external')).toHaveTextContent('External')
+      expect(screen.getByTestId('select-item-external')).toHaveTextContent(
+        'External',
+      )
       expect(screen.getByTestId('select-item-self')).toHaveTextContent('Self')
     })
   })
