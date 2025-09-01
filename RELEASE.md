@@ -5,12 +5,12 @@
 - Ensure your local `main` is up to date
 
 ## Process
+- Update the Version-Tag in [package.json](./package.json)
 - Create an **annotated** tag locally:
    ```bash
    git tag -a vX.Y.Z -m "Sec-o-Simple vX.Y.Z: short summary"
    git push origin vX.Y.Z
    ```
-- Update the Version-Tag in [package.json](./package.json)
 
 ## Release Notes
-Release Notes are generated automatically by the [release.yml](./github/workflows/release.yml) workflow.
+Release Notes are generated automatically by the [release.yml](./.github/workflows/release.yml) workflow.
