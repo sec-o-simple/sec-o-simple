@@ -22,7 +22,7 @@ exports[`ComponentList > should match snapshot 1`] = `
             class="flex items-center gap-4"
           >
             <div
-              class="max-w-xl overflow-hidden text-ellipsis text-nowrap"
+              class="max-w-xl overflow-hidden text-nowrap text-ellipsis"
             >
               Test Item 1
             </div>
@@ -33,7 +33,7 @@ exports[`ComponentList > should match snapshot 1`] = `
               title="Delete Test Item"
             >
               <button
-                class="rounded-full text-neutral-foreground"
+                class="text-neutral-foreground rounded-full"
                 data-isdisabled="false"
                 data-isicononly="true"
                 data-isinvalid="false"
@@ -73,7 +73,7 @@ exports[`ComponentList > should match snapshot 1`] = `
             class="flex items-center gap-4"
           >
             <div
-              class="max-w-xl overflow-hidden text-ellipsis text-nowrap"
+              class="max-w-xl overflow-hidden text-nowrap text-ellipsis"
             >
               Test Item 2
             </div>
@@ -84,7 +84,7 @@ exports[`ComponentList > should match snapshot 1`] = `
               title="Delete Test Item"
             >
               <button
-                class="rounded-full text-neutral-foreground"
+                class="text-neutral-foreground rounded-full"
                 data-isdisabled="false"
                 data-isicononly="true"
                 data-isinvalid="false"
@@ -113,7 +113,7 @@ exports[`ComponentList > should match snapshot 1`] = `
     </div>
   </div>
   <button
-    class="border-dashed border-primary text-primary"
+    class="border-primary text-primary border-dashed"
     data-isdisabled="false"
     data-isicononly="false"
     data-isinvalid="false"

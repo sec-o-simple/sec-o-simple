@@ -1,17 +1,19 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest'
-import { validateDocument, ValidationResult } from '../../../src/utils/validation/documentValidator'
-import { TDocumentStore } from '../../../src/utils/useDocumentStore'
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest'
 import { TConfig } from '../../../src/utils/useConfigStore'
-import { ValidationMessage } from '../../../src/utils/validation/useValidationStore'
+import { TDocumentStore } from '../../../src/utils/useDocumentStore'
+import {
+  validateDocument,
+  ValidationResult,
+} from '../../../src/utils/validation/documentValidator'
 
 // Mock the external dependencies
 vi.mock('../../../src/utils/csafExport/csafExport')
 vi.mock('@secvisogram/csaf-validator-lib/basic.js')
 vi.mock('@secvisogram/csaf-validator-lib/validate.js')
 
-import { createCSAFDocument } from '../../../src/utils/csafExport/csafExport'
 import * as basic from '@secvisogram/csaf-validator-lib/basic.js'
 import validate from '@secvisogram/csaf-validator-lib/validate.js'
+import { createCSAFDocument } from '../../../src/utils/csafExport/csafExport'
 
 describe('documentValidator', () => {
   let mockDocumentStore: TDocumentStore
@@ -62,8 +64,8 @@ describe('documentValidator', () => {
     // Setup mock functions
     mockGetFullProductName = vi.fn((id: string) => `Product ${id}`)
     mockGetRelationshipFullProductName = vi.fn(
-      (sourceId: string, targetId: string, category: string) => 
-        `${sourceId} -> ${targetId} (${category})`
+      (sourceId: string, targetId: string, category: string) =>
+        `${sourceId} -> ${targetId} (${category})`,
     )
 
     mockConfig = {
@@ -109,7 +111,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(true)
@@ -118,7 +120,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
     })
 
@@ -149,7 +151,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(false)
@@ -203,7 +205,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(false) // Should be invalid due to errors
@@ -274,12 +276,12 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(false)
       expect(result.messages).toHaveLength(3)
-      
+
       expect(result.messages[0].severity).toBe('error')
       expect(result.messages[1].severity).toBe('warning')
       expect(result.messages[2].severity).toBe('info')
@@ -313,7 +315,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(true) // Should be valid since no errors
@@ -337,7 +339,7 @@ describe('documentValidator', () => {
       const result = await validateDocument(
         mockDocumentStore,
         mockGetFullProductName,
-        mockGetRelationshipFullProductName
+        mockGetRelationshipFullProductName,
         // No config parameter
       )
 
@@ -347,7 +349,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        undefined
+        undefined,
       )
     })
 
@@ -360,11 +362,18 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(false)
-      expect(result.messages).toEqual([])
+      expect(result.messages).toEqual([
+        {
+          message:
+            'Unknown validation error: Error: Failed to create CSAF document',
+          path: '',
+          severity: 'error',
+        },
+      ])
       expect(validate).not.toHaveBeenCalled()
     })
 
@@ -375,11 +384,17 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(false)
-      expect(result.messages).toEqual([])
+      expect(result.messages).toEqual([
+        {
+          message: 'Unknown validation error: Error: Validation failed',
+          path: '',
+          severity: 'error',
+        },
+      ])
       expect(createCSAFDocument).toHaveBeenCalled()
     })
 
@@ -395,7 +410,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(true)
@@ -425,7 +440,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(true)
@@ -439,12 +454,8 @@ describe('documentValidator', () => {
         tests: [
           {
             errors: [], // No errors
-            warnings: [
-              { instancePath: '/test', message: 'Warning message' },
-            ],
-            infos: [
-              { instancePath: '/test', message: 'Info message' },
-            ],
+            warnings: [{ instancePath: '/test', message: 'Warning message' }],
+            infos: [{ instancePath: '/test', message: 'Info message' }],
           },
         ],
       }
@@ -455,7 +466,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result.isValid).toBe(true) // Should be true because no errors
@@ -472,7 +483,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(createCSAFDocument).toHaveBeenCalledTimes(1)
@@ -480,14 +491,14 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(validate).toHaveBeenCalledTimes(1)
       // The first argument should be the tests array from basic module
       expect(validate).toHaveBeenCalledWith(
         expect.any(Array),
-        expect.any(Object)
+        expect.any(Object),
       )
     })
   })
@@ -503,7 +514,7 @@ describe('documentValidator', () => {
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
 
       expect(result).toHaveProperty('isValid')
