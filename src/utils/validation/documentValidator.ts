@@ -70,7 +70,13 @@ export async function validateDocument(
   } catch (error) {
     return {
       isValid: false,
-      messages: [],
+      messages: [
+        {
+          path: '',
+          message: `Unknown validation error: ${error}`,
+          severity: 'error',
+        },
+      ],
     }
   }
 }

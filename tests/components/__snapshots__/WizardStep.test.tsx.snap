@@ -30,7 +30,7 @@ exports[`WizardStep > should render with progress bar and content 1`] = `
     </span>
   </div>
   <div
-    class="flex flex-col gap-2 rounded-lg border-1 border-default-200 bg-content1 p-8"
+    class="border-default-200 bg-content1 border-default-200 flex flex-col gap-2 rounded-lg border p-8"
   >
     <div
       class="mb-4 text-xl font-semibold"

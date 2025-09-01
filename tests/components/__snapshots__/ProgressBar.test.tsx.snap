@@ -14,18 +14,18 @@ exports[`ProgressBar > should handle negative progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       1
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 1
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -36,18 +36,18 @@ exports[`ProgressBar > should handle negative progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       2
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 2
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -58,18 +58,18 @@ exports[`ProgressBar > should handle negative progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       3
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 3
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -80,12 +80,12 @@ exports[`ProgressBar > should handle negative progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       4
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 4
     </div>
@@ -101,18 +101,18 @@ exports[`ProgressBar > should handle progress greater than sections length 1`] =
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       1
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 1
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -123,18 +123,18 @@ exports[`ProgressBar > should handle progress greater than sections length 1`] =
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       2
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 2
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -145,18 +145,18 @@ exports[`ProgressBar > should handle progress greater than sections length 1`] =
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       3
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 3
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -167,12 +167,12 @@ exports[`ProgressBar > should handle progress greater than sections length 1`] =
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       4
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 4
     </div>
@@ -188,18 +188,18 @@ exports[`ProgressBar > should render progress bar with all sections 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       1
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 1
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary "
@@ -210,18 +210,18 @@ exports[`ProgressBar > should render progress bar with all sections 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       2
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 2
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -232,18 +232,18 @@ exports[`ProgressBar > should render progress bar with all sections 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       3
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 3
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -254,12 +254,12 @@ exports[`ProgressBar > should render progress bar with all sections 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       4
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 4
     </div>
@@ -275,18 +275,18 @@ exports[`ProgressBar > should render with full progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       1
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 1
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -297,18 +297,18 @@ exports[`ProgressBar > should render with full progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       2
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 2
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -319,18 +319,18 @@ exports[`ProgressBar > should render with full progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       3
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 3
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary "
@@ -341,12 +341,12 @@ exports[`ProgressBar > should render with full progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       4
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 4
     </div>
@@ -362,18 +362,18 @@ exports[`ProgressBar > should render with no progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       1
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 1
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -384,18 +384,18 @@ exports[`ProgressBar > should render with no progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       2
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 2
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -406,18 +406,18 @@ exports[`ProgressBar > should render with no progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       3
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 3
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -428,12 +428,12 @@ exports[`ProgressBar > should render with no progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       4
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 4
     </div>
@@ -449,18 +449,18 @@ exports[`ProgressBar > should render with partial progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       1
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 1
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -471,18 +471,18 @@ exports[`ProgressBar > should render with partial progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       2
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Section 2
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -493,18 +493,18 @@ exports[`ProgressBar > should render with partial progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       3
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 3
     </div>
   </div>
   <div
-    class="relative top-4 flex h-1 grow overflow-hidden bg-content3"
+    class="bg-content3 relative top-4 flex h-1 grow overflow-hidden"
   >
     <div
       class="bg-primary rounded-r-full"
@@ -515,12 +515,12 @@ exports[`ProgressBar > should render with partial progress 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground "
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 "
     >
       4
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground "
+      class="text-neutral-foreground absolute top-full text-sm "
     >
       Section 4
     </div>
@@ -536,12 +536,12 @@ exports[`ProgressBar > should render with single section 1`] = `
     class="flex flex-col items-center justify-center gap-2"
   >
     <div
-      class="flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground border-primary bg-primary text-primary-foreground"
+      class="border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 border-primary bg-primary text-primary-foreground"
     >
       1
     </div>
     <div
-      class="absolute top-full text-sm text-neutral-foreground text-primary"
+      class="text-neutral-foreground absolute top-full text-sm text-primary"
     >
       Only Section
     </div>

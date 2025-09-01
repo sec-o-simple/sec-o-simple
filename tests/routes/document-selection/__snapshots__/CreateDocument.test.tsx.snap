@@ -10,7 +10,7 @@ exports[`CreateDocument > should render correctly with both document types 1`] =
       initial="[object Object]"
     >
       <div
-        class="relative flex w-96 flex-col gap-6 rounded-xl border-2 bg-content1 p-6"
+        class="border-default-200 bg-content1 relative flex w-96 flex-col gap-6 rounded-xl border-2 p-6"
       >
         <div
           class="flex items-center gap-2 text-xl font-bold"
@@ -74,7 +74,7 @@ exports[`CreateDocument > should render correctly with both document types 1`] =
         </div>
       </div>
       <div
-        class="relative flex w-96 flex-col gap-6 rounded-xl border-2 bg-content1 p-6"
+        class="border-default-200 bg-content1 relative flex w-96 flex-col gap-6 rounded-xl border-2 p-6"
       >
         <div
           class="flex items-center gap-2 text-xl font-bold"

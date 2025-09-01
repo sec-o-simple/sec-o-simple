@@ -78,7 +78,7 @@ export default function ProductsTagList({
       {error && <span className="text-sm text-red-500">{error}</span>}
       {/* If no products are selected, show a message */}
       {selectedProducts.length === 0 && (
-        <span className="text-center text-neutral-foreground">
+        <span className="text-neutral-foreground text-center">
           {t('vulnerabilities.remediation.products.empty')}
         </span>
       )}

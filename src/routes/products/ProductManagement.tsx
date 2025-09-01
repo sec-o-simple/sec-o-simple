@@ -35,7 +35,7 @@ export default function ProductManagement() {
           onClose={() => setModalOpen(false)}
         />
       )}
-      <div className="flex w-full items-center justify-between rounded-lg border-1 border-default-200 bg-white p-8">
+      <div className="border-default-200 flex w-full items-center justify-between rounded-lg border-1 bg-white p-8">
         <p className="text-xl font-semibold">{t('products.manage')}</p>
 
         {productDbEnabled && (

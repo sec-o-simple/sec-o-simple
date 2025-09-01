@@ -42,11 +42,17 @@ import { default as secOSimpleScheme } from './scheme'
 
 export const supportedCSAFVersions = ['2.0']
 
-type JSONValue = string | number | boolean | null | JSONObject | JSONArray
+export type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JSONObject
+  | Array<JSONValue>
+
 export interface JSONObject {
   [key: string]: JSONValue
 }
-interface JSONArray extends Array<JSONValue> {}
 
 export interface HiddenField {
   path: string

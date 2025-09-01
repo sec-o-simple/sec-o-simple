@@ -16,7 +16,7 @@ export function useDebounceInput<T extends InputElement>({
   value: propValue,
 }: UseDebounceInputOptions<T>) {
   const [isDebouncing, setIsDebouncing] = useState(false)
-  const timeoutRef = useRef<NodeJS.Timeout>()
+  const timeoutRef = useRef<NodeJS.Timeout>(null)
   const [debouncedValue, setDebouncedValue] = useState<string>(propValue ?? '')
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export function useDebounceInput<T extends InputElement>({
   const clearPendingTimeout = () => {
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
-      timeoutRef.current = undefined
+      timeoutRef.current = null
     }
   }
 
