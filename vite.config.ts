@@ -17,7 +17,10 @@ export default defineConfig({
     eslintPlugin(),
     vitePluginVersionMark({
       name: 'sec-o-simple',
-      command: 'git describe --tags --match "v[0-9]*" --dirty --always',
+      version: process.env.BUILD_VERSION || undefined,
+      command: process.env.BUILD_VERSION
+        ? undefined
+        : 'git describe --tags --match "v[0-9]*" --dirty --always',
       ifGlobal: true,
       ifMeta: true,
       ifLog: true,
