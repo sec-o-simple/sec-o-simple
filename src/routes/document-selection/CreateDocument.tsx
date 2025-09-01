@@ -101,7 +101,7 @@ function DocumentType({
   )
 
   return (
-    <div className="relative flex w-96 flex-col gap-6 rounded-xl border-2 bg-content1 p-6">
+    <div className="border-default-200 bg-content1 relative flex w-96 flex-col gap-6 rounded-xl border-2 p-6">
       <div className="flex items-center gap-2 text-xl font-bold">
         {icon && <FontAwesomeIcon className="text-primary" icon={icon} />}
         {label}

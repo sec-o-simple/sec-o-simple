@@ -1,10 +1,9 @@
 import { usePathValidation } from '@/utils/validation/usePathValidation'
-import React from 'react'
-import { PropsWithChildren, useMemo } from 'react'
+import React, { PropsWithChildren, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet, useLocation } from 'react-router'
 import { LanguageSwitcher } from '../forms/LanguageSwitcher'
 import SecOSimpleVersion from '../forms/SecOSimpleVersion'
-import { useTranslation } from 'react-i18next'
 import StatusIndicator from '../StatusIndicator'
 
 export default function NavigationLayout() {
@@ -12,7 +11,7 @@ export default function NavigationLayout() {
 
   return (
     <div className="flex grow">
-      <div className="flex flex-col justify-between border-r p-4">
+      <div className="border-default-200 flex flex-col justify-between border-r p-4">
         <div className="flex basis-80 flex-col gap-2">
           <Section
             number={1}
@@ -59,7 +58,7 @@ export default function NavigationLayout() {
         </div>
       </div>
 
-      <div className="grow bg-editor">
+      <div className="bg-editor grow">
         <Outlet />
       </div>
     </div>
@@ -85,15 +84,15 @@ function Section({
   const pathValidation = usePathValidation(to)
 
   return (
-    <div className="flex flex-col gap-2 text-neutral-foreground">
+    <div className="text-neutral-foreground flex flex-col gap-2">
       <NavLink
         to={to}
-        className={`flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 transition-colors hover:bg-content2 ${
-          isActive ? 'bg-content2 font-semibold text-foreground' : ''
+        className={`hover:bg-content2 flex cursor-pointer items-center gap-2 rounded-lg px-4 py-2 transition-colors ${
+          isActive ? 'bg-content2 text-foreground font-semibold' : ''
         }`}
       >
         <div
-          className={`flex size-8 items-center justify-center rounded-full bg-content3 p-4 ${
+          className={`bg-content3 flex size-8 items-center justify-center rounded-full p-4 ${
             isActive ? 'bg-primary text-primary-foreground' : ''
           }`}
         >
@@ -116,7 +115,7 @@ function SubSection({ title, to }: { title: string; to: string }) {
     <NavLink
       to={to}
       className={({ isActive }) =>
-        `flex cursor-pointer items-center gap-2 pl-12 transition-colors hover:text-primary ${
+        `hover:text-primary flex cursor-pointer items-center gap-2 pl-12 transition-colors ${
           isActive ? 'text-primary' : ''
         }`
       }

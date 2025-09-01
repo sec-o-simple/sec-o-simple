@@ -113,7 +113,7 @@ export default function TopBarLayout() {
 
   return (
     <div className="flex h-screen flex-col">
-      <div className="flex w-full items-center justify-between gap-8 border-b px-6 py-4">
+      <div className="border-default-200 flex w-full items-center justify-between gap-8 border-b px-6 py-4">
         <div className="flex items-center gap-3 text-2xl font-bold">
           <span className="flex items-center gap-4">
             <FontAwesomeIcon icon={faShieldHalved} className="text-primary" />

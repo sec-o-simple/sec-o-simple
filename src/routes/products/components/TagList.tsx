@@ -2,7 +2,7 @@ import HSplit from '@/components/forms/HSplit'
 import { faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Chip } from '@heroui/chip'
-import { cn } from '@heroui/theme'
+import { cn } from '@heroui/react'
 import { useNavigate } from 'react-router'
 
 export type TagListProps<T> = {

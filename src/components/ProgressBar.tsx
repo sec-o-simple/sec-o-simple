@@ -37,14 +37,14 @@ function ProgressBarItem({
   return (
     <div className="flex flex-col items-center justify-center gap-2">
       <div
-        className={`flex size-8 items-center justify-center rounded-full border bg-content1 p-4 text-neutral-foreground ${
+        className={`border-default-200 bg-content1 text-neutral-foreground flex size-8 items-center justify-center rounded-full border p-4 ${
           isActive ? 'border-primary bg-primary text-primary-foreground' : ''
         }`}
       >
         {number}
       </div>
       <div
-        className={`absolute top-full text-sm text-neutral-foreground ${
+        className={`text-neutral-foreground absolute top-full text-sm ${
           isActive ? 'text-primary' : ''
         }`}
       >
@@ -56,7 +56,7 @@ function ProgressBarItem({
 
 function ProgressLine({ progress }: { progress: number }) {
   return (
-    <div className="relative top-4 flex h-1 grow overflow-hidden bg-content3">
+    <div className="bg-content3 relative top-4 flex h-1 grow overflow-hidden">
       <div
         className={`bg-primary ${progress !== 100 ? 'rounded-r-full' : ''}`}
         style={{ width: `${progress}%` }}

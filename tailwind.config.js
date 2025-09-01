@@ -47,6 +47,7 @@ export default {
               DEFAULT: '#ffffff',
               foreground: '#ffffff',
             },
+            borderColor: '#F0F0F0',
             ['neutral-foreground']: '#64748b',
           },
         },
