@@ -153,7 +153,7 @@ export default function Product() {
       </div>
 
       {product.subBranches.length === 0 && (
-        <div className="text-center text-lg text-neutral-foreground">
+        <div className="text-neutral-foreground text-center text-lg">
           <p>{t('products.product.version.empty')}</p>
         </div>
       )}

@@ -13,22 +13,20 @@ export function useRelationships() {
   const getRelationshipsBySourceVersion = (
     sourceVersionId: string,
   ): TRelationship[] => {
-    return globalRelationships.filter(
-      (relationship) =>
-        relationship.relationships?.some(
-          (rel) => rel.product1VersionId === sourceVersionId,
-        ),
+    return globalRelationships.filter((relationship) =>
+      relationship.relationships?.some(
+        (rel) => rel.product1VersionId === sourceVersionId,
+      ),
     )
   }
 
   const getRelationshipsByTargetVersion = (
     targetVersionId: string,
   ): TRelationship[] => {
-    return globalRelationships.filter(
-      (relationship) =>
-        relationship.relationships?.some(
-          (rel) => rel.product2VersionId === targetVersionId,
-        ),
+    return globalRelationships.filter((relationship) =>
+      relationship.relationships?.some(
+        (rel) => rel.product2VersionId === targetVersionId,
+      ),
     )
   }
 

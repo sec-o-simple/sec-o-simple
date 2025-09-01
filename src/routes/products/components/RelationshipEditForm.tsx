@@ -224,7 +224,7 @@ export default function RelationshipEditForm({
                 versions={
                   updatedRelationship.relationships?.map((rel) => {
                     const version = findProductTreeBranch(rel.product1VersionId)
-                    return version ? getPTBName(version) ?? '' : ''
+                    return version ? (getPTBName(version) ?? '') : ''
                   }) ?? []
                 }
               />
@@ -249,7 +249,7 @@ export default function RelationshipEditForm({
                 versions={
                   updatedRelationship.relationships?.map((rel) => {
                     const version = findProductTreeBranch(rel.product2VersionId)
-                    return version ? getPTBName(version) ?? '' : ''
+                    return version ? (getPTBName(version) ?? '') : ''
                   }) ?? []
                 }
               />
@@ -286,7 +286,7 @@ function ProductBox({
   return (
     <div>
       {versions.length > 0 && (
-        <div className="flex flex-col items-center rounded-lg border border-gray bg-white p-2 px-4">
+        <div className="border-gray flex flex-col items-center rounded-lg border bg-white p-2 px-4">
           <div className="flex flex-col gap-1">
             <p key={product}>
               {product && product !== '' ? product : t('untitled.product_name')}

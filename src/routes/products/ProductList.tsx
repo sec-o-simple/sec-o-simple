@@ -17,7 +17,7 @@ export default function ProductList({ productType }: ProductListProps) {
   return (
     <div className="flex flex-col items-stretch gap-2">
       {products.length === 0 && (
-        <div className="text-center text-lg text-neutral-foreground">
+        <div className="text-neutral-foreground text-center text-lg">
           <p>
             {t('products.empty', {
               type: productType,

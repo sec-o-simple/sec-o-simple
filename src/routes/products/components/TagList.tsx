@@ -26,7 +26,7 @@ export default function TagList<T>({
         <Chip
           key={i}
           className={cn(
-            'rounded-md bg-content2 text-content2-foreground',
+            'bg-content2 text-content2-foreground rounded-md',
             linkGenerator ? 'cursor-pointer hover:underline' : '',
           )}
           onClick={() => {
@@ -46,7 +46,7 @@ export default function TagList<T>({
                 icon={faX}
                 onClick={() => onRemove?.(item)}
                 size="xs"
-                className="cursor-pointer text-neutral-foreground"
+                className="text-neutral-foreground cursor-pointer"
               />
             )}
           </HSplit>
