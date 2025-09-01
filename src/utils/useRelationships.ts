@@ -47,8 +47,6 @@ export function useRelationships() {
   }
 
   const addOrUpdateRelationship = (relationship: TRelationship) => {
-    relationship
-
     if (globalRelationships.find((x) => x.id === relationship.id)) {
       updateRelationships(
         globalRelationships.map((x) =>
