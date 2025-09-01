@@ -1,19 +1,23 @@
-name: SBOM
-
+name: Release & SBOM
 on:
-  release:
-    types: [published]
   push:
-    branches: ["feat/sbom-generation"]
+    tags: ['v*']
+
+permissions:
+  contents: write
+  actions: read   # sbom-action uses this when attaching assets
 
 jobs:
-  sbom:
+  release_and_sbom:
     runs-on: ubuntu-latest
-    permissions:
-      actions: read
-      contents: write
     steps:
       - uses: actions/checkout@v4
+
+      - name: Create/Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
 
       - name: SBOM (SPDX)
         uses: anchore/sbom-action@v0

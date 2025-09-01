@@ -17,6 +17,7 @@
     - [Code \& Module Organization](#code--module-organization)
     - [Tech Stack](#tech-stack)
   - [Contributing](#contributing)
+  - [Release](#release)
   - [Dependencies](#dependencies)
   - [License](#license)
   - [Security Considerations](#security-considerations)
@@ -131,6 +132,10 @@ A frontend-only application built with **React.js**, styled with **Tailwind CSS*
 ## Contributing
 
 Please refer to this [`CONTRIBUTING.md`](CONTRIBUTING.md).
+
+## Release
+
+Please refer to this [`RELEASE.md`](RELEASE.md)
 
 ## Dependencies
 
