@@ -14,7 +14,12 @@ export default defineConfig({
   server: {
     port: 8080,
   },
-  plugins: [react(), eslintPlugin(), tsconfigPaths(), tailwindcss(), vitePluginVersionMark({
+  plugins: [
+    react(),
+    eslintPlugin(),
+    tsconfigPaths(),
+    tailwindcss(),
+    vitePluginVersionMark({
       name: 'sec-o-simple',
       version: process.env.BUILD_VERSION || undefined,
       command: process.env.BUILD_VERSION
@@ -23,7 +28,8 @@ export default defineConfig({
       ifGlobal: true,
       ifMeta: true,
       ifLog: true,
-    })],
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve('./src'),
