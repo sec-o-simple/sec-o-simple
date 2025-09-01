@@ -1,17 +1,36 @@
-name: Create Release from tag
+name: Release & SBOM
 on:
   push:
     tags: ['v*']
+
 permissions:
   contents: write
+  actions: read   # sbom-action uses this when attaching assets
+
 jobs:
-  create:
+  release_and_sbom:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with: { fetch-depth: 0 }
+
       - name: Create/Update GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.ref_name }}
           generate_release_notes: true
+
+      - name: SBOM (SPDX)
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: spdx-json
+          artifact-name: sec-o-simple.spdx.json
+          upload-release-assets: true
+
+      - name: SBOM (CycloneDX)
+        uses: anchore/sbom-action@v0
+        with:
+          path: .
+          format: cyclonedx-json
+          artifact-name: sec-o-simple.cdx.json
+          upload-release-assets: true
