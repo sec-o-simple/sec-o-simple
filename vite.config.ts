@@ -1,8 +1,9 @@
 /// <reference types="vitest" />
-import { defineConfig } from 'vite'
 import eslintPlugin from '@nabla/vite-plugin-eslint'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
+import { defineConfig } from 'vite'
+import { vitePluginVersionMark } from 'vite-plugin-version-mark'
 
 /**
  * @see https://vitejs.dev/config/
@@ -11,7 +12,20 @@ export default defineConfig({
   server: {
     port: 8080,
   },
-  plugins: [react(), eslintPlugin()],
+  plugins: [
+    react(),
+    eslintPlugin(),
+    vitePluginVersionMark({
+      name: 'sec-o-simple',
+      version: process.env.BUILD_VERSION || undefined,
+      command: process.env.BUILD_VERSION
+        ? undefined
+        : 'git describe --tags --match "v[0-9]*" --dirty --always',
+      ifGlobal: true,
+      ifMeta: true,
+      ifLog: true,
+    }),
+  ],
   resolve: {
     alias: {
       '@': path.resolve('./src'),

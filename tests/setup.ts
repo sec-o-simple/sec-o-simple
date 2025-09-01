@@ -1,6 +1,13 @@
 import '@testing-library/jest-dom'
 import { vi } from 'vitest'
 
+// Mock the global version constant used by vite-plugin-version-mark
+Object.defineProperty(globalThis, '__SEC_O_SIMPLE_VERSION__', {
+  value: '1.0.0-test',
+  writable: true,
+  configurable: true,
+})
+
 // Mock IntersectionObserver
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}
@@ -47,23 +54,23 @@ vi.mock('@/utils/validation/useFieldValidation', () => ({
     warningMessages: [],
     infoMessages: [],
     isTouched: false,
-    markFieldAsTouched: vi.fn()
-  }))
+    markFieldAsTouched: vi.fn(),
+  })),
 }))
 
 // Mock config store
 vi.mock('@/utils/useConfigStore', () => ({
   useConfigStore: vi.fn(() => ({
-    config: null
+    config: null,
   })),
   default: vi.fn(() => ({
-    config: null
-  }))
+    config: null,
+  })),
 }))
 
 // Mock document store types
 vi.mock('@/routes/document-information/types/tDocumentInformation', () => ({
-  getDefaultDocumentInformation: vi.fn(() => ({}))
+  getDefaultDocumentInformation: vi.fn(() => ({})),
 }))
 
 // Mock debounce input hook
@@ -73,31 +80,31 @@ vi.mock('@/utils/useDebounceInput', () => ({
     isDebouncing: false,
     handleBlur: vi.fn(),
     handleChange: vi.fn(),
-  }))
+  })),
 }))
 
 // Mock download utility
 vi.mock('@/utils/download', () => ({
   downloadJSON: vi.fn(),
   downloadFile: vi.fn(),
-  download: vi.fn()
+  download: vi.fn(),
 }))
 
 // Mock csaf export helpers
 vi.mock('@/utils/csafExport/helpers', () => ({
   getFilename: vi.fn((id) => `document-${id}`),
   generateCSAFDocument: vi.fn(),
-  validateDocument: vi.fn()
+  validateDocument: vi.fn(),
 }))
 
 // Mock FontAwesome components
 vi.mock('@fortawesome/react-fontawesome', () => ({
   FontAwesomeIcon: vi.fn(({ icon, ...props }) => {
     const { createElement } = require('react')
-    return createElement('span', { 
+    return createElement('span', {
       'data-testid': 'fa-icon',
       'data-icon': icon?.iconName || 'unknown',
-      ...props 
+      ...props,
     })
   }),
 }))
@@ -107,18 +114,29 @@ vi.mock('@heroui/input', () => ({
   Input: vi.fn(({ children, ...props }) => {
     const { createElement } = require('react')
     // Filter out Hero UI specific props to avoid React warnings
-    const { 
-      variant, labelPlacement, errorMessage, isInvalid, classNames,
-      placeholder, value, onChange, onBlur, ...domProps 
+    const {
+      variant,
+      labelPlacement,
+      errorMessage,
+      isInvalid,
+      classNames,
+      placeholder,
+      value,
+      onChange,
+      onBlur,
+      ...domProps
     } = props
-    
+
     return createElement('input', {
       'data-testid': 'hero-input',
       'data-variant': variant,
       'data-labelplacement': labelPlacement,
       'data-errormessage': errorMessage || '',
       'data-isinvalid': String(isInvalid || false),
-      'data-classnames': typeof classNames === 'object' ? JSON.stringify(classNames) : classNames,
+      'data-classnames':
+        typeof classNames === 'object'
+          ? JSON.stringify(classNames)
+          : classNames,
       placeholder,
       value: value || '',
       onChange: (e) => {
@@ -127,24 +145,35 @@ vi.mock('@heroui/input', () => ({
         onChange?.(e)
       },
       onBlur,
-      ...domProps
+      ...domProps,
     })
   }),
   Textarea: vi.fn(({ children, ...props }) => {
     const { createElement } = require('react')
     // Filter out Hero UI specific props to avoid React warnings
-    const { 
-      variant, labelPlacement, errorMessage, isInvalid, classNames,
-      placeholder, value, onChange, onBlur, ...domProps 
+    const {
+      variant,
+      labelPlacement,
+      errorMessage,
+      isInvalid,
+      classNames,
+      placeholder,
+      value,
+      onChange,
+      onBlur,
+      ...domProps
     } = props
-    
+
     return createElement('textarea', {
       'data-testid': 'hero-textarea',
       'data-variant': variant,
       'data-labelplacement': labelPlacement,
       'data-errormessage': errorMessage || '',
       'data-isinvalid': String(isInvalid || false),
-      'data-classnames': typeof classNames === 'object' ? JSON.stringify(classNames) : classNames,
+      'data-classnames':
+        typeof classNames === 'object'
+          ? JSON.stringify(classNames)
+          : classNames,
       placeholder,
       defaultValue: value || '',
       onChange: (e) => {
@@ -153,7 +182,7 @@ vi.mock('@heroui/input', () => ({
         onChange?.(e)
       },
       onBlur,
-      ...domProps
+      ...domProps,
     })
   }),
 }))
@@ -162,22 +191,35 @@ vi.mock('@heroui/select', () => ({
   Select: vi.fn(({ children, ...props }) => {
     const { createElement } = require('react')
     // Filter out Hero UI specific props to avoid React warnings
-    const { 
-      variant, labelPlacement, errorMessage, isInvalid, classNames,
-      placeholder, onChange, ...domProps 
-    } = props
-    
-    return createElement('select', {
-      'data-testid': 'hero-select',
-      'data-variant': variant,
-      'data-labelplacement': labelPlacement,
-      'data-errormessage': errorMessage || '',
-      'data-isinvalid': String(isInvalid || false),
-      'data-classnames': typeof classNames === 'object' ? JSON.stringify(classNames) : classNames,
+    const {
+      variant,
+      labelPlacement,
+      errorMessage,
+      isInvalid,
+      classNames,
       placeholder,
       onChange,
       ...domProps
-    }, children)
+    } = props
+
+    return createElement(
+      'select',
+      {
+        'data-testid': 'hero-select',
+        'data-variant': variant,
+        'data-labelplacement': labelPlacement,
+        'data-errormessage': errorMessage || '',
+        'data-isinvalid': String(isInvalid || false),
+        'data-classnames':
+          typeof classNames === 'object'
+            ? JSON.stringify(classNames)
+            : classNames,
+        placeholder,
+        onChange,
+        ...domProps,
+      },
+      children,
+    )
   }),
 }))
 
@@ -185,27 +227,37 @@ vi.mock('@heroui/date-picker', () => ({
   DatePicker: vi.fn(({ children, ...props }) => {
     const { createElement } = require('react')
     // Filter out Hero UI specific props to avoid React warnings
-    const { 
-      variant, labelPlacement, errorMessage, isInvalid, classNames,
-      value, onChange, onBlur, ...domProps 
+    const {
+      variant,
+      labelPlacement,
+      errorMessage,
+      isInvalid,
+      classNames,
+      value,
+      onChange,
+      onBlur,
+      ...domProps
     } = props
-    
+
     return createElement('input', {
       'data-testid': 'hero-datepicker',
       'data-variant': variant,
       'data-labelplacement': labelPlacement,
       'data-errormessage': errorMessage || '',
       'data-isinvalid': String(isInvalid || false),
-      'data-classnames': typeof classNames === 'object' ? JSON.stringify(classNames) : classNames,
+      'data-classnames':
+        typeof classNames === 'object'
+          ? JSON.stringify(classNames)
+          : classNames,
       value: value?.toString() || '',
       onChange: (e) => {
         const mockDateValue = {
-          toDate: () => ({ toISOString: () => e.target.value })
+          toDate: () => ({ toISOString: () => e.target.value }),
         }
         onChange?.(mockDateValue)
       },
       onBlur,
-      ...domProps
+      ...domProps,
     })
   }),
 }))
@@ -214,25 +266,37 @@ vi.mock('@heroui/button', () => ({
   Button: vi.fn(({ children, ...props }) => {
     const { createElement } = require('react')
     // Filter out Hero UI specific props to avoid React warnings
-    const { 
-      variant, size, color, isInvalid, isIconOnly, isDisabled, 
-      className, onClick, onKeyDown, ...domProps 
-    } = props
-    
-    return createElement('button', {
-      'data-testid': 'hero-button',
-      'data-variant': variant,
-      'data-size': size,
-      'data-color': color,
-      'data-isinvalid': String(isInvalid || false),
-      'data-isicononly': String(isIconOnly || false),
-      'data-isdisabled': String(isDisabled || false),
+    const {
+      variant,
+      size,
+      color,
+      isInvalid,
+      isIconOnly,
+      isDisabled,
       className,
-      disabled: isDisabled,
       onClick,
       onKeyDown,
       ...domProps
-    }, children)
+    } = props
+
+    return createElement(
+      'button',
+      {
+        'data-testid': 'hero-button',
+        'data-variant': variant,
+        'data-size': size,
+        'data-color': color,
+        'data-isinvalid': String(isInvalid || false),
+        'data-isicononly': String(isIconOnly || false),
+        'data-isdisabled': String(isDisabled || false),
+        className,
+        disabled: isDisabled,
+        onClick,
+        onKeyDown,
+        ...domProps,
+      },
+      children,
+    )
   }),
 }))
 
@@ -242,13 +306,17 @@ vi.mock('@heroui/react', () => ({
     if (content && !isDisabled) {
       // Filter out Hero UI specific props to avoid React warnings
       const { ...domProps } = props
-      return createElement('div', { 
-        'data-testid': 'tooltip', 
-        title: content,
-        'data-showarrow': String(showArrow || false),
-        'data-isdisabled': String(isDisabled || false),
-        ...domProps 
-      }, children)
+      return createElement(
+        'div',
+        {
+          'data-testid': 'tooltip',
+          title: content,
+          'data-showarrow': String(showArrow || false),
+          'data-isdisabled': String(isDisabled || false),
+          ...domProps,
+        },
+        children,
+      )
     }
     return children
   }),
@@ -260,13 +328,17 @@ vi.mock('@heroui/tooltip', () => ({
     if (content && !isDisabled) {
       // Filter out Hero UI specific props to avoid React warnings
       const { ...domProps } = props
-      return createElement('div', { 
-        'data-testid': 'tooltip', 
-        title: content,
-        'data-showarrow': String(showArrow || false),
-        'data-isdisabled': String(isDisabled || false),
-        ...domProps 
-      }, children)
+      return createElement(
+        'div',
+        {
+          'data-testid': 'tooltip',
+          title: content,
+          'data-showarrow': String(showArrow || false),
+          'data-isdisabled': String(isDisabled || false),
+          ...domProps,
+        },
+        children,
+      )
     }
     return children
   }),
@@ -276,6 +348,6 @@ vi.mock('@heroui/tooltip', () => ({
 vi.mock('@internationalized/date', () => ({
   getLocalTimeZone: vi.fn(() => 'UTC'),
   parseAbsolute: vi.fn((dateString) => ({
-    toDate: vi.fn(() => ({ toISOString: () => dateString }))
-  }))
+    toDate: vi.fn(() => ({ toISOString: () => dateString })),
+  })),
 }))
