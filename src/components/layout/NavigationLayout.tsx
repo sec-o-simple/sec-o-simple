@@ -1,10 +1,10 @@
 import { usePathValidation } from '@/utils/validation/usePathValidation'
-import React from 'react'
-import { PropsWithChildren, useMemo } from 'react'
+import { ToastProvider } from '@heroui/react'
+import React, { PropsWithChildren, useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet, useLocation } from 'react-router'
 import { LanguageSwitcher } from '../forms/LanguageSwitcher'
 import SecOSimpleVersion from '../forms/SecOSimpleVersion'
-import { useTranslation } from 'react-i18next'
 import StatusIndicator from '../StatusIndicator'
 
 export default function NavigationLayout() {
@@ -62,6 +62,8 @@ export default function NavigationLayout() {
       <div className="grow bg-editor">
         <Outlet />
       </div>
+
+      <ToastProvider />
     </div>
   )
 }

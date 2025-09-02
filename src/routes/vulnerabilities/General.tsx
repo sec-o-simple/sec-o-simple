@@ -42,6 +42,7 @@ export default function General({
       <HSplit>
         <FetchCVE
           onChange={onChange}
+          cwes={cwes}
           vulnerability={vulnerability}
           vulnerabilityIndex={vulnerabilityIndex}
           isTouched={isTouched}
@@ -51,7 +52,7 @@ export default function General({
           label="CWE"
           csafPath={`/vulnerabilities/${vulnerabilityIndex}/cwe/name`}
           isTouched={isTouched}
-          defaultSelectedKey={vulnerability.cwe?.id}
+          selectedKey={vulnerability.cwe?.id}
           onSelectionChange={(selected) => {
             onChange({
               ...vulnerability,

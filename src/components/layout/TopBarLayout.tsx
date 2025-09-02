@@ -23,7 +23,6 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
-  ToastProvider,
   Tooltip,
   useDisclosure,
 } from '@heroui/react'
@@ -166,8 +165,6 @@ export default function TopBarLayout() {
           <ValidationErrorList />
         </div>
       </div>
-
-      <ToastProvider />
       <Outlet />
     </div>
   )
