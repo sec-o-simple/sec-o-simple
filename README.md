@@ -32,7 +32,7 @@ _Placeholder for BSI Description_
 ### Prerequisites
 
 - [Git](https://github.com)
-- [Node.js](https://nodejs.org/) 20 or higher
+- [Node.js](https://nodejs.org/) 22.12.0 or higher
 - [NPM](https://www.npmjs.com/package/npm)
 
 ### Clone & Setup
