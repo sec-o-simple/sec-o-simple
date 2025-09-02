@@ -5,6 +5,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import FetchCVE from '../../../../src/routes/vulnerabilities/components/FetchCVE'
 import { TVulnerability } from '../../../../src/routes/vulnerabilities/types/tVulnerability'
 
+// Import the modules we want to mock
+import { addToast } from '@heroui/react'
+import { checkReadOnly, getPlaceholder } from '../../../../src/utils/template'
+import { useConfigStore } from '../../../../src/utils/useConfigStore'
+import useDocumentStore from '../../../../src/utils/useDocumentStore'
+
 // Mock all the dependencies
 vi.mock('@/components/forms/HSplit', () => ({
   default: ({
@@ -95,6 +101,9 @@ vi.mock('@/utils/useDocumentStore', () => ({
   default: vi.fn(() => 'en'),
 }))
 
+vi.mock('../../../../src/utils/useConfigStore')
+vi.mock('../../../../src/utils/useDocumentStore')
+vi.mock('../../../../src/utils/template')
 vi.mock('@heroui/react', () => ({
   addToast: vi.fn(),
   Button: ({
@@ -146,11 +155,17 @@ vi.mock('react-i18next', () => ({
         'vulnerabilities.general.cveNotesFetchedDescription': `Fetched ${
           options?.count || 0
         } notes`,
+        'vulnerabilities.general.dataAddedWarning': 'Data added warning',
+        'vulnerabilities.general.dataAddedWarningDescription': `Added ${options?.count || 0} ${options?.type || 'items'}`,
+        'vulnerabilities.general.dataOverrideWarning': 'Data override warning',
+        'vulnerabilities.general.dataOverrideWarningDescription': `This will override: ${options?.fields || 'fields'}`,
         'vulnerabilities.general.cveFetchError': 'CVE fetch error',
         'vulnerabilities.general.cveFetchErrorDescription':
           'CVE fetch error description',
         'vulnerabilities.general.fetchCVEData': 'Fetch CVE Data',
         'vulnerabilities.general.fetchCve': 'Fetch CVE',
+        'common.cancel': 'Cancel',
+        'common.confirm': 'Confirm',
       }
       return translations[key] || key
     },
@@ -164,6 +179,9 @@ vi.mock('uid', () => ({
 // Mock fetch globally
 const mockFetch = vi.fn()
 global.fetch = mockFetch
+
+// Create a mock for addToast that we can access
+const mockAddToast = vi.fn()
 
 describe('FetchCVE', () => {
   const mockOnChange = vi.fn()
@@ -184,6 +202,31 @@ describe('FetchCVE', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
+
+    // Set up default mock returns using vi.mocked
+    vi.mocked(useConfigStore).mockImplementation((selector) =>
+      selector({
+        config: {
+          cveApiUrl: 'https://test-api.com/api/cve',
+          productDatabase: { enabled: false },
+          template: {},
+        },
+        updateConfig: vi.fn(),
+      }),
+    )
+    vi.mocked(useDocumentStore).mockImplementation((selector) =>
+      selector({
+        documentInformation: { lang: 'en' },
+      } as any),
+    )
+    vi.mocked(checkReadOnly).mockReturnValue(false)
+    vi.mocked(getPlaceholder).mockReturnValue('Enter CVE ID')
+
+    // Reset the addToast mock
+    mockAddToast.mockClear()
+
+    // Make sure the mocked addToast is available
+    vi.mocked(addToast).mockImplementation(mockAddToast)
 
     // Default mock for successful fetch
     mockFetch.mockResolvedValue({
@@ -452,5 +495,715 @@ describe('FetchCVE', () => {
     )
 
     expect(container.firstChild).toMatchSnapshot()
+  })
+
+  // Test modal functionality for data override warning
+  describe('Modal functionality', () => {
+    it('should show override modal when vulnerability has existing title', async () => {
+      const vulnerabilityWithTitle = {
+        ...mockVulnerability,
+        title: 'Existing Title',
+      }
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={vulnerabilityWithTitle}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      // Should not fetch immediately when there's existing data
+      expect(mockFetch).not.toHaveBeenCalled()
+    })
+
+    it('should show override modal when vulnerability has existing CWE', async () => {
+      const vulnerabilityWithCWE = {
+        ...mockVulnerability,
+        title: '',
+        cwe: { id: 'CWE-79', name: 'Cross-site Scripting' },
+      }
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={vulnerabilityWithCWE}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      // Should not fetch immediately when there's existing data
+      expect(mockFetch).not.toHaveBeenCalled()
+    })
+  })
+
+  // Test API URL variations
+  describe('API URL handling', () => {
+    it('should use default API URL when config is not available', async () => {
+      // Mock config store with undefined config - should use default API URL
+      vi.mocked(useConfigStore).mockImplementation((selector) =>
+        selector({
+          config: undefined,
+          updateConfig: vi.fn(),
+        }),
+      )
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      const button = screen.getByTestId('fetch-button')
+      expect(button).toBeInTheDocument()
+
+      await user.click(button)
+
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalledWith(
+          `https://cveawg.mitre.org/api/cve/${mockVulnerability.cve}`,
+        )
+      })
+    })
+
+    it('should use custom API URL from config', async () => {
+      const customApiUrl = 'https://custom-api.example.com/cve'
+      vi.mocked(useConfigStore).mockImplementation((selector) =>
+        selector({
+          config: {
+            cveApiUrl: customApiUrl,
+            productDatabase: { enabled: false },
+            template: {},
+          },
+          updateConfig: vi.fn(),
+        }),
+      )
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalledWith(
+          `${customApiUrl}/${mockVulnerability.cve}`,
+        )
+      })
+    })
+  })
+
+  // Test language handling and fallback
+  describe('Language handling', () => {
+    it('should fetch descriptions in document language', async () => {
+      vi.mocked(useDocumentStore).mockReturnValue('de')
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'German CVE Title',
+                descriptions: [
+                  { lang: 'de', value: 'German description' },
+                  { lang: 'en', value: 'English description' },
+                ],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockOnChange).toHaveBeenCalledWith(
+          expect.objectContaining({
+            title: 'German CVE Title',
+          }),
+        )
+      })
+    })
+
+    it('should fallback to English when document language is not available', async () => {
+      vi.mocked(useDocumentStore).mockReturnValue('fr')
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'English Fallback Title',
+                descriptions: [{ lang: 'en', value: 'English description' }],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockOnChange).toHaveBeenCalledWith(
+          expect.objectContaining({
+            title: 'English Fallback Title',
+          }),
+        )
+      })
+    })
+  }) // Test CWE extraction and mapping
+  describe('CWE handling', () => {
+    it('should extract and map CWE from problemTypes', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'CVE with CWE',
+                descriptions: [{ lang: 'en', value: 'Description' }],
+                problemTypes: [
+                  {
+                    descriptions: [{ type: 'CWE', cweId: 'CWE-79' }],
+                  },
+                ],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockOnChange).toHaveBeenCalledWith(
+          expect.objectContaining({
+            cwe: {
+              id: 'CWE-79',
+              name: 'Cross-site Scripting',
+            },
+          }),
+        )
+      })
+    })
+
+    it('should handle CWE not found in cwes list', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'CVE with unknown CWE',
+                descriptions: [{ lang: 'en', value: 'Description' }],
+                problemTypes: [
+                  {
+                    descriptions: [
+                      { type: 'CWE', cweId: 'CWE-999' }, // Not in mockCwes
+                    ],
+                  },
+                ],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockOnChange).toHaveBeenCalledWith(
+          expect.objectContaining({
+            cwe: {
+              id: 'CWE-999',
+              name: '',
+            },
+          }),
+        )
+      })
+    })
+  })
+
+  // Test CVSS scoring scenarios
+  describe('CVSS scoring', () => {
+    it('should handle both CVSS v3.1 and v4.0 scores', async () => {
+      const vulnerabilityWithoutScores = {
+        ...mockVulnerability,
+        scores: [],
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'CVE with multiple CVSS scores',
+                descriptions: [{ lang: 'en', value: 'Description' }],
+                metrics: [
+                  {
+                    cvssV3_1: {
+                      vectorString:
+                        'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+                    },
+                    cvssV4_0: {
+                      vectorString:
+                        'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N',
+                    },
+                  },
+                ],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={vulnerabilityWithoutScores}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        // The component should add scores to the vulnerability
+        const expectedVulnerability = expect.objectContaining({
+          scores: expect.arrayContaining([
+            expect.objectContaining({
+              cvssVersion: '3.1',
+              vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+            }),
+            expect.objectContaining({
+              cvssVersion: '4.0',
+              vectorString:
+                'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N',
+            }),
+          ]),
+        })
+        expect(mockOnChange).toHaveBeenCalledWith(expectedVulnerability)
+      })
+    })
+
+    it('should handle only CVSS v3.1 scores', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'CVE with CVSS v3.1 only',
+                descriptions: [{ lang: 'en', value: 'Description' }],
+                metrics: [
+                  {
+                    cvssV3_1: {
+                      vectorString:
+                        'CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:L/I:L/A:L',
+                    },
+                  },
+                ],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={{ ...mockVulnerability, scores: [] }}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        const expectedVulnerability = expect.objectContaining({
+          scores: expect.arrayContaining([
+            expect.objectContaining({
+              cvssVersion: '3.1',
+              vectorString: 'CVSS:3.1/AV:L/AC:H/PR:H/UI:R/S:U/C:L/I:L/A:L',
+            }),
+          ]),
+        })
+        expect(mockOnChange).toHaveBeenCalledWith(expectedVulnerability)
+      })
+    })
+  })
+
+  // Test edge cases and error scenarios
+  describe('Edge cases and error handling', () => {
+    it('should handle CVE response with no descriptions', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'CVE without descriptions',
+                descriptions: [],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockAddToast).toHaveBeenCalledWith(
+          expect.objectContaining({
+            title: 'No CVE notes found',
+            color: 'warning',
+          }),
+        )
+      })
+    })
+
+    it('should handle CVE response with missing cna container', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.resolve({ containers: {} }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      // Should not crash and not call onChange
+      await waitFor(() => {
+        expect(mockFetch).toHaveBeenCalled()
+      })
+    })
+
+    it('should handle malformed JSON response', async () => {
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () => Promise.reject(new Error('Invalid JSON')),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockAddToast).toHaveBeenCalledWith(
+          expect.objectContaining({
+            title: 'CVE fetch error',
+            color: 'danger',
+          }),
+        )
+      })
+    })
+
+    it('should set CVE error state on fetch failure', async () => {
+      mockFetch.mockRejectedValueOnce(new Error('Network error'))
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        const input = screen.getByTestId('input-field')
+        expect(input).toHaveAttribute('data-invalid', 'true')
+      })
+    })
+  }) // Test existing data scenarios and warnings
+  describe('Existing data scenarios', () => {
+    it('should show warning when adding notes to existing notes', async () => {
+      const { addToast } = require('@heroui/react')
+
+      const vulnerabilityWithNotes = {
+        ...mockVulnerability,
+        notes: [
+          {
+            id: 'existing-note',
+            title: 'Existing Note',
+            content: 'Existing content',
+            category: 'general' as const,
+          },
+        ],
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'CVE Title',
+                descriptions: [{ lang: 'en', value: 'New description' }],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={vulnerabilityWithNotes}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockAddToast).toHaveBeenCalledWith(
+          expect.objectContaining({
+            title: 'Data added warning',
+            color: 'warning',
+          }),
+        )
+      })
+    })
+
+    it('should show warning when adding scores to existing scores', async () => {
+      const vulnerabilityWithScores = {
+        ...mockVulnerability,
+        scores: [
+          {
+            id: 'existing-score',
+            cvssVersion: '3.0' as const,
+            vectorString: 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:P/I:P/A:P',
+            productIds: [],
+          },
+        ],
+      }
+
+      mockFetch.mockResolvedValueOnce({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'CVE Title',
+                descriptions: [{ lang: 'en', value: 'Description' }],
+                metrics: [
+                  {
+                    cvssV3_1: {
+                      vectorString:
+                        'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+                    },
+                  },
+                ],
+              },
+            },
+          }),
+      } as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={vulnerabilityWithScores}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      await user.click(screen.getByTestId('fetch-button'))
+
+      await waitFor(() => {
+        expect(mockAddToast).toHaveBeenCalledWith(
+          expect.objectContaining({
+            title: 'Data added warning',
+            color: 'warning',
+          }),
+        )
+      })
+    })
+  })
+
+  // Test input validation states
+  describe('Input validation', () => {
+    it('should disable fetch button when fetching is in progress', async () => {
+      // Create a promise that we can control
+      let resolvePromise: (value: any) => void
+      const pendingPromise = new Promise((resolve) => {
+        resolvePromise = resolve
+      })
+
+      mockFetch.mockReturnValueOnce(pendingPromise as any)
+
+      const user = userEvent.setup()
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      // Start the fetch
+      await user.click(screen.getByTestId('fetch-button'))
+
+      // Button should be disabled while fetching
+      const fetchButton = screen.getByTestId('fetch-button')
+      expect(fetchButton).toBeDisabled()
+      expect(fetchButton).toHaveAttribute('data-loading', 'true')
+
+      // Complete the fetch
+      resolvePromise!({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            containers: {
+              cna: {
+                title: 'Test Title',
+                descriptions: [{ lang: 'en', value: 'Description' }],
+              },
+            },
+          }),
+      })
+
+      await waitFor(() => {
+        expect(mockOnChange).toHaveBeenCalled()
+      })
+    })
+
+    it('should show input as invalid when CVE error is set', () => {
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      const input = screen.getByTestId('input-field')
+      expect(input).toHaveAttribute('data-invalid', 'false')
+    })
+
+    it('should handle disabled state from template utils', () => {
+      vi.mocked(checkReadOnly).mockReturnValueOnce(true)
+
+      render(
+        <FetchCVE
+          onChange={mockOnChange}
+          vulnerability={mockVulnerability}
+          vulnerabilityIndex={0}
+          cwes={mockCwes}
+        />,
+      )
+
+      const input = screen.getByTestId('input-field')
+      expect(input).toBeDisabled()
+    })
   })
 })
