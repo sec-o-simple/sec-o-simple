@@ -190,7 +190,7 @@ export default function FetchCVE({
           })
         }
 
-        let cweID = undefined
+        let cweID
         for (const pt of cna.problemTypes ?? []) {
           for (const d of pt?.descriptions ?? []) {
             if (d?.type === 'CWE' && d?.cweId && cweID === undefined) {
