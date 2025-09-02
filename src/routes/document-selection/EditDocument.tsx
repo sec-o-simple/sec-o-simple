@@ -81,7 +81,7 @@ export default function EditDocument() {
 
   return (
     <motion.div
-      className="flex w-96 flex-col gap-6 rounded-xl border-2 bg-content1 p-6"
+      className="border-default-200 bg-content1 flex w-96 flex-col gap-6 rounded-xl border-2 p-6"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -164,10 +164,10 @@ export default function EditDocument() {
               reader.readAsText(file)
             }
           }}
-          className="w-full rounded-md border p-2 text-sm outline-none focus:border-black"
+          className="border-default-200 w-full rounded-md border p-2 text-sm outline-none focus:border-black"
         />
         {errorMessage && (
-          <div className="px-3 text-sm text-danger">{errorMessage}</div>
+          <div className="text-danger px-3 text-sm">{errorMessage}</div>
         )}
       </div>
       <div className="self-end">

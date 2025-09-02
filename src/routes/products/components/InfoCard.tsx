@@ -2,7 +2,7 @@ import HSplit from '@/components/forms/HSplit'
 import IconButton from '@/components/forms/IconButton'
 import VSplit from '@/components/forms/VSplit'
 import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
-import { cn } from '@heroui/theme'
+import { cn } from '@heroui/react'
 import { HTMLProps, PropsWithChildren, ReactNode } from 'react'
 import { Link } from 'react-router'
 
@@ -75,7 +75,7 @@ export default function InfoCard(props: InfoCardProps) {
 
 function BoxedInfoCard(props: InfoCardProps) {
   return (
-    <div className="rounded-lg border bg-content1 px-4 py-2">
+    <div className="border-default-200 bg-content1 rounded-lg border px-4 py-2">
       <InfoCard {...props} variant="plain" />
     </div>
   )

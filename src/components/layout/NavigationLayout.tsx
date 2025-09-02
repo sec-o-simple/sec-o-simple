@@ -12,7 +12,7 @@ export default function NavigationLayout() {
 
   return (
     <div className="flex grow">
-      <div className="flex flex-col justify-between border-r p-4">
+      <div className="flex flex-col justify-between border-r border-default-200 p-4">
         <div className="flex basis-80 flex-col gap-2">
           <Section
             number={1}

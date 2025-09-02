@@ -89,7 +89,7 @@ export default function ComponentList<T extends object>({
                     <div
                       {...titleProps}
                       className={twMerge(
-                        'max-w-xl overflow-hidden text-ellipsis text-nowrap',
+                        'max-w-xl overflow-hidden text-nowrap text-ellipsis',
                         titleProps?.className,
                       )}
                     >

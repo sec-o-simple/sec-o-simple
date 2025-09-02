@@ -1,9 +1,11 @@
 /// <reference types="vitest" />
 import eslintPlugin from '@nabla/vite-plugin-eslint'
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react-swc'
 import path from 'path'
 import { defineConfig } from 'vite'
 import { vitePluginVersionMark } from 'vite-plugin-version-mark'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 /**
  * @see https://vitejs.dev/config/
@@ -15,6 +17,8 @@ export default defineConfig({
   plugins: [
     react(),
     eslintPlugin(),
+    tsconfigPaths(),
+    tailwindcss(),
     vitePluginVersionMark({
       name: 'sec-o-simple',
       version: process.env.BUILD_VERSION || undefined,

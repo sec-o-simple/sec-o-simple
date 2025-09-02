@@ -4,6 +4,7 @@ import {
   FontAwesomeIconProps,
 } from '@fortawesome/react-fontawesome'
 import { AnimatePresence, motion } from 'motion/react'
+import { useTranslation } from 'react-i18next'
 import {
   MButtonIconFinal,
   MButtonIconInitial,
@@ -12,7 +13,6 @@ import {
   MButtonRightFinal,
 } from './categorySelection.motions'
 import { DocumentSelectionState } from './DocumentSelection'
-import { useTranslation } from 'react-i18next'
 
 export default function CategorySelection({
   state,

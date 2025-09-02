@@ -131,7 +131,7 @@ vi.mock('@heroui/react', () => ({
   ),
 }))
 
-vi.mock('@heroui/theme', () => ({
+vi.mock('@heroui/react', () => ({
   cn: (...classes: string[]) => classes.filter(Boolean).join(' '),
 }))
 

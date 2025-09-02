@@ -35,7 +35,7 @@ export default function WizardStep({
         progress={progress ?? 1}
       />
       {(noContentWrapper && <>{children}</>) || (
-        <div className="flex flex-col gap-2 rounded-lg border-1 border-default-200 bg-content1 p-8">
+        <div className="border-default-200 bg-content1 border-default-200 flex flex-col gap-2 rounded-lg border p-8">
           {title && <div className="mb-4 text-xl font-semibold">{title}</div>}
           {children}
         </div>
@@ -48,7 +48,7 @@ export default function WizardStep({
                 typeof onBack === 'string' ? navigate(onBack) : onBack?.()
               }
               variant="bordered"
-              className="border-1 bg-content1"
+              className="bg-content1 border-1"
             >
               {t('common.back')}
             </Button>

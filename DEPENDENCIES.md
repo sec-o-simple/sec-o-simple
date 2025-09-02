@@ -40,6 +40,7 @@ The lockfile (`package-lock.json`) ensures repeatable installs.
 | `prettier`, `prettier-plugin-tailwindcss` | Opinionated code formatting with Tailwind-aware class ordering. |
 | `@nabla/vite-plugin-eslint` | ESLint integration into the Vite pipeline. |
 | `@vitejs/plugin-react-swc` | React support in Vite via the SWC compiler. |
-| `postcss`, `autoprefixer` | CSS processing pipeline required by Tailwind. |
 | `cypress` | End-to-end testing framework. |
 | `@types/*` (e.g., `@types/react`, `@types/react-dom`, `@types/node`) | Type definitions for TypeScript interoperability with external libraries. |
+| `@tailwindcss/vite` | Tailwind CSS v4 Vite plugin for native integration with Vite. |
+| `postcss`,  `@tailwindcss/postcss` | CSS processing for Tailwind; Tailwind’s PostCSS plugin for v4. |

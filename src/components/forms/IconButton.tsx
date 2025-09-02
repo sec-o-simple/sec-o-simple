@@ -25,7 +25,7 @@ export default function IconButton({
       <Button
         isIconOnly={true}
         variant="light"
-        className="rounded-full text-neutral-foreground"
+        className="text-neutral-foreground rounded-full"
         {...buttonProps}
       >
         <FontAwesomeIcon icon={icon} />

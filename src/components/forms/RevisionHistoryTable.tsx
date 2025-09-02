@@ -1,5 +1,16 @@
 import { Input } from '@/components/forms/Input'
+import { TDocumentInformation } from '@/routes/document-information/types/tDocumentInformation'
+import {
+  getDefaultRevisionHistoryEntry,
+  TRevisionHistoryEntry,
+} from '@/routes/document-information/types/tRevisionHistoryEntry'
+import { retrieveLatestVersion } from '@/utils/csafExport/latestVersion'
+import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
+import { useListState } from '@/utils/useListState'
+import { useListValidation } from '@/utils/validation/useListValidation'
+import { faTrash } from '@fortawesome/free-solid-svg-icons'
 import { Button } from '@heroui/button'
+import { Alert } from '@heroui/react'
 import {
   Table,
   TableBody,
@@ -8,21 +19,10 @@ import {
   TableHeader,
   TableRow,
 } from '@heroui/table'
-import IconButton from './IconButton'
-import { faTrash } from '@fortawesome/free-solid-svg-icons'
-import { useListState } from '@/utils/useListState'
-import {
-  getDefaultRevisionHistoryEntry,
-  TRevisionHistoryEntry,
-} from '@/routes/document-information/types/tRevisionHistoryEntry'
-import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
-import { TDocumentInformation } from '@/routes/document-information/types/tDocumentInformation'
-import { useListValidation } from '@/utils/validation/useListValidation'
-import { Alert } from '@heroui/react'
-import DatePicker from './DatePicker'
 import { useTranslation } from 'react-i18next'
 import semver from 'semver'
-import { retrieveLatestVersion } from '@/utils/csafExport/latestVersion'
+import DatePicker from './DatePicker'
+import IconButton from './IconButton'
 
 export default function RevisionHistoryTable() {
   const { t } = useTranslation()

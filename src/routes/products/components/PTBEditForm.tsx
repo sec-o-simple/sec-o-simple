@@ -59,7 +59,7 @@ export function PTBCreateEditForm({
             <Input
               label={t(`${category}.name`)}
               autoFocus
-              value={isReadonly ? ptbName ?? '' : name}
+              value={isReadonly ? (ptbName ?? '') : name}
               onValueChange={setName}
               isDisabled={
                 ptb ? checkTemplateReadonly(ptb, 'name') || isReadonly : false

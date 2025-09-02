@@ -1,8 +1,4 @@
-type JSONValue = string | number | boolean | null | JSONObject | JSONArray
-interface JSONObject {
-  [key: string]: JSONValue
-}
-interface JSONArray extends Array<JSONValue> {}
+import { JSONObject } from './csafImport'
 
 const IdentificationHelper = {
   hashes: [

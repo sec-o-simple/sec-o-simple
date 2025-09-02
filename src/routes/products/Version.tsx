@@ -122,7 +122,7 @@ export default function Version() {
       </Modal>
       <div className="font-bold">{t('products.relationship.label')}</div>
       {relationshipsByCategory.length === 0 && (
-        <span className="text-center text-neutral-foreground">
+        <span className="text-neutral-foreground text-center">
           {t('products.relationship.empty')}
         </span>
       )}
@@ -140,7 +140,7 @@ export default function Version() {
             key={category}
             aria-label={category}
             title={t(`products.relationship.categories.${category}`)}
-            className="border shadow-none"
+            className="border-default-200 border shadow-none"
           >
             <VSplit>
               {relationships.map((rel) => {
