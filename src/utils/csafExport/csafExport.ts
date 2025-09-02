@@ -91,7 +91,7 @@ export function createCSAFDocument(
           : '1',
         id: documentInformation.id,
       },
-      distribution: documentInformation.tlp
+      distribution: documentInformation.tlp?.label
         ? {
             tlp: {
               label: documentInformation.tlp?.label?.toUpperCase() || undefined,

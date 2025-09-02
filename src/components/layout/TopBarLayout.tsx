@@ -166,9 +166,8 @@ export default function TopBarLayout() {
           <ValidationErrorList />
         </div>
       </div>
-
-      <ToastProvider />
       <Outlet />
+      <ToastProvider />
     </div>
   )
 }

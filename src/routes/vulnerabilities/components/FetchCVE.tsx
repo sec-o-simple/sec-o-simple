@@ -3,11 +3,19 @@ import { Input } from '@/components/forms/Input'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
 import { useConfigStore } from '@/utils/useConfigStore'
 import useDocumentStore from '@/utils/useDocumentStore'
+import {
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from '@heroui/modal'
 import { addToast, Button, Tooltip } from '@heroui/react'
 import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { uid } from 'uid'
-import { TVulnerability } from '../types/tVulnerability'
+import { TCwe, TVulnerability } from '../types/tVulnerability'
 
 interface CNADescription {
   lang: string
@@ -23,16 +31,22 @@ export default function FetchCVE({
   onChange,
   vulnerability,
   vulnerabilityIndex,
+  cwes,
   isTouched = false,
 }: {
   onChange: (vulnerability: TVulnerability) => void
   vulnerability: TVulnerability
   vulnerabilityIndex: number
+  cwes: TCwe[]
   isTouched?: boolean
 }) {
   const { t } = useTranslation()
   const [fetchingCve, setFetchingCve] = useState(false)
   const [cveError, setCVEError] = useState(false)
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const [pendingOverrideFields, setPendingOverrideFields] = useState<string[]>(
+    [],
+  )
 
   const config = useConfigStore((state) => state.config)
   const docLanguage = useDocumentStore((state) =>
@@ -42,6 +56,26 @@ export default function FetchCVE({
   let apiUrl = 'https://cveawg.mitre.org/api/cve'
   if (config && config?.cveApiUrl) {
     apiUrl = config?.cveApiUrl
+  }
+
+  const checkForExistingData = () => {
+    const fieldsToOverride: string[] = []
+
+    if (vulnerability.title?.trim()) fieldsToOverride.push('Title')
+    if (vulnerability.cwe?.id) fieldsToOverride.push('CWE')
+
+    return fieldsToOverride
+  }
+
+  const handleFetchCVE = () => {
+    const overrideFields = checkForExistingData()
+
+    if (overrideFields.length > 0) {
+      setPendingOverrideFields(overrideFields)
+      onOpen()
+    } else {
+      fetchCVEData()
+    }
   }
 
   const fetchCVEData = async () => {
@@ -54,8 +88,6 @@ export default function FetchCVE({
       const data = await response.json()
       if (data.containers && data.containers.cna) {
         const cna = data.containers.cna
-
-        onChange({ ...vulnerability, title: cna.title })
 
         if (!cna.descriptions || cna.descriptions.length === 0) {
           addToast({
@@ -73,6 +105,7 @@ export default function FetchCVE({
             (desc.lang as string).toLowerCase() === docLanguage,
         )
 
+        // Fallback to English
         if (!descriptions || descriptions.length === 0) {
           descriptions = cna.descriptions?.filter(
             (desc: CNADescription) => desc.lang === 'en',
@@ -90,6 +123,7 @@ export default function FetchCVE({
           })
         })
 
+        const initialScoreCount = vulnerability.scores.length
         cna.metrics?.map((metric: CNAMetric) => {
           if (metric.cvssV3_1) {
             vulnerability.scores.push({
@@ -122,6 +156,64 @@ export default function FetchCVE({
             color: 'success',
           })
         }
+
+        // Show warning if notes were added to existing notes
+        const initialNoteCount =
+          vulnerability.notes.length - descriptions.length
+        if (initialNoteCount > 0 && descriptions.length > 0) {
+          addToast({
+            title: t('vulnerabilities.general.dataAddedWarning'),
+            description: t(
+              'vulnerabilities.general.dataAddedWarningDescription',
+              {
+                count: descriptions.length,
+                type: 'notes',
+              },
+            ),
+            color: 'warning',
+          })
+        }
+
+        // Show warning if scores were added to existing scores
+        const newScoreCount = vulnerability.scores.length - initialScoreCount
+        if (initialScoreCount > 0 && newScoreCount > 0) {
+          addToast({
+            title: t('vulnerabilities.general.dataAddedWarning'),
+            description: t(
+              'vulnerabilities.general.dataAddedWarningDescription',
+              {
+                count: newScoreCount,
+                type: 'scores',
+              },
+            ),
+            color: 'warning',
+          })
+        }
+
+        let cweID: string | undefined
+        for (const pt of cna.problemTypes ?? []) {
+          for (const d of pt?.descriptions ?? []) {
+            if (d?.type === 'CWE' && d?.cweId && cweID === undefined) {
+              cweID = d.cweId
+            }
+          }
+        }
+
+        let cweName = {}
+        if (cweID) {
+          cweName = {
+            cwe: {
+              id: cweID,
+              name: cwes.find((x) => x.id === cweID)?.name || '',
+            },
+          }
+        }
+
+        onChange({
+          ...vulnerability,
+          ...cweName,
+          title: cna.title ?? '',
+        })
       }
     } catch (error) {
       setCVEError(true)
@@ -170,7 +262,7 @@ export default function FetchCVE({
         >
           <Button
             color={fetchDisabled ? 'default' : 'primary'}
-            onPress={fetchCVEData}
+            onPress={handleFetchCVE}
             disabled={fetchDisabled}
             isLoading={fetchingCve}
           >
@@ -178,6 +270,45 @@ export default function FetchCVE({
           </Button>
         </Tooltip>
       )}
+
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                {t('vulnerabilities.general.dataOverrideWarning')}
+              </ModalHeader>
+              <ModalBody>
+                <p>
+                  {t('vulnerabilities.general.dataOverrideWarningDescription', {
+                    fields: pendingOverrideFields.join(', '),
+                  })}
+                </p>
+              </ModalBody>
+              <ModalFooter>
+                <Button
+                  color="danger"
+                  variant="light"
+                  onPress={onClose}
+                  data-testid="modal-cancel-button"
+                >
+                  {t('common.cancel')}
+                </Button>
+                <Button
+                  color="primary"
+                  onPress={() => {
+                    onClose()
+                    fetchCVEData()
+                  }}
+                  data-testid="modal-confirm-button"
+                >
+                  {t('common.confirm')}
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
     </HSplit>
   )
 }

@@ -320,6 +320,140 @@ vi.mock('@heroui/react', () => ({
     }
     return children
   }),
+  ToastProvider: vi.fn(() => {
+    const { createElement } = require('react')
+    return createElement('div', {
+      'data-testid': 'toast-provider',
+    })
+  }),
+  Modal: vi.fn(({ children, isOpen, ...props }) => {
+    const { createElement } = require('react')
+    if (!isOpen) return null
+    return createElement(
+      'div',
+      {
+        'data-testid': 'modal',
+        ...props,
+      },
+      children,
+    )
+  }),
+  ModalContent: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'div',
+      {
+        'data-testid': 'modal-content',
+        ...props,
+      },
+      children,
+    )
+  }),
+  ModalHeader: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'div',
+      {
+        'data-testid': 'modal-header',
+        ...props,
+      },
+      children,
+    )
+  }),
+  ModalBody: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'div',
+      {
+        'data-testid': 'modal-body',
+        ...props,
+      },
+      children,
+    )
+  }),
+  ModalFooter: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'div',
+      {
+        'data-testid': 'modal-footer',
+        ...props,
+      },
+      children,
+    )
+  }),
+  Table: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'table',
+      {
+        'data-testid': 'table',
+        ...props,
+      },
+      children,
+    )
+  }),
+  TableHeader: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'thead',
+      {
+        'data-testid': 'table-header',
+        ...props,
+      },
+      children,
+    )
+  }),
+  TableBody: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'tbody',
+      {
+        'data-testid': 'table-body',
+        ...props,
+      },
+      children,
+    )
+  }),
+  TableRow: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'tr',
+      {
+        'data-testid': 'table-row',
+        ...props,
+      },
+      children,
+    )
+  }),
+  TableColumn: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'th',
+      {
+        'data-testid': 'table-column',
+        'data-width': props.width,
+        ...props,
+      },
+      children,
+    )
+  }),
+  TableCell: vi.fn(({ children, ...props }) => {
+    const { createElement } = require('react')
+    return createElement(
+      'td',
+      {
+        'data-testid': 'table-cell',
+        ...props,
+      },
+      children,
+    )
+  }),
+  useDisclosure: vi.fn(() => ({
+    isOpen: false,
+    onOpen: vi.fn(),
+    onClose: vi.fn(),
+  })),
 }))
 
 vi.mock('@heroui/tooltip', () => ({

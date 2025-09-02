@@ -144,7 +144,13 @@
         "description": "Beschreibung",
         "cveNotesFetched": "CVE Notizen geladen",
         "cveNotesFetchedDescription_one": "{{count}} Notiz erfolgreich geladen und hinzugefügt",
-        "cveNotesFetchedDescription": "{{count}} Notizen erfolgreich geladen und hinzugefügt"
+        "cveNotesFetchedDescription": "{{count}} Notizen erfolgreich geladen und hinzugefügt",
+        "noCveNotesFound": "Keine CVE-Notizen gefunden",
+        "noCveNotesFoundDescription": "Für diese CVE-ID wurden keine CVE-Notizen gefunden",
+        "dataOverrideWarning": "Datenüberschreibung Warnung",
+        "dataOverrideWarningDescription": "Das Laden der CVE-Daten wird bestehende {{fields}} überschreiben. Möchten Sie fortfahren?",
+        "dataAddedWarning": "Daten hinzugefügt Warnung",
+        "dataAddedWarningDescription": "{{count}} neue {{type}} wurden zu den bestehenden Daten hinzugefügt"
       },
       "notes": "Notizen",
       "products": {

@@ -144,7 +144,13 @@
         "description": "Description",
         "cveNotesFetched": "CVE Notes fetched",
         "cveNotesFetchedDescription_one": "{{count}} CVE note fetched and added successfully",
-        "cveNotesFetchedDescription": "{{count}} CVE notes fetched and added successfully"
+        "cveNotesFetchedDescription": "{{count}} CVE notes fetched and added successfully",
+        "noCveNotesFound": "No CVE notes found",
+        "noCveNotesFoundDescription": "No CVE notes found for this CVE ID",
+        "dataOverrideWarning": "Data Override Warning",
+        "dataOverrideWarningDescription": "Fetching CVE data will override existing {{fields}}. Do you want to continue?",
+        "dataAddedWarning": "Data Added Warning",
+        "dataAddedWarningDescription": "{{count}} new {{type}} have been added to existing data"
       },
       "notes": "Notes",
       "products": {
