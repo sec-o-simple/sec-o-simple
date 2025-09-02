@@ -1,3 +1,12 @@
 @import 'tailwindcss';
 
-@config "../tailwind.config.js";
+@source "./src";
+@source "../node_modules/@heroui";
+
+@plugin "../hero.ts";
+
+@theme {
+  --color-editor: #f8fafc;
+  --color-gray: #6b7280;
+  --border-gray: #f0f0f0;
+}
