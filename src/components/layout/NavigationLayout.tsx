@@ -1,5 +1,4 @@
 import { usePathValidation } from '@/utils/validation/usePathValidation'
-import { ToastProvider } from '@heroui/react'
 import React, { PropsWithChildren, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { NavLink, Outlet, useLocation } from 'react-router'
@@ -62,8 +61,6 @@ export default function NavigationLayout() {
       <div className="bg-editor grow">
         <Outlet />
       </div>
-
-      <ToastProvider />
     </div>
   )
 }

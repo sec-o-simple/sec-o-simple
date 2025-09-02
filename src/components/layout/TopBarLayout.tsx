@@ -23,6 +23,7 @@ import {
   TableColumn,
   TableHeader,
   TableRow,
+  ToastProvider,
   Tooltip,
   useDisclosure,
 } from '@heroui/react'
@@ -166,6 +167,7 @@ export default function TopBarLayout() {
         </div>
       </div>
       <Outlet />
+      <ToastProvider />
     </div>
   )
 }
