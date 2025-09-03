@@ -11,9 +11,10 @@ import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import ProductCard from './components/ProductCard'
 import { PTBCreateEditForm } from './components/PTBEditForm'
+import { ProductFamilyChip } from './Product'
 import {
-  TProductTreeBranch,
   getDefaultProductTreeBranch,
+  TProductTreeBranch,
 } from './types/tProductTreeBranch'
 
 export default function VendorList() {
@@ -116,6 +117,7 @@ export default function VendorList() {
                 <ProductCard
                   key={product.id}
                   product={product}
+                  chips={<ProductFamilyChip product={product} />}
                   variant="boxed"
                   onEdit={() => {
                     setEditingProduct(product)

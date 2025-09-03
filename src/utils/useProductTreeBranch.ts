@@ -1,4 +1,5 @@
 import {
+  TProductFamily,
   TProductTreeBranch,
   TProductTreeBranchCategory,
   TProductTreeBranchWithParents,
@@ -18,10 +19,12 @@ export type TSelectableFullProductName = {
 export function useProductTreeBranch() {
   const { t } = useTranslation()
   const products = Object.values(useDocumentStore((store) => store.products))
+  const families = Object.values(useDocumentStore((store) => store.families))
   const relationships = Object.values(
     useDocumentStore((store) => store.relationships),
   )
   const updateProducts = useDocumentStore((store) => store.updateProducts)
+  const updateFamilies = useDocumentStore((store) => store.updateFamilies)
   const {
     getRelationshipsBySourceVersion,
     getRelationshipsByTargetVersion,
@@ -214,6 +217,11 @@ export function useProductTreeBranch() {
     updateProducts(newProducts)
   }
 
+  const addProductFamily = (family: TProductFamily) => {
+    const newFamilies = [...families, family]
+    updateFamilies(newFamilies)
+  }
+
   const updatePTB = (ptb: TProductTreeBranch) => {
     const updateBranch = (branch: TProductTreeBranch): TProductTreeBranch =>
       branch.id === ptb.id
@@ -223,6 +231,11 @@ export function useProductTreeBranch() {
     updateProducts(newProducts)
 
     return newProducts
+  }
+
+  const updateFamily = (family: TProductFamily) => {
+    const newFamilies = families.map((f) => (f.id === family.id ? family : f))
+    updateFamilies(newFamilies)
   }
 
   const deletePTB = (id: string) => {
@@ -260,8 +273,13 @@ export function useProductTreeBranch() {
     }
   }
 
+  const deleteFamily = (id: string) => {
+    updateFamilies(families.filter((fam) => fam.id !== id))
+  }
+
   return {
     rootBranch: products,
+    families,
     findProductTreeBranch,
     findProductTreeBranchWithParents,
     getFullProductName,
@@ -272,7 +290,10 @@ export function useProductTreeBranch() {
     getSelectableRefs,
     getGroupedSelectableRefs,
     addPTB,
+    addProductFamily,
     updatePTB,
+    updateFamily,
     deletePTB,
+    deleteFamily,
   }
 }

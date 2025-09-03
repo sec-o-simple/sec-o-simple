@@ -1,19 +1,20 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router'
-import TopBarLayout from './components/layout/TopBarLayout'
-import DocumentSelection from './routes/document-selection/DocumentSelection'
 import NavigationLayout from './components/layout/NavigationLayout'
+import TopBarLayout from './components/layout/TopBarLayout'
+import Acknowledgments from './routes/document-information/Acknowledgments'
 import General from './routes/document-information/General'
 import Notes from './routes/document-information/Notes'
 import Publisher from './routes/document-information/Publisher'
 import References from './routes/document-information/References'
+import Tracking from './routes/document-information/Tracking'
+import DocumentSelection from './routes/document-selection/DocumentSelection'
+import Product from './routes/products/Product'
+import ProductFamily from './routes/products/ProductFamily'
+import ProductManagement from './routes/products/ProductManagement'
+import Version from './routes/products/Version'
 import Vulnerabilities from './routes/vulnerabilities/Vulnerabilities'
 import { useTemplateInitializer } from './utils/template'
 import { useConfigInitializer } from './utils/useConfigStore'
-import ProductManagement from './routes/products/ProductManagement'
-import Product from './routes/products/Product'
-import Version from './routes/products/Version'
-import Acknowledgments from './routes/document-information/Acknowledgments'
-import Tracking from './routes/document-information/Tracking'
 
 export default function App() {
   useConfigInitializer()
@@ -33,10 +34,13 @@ export default function App() {
               <Route path="references" element={<References />} />
               <Route path="acknowledgments" element={<Acknowledgments />} />
             </Route>
-            <Route path="product-management">
-              <Route index element={<ProductManagement />} />
-              <Route path="product/:productId" element={<Product />} />
-              <Route path="version/:productVersionId" element={<Version />} />
+            <Route path="products">
+              <Route path="families" element={<ProductFamily />} />
+              <Route path="management">
+                <Route index element={<ProductManagement />} />
+                <Route path="product/:productId" element={<Product />} />
+                <Route path="version/:productVersionId" element={<Version />} />
+              </Route>
             </Route>
             <Route path="vulnerabilities" element={<Vulnerabilities />} />
             <Route path="tracking" element={<Tracking />} />

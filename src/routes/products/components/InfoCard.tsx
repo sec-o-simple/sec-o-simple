@@ -6,24 +6,28 @@ import { cn } from '@heroui/react'
 import { HTMLProps, PropsWithChildren, ReactNode } from 'react'
 import { Link } from 'react-router'
 
-export type InfoCardProps = HTMLProps<HTMLDivElement> &
-  PropsWithChildren<{
-    variant?: 'boxed' | 'plain'
-    title: string
-    description?: string
-    startContent?: ReactNode
-    endContent?: ReactNode
-    linkTo?: string
-    onEdit?: () => void
-    onDelete?: () => void
-  }>
+export type InfoCardProps = PropsWithChildren<{
+  variant?: 'boxed' | 'plain'
+  title: string | ReactNode
+  description?: string
+  startContent?: ReactNode
+  endContent?: ReactNode
+  linkTo?: string
+  onEdit?: () => void
+  onDelete?: () => void
+}> &
+  HTMLProps<HTMLDivElement>
 
-export default function InfoCard(props: InfoCardProps) {
+export default function InfoCard({
+  title,
+  ...props
+}: {
+  title: string | ReactNode
+} & InfoCardProps) {
   if (props.variant === 'boxed') {
-    return <BoxedInfoCard {...props} />
+    return <BoxedInfoCard title={title} {...props} />
   } else {
     const {
-      title,
       description,
       startContent,
       endContent,
@@ -44,7 +48,13 @@ export default function InfoCard(props: InfoCardProps) {
                 'hover:underline': linkTo,
               })}
             >
-              {linkTo ? <Link to={linkTo}>{title}</Link> : title}
+              {linkTo ? (
+                <Link to={linkTo}>
+                  <div>{title}</div>
+                </Link>
+              ) : (
+                title
+              )}
             </div>
 
             <div className="text-neutral-foreground">{description}</div>

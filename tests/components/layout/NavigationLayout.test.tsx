@@ -73,7 +73,7 @@ describe('NavigationLayout', () => {
 
     // Check for navigation text (using actual translation keys from the component)
     expect(screen.getByText('nav.documentInfo')).toBeInTheDocument()
-    expect(screen.getByText('nav.products')).toBeInTheDocument()
+    expect(screen.getByText('nav.productManagement.title')).toBeInTheDocument()
     expect(screen.getByText('nav.vulnerabilities')).toBeInTheDocument()
     expect(screen.getByText('nav.tracking')).toBeInTheDocument()
   })

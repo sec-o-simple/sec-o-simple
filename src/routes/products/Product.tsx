@@ -6,7 +6,7 @@ import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { useRelationships } from '@/utils/useRelationships'
 import { faLink } from '@fortawesome/free-solid-svg-icons'
 import { Modal, useDisclosure } from '@heroui/modal'
-import { BreadcrumbItem } from '@heroui/react'
+import { BreadcrumbItem, Chip } from '@heroui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate, useParams } from 'react-router'
@@ -14,6 +14,7 @@ import { uid } from 'uid'
 import InfoCard from './components/InfoCard'
 import { PTBCreateEditForm } from './components/PTBEditForm'
 import SubMenuHeader from './components/SubMenuHeader'
+import { getFamilyChain } from './ProductFamily'
 import {
   getDefaultProductTreeBranch,
   TProductTreeBranch,
@@ -22,6 +23,34 @@ import {
   getDefaultRelationship,
   TRelationshipCategory,
 } from './types/tRelationship'
+
+export function ProductFamilyChip({
+  product,
+}: {
+  product: TProductTreeBranch
+}) {
+  const navigate = useNavigate()
+  const { families } = useProductTreeBranch()
+
+  if (!product.familyId) return null
+
+  const family = families.find((f) => f.id === product.familyId)
+  if (!family) return null
+
+  return (
+    <Chip
+      radius="md"
+      color="primary"
+      variant="flat"
+      className="cursor-pointer hover:underline"
+      onClick={() => navigate('/product-families')}
+    >
+      {getFamilyChain(family)
+        .map((f) => f.name)
+        .join(' / ')}
+    </Chip>
+  )
+}
 
 export default function Product() {
   const { productId } = useParams()
@@ -46,7 +75,7 @@ export default function Product() {
   return (
     <WizardStep progress={2} noContentWrapper={true}>
       <Breadcrumbs>
-        <BreadcrumbItem href="/#/product-management">
+        <BreadcrumbItem href="/#/products/management">
           {product.parent?.name !== ''
             ? product.parent?.name
             : t('untitled.vendor')}
@@ -62,7 +91,7 @@ export default function Product() {
             ? t('products.product.label') + ' ' + name
             : t('untitled.product_name')
         }
-        backLink={'/product-management'}
+        backLink={'/products/management'}
         actionTitle={t('common.add', {
           label: t('products.product.version.label'),
         })}
@@ -170,7 +199,7 @@ export default function Product() {
           onDelete={() => deletePTB(version.id)}
           linkTo={
             sosDocumentType !== 'Software'
-              ? `/product-management/version/${version.id}`
+              ? `/products/management/version/${version.id}`
               : undefined
           }
           endContent={
@@ -181,7 +210,7 @@ export default function Product() {
                   count: 2,
                 })}
                 onPress={() =>
-                  navigate(`/product-management/version/${version.id}`)
+                  navigate(`/products/management/version/${version.id}`)
                 }
               />
             ) : undefined

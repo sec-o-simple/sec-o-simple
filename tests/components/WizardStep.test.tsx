@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import '@testing-library/jest-dom'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import WizardStep from '../../src/components/WizardStep'
 
 // Mock React Router
@@ -15,7 +15,7 @@ vi.mock('react-i18next', () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
         'nav.document': 'Document',
-        'nav.products': 'Products', 
+        'nav.productManagement.title': 'Product Management',
         'nav.vulnerabilities': 'Vulnerabilities',
         'nav.tracking': 'Tracking',
         'common.back': 'Back',
@@ -26,10 +26,10 @@ vi.mock('react-i18next', () => ({
   }),
 }))
 
-// Mock HeroUI Button component  
+// Mock HeroUI Button component
 vi.mock('@heroui/button', () => ({
   Button: vi.fn(({ children, onPress, variant, color, className }: any) => (
-    <button 
+    <button
       onClick={onPress}
       data-variant={variant}
       data-color={color}
@@ -61,9 +61,9 @@ describe('WizardStep', () => {
     const { container } = render(
       <WizardStep title="Test Step">
         <div>Test content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     expect(screen.getByTestId('progress-bar')).toBeInTheDocument()
     expect(screen.getByText('Test content')).toBeInTheDocument()
     expect(screen.getByText('Test Step')).toBeInTheDocument()
@@ -74,9 +74,9 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Test" progress={2}>
         <div>Content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     const progressBar = screen.getByTestId('progress-bar')
     expect(progressBar).toHaveAttribute('data-progress', '2')
     expect(screen.getByTestId('section-0')).toHaveTextContent('Document')
@@ -89,9 +89,9 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Test">
         <div data-testid="child-content">Child content here</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     expect(screen.getByTestId('child-content')).toBeInTheDocument()
     expect(screen.getByText('Child content here')).toBeInTheDocument()
   })
@@ -100,9 +100,9 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Test" noContentWrapper>
         <div data-testid="unwrapped-content">Unwrapped content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     expect(screen.getByTestId('unwrapped-content')).toBeInTheDocument()
     expect(screen.getByText('Unwrapped content')).toBeInTheDocument()
   })
@@ -111,9 +111,9 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Custom Title">
         <div>Content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     expect(screen.getByText('Custom Title')).toBeInTheDocument()
   })
 
@@ -121,9 +121,9 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="" progress={1}>
         <div>Content without title</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     expect(screen.getByText('Content without title')).toBeInTheDocument()
     // Check that no title heading element is rendered when title is empty
     expect(screen.queryByRole('heading')).not.toBeInTheDocument()
@@ -134,12 +134,12 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Test" onBack={mockOnBack}>
         <div>Content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     const backButton = screen.getByText('Back')
     expect(backButton).toBeInTheDocument()
-    
+
     fireEvent.click(backButton)
     expect(mockOnBack).toHaveBeenCalledTimes(1)
   })
@@ -149,12 +149,12 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Test" onContinue={mockOnContinue}>
         <div>Content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     const continueButton = screen.getByText('Next')
     expect(continueButton).toBeInTheDocument()
-    
+
     fireEvent.click(continueButton)
     expect(mockOnContinue).toHaveBeenCalledTimes(1)
   })
@@ -163,12 +163,12 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Test" onBack="/previous">
         <div>Content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     const backButton = screen.getByText('Back')
     fireEvent.click(backButton)
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/previous')
   })
 
@@ -176,12 +176,12 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Test" onContinue="/next">
         <div>Content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     const continueButton = screen.getByText('Next')
     fireEvent.click(continueButton)
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/next')
   })
 
@@ -189,9 +189,9 @@ describe('WizardStep', () => {
     render(
       <WizardStep title="Test">
         <div>Content</div>
-      </WizardStep>
+      </WizardStep>,
     )
-    
+
     const progressBar = screen.getByTestId('progress-bar')
     expect(progressBar).toHaveAttribute('data-progress', '1')
   })
