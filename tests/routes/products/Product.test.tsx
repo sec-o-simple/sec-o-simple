@@ -1,9 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
+import { fireEvent, render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the Product component to test the actual implementation
+vi.unmock('../../../src/routes/products/Product')
+
 import Product from '../../../src/routes/products/Product'
-import type { TProductTreeBranch, TProductTreeBranchWithParents } from '../../../src/routes/products/types/tProductTreeBranch'
-import type { TRelationship } from '../../../src/routes/products/types/tRelationship'
+import type {
+  TProductTreeBranch,
+  TProductTreeBranchWithParents,
+} from '../../../src/routes/products/types/tProductTreeBranch'
 
 // Mock all the dependencies
 const mockUseParams = vi.fn()
@@ -52,7 +57,7 @@ vi.mock('../../../src/utils/useProductTreeBranch', () => ({
         fullProductName: 'Test Vendor / Test Product / Version 1.0',
       },
       {
-        id: 'version-2', 
+        id: 'version-2',
         fullProductName: 'Another Vendor / Related Product / Version 2.0',
       },
     ]),
@@ -77,8 +82,12 @@ const mockOnOpenChange = vi.fn()
 const mockUseDisclosure = vi.fn()
 
 vi.mock('@heroui/modal', () => ({
-  Modal: ({ children, isOpen, onOpenChange }: any) => 
-    isOpen ? <div data-testid="modal" onClick={onOpenChange}>{children}</div> : null,
+  Modal: ({ children, isOpen, onOpenChange }: any) =>
+    isOpen ? (
+      <div data-testid="modal" onClick={onOpenChange}>
+        {children}
+      </div>
+    ) : null,
   useDisclosure: () => mockUseDisclosure(),
 }))
 
@@ -99,11 +108,7 @@ vi.mock('../../../src/components/forms/Breadcrumbs', () => ({
 
 vi.mock('../../../src/components/forms/IconButton', () => ({
   default: ({ icon, tooltip, onPress }: any) => (
-    <button 
-      data-testid="icon-button"
-      data-tooltip={tooltip}
-      onClick={onPress}
-    >
+    <button data-testid="icon-button" data-tooltip={tooltip} onClick={onPress}>
       Icon Button
     </button>
   ),
@@ -111,8 +116,8 @@ vi.mock('../../../src/components/forms/IconButton', () => ({
 
 vi.mock('../../../src/components/WizardStep', () => ({
   default: ({ children, progress, noContentWrapper }: any) => (
-    <div 
-      data-testid="wizard-step" 
+    <div
+      data-testid="wizard-step"
       data-progress={progress}
       data-no-content-wrapper={noContentWrapper}
     >
@@ -123,14 +128,18 @@ vi.mock('../../../src/components/WizardStep', () => ({
 
 vi.mock('../../../src/routes/products/components/InfoCard', () => ({
   default: ({ title, variant, onEdit, onDelete, linkTo, endContent }: any) => (
-    <div 
-      data-testid="info-card" 
-      data-variant={variant} 
+    <div
+      data-testid="info-card"
+      data-variant={variant}
       {...(linkTo !== undefined && { 'data-link-to': linkTo })}
     >
       <div data-testid="info-card-title">{title}</div>
-      <button data-testid="edit-button" onClick={onEdit}>Edit</button>
-      <button data-testid="delete-button" onClick={onDelete}>Delete</button>
+      <button data-testid="edit-button" onClick={onEdit}>
+        Edit
+      </button>
+      <button data-testid="delete-button" onClick={onDelete}>
+        Delete
+      </button>
       {endContent && <div data-testid="end-content">{endContent}</div>}
     </div>
   ),
@@ -140,7 +149,9 @@ vi.mock('../../../src/routes/products/components/SubMenuHeader', () => ({
   default: ({ title, backLink, actionTitle, onAction }: any) => (
     <div data-testid="sub-menu-header">
       <div data-testid="title">{title}</div>
-      <div data-testid="back-link" data-href={backLink}>Back</div>
+      <div data-testid="back-link" data-href={backLink}>
+        Back
+      </div>
       <button data-testid="action-button" onClick={onAction}>
         {actionTitle}
       </button>
@@ -152,26 +163,30 @@ vi.mock('../../../src/routes/products/components/PTBEditForm', () => ({
   PTBCreateEditForm: ({ ptb, category, onSave }: any) => (
     <div data-testid="ptb-create-edit-form" data-category={category}>
       <div data-testid="ptb-data">{JSON.stringify(ptb)}</div>
-      <button 
-        data-testid="save-button" 
-        onClick={() => onSave({ 
-          id: ptb?.id || 'new-id', 
-          name: 'Test Version',
-          category: 'product_version',
-          description: '',
-          subBranches: [],
-        })}
+      <button
+        data-testid="save-button"
+        onClick={() =>
+          onSave({
+            id: ptb?.id || 'new-id',
+            name: 'Test Version',
+            category: 'product_version',
+            description: '',
+            subBranches: [],
+          })
+        }
       >
         Save
       </button>
-      <button 
-        data-testid="save-new-button" 
-        onClick={() => onSave({ 
-          name: 'New Version',
-          category: 'product_version',
-          description: '',
-          subBranches: [],
-        })}
+      <button
+        data-testid="save-new-button"
+        onClick={() =>
+          onSave({
+            name: 'New Version',
+            category: 'product_version',
+            description: '',
+            subBranches: [],
+          })
+        }
       >
         Save New
       </button>
@@ -184,7 +199,8 @@ const mockGetDefaultProductTreeBranch = vi.fn()
 const mockGetPTBName = vi.fn()
 
 vi.mock('../../../src/routes/products/types/tProductTreeBranch', () => ({
-  getDefaultProductTreeBranch: (category: any) => mockGetDefaultProductTreeBranch(category),
+  getDefaultProductTreeBranch: (category: any) =>
+    mockGetDefaultProductTreeBranch(category),
   getPTBName: (product: any) => mockGetPTBName(product),
 }))
 
@@ -195,7 +211,9 @@ vi.mock('../../../src/routes/products/types/tRelationship', () => ({
 }))
 
 // Test data helpers
-const createMockProduct = (overrides?: Partial<TProductTreeBranchWithParents>): TProductTreeBranchWithParents => ({
+const createMockProduct = (
+  overrides?: Partial<TProductTreeBranchWithParents>,
+): TProductTreeBranchWithParents => ({
   id: 'product-1',
   category: 'product_name' as const,
   name: 'Test Product',
@@ -224,7 +242,7 @@ const createMockVersion = (id: string, name: string): TProductTreeBranch => ({
 describe('Product', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     // Setup default mocks
     mockUseParams.mockReturnValue({ productId: 'product-1' })
     mockUseNavigate.mockReturnValue(mockNavigate)
@@ -237,7 +255,7 @@ describe('Product', () => {
       onOpen: mockOnOpen,
       onOpenChange: mockOnOpenChange,
     })
-    
+
     // Setup utility function mocks
     mockGetDefaultProductTreeBranch.mockImplementation((category) => ({
       id: 'default-id',
@@ -249,20 +267,20 @@ describe('Product', () => {
     }))
     mockGetPTBName.mockImplementation((product) => {
       if (!product) return { name: 'Default Name' }
-      
+
       // For product versions, use untitled.product_version when name is empty
       if (product.category === 'product_version') {
-        return { 
+        return {
           name: product.name || 'Untitled Version',
-          isReadonly: false
+          isReadonly: false,
         }
       }
-      
+
       // For other categories (like product_name), just return the name as-is
       // The component will handle the untitled logic
-      return { 
+      return {
         name: product.name,
-        isReadonly: false
+        isReadonly: false,
       }
     })
     mockGetDefaultRelationship.mockReturnValue({
@@ -273,7 +291,7 @@ describe('Product', () => {
       relationships: [],
       name: '',
     })
-    
+
     mockFindProductTreeBranchWithParents.mockReturnValue(createMockProduct())
     mockUpdatePTB.mockReturnValue([])
   })
@@ -309,7 +327,7 @@ describe('Product', () => {
           description: '',
           subBranches: [],
           parent: null,
-        }
+        },
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
 
@@ -345,9 +363,16 @@ describe('Product', () => {
 
       render(<Product />)
 
-      expect(screen.getByTestId('title')).toHaveTextContent('Product Test Product')
-      expect(screen.getByTestId('back-link')).toHaveAttribute('data-href', '/product-management')
-      expect(screen.getByTestId('action-button')).toHaveTextContent('Add Version')
+      expect(screen.getByTestId('title')).toHaveTextContent(
+        'Product Test Product',
+      )
+      expect(screen.getByTestId('back-link')).toHaveAttribute(
+        'data-href',
+        '/products/management',
+      )
+      expect(screen.getByTestId('action-button')).toHaveTextContent(
+        'Add Version',
+      )
     })
 
     it('should show untitled product name when product has no name', () => {
@@ -418,7 +443,7 @@ describe('Product', () => {
         subBranches: [
           createMockVersion('v1', 'Version 1'),
           createMockVersion('v2', 'Version 2'),
-        ]
+        ],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
 
@@ -441,7 +466,7 @@ describe('Product', () => {
         subBranches: [
           createMockVersion('v1', 'Version 1'),
           createMockVersion('v2', 'Version 2'),
-        ]
+        ],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
 
@@ -457,7 +482,7 @@ describe('Product', () => {
   describe('InfoCard Interactions', () => {
     beforeEach(() => {
       const product = createMockProduct({
-        subBranches: [createMockVersion('v1', 'Version 1')]
+        subBranches: [createMockVersion('v1', 'Version 1')],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
     })
@@ -495,14 +520,17 @@ describe('Product', () => {
       })
 
       const product = createMockProduct({
-        subBranches: [createMockVersion('v1', 'Version 1')]
+        subBranches: [createMockVersion('v1', 'Version 1')],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
 
       render(<Product />)
 
       const infoCard = screen.getByTestId('info-card')
-      expect(infoCard).toHaveAttribute('data-link-to', '/product-management/version/v1')
+      expect(infoCard).toHaveAttribute(
+        'data-link-to',
+        '/products/management/version/v1',
+      )
       expect(screen.getByTestId('end-content')).toBeInTheDocument()
       expect(screen.getByTestId('icon-button')).toBeInTheDocument()
     })
@@ -514,7 +542,7 @@ describe('Product', () => {
       })
 
       const product = createMockProduct({
-        subBranches: [createMockVersion('v1', 'Version 1')]
+        subBranches: [createMockVersion('v1', 'Version 1')],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
 
@@ -532,7 +560,7 @@ describe('Product', () => {
       })
 
       const product = createMockProduct({
-        subBranches: [createMockVersion('v1', 'Version 1')]
+        subBranches: [createMockVersion('v1', 'Version 1')],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
 
@@ -541,7 +569,9 @@ describe('Product', () => {
       const iconButton = screen.getByTestId('icon-button')
       fireEvent.click(iconButton)
 
-      expect(mockNavigate).toHaveBeenCalledWith('/product-management/version/v1')
+      expect(mockNavigate).toHaveBeenCalledWith(
+        '/products/management/version/v1',
+      )
     })
   })
 
@@ -570,9 +600,9 @@ describe('Product', () => {
     })
 
     it('should handle creating new version with Software product type', () => {
-      const product = createMockProduct({ 
+      const product = createMockProduct({
         type: 'Software',
-        subBranches: []
+        subBranches: [],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
       mockUpdatePTB.mockReturnValue([
@@ -581,10 +611,10 @@ describe('Product', () => {
           subBranches: [
             {
               id: 'other-product',
-              subBranches: [{ id: 'other-version-1' }]
-            }
-          ]
-        }
+              subBranches: [{ id: 'other-version-1' }],
+            },
+          ],
+        },
       ])
 
       render(<Product />)
@@ -597,9 +627,9 @@ describe('Product', () => {
     })
 
     it('should handle creating new version with Hardware product type', () => {
-      const product = createMockProduct({ 
+      const product = createMockProduct({
         type: 'Hardware',
-        subBranches: []
+        subBranches: [],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
       mockUpdatePTB.mockReturnValue([
@@ -608,10 +638,10 @@ describe('Product', () => {
           subBranches: [
             {
               id: 'other-product',
-              subBranches: [{ id: 'other-version-1' }]
-            }
-          ]
-        }
+              subBranches: [{ id: 'other-version-1' }],
+            },
+          ],
+        },
       ])
 
       render(<Product />)
@@ -624,9 +654,9 @@ describe('Product', () => {
     })
 
     it('should not create relationships for unsupported product types', () => {
-      const product = createMockProduct({ 
+      const product = createMockProduct({
         type: undefined,
-        subBranches: []
+        subBranches: [],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
 
@@ -639,10 +669,10 @@ describe('Product', () => {
     })
 
     it('should skip relationship creation when source and target are the same', () => {
-      const product = createMockProduct({ 
+      const product = createMockProduct({
         id: 'product-1',
         type: 'Software',
-        subBranches: []
+        subBranches: [],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
       mockUpdatePTB.mockReturnValue([
@@ -651,10 +681,10 @@ describe('Product', () => {
           subBranches: [
             {
               id: 'product-1', // Same as current product
-              subBranches: [{ id: 'version-1' }]
-            }
-          ]
-        }
+              subBranches: [{ id: 'version-1' }],
+            },
+          ],
+        },
       ])
 
       render(<Product />)
@@ -666,9 +696,9 @@ describe('Product', () => {
     })
 
     it('should not create relationships when versions are empty', () => {
-      const product = createMockProduct({ 
+      const product = createMockProduct({
         type: 'Software',
-        subBranches: []
+        subBranches: [],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
       mockUpdatePTB.mockReturnValue([
@@ -677,10 +707,10 @@ describe('Product', () => {
           subBranches: [
             {
               id: 'other-product',
-              subBranches: [] // No versions
-            }
-          ]
-        }
+              subBranches: [], // No versions
+            },
+          ],
+        },
       ])
 
       render(<Product />)
@@ -715,7 +745,7 @@ describe('Product', () => {
       mockGetPTBName.mockReturnValue({ name: null })
 
       const product = createMockProduct({
-        subBranches: [createMockVersion('v1', '')]
+        subBranches: [createMockVersion('v1', '')],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
 
@@ -735,10 +765,10 @@ describe('Product', () => {
     })
 
     it('should create correct relationships for Software products', () => {
-      const product = createMockProduct({ 
+      const product = createMockProduct({
         id: 'software-product',
         type: 'Software',
-        subBranches: []
+        subBranches: [],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
       mockUpdatePTB.mockReturnValue([
@@ -748,13 +778,10 @@ describe('Product', () => {
             {
               id: 'hardware-product',
               type: 'Hardware',
-              subBranches: [
-                { id: 'hw-version-1' },
-                { id: 'hw-version-2' }
-              ]
-            }
-          ]
-        }
+              subBranches: [{ id: 'hw-version-1' }, { id: 'hw-version-2' }],
+            },
+          ],
+        },
       ])
 
       render(<Product />)
@@ -777,15 +804,15 @@ describe('Product', () => {
               product2VersionId: 'hw-version-2',
             }),
           ],
-        })
+        }),
       )
     })
 
     it('should create correct relationships for Hardware products', () => {
-      const product = createMockProduct({ 
+      const product = createMockProduct({
         id: 'hardware-product',
         type: 'Hardware',
-        subBranches: []
+        subBranches: [],
       })
       mockFindProductTreeBranchWithParents.mockReturnValue(product)
       mockUpdatePTB.mockReturnValue([
@@ -795,13 +822,10 @@ describe('Product', () => {
             {
               id: 'software-product',
               type: 'Software',
-              subBranches: [
-                { id: 'sw-version-1' },
-                { id: 'sw-version-2' }
-              ]
-            }
-          ]
-        }
+              subBranches: [{ id: 'sw-version-1' }, { id: 'sw-version-2' }],
+            },
+          ],
+        },
       ])
 
       render(<Product />)
@@ -824,7 +848,7 @@ describe('Product', () => {
               product2VersionId: 'default-id', // New version ID
             }),
           ],
-        })
+        }),
       )
     })
   })

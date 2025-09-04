@@ -80,7 +80,9 @@ describe('WizardStep', () => {
     const progressBar = screen.getByTestId('progress-bar')
     expect(progressBar).toHaveAttribute('data-progress', '2')
     expect(screen.getByTestId('section-0')).toHaveTextContent('Document')
-    expect(screen.getByTestId('section-1')).toHaveTextContent('Products')
+    expect(screen.getByTestId('section-1')).toHaveTextContent(
+      'Product Management',
+    )
     expect(screen.getByTestId('section-2')).toHaveTextContent('Vulnerabilities')
     expect(screen.getByTestId('section-3')).toHaveTextContent('Tracking')
   })

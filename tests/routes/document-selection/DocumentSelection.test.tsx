@@ -1,6 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the DocumentSelection component to test the actual implementation
+vi.unmock('../../../src/routes/document-selection/DocumentSelection')
+
 import DocumentSelection from '../../../src/routes/document-selection/DocumentSelection'
 
 // Mock dependencies
@@ -8,20 +12,20 @@ vi.mock('../../../src/routes/document-selection/CategorySelection', () => ({
   default: ({ state, onSelect }: any) => (
     <div data-testid="category-selection">
       <div data-testid="current-state">{state}</div>
-      <button 
-        data-testid="select-create" 
+      <button
+        data-testid="select-create"
         onClick={() => onSelect('createDocument')}
       >
         Create Document
       </button>
-      <button 
-        data-testid="select-edit" 
+      <button
+        data-testid="select-edit"
         onClick={() => onSelect('editDocument')}
       >
         Edit Document
       </button>
-      <button 
-        data-testid="select-new-or-open" 
+      <button
+        data-testid="select-new-or-open"
         onClick={() => onSelect('selectNewOrOpen')}
       >
         Select New or Open
@@ -37,13 +41,13 @@ vi.mock('../../../src/routes/document-selection/CreateDocument', () => ({
 }))
 
 vi.mock('../../../src/routes/document-selection/EditDocument', () => ({
-  default: () => (
-    <div data-testid="edit-document">Edit Document Component</div>
-  ),
+  default: () => <div data-testid="edit-document">Edit Document Component</div>,
 }))
 
 vi.mock('framer-motion', () => ({
-  AnimatePresence: ({ children }: any) => <div data-testid="animate-presence">{children}</div>,
+  AnimatePresence: ({ children }: any) => (
+    <div data-testid="animate-presence">{children}</div>
+  ),
 }))
 
 vi.mock('../../../src/components/forms/LanguageSwitcher', () => ({
@@ -64,7 +68,9 @@ describe('DocumentSelection', () => {
       render(<DocumentSelection />)
 
       expect(screen.getByTestId('category-selection')).toBeInTheDocument()
-      expect(screen.getByTestId('current-state')).toHaveTextContent('selectNewOrOpen')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'selectNewOrOpen',
+      )
       expect(screen.getByTestId('animate-presence')).toBeInTheDocument()
       expect(screen.getByTestId('language-switcher')).toBeInTheDocument()
     })
@@ -72,15 +78,32 @@ describe('DocumentSelection', () => {
     it('should render with correct layout classes', () => {
       render(<DocumentSelection />)
 
-      const mainContainer = screen.getByTestId('category-selection').parentElement
-      expect(mainContainer).toHaveClass('flex', 'grow', 'flex-col', 'items-center', 'gap-8', 'bg-gradient-to-b', 'from-sky-50', 'to-white')
+      const mainContainer =
+        screen.getByTestId('category-selection').parentElement
+      expect(mainContainer).toHaveClass(
+        'flex',
+        'grow',
+        'flex-col',
+        'items-center',
+        'gap-8',
+        'bg-gradient-to-b',
+        'from-sky-50',
+        'to-white',
+      )
     })
 
     it('should render language switcher at the bottom', () => {
       render(<DocumentSelection />)
 
-      const languageSwitcherContainer = screen.getByTestId('language-switcher').parentElement
-      expect(languageSwitcherContainer).toHaveClass('absolute', 'inset-x-0', 'bottom-4', 'flex', 'justify-center')
+      const languageSwitcherContainer =
+        screen.getByTestId('language-switcher').parentElement
+      expect(languageSwitcherContainer).toHaveClass(
+        'absolute',
+        'inset-x-0',
+        'bottom-4',
+        'flex',
+        'justify-center',
+      )
     })
   })
 
@@ -88,7 +111,9 @@ describe('DocumentSelection', () => {
     it('should start with selectNewOrOpen state', () => {
       render(<DocumentSelection />)
 
-      expect(screen.getByTestId('current-state')).toHaveTextContent('selectNewOrOpen')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'selectNewOrOpen',
+      )
       expect(screen.queryByTestId('create-document')).not.toBeInTheDocument()
       expect(screen.queryByTestId('edit-document')).not.toBeInTheDocument()
     })
@@ -98,7 +123,9 @@ describe('DocumentSelection', () => {
 
       await user.click(screen.getByTestId('select-create'))
 
-      expect(screen.getByTestId('current-state')).toHaveTextContent('createDocument')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'createDocument',
+      )
       expect(screen.getByTestId('create-document')).toBeInTheDocument()
       expect(screen.queryByTestId('edit-document')).not.toBeInTheDocument()
     })
@@ -108,7 +135,9 @@ describe('DocumentSelection', () => {
 
       await user.click(screen.getByTestId('select-edit'))
 
-      expect(screen.getByTestId('current-state')).toHaveTextContent('editDocument')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'editDocument',
+      )
       expect(screen.getByTestId('edit-document')).toBeInTheDocument()
       expect(screen.queryByTestId('create-document')).not.toBeInTheDocument()
     })
@@ -118,11 +147,15 @@ describe('DocumentSelection', () => {
 
       // First switch to createDocument
       await user.click(screen.getByTestId('select-create'))
-      expect(screen.getByTestId('current-state')).toHaveTextContent('createDocument')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'createDocument',
+      )
 
       // Then switch back to selectNewOrOpen
       await user.click(screen.getByTestId('select-new-or-open'))
-      expect(screen.getByTestId('current-state')).toHaveTextContent('selectNewOrOpen')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'selectNewOrOpen',
+      )
       expect(screen.queryByTestId('create-document')).not.toBeInTheDocument()
       expect(screen.queryByTestId('edit-document')).not.toBeInTheDocument()
     })
@@ -133,7 +166,9 @@ describe('DocumentSelection', () => {
       render(<DocumentSelection />)
 
       // Check initial state
-      expect(screen.getByTestId('current-state')).toHaveTextContent('selectNewOrOpen')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'selectNewOrOpen',
+      )
     })
 
     it('should handle state changes from CategorySelection', async () => {
@@ -141,13 +176,19 @@ describe('DocumentSelection', () => {
 
       // Test each state change
       await user.click(screen.getByTestId('select-create'))
-      expect(screen.getByTestId('current-state')).toHaveTextContent('createDocument')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'createDocument',
+      )
 
       await user.click(screen.getByTestId('select-edit'))
-      expect(screen.getByTestId('current-state')).toHaveTextContent('editDocument')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'editDocument',
+      )
 
       await user.click(screen.getByTestId('select-new-or-open'))
-      expect(screen.getByTestId('current-state')).toHaveTextContent('selectNewOrOpen')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'selectNewOrOpen',
+      )
     })
 
     it('should render CreateDocument only when state is createDocument', async () => {
@@ -212,7 +253,9 @@ describe('DocumentSelection', () => {
       await user.click(screen.getByTestId('select-new-or-open'))
       await user.click(screen.getByTestId('select-create'))
 
-      expect(screen.getByTestId('current-state')).toHaveTextContent('createDocument')
+      expect(screen.getByTestId('current-state')).toHaveTextContent(
+        'createDocument',
+      )
       expect(screen.getByTestId('create-document')).toBeInTheDocument()
     })
 
@@ -220,8 +263,18 @@ describe('DocumentSelection', () => {
       render(<DocumentSelection />)
 
       // Test multiple state transitions
-      const states = ['createDocument', 'editDocument', 'selectNewOrOpen', 'createDocument']
-      const buttons = ['select-create', 'select-edit', 'select-new-or-open', 'select-create']
+      const states = [
+        'createDocument',
+        'editDocument',
+        'selectNewOrOpen',
+        'createDocument',
+      ]
+      const buttons = [
+        'select-create',
+        'select-edit',
+        'select-new-or-open',
+        'select-create',
+      ]
 
       for (let i = 0; i < states.length; i++) {
         await user.click(screen.getByTestId(buttons[i]))

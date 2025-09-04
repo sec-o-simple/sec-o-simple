@@ -89,6 +89,10 @@ vi.mock(
 describe('template utility functions', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+
+    // The global setup.ts mocks the template module but with limited functionality
+    // We need to unmock it to access all the real functions
+    vi.unmock('@/utils/template')
   })
 
   describe('checkReadOnly', () => {

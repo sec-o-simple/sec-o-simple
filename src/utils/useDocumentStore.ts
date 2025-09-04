@@ -81,6 +81,7 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
     set({
       documentInformation: getDefaultDocumentInformation(),
       products: [],
+      families: [],
       relationships: [],
       vulnerabilities: [],
     }),

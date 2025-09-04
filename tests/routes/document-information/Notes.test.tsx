@@ -1,114 +1,117 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the Notes component to test the actual implementation
+vi.unmock('../../../src/routes/document-information/Notes')
+
 import Notes from '../../../src/routes/document-information/Notes'
 
 // Mock WizardStep component
 vi.mock('@/components/WizardStep', () => ({
-  default: ({ 
-    title, 
-    progress, 
-    onBack, 
-    onContinue, 
-    children 
-  }: { 
+  default: ({
+    title,
+    progress,
+    onBack,
+    onContinue,
+    children,
+  }: {
     title: string
     progress: number
     onBack: string
     onContinue: string
-    children: React.ReactNode 
+    children: React.ReactNode
   }) => (
-    <div 
-      data-testid="wizard-step" 
-      data-title={title} 
+    <div
+      data-testid="wizard-step"
+      data-title={title}
       data-progress={progress}
       data-back={onBack}
       data-continue={onContinue}
     >
       {children}
     </div>
-  )
+  ),
 }))
 
 // Mock hooks
 vi.mock('@/utils/useDocumentStoreUpdater', () => ({
-  default: vi.fn()
+  default: vi.fn(),
 }))
 
 vi.mock('@/utils/useListState', () => ({
   useListState: vi.fn(() => ({
     data: [],
-    setData: vi.fn()
-  }))
+    setData: vi.fn(),
+  })),
 }))
 
 vi.mock('@/utils/validation/useListValidation', () => ({
   useListValidation: vi.fn(() => ({
     hasErrors: false,
     isTouched: false,
-    errorMessages: []
-  }))
+    errorMessages: [],
+  })),
 }))
 
 vi.mock('@/utils/validation/usePageVisit', () => ({
-  default: vi.fn(() => false)
+  default: vi.fn(() => false),
 }))
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
-        'nav.documentInformation.notes': 'Document Notes'
+        'nav.documentInformation.notes': 'Document Notes',
       }
       return translations[key] || key
-    }
-  })
+    },
+  }),
 }))
 
 vi.mock('@heroui/react', () => ({
-  Alert: ({ children, color }: { children: React.ReactNode; color: string }) => (
+  Alert: ({
+    children,
+    color,
+  }: {
+    children: React.ReactNode
+    color: string
+  }) => (
     <div data-testid="alert" data-color={color}>
       {children}
     </div>
-  )
+  ),
 }))
 
 vi.mock('../../../src/routes/shared/NotesList', () => ({
-  NotesList: ({ 
-    notesListState, 
-    csafPath, 
-    isTouched 
-  }: { 
+  NotesList: ({
+    notesListState,
+    csafPath,
+    isTouched,
+  }: {
     notesListState: any
     csafPath: string
-    isTouched: boolean 
+    isTouched: boolean
   }) => (
-    <div 
-      data-testid="notes-list" 
-      data-path={csafPath}
-      data-touched={isTouched}
-    >
+    <div data-testid="notes-list" data-path={csafPath} data-touched={isTouched}>
       Notes List Component
     </div>
   ),
   useNoteGenerator: vi.fn(() => vi.fn()),
-  TNote: {}
+  TNote: {},
 }))
 
 vi.mock('../../../src/routes/shared/NotesTemplates', () => ({
-  NotesTemplates: ({ 
-    notesListState, 
-    templatePath 
-  }: { 
+  NotesTemplates: ({
+    notesListState,
+    templatePath,
+  }: {
     notesListState: any
-    templatePath: string 
+    templatePath: string
   }) => (
-    <div 
-      data-testid="notes-templates" 
-      data-template-path={templatePath}
-    >
+    <div data-testid="notes-templates" data-template-path={templatePath}>
       Notes Templates Component
     </div>
-  )
+  ),
 }))
 
 describe('Document Information Notes', () => {
@@ -123,8 +126,14 @@ describe('Document Information Notes', () => {
     expect(wizardStep).toBeInTheDocument()
     expect(wizardStep).toHaveAttribute('data-title', 'Document Notes')
     expect(wizardStep).toHaveAttribute('data-progress', '1.2')
-    expect(wizardStep).toHaveAttribute('data-back', '/document-information/general')
-    expect(wizardStep).toHaveAttribute('data-continue', '/document-information/publisher')
+    expect(wizardStep).toHaveAttribute(
+      'data-back',
+      '/document-information/general',
+    )
+    expect(wizardStep).toHaveAttribute(
+      'data-continue',
+      '/document-information/publisher',
+    )
   })
 
   it('should render NotesTemplates with correct props', () => {
@@ -132,7 +141,10 @@ describe('Document Information Notes', () => {
 
     const notesTemplates = screen.getByTestId('notes-templates')
     expect(notesTemplates).toBeInTheDocument()
-    expect(notesTemplates).toHaveAttribute('data-template-path', 'document-information.notes_templates')
+    expect(notesTemplates).toHaveAttribute(
+      'data-template-path',
+      'document-information.notes_templates',
+    )
   })
 
   it('should render NotesList with correct props', () => {

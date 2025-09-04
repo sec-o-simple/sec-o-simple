@@ -1,8 +1,8 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
-import { useSOSExport, useSOSImport } from '../../src/utils/sosDraft'
-import { download } from '../../src/utils/download'
+import { act, renderHook } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getFilename } from '../../src/utils/csafExport/helpers'
+import { download } from '../../src/utils/download'
+import { useSOSExport, useSOSImport } from '../../src/utils/sosDraft'
 
 // Mock dependencies
 vi.mock('../../src/utils/download', () => ({
@@ -23,11 +23,13 @@ const mockDocumentStore = {
     title: 'Test Document',
   },
   products: [],
+  families: [],
   relationships: [],
   vulnerabilities: [],
   setSOSDocumentType: vi.fn(),
   updateDocumentInformation: vi.fn(),
   updateProducts: vi.fn(),
+  updateFamilies: vi.fn(),
   updateRelationships: vi.fn(),
   updateVulnerabilities: vi.fn(),
 }
@@ -39,7 +41,16 @@ vi.mock('../../src/utils/useDocumentStore', () => ({
     }
     return mockDocumentStore
   }),
-  sosDocumentTypes: ['Import', 'Software', 'HardwareSoftware', 'HardwareFirmware', 'VexSoftware', 'VexHardwareSoftware', 'VexHardwareFirmware', 'VexSbom'],
+  sosDocumentTypes: [
+    'Import',
+    'Software',
+    'HardwareSoftware',
+    'HardwareFirmware',
+    'VexSoftware',
+    'VexHardwareSoftware',
+    'VexHardwareFirmware',
+    'VexSbom',
+  ],
 }))
 
 describe('sosDraft utils', () => {
@@ -50,28 +61,28 @@ describe('sosDraft utils', () => {
   describe('useSOSExport', () => {
     it('should export SOS document with correct filename and content', () => {
       const { result } = renderHook(() => useSOSExport())
-      
+
       act(() => {
         result.current.exportSOSDocument()
       })
-      
+
       // Verify that getFilename was called with the correct document ID
       expect(mockGetFilename).toHaveBeenCalledWith('test-doc-123')
-      
+
       // Verify that download was called with the correct filename and content
       expect(mockDownload).toHaveBeenCalledWith(
         'document-test-doc-123.sos.json',
-        JSON.stringify(mockDocumentStore, null, 2)
+        JSON.stringify(mockDocumentStore, null, 2),
       )
     })
 
     it('should format JSON with proper indentation', () => {
       const { result } = renderHook(() => useSOSExport())
-      
+
       act(() => {
         result.current.exportSOSDocument()
       })
-      
+
       // Verify that the JSON is formatted with 2-space indentation
       const [, jsonContent] = mockDownload.mock.calls[0]
       expect(jsonContent).toContain('  ') // Should have proper indentation
@@ -93,10 +104,11 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'Software',
           documentInformation: { id: 'test' },
           products: [],
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         expect(importHook.isSOSDraft(validDraft)).toBe(true)
       })
 
@@ -105,10 +117,11 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'Invalid Type',
           documentInformation: { id: 'test' },
           products: [],
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         expect(importHook.isSOSDraft(invalidDraft)).toBe(false)
       })
 
@@ -116,10 +129,11 @@ describe('sosDraft utils', () => {
         const invalidDraft = {
           documentInformation: { id: 'test' },
           products: [],
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         expect(importHook.isSOSDraft(invalidDraft)).toBe(false)
       })
 
@@ -127,10 +141,11 @@ describe('sosDraft utils', () => {
         const invalidDraft = {
           sosDocumentType: 'Software',
           products: [],
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         expect(importHook.isSOSDraft(invalidDraft)).toBe(false)
       })
 
@@ -139,10 +154,11 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'Software',
           documentInformation: { id: 'test' },
           products: 'not an array',
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         expect(importHook.isSOSDraft(invalidDraft)).toBe(false)
       })
 
@@ -151,9 +167,10 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'Software',
           documentInformation: { id: 'test' },
           products: [],
-          vulnerabilities: {}
+          families: [],
+          vulnerabilities: {},
         }
-        
+
         expect(importHook.isSOSDraft(invalidDraft)).toBe(false)
       })
 
@@ -162,9 +179,10 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'Software',
           documentInformation: { id: 'test' },
           products: [],
-          relationships: {}
+          families: [],
+          relationships: {},
         }
-        
+
         expect(importHook.isSOSDraft(invalidDraft)).toBe(false)
       })
     })
@@ -175,18 +193,32 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'VexSoftware',
           documentInformation: { id: 'imported-doc', title: 'Imported' },
           products: [{ id: 'product1' }],
+          families: [{ id: 'family1' }],
           relationships: [{ id: 'rel1' }],
-          vulnerabilities: [{ id: 'vuln1' }]
+          vulnerabilities: [{ id: 'vuln1' }],
         }
-        
+
         const result = importHook.importSOSDocument(validDraft)
-        
+
         expect(result).toBe(true)
-        expect(mockDocumentStore.setSOSDocumentType).toHaveBeenCalledWith('VexSoftware')
-        expect(mockDocumentStore.updateDocumentInformation).toHaveBeenCalledWith(validDraft.documentInformation)
-        expect(mockDocumentStore.updateProducts).toHaveBeenCalledWith(validDraft.products)
-        expect(mockDocumentStore.updateRelationships).toHaveBeenCalledWith(validDraft.relationships)
-        expect(mockDocumentStore.updateVulnerabilities).toHaveBeenCalledWith(validDraft.vulnerabilities)
+        expect(mockDocumentStore.setSOSDocumentType).toHaveBeenCalledWith(
+          'VexSoftware',
+        )
+        expect(
+          mockDocumentStore.updateDocumentInformation,
+        ).toHaveBeenCalledWith(validDraft.documentInformation)
+        expect(mockDocumentStore.updateProducts).toHaveBeenCalledWith(
+          validDraft.products,
+        )
+        expect(mockDocumentStore.updateFamilies).toHaveBeenCalledWith(
+          validDraft.families,
+        )
+        expect(mockDocumentStore.updateRelationships).toHaveBeenCalledWith(
+          validDraft.relationships,
+        )
+        expect(mockDocumentStore.updateVulnerabilities).toHaveBeenCalledWith(
+          validDraft.vulnerabilities,
+        )
       })
 
       it('should not import invalid SOS document and return false', () => {
@@ -194,16 +226,20 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'Invalid Type',
           documentInformation: { id: 'test' },
           products: [],
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         const result = importHook.importSOSDocument(invalidDraft)
-        
+
         expect(result).toBe(false)
         expect(mockDocumentStore.setSOSDocumentType).not.toHaveBeenCalled()
-        expect(mockDocumentStore.updateDocumentInformation).not.toHaveBeenCalled()
+        expect(
+          mockDocumentStore.updateDocumentInformation,
+        ).not.toHaveBeenCalled()
         expect(mockDocumentStore.updateProducts).not.toHaveBeenCalled()
+        expect(mockDocumentStore.updateFamilies).not.toHaveBeenCalled()
         expect(mockDocumentStore.updateRelationships).not.toHaveBeenCalled()
         expect(mockDocumentStore.updateVulnerabilities).not.toHaveBeenCalled()
       })
@@ -215,17 +251,31 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'HardwareSoftware' as const,
           documentInformation: { id: 'direct-import', title: 'Direct' },
           products: [{ id: 'prod1' }, { id: 'prod2' }],
+          families: [{ id: 'fam1' }],
           relationships: [{ id: 'rel1' }],
-          vulnerabilities: [{ id: 'vuln1' }, { id: 'vuln2' }]
+          vulnerabilities: [{ id: 'vuln1' }, { id: 'vuln2' }],
         }
-        
+
         importHook.importSOSDraft(draft)
-        
-        expect(mockDocumentStore.setSOSDocumentType).toHaveBeenCalledWith('HardwareSoftware')
-        expect(mockDocumentStore.updateDocumentInformation).toHaveBeenCalledWith(draft.documentInformation)
-        expect(mockDocumentStore.updateProducts).toHaveBeenCalledWith(draft.products)
-        expect(mockDocumentStore.updateRelationships).toHaveBeenCalledWith(draft.relationships)
-        expect(mockDocumentStore.updateVulnerabilities).toHaveBeenCalledWith(draft.vulnerabilities)
+
+        expect(mockDocumentStore.setSOSDocumentType).toHaveBeenCalledWith(
+          'HardwareSoftware',
+        )
+        expect(
+          mockDocumentStore.updateDocumentInformation,
+        ).toHaveBeenCalledWith(draft.documentInformation)
+        expect(mockDocumentStore.updateProducts).toHaveBeenCalledWith(
+          draft.products,
+        )
+        expect(mockDocumentStore.updateFamilies).toHaveBeenCalledWith(
+          draft.families,
+        )
+        expect(mockDocumentStore.updateRelationships).toHaveBeenCalledWith(
+          draft.relationships,
+        )
+        expect(mockDocumentStore.updateVulnerabilities).toHaveBeenCalledWith(
+          draft.vulnerabilities,
+        )
       })
     })
 
@@ -235,10 +285,11 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'Import',
           documentInformation: {},
           products: [],
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         expect(importHook.isSOSDraft(validDraft)).toBe(true)
         expect(importHook.importSOSDocument(validDraft)).toBe(true)
       })
@@ -249,37 +300,49 @@ describe('sosDraft utils', () => {
           sosDocumentType: 'Import',
           documentInformation: null,
           products: [],
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         // The implementation accepts null as it passes typeof === 'object' check
         expect(importHook.isSOSDraft(draftWithNull)).toBe(true)
-        
+
         // Test with completely missing property (undefined)
         const draftMissingProperty = {
           sosDocumentType: 'Import',
           // documentInformation is missing
           products: [],
+          families: [],
           relationships: {},
-          vulnerabilities: {}
+          vulnerabilities: {},
         }
-        
+
         expect(importHook.isSOSDraft(draftMissingProperty)).toBe(false)
       })
 
       it('should validate all sosDocumentTypes', () => {
-        const validTypes = ['Import', 'Software', 'HardwareSoftware', 'HardwareFirmware', 'VexSoftware', 'VexHardwareSoftware', 'VexHardwareFirmware', 'VexSbom']
-        
-        validTypes.forEach(type => {
+        const validTypes = [
+          'Import',
+          'Software',
+          'HardwareSoftware',
+          'HardwareFirmware',
+          'VexSoftware',
+          'VexHardwareSoftware',
+          'VexHardwareFirmware',
+          'VexSbom',
+        ]
+
+        validTypes.forEach((type) => {
           const draft = {
             sosDocumentType: type,
             documentInformation: {},
             products: [],
+            families: [],
             relationships: {},
-            vulnerabilities: {}
+            vulnerabilities: {},
           }
-          
+
           expect(importHook.isSOSDraft(draft)).toBe(true)
         })
       })

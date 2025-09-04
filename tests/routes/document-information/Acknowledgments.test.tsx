@@ -1,6 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, waitFor, fireEvent } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the Acknowledgments component to test the actual implementation
+vi.unmock('../../../src/routes/document-information/Acknowledgments')
+
 import Acknowledgments from '../../../src/routes/document-information/Acknowledgments'
 import {
   TAcknowledgment,
@@ -9,8 +13,18 @@ import {
 
 // Mock all the dependencies
 vi.mock('@/components/StatusIndicator', () => ({
-  default: ({ hasErrors, hasVisited }: { hasErrors: boolean; hasVisited: boolean }) => (
-    <div data-testid="status-indicator" data-has-errors={hasErrors} data-has-visited={hasVisited}>
+  default: ({
+    hasErrors,
+    hasVisited,
+  }: {
+    hasErrors: boolean
+    hasVisited: boolean
+  }) => (
+    <div
+      data-testid="status-indicator"
+      data-has-errors={hasErrors}
+      data-has-visited={hasVisited}
+    >
       Status Indicator
     </div>
   ),
@@ -34,8 +48,12 @@ vi.mock('@/components/WizardStep', () => ({
       <h1 data-testid="wizard-title">{title}</h1>
       <div data-testid="progress" data-progress={progress}></div>
       <div data-testid="navigation">
-        <a href={onBack} data-testid="back-link">Back</a>
-        <a href={onContinue} data-testid="continue-link">Continue</a>
+        <a href={onBack} data-testid="back-link">
+          Back
+        </a>
+        <a href={onContinue} data-testid="continue-link">
+          Continue
+        </a>
       </div>
       <div data-testid="wizard-content">{children}</div>
     </div>
@@ -57,7 +75,12 @@ vi.mock('@/components/forms/AcknowledgmentNamesTable', () => ({
       <span data-testid="ack-id">{acknowledgment.id}</span>
       <button
         data-testid="update-names"
-        onClick={() => onChange({ ...acknowledgment, names: [{ id: 'test', name: 'Test Name' }] })}
+        onClick={() =>
+          onChange({
+            ...acknowledgment,
+            names: [{ id: 'test', name: 'Test Name' }],
+          })
+        }
       >
         Update Names
       </button>
@@ -85,10 +108,7 @@ vi.mock('@/components/forms/ComponentList', () => ({
       <div data-testid="list-title">{title}</div>
       <div data-testid="item-label">{itemLabel}</div>
       <div data-testid="item-bg-color">{itemBgColor}</div>
-      <button
-        data-testid="add-item"
-        onClick={() => listState.addDataEntry()}
-      >
+      <button data-testid="add-item" onClick={() => listState.addDataEntry()}>
         Add Item
       </button>
       {listState.data.map((item: TAcknowledgment, index: number) => (
@@ -182,7 +202,9 @@ vi.mock('@/components/forms/VSplit', () => ({
 
 vi.mock('@/utils/template', () => ({
   checkReadOnly: vi.fn(() => false),
-  getPlaceholder: vi.fn((obj: any, field: string) => `Placeholder for ${field}`),
+  getPlaceholder: vi.fn(
+    (obj: any, field: string) => `Placeholder for ${field}`,
+  ),
 }))
 
 vi.mock('@/utils/useDocumentStoreUpdater')
@@ -208,7 +230,15 @@ vi.mock('@/utils/validation/useValidationStore', () => ({
 }))
 
 vi.mock('@heroui/react', () => ({
-  Alert: ({ color, children, className }: { color: string; children: React.ReactNode; className?: string }) => (
+  Alert: ({
+    color,
+    children,
+    className,
+  }: {
+    color: string
+    children: React.ReactNode
+    className?: string
+  }) => (
     <div data-testid="alert" data-color={color} className={className}>
       {children}
     </div>
@@ -231,8 +261,8 @@ vi.mock('react-i18next', () => ({
 }))
 
 // Import mocked modules
-import { useListState } from '../../../src/utils/useListState'
 import useDocumentStoreUpdater from '../../../src/utils/useDocumentStoreUpdater'
+import { useListState } from '../../../src/utils/useListState'
 import { useFieldValidation } from '../../../src/utils/validation/useFieldValidation'
 import { useListValidation } from '../../../src/utils/validation/useListValidation'
 import usePageVisit from '../../../src/utils/validation/usePageVisit'
@@ -278,7 +308,7 @@ describe('Acknowledgments', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     vi.mocked(useListState).mockReturnValue(mockListState)
     vi.mocked(useDocumentStoreUpdater).mockImplementation(() => {})
     vi.mocked(useFieldValidation).mockReturnValue(mockFieldValidation)
@@ -303,7 +333,7 @@ describe('Acknowledgments', () => {
         markFieldAsTouched: vi.fn(),
         markPageAsVisited: vi.fn(),
       }
-      
+
       if (typeof selector === 'function') {
         return selector(store)
       }
@@ -311,7 +341,9 @@ describe('Acknowledgments', () => {
     })
   })
 
-  const createMockAcknowledgment = (id: string = 'test-id'): TAcknowledgment => ({
+  const createMockAcknowledgment = (
+    id: string = 'test-id',
+  ): TAcknowledgment => ({
     id,
     organization: 'Test Organization',
     summary: 'Test Summary',
@@ -322,26 +354,41 @@ describe('Acknowledgments', () => {
   describe('Component Rendering', () => {
     it('should render with empty acknowledgments list', () => {
       mockListState.data = []
-      
+
       const { container } = render(<Acknowledgments />)
 
       expect(screen.getByTestId('wizard-step')).toBeInTheDocument()
-      expect(screen.getByTestId('wizard-title')).toHaveTextContent('Acknowledgments')
-      expect(screen.getByTestId('progress')).toHaveAttribute('data-progress', '1.8')
-      expect(screen.getByTestId('back-link')).toHaveAttribute('href', '/document-information/references')
-      expect(screen.getByTestId('continue-link')).toHaveAttribute('href', '/product-management')
+      expect(screen.getByTestId('wizard-title')).toHaveTextContent(
+        'Acknowledgments',
+      )
+      expect(screen.getByTestId('progress')).toHaveAttribute(
+        'data-progress',
+        '1.8',
+      )
+      expect(screen.getByTestId('back-link')).toHaveAttribute(
+        'href',
+        '/document-information/references',
+      )
+      expect(screen.getByTestId('continue-link')).toHaveAttribute(
+        'href',
+        '/product-families',
+      )
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
       expect(container.firstChild).toMatchSnapshot()
     })
 
     it('should render ComponentList with correct props', () => {
       mockListState.data = []
-      
+
       render(<Acknowledgments />)
 
       expect(screen.getByTestId('list-title')).toHaveTextContent('organization')
-      expect(screen.getByTestId('item-label')).toHaveTextContent('Acknowledgment')
-      expect(screen.getByTestId('item-bg-color')).toHaveTextContent('bg-zinc-50')
+      expect(screen.getByTestId('item-label')).toHaveTextContent(
+        'Acknowledgment',
+      )
+      expect(screen.getByTestId('item-bg-color')).toHaveTextContent(
+        'bg-zinc-50',
+      )
     })
 
     it('should render acknowledgments when they exist', () => {
@@ -368,11 +415,14 @@ describe('Acknowledgments', () => {
         { path: '/document/acknowledgments/0', message: 'Error message 1' },
         { path: '/document/acknowledgments/1', message: 'Error message 2' },
       ]
-      
+
       render(<Acknowledgments />)
 
       expect(screen.getByTestId('alert')).toBeInTheDocument()
-      expect(screen.getByTestId('alert')).toHaveAttribute('data-color', 'danger')
+      expect(screen.getByTestId('alert')).toHaveAttribute(
+        'data-color',
+        'danger',
+      )
       expect(screen.getByText('Error message 1')).toBeInTheDocument()
       expect(screen.getByText('Error message 2')).toBeInTheDocument()
     })
@@ -383,7 +433,7 @@ describe('Acknowledgments', () => {
       mockListValidation.errorMessages = [
         { path: '/document/acknowledgments/0', message: 'Error message' },
       ]
-      
+
       render(<Acknowledgments />)
 
       expect(screen.queryByTestId('alert')).not.toBeInTheDocument()
@@ -393,7 +443,7 @@ describe('Acknowledgments', () => {
       mockListValidation.isTouched = true
       mockListValidation.hasErrors = false
       mockListValidation.errorMessages = []
-      
+
       render(<Acknowledgments />)
 
       expect(screen.queryByTestId('alert')).not.toBeInTheDocument()
@@ -413,10 +463,7 @@ describe('Acknowledgments', () => {
       render(<Acknowledgments />)
 
       expect(useDocumentStoreUpdater).toHaveBeenCalledWith({
-        localState: [
-          mockListState.data,
-          expect.any(Function),
-        ],
+        localState: [mockListState.data, expect.any(Function)],
         valueField: 'documentInformation',
         valueUpdater: 'updateDocumentInformation',
         init: expect.any(Function),
@@ -428,7 +475,7 @@ describe('Acknowledgments', () => {
 
       expect(useListValidation).toHaveBeenCalledWith(
         '/document/acknowledgments',
-        mockListState.data
+        mockListState.data,
       )
     })
 
@@ -443,7 +490,7 @@ describe('Acknowledgments', () => {
     it('should render StatusIndicator with correct props when no errors', () => {
       mockFieldValidation.hasErrors = false
       mockListState.data = [createMockAcknowledgment()]
-      
+
       render(<Acknowledgments />)
 
       const statusIndicator = screen.getByTestId('status-indicator')
@@ -454,7 +501,7 @@ describe('Acknowledgments', () => {
     it('should render StatusIndicator with errors when field has errors', () => {
       mockFieldValidation.hasErrors = true
       mockListState.data = [createMockAcknowledgment()]
-      
+
       render(<Acknowledgments />)
 
       const statusIndicator = screen.getByTestId('status-indicator')
@@ -467,33 +514,44 @@ describe('Acknowledgments', () => {
     it('should render form fields with correct values', () => {
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       render(<Acknowledgments />)
 
       // Organization input
       const orgInput = screen.getByLabelText('Organization')
       expect(orgInput).toHaveValue('Test Organization')
-      expect(orgInput).toHaveAttribute('data-csaf-path', '/document/acknowledgments/0/organization')
+      expect(orgInput).toHaveAttribute(
+        'data-csaf-path',
+        '/document/acknowledgments/0/organization',
+      )
 
       // Summary textarea
       const summaryTextarea = screen.getByLabelText('Summary')
       expect(summaryTextarea).toHaveValue('Test Summary')
-      expect(summaryTextarea).toHaveAttribute('data-csaf-path', '/document/acknowledgments/0/summary')
+      expect(summaryTextarea).toHaveAttribute(
+        'data-csaf-path',
+        '/document/acknowledgments/0/summary',
+      )
 
       // URL input
       const urlInput = screen.getByLabelText('URL')
       expect(urlInput).toHaveValue('https://example.com')
-      expect(urlInput).toHaveAttribute('data-csaf-path', '/document/acknowledgments/0/urls/0')
+      expect(urlInput).toHaveAttribute(
+        'data-csaf-path',
+        '/document/acknowledgments/0/urls/0',
+      )
       expect(urlInput).toHaveAttribute('type', 'url')
     })
 
     it('should render AcknowledgmentNamesTable with correct props', () => {
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       render(<Acknowledgments />)
 
-      expect(screen.getByTestId('acknowledgment-names-table')).toBeInTheDocument()
+      expect(
+        screen.getByTestId('acknowledgment-names-table'),
+      ).toBeInTheDocument()
       expect(screen.getByTestId('ack-index')).toHaveTextContent('0')
       expect(screen.getByTestId('ack-id')).toHaveTextContent(acknowledgment.id)
     })
@@ -502,13 +560,20 @@ describe('Acknowledgments', () => {
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
       mockValidationStore.messages = [
-        { path: '/document/acknowledgments/0', message: 'Acknowledgment error', severity: 'error' }
+        {
+          path: '/document/acknowledgments/0',
+          message: 'Acknowledgment error',
+          severity: 'error',
+        },
       ]
-      
+
       render(<Acknowledgments />)
 
       expect(screen.getByTestId('alert')).toBeInTheDocument()
-      expect(screen.getByTestId('alert')).toHaveAttribute('data-color', 'danger')
+      expect(screen.getByTestId('alert')).toHaveAttribute(
+        'data-color',
+        'danger',
+      )
       expect(screen.getByText('Acknowledgment error')).toBeInTheDocument()
     })
 
@@ -516,9 +581,13 @@ describe('Acknowledgments', () => {
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
       mockValidationStore.messages = [
-        { path: '/document/acknowledgments/0', message: 'Warning message', severity: 'warning' }
+        {
+          path: '/document/acknowledgments/0',
+          message: 'Warning message',
+          severity: 'warning',
+        },
       ]
-      
+
       render(<Acknowledgments />)
 
       expect(screen.queryByText('Warning message')).not.toBeInTheDocument()
@@ -530,11 +599,11 @@ describe('Acknowledgments', () => {
       const user = userEvent.setup()
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       render(<Acknowledgments />)
 
       const orgInput = screen.getByLabelText('Organization')
-      
+
       // Simulate the onChange event directly
       fireEvent.change(orgInput, { target: { value: 'New Organization' } })
 
@@ -548,11 +617,11 @@ describe('Acknowledgments', () => {
       const user = userEvent.setup()
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       render(<Acknowledgments />)
 
       const summaryTextarea = screen.getByLabelText('Summary')
-      
+
       // Simulate the onChange event directly
       fireEvent.change(summaryTextarea, { target: { value: 'New Summary' } })
 
@@ -566,11 +635,11 @@ describe('Acknowledgments', () => {
       const user = userEvent.setup()
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       render(<Acknowledgments />)
 
       const urlInput = screen.getByLabelText('URL')
-      
+
       // Simulate the onChange event directly
       fireEvent.change(urlInput, { target: { value: 'https://newurl.com' } })
 
@@ -584,7 +653,7 @@ describe('Acknowledgments', () => {
       const user = userEvent.setup()
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       render(<Acknowledgments />)
 
       const updateNamesButton = screen.getByTestId('update-names')
@@ -599,7 +668,7 @@ describe('Acknowledgments', () => {
     it('should handle adding new acknowledgment', async () => {
       const user = userEvent.setup()
       mockListState.data = []
-      
+
       render(<Acknowledgments />)
 
       const addButton = screen.getByTestId('add-item')
@@ -612,7 +681,7 @@ describe('Acknowledgments', () => {
       const user = userEvent.setup()
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       render(<Acknowledgments />)
 
       const removeButton = screen.getByTestId('remove-item-0')
@@ -632,7 +701,7 @@ describe('Acknowledgments', () => {
         url: undefined,
       }
       mockListState.data = [acknowledgment]
-      
+
       render(<Acknowledgments />)
 
       expect(screen.getByLabelText('Organization')).toHaveValue('')
@@ -647,7 +716,7 @@ describe('Acknowledgments', () => {
         createMockAcknowledgment('ack-3'),
       ]
       mockListState.data = acknowledgments
-      
+
       render(<Acknowledgments />)
 
       expect(screen.getAllByTestId(/^list-item-/)).toHaveLength(3)
@@ -662,10 +731,18 @@ describe('Acknowledgments', () => {
       ]
       mockListState.data = acknowledgments
       mockValidationStore.messages = [
-        { path: '/document/acknowledgments/0', message: 'Error for first ack', severity: 'error' },
-        { path: '/document/acknowledgments/1', message: 'Error for second ack', severity: 'error' },
+        {
+          path: '/document/acknowledgments/0',
+          message: 'Error for first ack',
+          severity: 'error',
+        },
+        {
+          path: '/document/acknowledgments/1',
+          message: 'Error for second ack',
+          severity: 'error',
+        },
       ]
-      
+
       render(<Acknowledgments />)
 
       expect(screen.getByText('Error for first ack')).toBeInTheDocument()
@@ -676,7 +753,7 @@ describe('Acknowledgments', () => {
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
       mockValidationStore.messages = []
-      
+
       render(<Acknowledgments />)
 
       expect(screen.queryByTestId('alert')).not.toBeInTheDocument()
@@ -687,9 +764,9 @@ describe('Acknowledgments', () => {
     it('should check readonly status for form fields', async () => {
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       const { checkReadOnly } = await import('../../../src/utils/template')
-      
+
       render(<Acknowledgments />)
 
       expect(checkReadOnly).toHaveBeenCalledWith(acknowledgment, 'organization')
@@ -700,12 +777,15 @@ describe('Acknowledgments', () => {
     it('should get placeholder text for form fields', async () => {
       const acknowledgment = createMockAcknowledgment()
       mockListState.data = [acknowledgment]
-      
+
       const { getPlaceholder } = await import('../../../src/utils/template')
-      
+
       render(<Acknowledgments />)
 
-      expect(getPlaceholder).toHaveBeenCalledWith(acknowledgment, 'organization')
+      expect(getPlaceholder).toHaveBeenCalledWith(
+        acknowledgment,
+        'organization',
+      )
       expect(getPlaceholder).toHaveBeenCalledWith(acknowledgment, 'summary')
       expect(getPlaceholder).toHaveBeenCalledWith(acknowledgment, 'url')
     })
@@ -714,16 +794,18 @@ describe('Acknowledgments', () => {
   describe('DocumentStoreUpdater Integration', () => {
     it('should call init function with initial data', () => {
       const mockInit = vi.fn()
-      
+
       vi.mocked(useDocumentStoreUpdater).mockImplementation(({ init }) => {
         if (init) {
           init({ acknowledgments: [createMockAcknowledgment()] })
         }
       })
-      
+
       render(<Acknowledgments />)
 
-      expect(mockListState.setData).toHaveBeenCalledWith([createMockAcknowledgment()])
+      expect(mockListState.setData).toHaveBeenCalledWith([
+        createMockAcknowledgment(),
+      ])
     })
 
     it('should handle missing acknowledgments in initial data', () => {
@@ -732,7 +814,7 @@ describe('Acknowledgments', () => {
           init({} as any)
         }
       })
-      
+
       render(<Acknowledgments />)
 
       expect(mockListState.setData).toHaveBeenCalledWith([])
@@ -741,10 +823,12 @@ describe('Acknowledgments', () => {
     it('should return correct state transformation', () => {
       let stateTransformer: () => any
 
-      vi.mocked(useDocumentStoreUpdater).mockImplementation(({ localState }) => {
-        stateTransformer = localState[1]
-      })
-      
+      vi.mocked(useDocumentStoreUpdater).mockImplementation(
+        ({ localState }) => {
+          stateTransformer = localState[1]
+        },
+      )
+
       render(<Acknowledgments />)
 
       const result = stateTransformer!()
