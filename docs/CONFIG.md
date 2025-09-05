@@ -115,6 +115,63 @@ The following suffixes can be appended to most fields to enhance configurability
 
 ---
 
+## Product Families
+
+**Path:** `product_families[]`
+
+Product families define a hierarchical structure that can be referenced by products via their `familyId`. The structure supports unlimited nesting through the recursive `subFamily` property.
+
+| Key         | Description                                    | Values        | Required |
+|-------------|------------------------------------------------|---------------|----------|
+| `id`        | Unique identifier for the product family      | `string`      | Yes      |
+| `name`      | Human-readable name of the product family     | `string`      | Yes      |
+| `subFamily` | Optional nested subfamily (recursive structure)| `ProductFamily` object | No |
+
+### Example Structure
+
+```json
+{
+  "product_families": [
+    {
+      "id": "apple",
+      "name": "Apple Inc.",
+      "subFamily": {
+        "id": "macbook",
+        "name": "MacBook Series",
+        "subFamily": {
+          "id": "macbook-pro",
+          "name": "MacBook Pro"
+        }
+      }
+    }
+  ]
+}
+```
+
+### Usage in Products
+
+Products can reference families using the `familyId` field to establish hierarchical relationships:
+
+```json
+{
+  "products": [
+    {
+      "id": "vendor1",
+      "category": "vendor",
+      "name": "Apple Inc.",
+      "subBranches": [
+        {
+          "id": "product1",
+          "category": "product_name",
+          "familyId": "macbook-pro",
+          "name": "MacBook Pro 16-inch"
+        }
+      ]
+    }
+  ]
+}
+```
+
 ## Products
 
 ### Vendors
@@ -133,15 +190,18 @@ The following suffixes can be appended to most fields to enhance configurability
 
 **Path:** `products[].subBranches[]`
 
-| Key           | Description           | Values                      |
-|----------------|-----------------------|------------------------------|
-| `id`          | Product ID            | `string`                    |
-| `category`    | Must be `product_name`| `product_name`              |
-| `name`        | Product name          | `string`                    |
-| `description` | Short description     | `string`                    |
-| `type`        | Product type          | `software`, `hardware`      |
-| `readonly`    | Read-only flag        | `boolean`                   |
-| `subBranches` | Product versions      | `array`                     |
+| Key           | Description                                    | Values                      |
+|---------------|------------------------------------------------|-----------------------------|
+| `id`          | Product ID                                     | `string`                    |
+| `category`    | Must be `product_name`                         | `product_name`              |
+| `familyId`    | Reference to a product family ID (optional)   | `string`                    | 
+| `name`        | Product name                                   | `string`                    |
+| `description` | Short description                              | `string`                    |
+| `type`        | Product type                                   | `software`, `hardware`      |
+| `readonly`    | Read-only flag                                 | `boolean`                   |
+| `subBranches` | Product versions                               | `array`                     |
+
+**Note:** The `familyId` field references an `id` from the `product_families[]` array, allowing products to be organized within the hierarchical family structure.
 
 ### Versions
 

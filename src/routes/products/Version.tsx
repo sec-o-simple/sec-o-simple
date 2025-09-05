@@ -57,13 +57,13 @@ export default function Version() {
   return (
     <WizardStep noContentWrapper={true} progress={2}>
       <Breadcrumbs>
-        <BreadcrumbItem href="/#/product-management">
+        <BreadcrumbItem href="/#/products/management">
           {productVersion.parent?.parent?.name !== ''
             ? productVersion.parent?.parent?.name
             : t('untitled.vendor')}
         </BreadcrumbItem>
         <BreadcrumbItem
-          href={`/#/product-management/product/${productVersion.parent?.id}`}
+          href={`/#/products/management/product/${productVersion.parent?.id}`}
         >
           {productVersion.parent?.name !== ''
             ? productVersion.parent?.name
@@ -84,8 +84,8 @@ export default function Version() {
         }
         backLink={
           productVersion.parent?.id
-            ? `/product-management/product/${productVersion.parent?.id}`
-            : '/product-management'
+            ? `/products/management/product/${productVersion.parent?.id}`
+            : '/products/management'
         }
         actionTitle={
           sosDocumentType !== 'Software'
@@ -177,7 +177,7 @@ export default function Version() {
                           (rel) => rel.product2VersionId,
                         )}
                         linkGenerator={(x) =>
-                          `/product-management/version/${x}`
+                          `/products/management/version/${x}`
                         }
                         labelGenerator={(x) => {
                           const findProductTreeBranch =

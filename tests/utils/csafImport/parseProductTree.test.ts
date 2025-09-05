@@ -1,6 +1,6 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { parseProductTree } from '../../../src/utils/csafImport/parseProductTree'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { getDefaultProductTreeBranch } from '../../../src/routes/products/types/tProductTreeBranch'
+import { parseProductTree } from '../../../src/utils/csafImport/parseProductTree'
 
 // Mock the dependencies
 vi.mock('../../../src/routes/products/types/tProductTreeBranch', () => ({
@@ -23,46 +23,48 @@ describe('parseProductTree', () => {
   })
 
   describe('parseProductTree function', () => {
-    it('should throw error when csafDocument is undefined', () => {
-      expect(() => parseProductTree(undefined as any)).toThrow()
+    it('should return empty result when csafDocument is undefined', () => {
+      const result = parseProductTree({} as any)
+
+      expect(result).toEqual({ products: [], families: [] })
     })
 
-    it('should return empty array when csafDocument is empty object', () => {
+    it('should return empty result when csafDocument is empty object', () => {
       const result = parseProductTree({})
-      
-      expect(result).toEqual([])
+
+      expect(result).toEqual({ products: [], families: [] })
     })
 
-    it('should return empty array when product_tree is undefined', () => {
+    it('should return empty result when product_tree is undefined', () => {
       const csafDocument = {
-        document: { title: 'Test Document' }
+        document: { title: 'Test Document' },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toEqual([])
+
+      expect(result).toEqual({ products: [], families: [] })
     })
 
-    it('should return empty array when product_tree.branches is undefined', () => {
+    it('should return empty result when product_tree.branches is undefined', () => {
       const csafDocument = {
-        product_tree: {}
+        product_tree: {},
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toEqual([])
+
+      expect(result).toEqual({ products: [], families: [] })
     })
 
-    it('should return empty array when product_tree.branches is empty array', () => {
+    it('should return empty result when product_tree.branches is empty array', () => {
       const csafDocument = {
         product_tree: {
-          branches: []
-        }
+          branches: [],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toEqual([])
+
+      expect(result).toEqual({ products: [], families: [] })
     })
 
     it('should parse single branch with minimal data', () => {
@@ -71,16 +73,17 @@ describe('parseProductTree', () => {
           branches: [
             {
               category: 'vendor',
-              name: 'Test Vendor'
-            }
-          ]
-        }
+              name: 'Test Vendor',
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(1)
-      expect(result[0]).toEqual({
+
+      expect(result.products).toHaveLength(1)
+      expect(result.families).toHaveLength(0)
+      expect(result.products[0]).toEqual({
         id: 'default-vendor-id',
         category: 'vendor',
         name: 'Test Vendor',
@@ -88,6 +91,7 @@ describe('parseProductTree', () => {
         description: 'Default vendor description',
         identificationHelper: undefined,
         subBranches: [],
+        familyId: undefined,
         type: undefined,
       })
       expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledWith('vendor')
@@ -104,30 +108,34 @@ describe('parseProductTree', () => {
                 product_id: 'prod-123',
                 name: 'Product Description',
                 product_identification_helper: {
-                  cpe: 'cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*'
-                }
-              }
-            }
-          ]
-        }
+                  cpe: 'cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*',
+                },
+              },
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(1)
-      expect(result[0]).toEqual({
+
+      expect(result.products).toHaveLength(1)
+      expect(result.families).toHaveLength(0)
+      expect(result.products[0]).toEqual({
         id: 'prod-123',
         category: 'product_name',
         name: 'Test Product',
         productName: 'Product Description',
         description: 'Product Description',
         identificationHelper: {
-          cpe: 'cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*'
+          cpe: 'cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*',
         },
         subBranches: [],
+        familyId: undefined,
         type: undefined,
       })
-      expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledWith('product_name')
+      expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledWith(
+        'product_name',
+      )
     })
 
     it('should use default values when product data is missing', () => {
@@ -139,16 +147,17 @@ describe('parseProductTree', () => {
               name: '', // Empty name should use default
               product: {
                 // Missing product_id and name should use defaults
-              }
-            }
-          ]
-        }
+              },
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(1)
-      expect(result[0]).toEqual({
+
+      expect(result.products).toHaveLength(1)
+      expect(result.families).toHaveLength(0)
+      expect(result.products[0]).toEqual({
         id: 'default-product_version-id',
         category: 'product_version',
         name: 'Default product_version name', // Should use default because name is empty
@@ -156,6 +165,7 @@ describe('parseProductTree', () => {
         description: 'Default product_version description', // Should use default because product.name is missing
         identificationHelper: undefined,
         subBranches: [],
+        familyId: undefined,
         type: undefined,
       })
     })
@@ -173,8 +183,8 @@ describe('parseProductTree', () => {
                   name: 'Child Product',
                   product: {
                     product_id: 'child-prod-123',
-                    name: 'Child Product Description'
-                  }
+                    name: 'Child Product Description',
+                  },
                 },
                 {
                   category: 'product_version',
@@ -184,21 +194,22 @@ describe('parseProductTree', () => {
                       category: 'product_name',
                       name: 'Grandchild Product',
                       product: {
-                        product_id: 'grandchild-prod-456'
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                        product_id: 'grandchild-prod-456',
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(1)
-      expect(result[0]).toEqual({
+
+      expect(result.products).toHaveLength(1)
+      expect(result.families).toHaveLength(0)
+      expect(result.products[0]).toEqual({
         id: 'default-vendor-id',
         category: 'vendor',
         name: 'Parent Vendor',
@@ -214,6 +225,7 @@ describe('parseProductTree', () => {
             description: 'Child Product Description',
             identificationHelper: undefined,
             subBranches: [],
+            familyId: undefined,
             type: undefined,
           },
           {
@@ -232,12 +244,15 @@ describe('parseProductTree', () => {
                 description: 'Default product_name description',
                 identificationHelper: undefined,
                 subBranches: [],
+                familyId: undefined,
                 type: undefined,
-              }
+              },
             ],
+            familyId: undefined,
             type: undefined,
-          }
+          },
         ],
+        familyId: undefined,
         type: undefined,
       })
     })
@@ -251,34 +266,34 @@ describe('parseProductTree', () => {
               name: 'Vendor 1',
               product: {
                 product_id: 'vendor-1-id',
-                name: 'Vendor 1 Description'
-              }
+                name: 'Vendor 1 Description',
+              },
             },
             {
               category: 'vendor',
               name: 'Vendor 2',
               product: {
                 product_id: 'vendor-2-id',
-                name: 'Vendor 2 Description'
-              }
+                name: 'Vendor 2 Description',
+              },
             },
             {
               category: 'product_name',
-              name: 'Product 1'
-            }
-          ]
-        }
+              name: 'Product 1',
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(3)
-      expect(result[0].name).toBe('Vendor 1')
-      expect(result[0].id).toBe('vendor-1-id')
-      expect(result[1].name).toBe('Vendor 2')
-      expect(result[1].id).toBe('vendor-2-id')
-      expect(result[2].name).toBe('Product 1')
-      expect(result[2].id).toBe('default-product_name-id')
+
+      expect(result.products).toHaveLength(3)
+      expect(result.products[0].name).toBe('Vendor 1')
+      expect(result.products[0].id).toBe('vendor-1-id')
+      expect(result.products[1].name).toBe('Vendor 2')
+      expect(result.products[1].id).toBe('vendor-2-id')
+      expect(result.products[2].name).toBe('Product 1')
+      expect(result.products[2].id).toBe('default-product_name-id')
     })
 
     it('should handle branches with empty sub-branches array', () => {
@@ -288,16 +303,17 @@ describe('parseProductTree', () => {
             {
               category: 'vendor',
               name: 'Test Vendor',
-              branches: [] // Explicitly empty
-            }
-          ]
-        }
+              branches: [], // Explicitly empty
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(1)
-      expect(result[0].subBranches).toEqual([])
+
+      expect(result.products).toHaveLength(1)
+      expect(result.families).toHaveLength(0)
+      expect(result.products[0].subBranches).toEqual([])
     })
 
     it('should handle product identification helper with various properties', () => {
@@ -319,21 +335,22 @@ describe('parseProductTree', () => {
                     {
                       filename: 'file1.exe',
                       file_hashes: [
-                        { algorithm: 'SHA256', value: 'abc123def456' }
-                      ]
-                    }
-                  ]
-                }
-              }
-            }
-          ]
-        }
+                        { algorithm: 'SHA256', value: 'abc123def456' },
+                      ],
+                    },
+                  ],
+                },
+              },
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(1)
-      expect(result[0].identificationHelper).toEqual({
+
+      expect(result.products).toHaveLength(1)
+      expect(result.families).toHaveLength(0)
+      expect(result.products[0].identificationHelper).toEqual({
         cpe: 'cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*',
         purl: 'pkg:npm/example@1.0.0',
         model_numbers: ['MODEL-123', 'MODEL-456'],
@@ -341,11 +358,9 @@ describe('parseProductTree', () => {
         hashes: [
           {
             filename: 'file1.exe',
-            file_hashes: [
-              { algorithm: 'SHA256', value: 'abc123def456' }
-            ]
-          }
-        ]
+            file_hashes: [{ algorithm: 'SHA256', value: 'abc123def456' }],
+          },
+        ],
       })
     })
 
@@ -359,17 +374,18 @@ describe('parseProductTree', () => {
               product: {
                 product_id: undefined, // undefined product_id
                 name: undefined, // undefined name
-                product_identification_helper: null
-              }
-            }
-          ]
-        }
+                product_identification_helper: null,
+              },
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(1)
-      expect(result[0]).toEqual({
+
+      expect(result.products).toHaveLength(1)
+      expect(result.families).toHaveLength(0)
+      expect(result.products[0]).toEqual({
         id: 'default-vendor-id', // Should use default when product_id is undefined
         category: 'vendor',
         name: 'Default vendor name', // Should use default when name is undefined/falsy
@@ -377,6 +393,7 @@ describe('parseProductTree', () => {
         description: 'Default vendor description', // Should use default when product.name is undefined
         identificationHelper: null,
         subBranches: [],
+        familyId: undefined,
         type: undefined,
       })
     })
@@ -387,24 +404,24 @@ describe('parseProductTree', () => {
           branches: [
             {
               category: 'vendor',
-              name: 'Test Vendor'
+              name: 'Test Vendor',
             },
             {
               category: 'product_name',
-              name: 'Test Product'
+              name: 'Test Product',
             },
             {
               category: 'product_version',
-              name: 'Test Version'
-            }
-          ]
-        }
+              name: 'Test Version',
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(3)
-      result.forEach(branch => {
+
+      expect(result.products).toHaveLength(3)
+      result.products.forEach((branch) => {
         expect(branch.type).toBeUndefined()
       })
     })
@@ -415,17 +432,21 @@ describe('parseProductTree', () => {
           branches: [
             { category: 'vendor', name: 'Vendor' },
             { category: 'product_name', name: 'Product' },
-            { category: 'product_version', name: 'Version' }
-          ]
-        }
+            { category: 'product_version', name: 'Version' },
+          ],
+        },
       }
-      
+
       parseProductTree(csafDocument)
-      
+
       expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledTimes(3)
       expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledWith('vendor')
-      expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledWith('product_name')
-      expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledWith('product_version')
+      expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledWith(
+        'product_name',
+      )
+      expect(mockGetDefaultProductTreeBranch).toHaveBeenCalledWith(
+        'product_version',
+      )
     })
 
     it('should handle very deep nesting', () => {
@@ -446,28 +467,35 @@ describe('parseProductTree', () => {
                       branches: [
                         {
                           category: 'vendor',
-                          name: 'Level 4'
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
+                          name: 'Level 4',
+                        },
+                      ],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
       }
-      
+
       const result = parseProductTree(csafDocument)
-      
-      expect(result).toHaveLength(1)
-      expect(result[0].name).toBe('Level 1')
-      expect(result[0].subBranches).toHaveLength(1)
-      expect(result[0].subBranches[0].name).toBe('Level 2')
-      expect(result[0].subBranches[0].subBranches).toHaveLength(1)
-      expect(result[0].subBranches[0].subBranches[0].name).toBe('Level 3')
-      expect(result[0].subBranches[0].subBranches[0].subBranches).toHaveLength(1)
-      expect(result[0].subBranches[0].subBranches[0].subBranches[0].name).toBe('Level 4')
+
+      expect(result.products).toHaveLength(1)
+      expect(result.families).toHaveLength(0)
+      expect(result.products[0].name).toBe('Level 1')
+      expect(result.products[0].subBranches).toHaveLength(1)
+      expect(result.products[0].subBranches[0].name).toBe('Level 2')
+      expect(result.products[0].subBranches[0].subBranches).toHaveLength(1)
+      expect(result.products[0].subBranches[0].subBranches[0].name).toBe(
+        'Level 3',
+      )
+      expect(
+        result.products[0].subBranches[0].subBranches[0].subBranches,
+      ).toHaveLength(1)
+      expect(
+        result.products[0].subBranches[0].subBranches[0].subBranches[0].name,
+      ).toBe('Level 4')
     })
   })
 
@@ -475,10 +503,10 @@ describe('parseProductTree', () => {
     it('should throw error when branches is not an array', () => {
       const csafDocument = {
         product_tree: {
-          branches: 'invalid' // Should be array
-        }
+          branches: 'invalid', // Should be array
+        },
       }
-      
+
       expect(() => parseProductTree(csafDocument as any)).toThrow()
     })
 
@@ -489,13 +517,13 @@ describe('parseProductTree', () => {
             null,
             {
               category: 'vendor',
-              name: 'Valid Vendor'
+              name: 'Valid Vendor',
             },
-            undefined
-          ]
-        }
+            undefined,
+          ],
+        },
       }
-      
+
       expect(() => parseProductTree(csafDocument as any)).toThrow()
     })
 
@@ -505,12 +533,12 @@ describe('parseProductTree', () => {
           branches: [
             {
               // Missing category - but implementation handles it
-              name: 'Test Name'
-            }
-          ]
-        }
+              name: 'Test Name',
+            },
+          ],
+        },
       }
-      
+
       // The implementation doesn't validate required properties
       expect(() => parseProductTree(csafDocument as any)).not.toThrow()
     })

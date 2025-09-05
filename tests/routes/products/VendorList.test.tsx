@@ -1,7 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+vi.unmock('../../../src/routes/products/Product')
+
 import VendorList from '../../../src/routes/products/VendorList'
 import { TProductTreeBranch } from '../../../src/routes/products/types/tProductTreeBranch'
 
@@ -67,12 +70,14 @@ vi.mock('../../../src/utils/useDocumentStoreUpdater', () => ({
   },
 }))
 
-// Mock HeroUI components 
+// Mock HeroUI components
 vi.mock('@heroui/modal', () => ({
-  Modal: ({ children, isOpen, onOpenChange }: any) => 
+  Modal: ({ children, isOpen, onOpenChange }: any) =>
     isOpen ? (
       <div data-testid="modal">
-        <button data-testid="modal-close" onClick={() => onOpenChange()}>Close</button>
+        <button data-testid="modal-close" onClick={() => onOpenChange()}>
+          Close
+        </button>
         {children}
       </div>
     ) : null,
@@ -112,7 +117,15 @@ const mockProductDisclosure = {
 
 // Mock form components
 vi.mock('../../../src/components/forms/ComponentList', () => ({
-  default: ({ listState, itemLabel, title, titleProps, addEntry, customActions, content }: any) => (
+  default: ({
+    listState,
+    itemLabel,
+    title,
+    titleProps,
+    addEntry,
+    customActions,
+    content,
+  }: any) => (
     <div data-testid="component-list">
       <div data-testid="item-label">{itemLabel}</div>
       <div data-testid="title-field">{title}</div>
@@ -149,8 +162,8 @@ vi.mock('../../../src/components/forms/VSplit', () => ({
 
 vi.mock('../../../src/components/forms/AddItemButton', () => ({
   default: ({ fullWidth, label, onPress }: any) => (
-    <button 
-      data-testid="add-item-button" 
+    <button
+      data-testid="add-item-button"
       data-full-width={fullWidth}
       onClick={onPress}
     >
@@ -161,7 +174,7 @@ vi.mock('../../../src/components/forms/AddItemButton', () => ({
 
 vi.mock('../../../src/routes/products/components/ProductCard', () => ({
   default: ({ product, variant, onEdit }: any) => (
-    <div 
+    <div
       data-testid={`product-card-${product.id}`}
       data-variant={variant}
       onClick={onEdit}
@@ -175,9 +188,11 @@ vi.mock('../../../src/routes/products/components/PTBEditForm', () => ({
   PTBCreateEditForm: ({ ptb, category, onSave }: any) => (
     <div data-testid="ptb-create-edit-form" data-category={category}>
       <div data-testid="ptb-name">{ptb?.name || 'No PTB'}</div>
-      <button 
-        data-testid="ptb-save-button" 
-        onClick={() => onSave && onSave({ id: ptb?.id, name: 'Test Save', category })}
+      <button
+        data-testid="ptb-save-button"
+        onClick={() =>
+          onSave && onSave({ id: ptb?.id, name: 'Test Save', category })
+        }
       >
         Save PTB
       </button>
@@ -208,7 +223,7 @@ const mockProduct1: TProductTreeBranch = {
 
 const mockProduct2: TProductTreeBranch = {
   id: 'product-2',
-  category: 'product_name', 
+  category: 'product_name',
   name: 'Test Product 2',
   description: 'Test product 2 description',
   subBranches: [],
@@ -230,7 +245,13 @@ describe('VendorList', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockGetPTBsByCategory.mockReturnValue(mockVendorData)
-    mockAddDataEntry.mockReturnValue({ id: 'new-vendor-entry', category: 'vendor', name: '', description: '', subBranches: [] })
+    mockAddDataEntry.mockReturnValue({
+      id: 'new-vendor-entry',
+      category: 'vendor',
+      name: '',
+      description: '',
+      subBranches: [],
+    })
     mockGetId.mockImplementation((entry: any) => entry.id)
   })
 
@@ -246,7 +267,9 @@ describe('VendorList', () => {
       render(<VendorList />)
 
       expect(screen.getByTestId('title-field')).toHaveTextContent('name')
-      expect(screen.getByTestId('title-props')).toHaveTextContent('{"className":"font-bold"}')
+      expect(screen.getByTestId('title-props')).toHaveTextContent(
+        '{"className":"font-bold"}',
+      )
     })
 
     it('should render custom actions for vendors', () => {
@@ -317,7 +340,7 @@ describe('VendorList', () => {
         ...mockVendor,
         subBranches: [],
       }
-      
+
       mockGetPTBsByCategory.mockReturnValue([vendorWithNoProducts])
 
       render(<VendorList />)
@@ -334,18 +357,18 @@ describe('VendorList', () => {
         description: 'Test vendor 2 description',
         subBranches: [],
       }
-      
+
       const multipleVendors = [mockVendor, vendor2]
-      
+
       // Update the mock to return multiple vendors for this test
       mockSetData.mockClear()
-      
+
       render(<VendorList />)
 
       // Check that setData was called with the original mock data
       expect(mockSetData).toHaveBeenCalledWith(mockVendorData)
-      
-      // For this test, we can't easily test multiple vendors without 
+
+      // For this test, we can't easily test multiple vendors without
       // more complex mocking, so just verify the component renders
       expect(screen.getByTestId('vendor-vendor-1')).toBeInTheDocument()
     })
@@ -354,7 +377,7 @@ describe('VendorList', () => {
   describe('Modal Interactions', () => {
     it('should open vendor modal when custom action is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const customAction = screen.getByTestId('custom-action-0')
@@ -366,7 +389,7 @@ describe('VendorList', () => {
 
     it('should open vendor modal when add entry is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const addEntryButton = screen.getByTestId('add-entry-button')
@@ -378,7 +401,7 @@ describe('VendorList', () => {
 
     it('should open product modal when add item button is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const addItemButton = screen.getByTestId('add-item-button')
@@ -390,7 +413,7 @@ describe('VendorList', () => {
 
     it('should open product modal when product card is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const productCard = screen.getByTestId('product-card-product-1')
@@ -404,30 +427,30 @@ describe('VendorList', () => {
   describe('Vendor Save Operations', () => {
     it('should handle vendor form save functionality', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       // Test basic rendering which covers the vendor save operations structure
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
       expect(screen.getByTestId('custom-action-0')).toBeInTheDocument()
-      
+
       // Click on custom action to trigger vendor editing flow
       const customAction = screen.getByTestId('custom-action-0')
       await user.click(customAction)
-      
+
       // The component should handle the action
       expect(customAction).toBeInTheDocument()
     })
 
     it('should handle add vendor functionality', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       // Click add entry button to trigger vendor adding flow
       const addEntryButton = screen.getByTestId('add-entry-button')
       await user.click(addEntryButton)
-      
+
       // Verify add entry was triggered
       expect(addEntryButton).toBeInTheDocument()
     })
@@ -436,26 +459,26 @@ describe('VendorList', () => {
   describe('Product Save Operations', () => {
     it('should handle product form save functionality', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       // Click on product card to trigger product editing flow
       const productCard = screen.getByTestId('product-card-product-1')
       await user.click(productCard)
-      
+
       // The component should handle the product edit action
       expect(productCard).toBeInTheDocument()
     })
 
     it('should handle add product functionality', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       // Click add item button to trigger product adding flow
       const addItemButton = screen.getByTestId('add-item-button')
       await user.click(addItemButton)
-      
+
       // Verify add product was triggered
       expect(addItemButton).toBeInTheDocument()
     })
@@ -466,7 +489,7 @@ describe('VendorList', () => {
       // Verify product card rendering covers the product save structure
       const productCard1 = screen.getByTestId('product-card-product-1')
       const productCard2 = screen.getByTestId('product-card-product-2')
-      
+
       expect(productCard1).toHaveAttribute('data-variant', 'boxed')
       expect(productCard2).toHaveAttribute('data-variant', 'boxed')
       expect(productCard1).toHaveTextContent('Product: Test Product 1')
@@ -477,7 +500,7 @@ describe('VendorList', () => {
   describe('Edit Functionality', () => {
     it('should handle edit vendor action', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const customAction = screen.getByTestId('custom-action-0')
@@ -489,7 +512,7 @@ describe('VendorList', () => {
 
     it('should handle edit product action', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const productCard = screen.getByTestId('product-card-product-1')
@@ -521,7 +544,7 @@ describe('VendorList', () => {
       // Verify both products are rendered
       expect(screen.getByTestId('product-card-product-1')).toBeInTheDocument()
       expect(screen.getByTestId('product-card-product-2')).toBeInTheDocument()
-      
+
       // Verify vendor structure
       expect(screen.getByTestId('vendor-vendor-1')).toBeInTheDocument()
       expect(screen.getByTestId('vsplit')).toBeInTheDocument()
@@ -548,7 +571,7 @@ describe('VendorList', () => {
   describe('Extended Component Coverage', () => {
     it('should handle modal operations without errors', () => {
       render(<VendorList />)
-      
+
       // Verify component renders without modal-related errors
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
     })
@@ -567,13 +590,13 @@ describe('VendorList', () => {
             description: 'Complex Product 1',
             subBranches: [],
             type: 'Software',
-          }
+          },
         ],
       }
 
       // Set the data for this specific test
       mockGetPTBsByCategory.mockReturnValue([complexVendor])
-      
+
       // Clear previous mock calls
       mockSetData.mockClear()
 
@@ -593,7 +616,7 @@ describe('VendorList', () => {
           name: 'New Vendor',
           description: 'New vendor',
           subBranches: [],
-        }
+        },
       ]
 
       mockGetPTBsByCategory.mockReturnValue(newVendorData)
@@ -622,7 +645,7 @@ describe('VendorList', () => {
           name: 'Second Vendor',
           description: 'Second vendor',
           subBranches: [],
-        }
+        },
       ]
 
       mockGetPTBsByCategory.mockReturnValue(multipleVendors)
@@ -649,7 +672,7 @@ describe('VendorList', () => {
 
     it('should handle custom action interactions', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const customAction = screen.getByTestId('custom-action-0')
@@ -661,7 +684,7 @@ describe('VendorList', () => {
 
     it('should handle component list add entry functionality', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const addEntryButton = screen.getByTestId('add-entry-button')
@@ -672,12 +695,12 @@ describe('VendorList', () => {
 
     it('should handle product card interactions', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const productCard1 = screen.getByTestId('product-card-product-1')
       const productCard2 = screen.getByTestId('product-card-product-2')
-      
+
       await user.click(productCard1)
       await user.click(productCard2)
 
@@ -689,7 +712,7 @@ describe('VendorList', () => {
 
     it('should handle add item button functionality', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const addItemButton = screen.getByTestId('add-item-button')
@@ -714,8 +737,13 @@ describe('VendorList', () => {
 
       // Verify all translations are being used correctly
       expect(screen.getByTestId('item-label')).toHaveTextContent('Vendor')
-      expect(screen.getByTestId('add-item-button')).toHaveTextContent('Add Product')
-      expect(screen.getByTestId('custom-action-0')).toHaveAttribute('data-tooltip', 'Edit Vendor')
+      expect(screen.getByTestId('add-item-button')).toHaveTextContent(
+        'Add Product',
+      )
+      expect(screen.getByTestId('custom-action-0')).toHaveAttribute(
+        'data-tooltip',
+        'Edit Vendor',
+      )
     })
 
     it('should handle useListState integration correctly', () => {
@@ -741,11 +769,17 @@ describe('VendorList', () => {
 
       expect(screen.getByTestId('product-card-product-1')).toBeInTheDocument()
       expect(screen.getByTestId('product-card-product-2')).toBeInTheDocument()
-      
+
       // Verify products are rendered with correct variant
-      expect(screen.getByTestId('product-card-product-1')).toHaveAttribute('data-variant', 'boxed')
-      expect(screen.getByTestId('product-card-product-2')).toHaveAttribute('data-variant', 'boxed')
-      
+      expect(screen.getByTestId('product-card-product-1')).toHaveAttribute(
+        'data-variant',
+        'boxed',
+      )
+      expect(screen.getByTestId('product-card-product-2')).toHaveAttribute(
+        'data-variant',
+        'boxed',
+      )
+
       expect(screen.getByText('Product: Test Product 1')).toBeInTheDocument()
       expect(screen.getByText('Product: Test Product 2')).toBeInTheDocument()
     })
@@ -754,7 +788,9 @@ describe('VendorList', () => {
       render(<VendorList />)
 
       expect(screen.getByTestId('title-field')).toHaveTextContent('name')
-      expect(screen.getByTestId('title-props')).toHaveTextContent('{"className":"font-bold"}')
+      expect(screen.getByTestId('title-props')).toHaveTextContent(
+        '{"className":"font-bold"}',
+      )
     })
 
     it('should handle document store updater integration', () => {
@@ -806,7 +842,7 @@ describe('VendorList', () => {
       // Each vendor should have its products rendered
       const vendor = screen.getByTestId('vendor-vendor-1')
       expect(vendor).toBeInTheDocument()
-      
+
       // Products should be within the vendor context
       expect(screen.getByTestId('product-card-product-1')).toBeInTheDocument()
       expect(screen.getByTestId('product-card-product-2')).toBeInTheDocument()
@@ -843,7 +879,7 @@ describe('VendorList', () => {
             description: 'Product C',
             subBranches: [],
             type: 'Software',
-          }
+          },
         ],
       }
 
@@ -871,13 +907,13 @@ describe('VendorList', () => {
             description: 'Product 1',
             subBranches: [],
             type: 'Software',
-          }
+          },
         ],
       }
 
       // Set the data for this specific test
       mockGetPTBsByCategory.mockReturnValue([complexVendor])
-      
+
       // Clear previous mock calls
       mockSetData.mockClear()
 
@@ -890,7 +926,7 @@ describe('VendorList', () => {
 
     it('should handle product operations within vendor context', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       // Click on a product card to simulate editing
@@ -930,7 +966,9 @@ describe('VendorList', () => {
 
       // Verify translations are being used
       expect(screen.getByTestId('item-label')).toHaveTextContent('Vendor')
-      expect(screen.getByTestId('add-item-button')).toHaveTextContent('Add Product')
+      expect(screen.getByTestId('add-item-button')).toHaveTextContent(
+        'Add Product',
+      )
     })
 
     it('should handle useListState operations correctly', () => {
@@ -951,7 +989,7 @@ describe('VendorList', () => {
 
     it('should handle custom actions on vendors', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const customAction = screen.getByTestId('custom-action-0')
@@ -967,10 +1005,16 @@ describe('VendorList', () => {
 
       expect(screen.getByTestId('product-card-product-1')).toBeInTheDocument()
       expect(screen.getByTestId('product-card-product-2')).toBeInTheDocument()
-      
+
       // Verify products are rendered with correct variant
-      expect(screen.getByTestId('product-card-product-1')).toHaveAttribute('data-variant', 'boxed')
-      expect(screen.getByTestId('product-card-product-2')).toHaveAttribute('data-variant', 'boxed')
+      expect(screen.getByTestId('product-card-product-1')).toHaveAttribute(
+        'data-variant',
+        'boxed',
+      )
+      expect(screen.getByTestId('product-card-product-2')).toHaveAttribute(
+        'data-variant',
+        'boxed',
+      )
     })
 
     it('should handle multiple vendors with different configurations', () => {
@@ -982,7 +1026,7 @@ describe('VendorList', () => {
           name: 'Second Vendor',
           description: 'Second vendor',
           subBranches: [],
-        }
+        },
       ]
 
       mockGetPTBsByCategory.mockReturnValue(multipleVendors)
@@ -1009,7 +1053,7 @@ describe('VendorList', () => {
 
     it('should handle component list interactions', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       // Test add entry functionality
@@ -1027,12 +1071,12 @@ describe('VendorList', () => {
 
     it('should handle product card click interactions', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const productCard1 = screen.getByTestId('product-card-product-1')
       const productCard2 = screen.getByTestId('product-card-product-2')
-      
+
       await user.click(productCard1)
       await user.click(productCard2)
 
@@ -1042,7 +1086,7 @@ describe('VendorList', () => {
 
     it('should handle add item button functionality', async () => {
       const user = userEvent.setup()
-      
+
       render(<VendorList />)
 
       const addItemButton = screen.getByTestId('add-item-button')
@@ -1075,7 +1119,7 @@ describe('VendorList', () => {
           name: 'New Vendor',
           description: 'New vendor',
           subBranches: [],
-        }
+        },
       ]
 
       mockGetPTBsByCategory.mockReturnValue(newVendorData)
@@ -1096,14 +1140,14 @@ describe('VendorList', () => {
   describe('Modal Callback Coverage', () => {
     it('should handle modal state changes without errors', () => {
       render(<VendorList />)
-      
+
       // Verify component renders without modal-related errors
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
     })
 
     it('should handle modal interactions properly', () => {
       render(<VendorList />)
-      
+
       // Verify modal functionality doesn't break component rendering
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
       expect(screen.getByTestId('custom-action-0')).toBeInTheDocument()

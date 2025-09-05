@@ -1,7 +1,8 @@
-import { TProductTreeBranchProductType } from './types/tProductTreeBranch'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
-import ProductCard from './components/ProductCard'
 import { useTranslation } from 'react-i18next'
+import ProductCard from './components/ProductCard'
+import { ProductFamilyChip } from './Product'
+import { TProductTreeBranchProductType } from './types/tProductTreeBranch'
 
 export type ProductListProps = {
   productType: TProductTreeBranchProductType
@@ -26,7 +27,11 @@ export default function ProductList({ productType }: ProductListProps) {
         </div>
       )}
       {products.map((product) => (
-        <ProductCard key={product.id} product={product} />
+        <ProductCard
+          key={product.id}
+          product={product}
+          chips={<ProductFamilyChip product={product} />}
+        />
       ))}
       {/* Button will be added after products can be moved between vendors */}
       {/*<AddItemButton

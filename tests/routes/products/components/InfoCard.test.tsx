@@ -1,7 +1,23 @@
 import { fireEvent, render, screen } from '@testing-library/react'
-import { MemoryRouter } from 'react-router'
 import { describe, expect, it, vi } from 'vitest'
 import InfoCard from '../../../../src/routes/products/components/InfoCard'
+
+// Mock react-router to include MemoryRouter
+vi.mock('react-router', async (importOriginal) => {
+  const actual: any = await importOriginal()
+  return {
+    ...actual,
+    MemoryRouter: ({ children }: any) => children,
+    Link: ({ children, to, ...props }: any) => (
+      <a href={to} {...props}>
+        {children}
+      </a>
+    ),
+  }
+})
+
+// Import MemoryRouter after the mock is set up
+const { MemoryRouter } = await import('react-router')
 
 // Mock dependencies
 vi.mock('@/components/forms/HSplit', () => ({

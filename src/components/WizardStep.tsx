@@ -6,6 +6,7 @@ import ProgressBar from './ProgressBar'
 
 export type WizardStepProps = PropsWithChildren<{
   title?: string
+  subtitle?: string
   progress?: number
   onBack?: string | (() => void)
   onContinue?: string | (() => void)
@@ -14,6 +15,7 @@ export type WizardStepProps = PropsWithChildren<{
 
 export default function WizardStep({
   title,
+  subtitle,
   progress,
   onBack,
   onContinue,
@@ -28,7 +30,7 @@ export default function WizardStep({
       <ProgressBar
         sections={[
           t('nav.document'),
-          t('nav.products'),
+          t('nav.productManagement.title'),
           t('nav.vulnerabilities'),
           t('nav.tracking'),
         ]}
@@ -36,7 +38,12 @@ export default function WizardStep({
       />
       {(noContentWrapper && <>{children}</>) || (
         <div className="border-default-200 bg-content1 border-default-200 flex flex-col gap-2 rounded-lg border p-8">
-          {title && <div className="mb-4 text-xl font-semibold">{title}</div>}
+          <div className="gap-2">
+            {title && <div className="text-xl font-semibold">{title}</div>}
+            {subtitle && (
+              <div className="text-default-400 mb-4 text-lg">{subtitle}</div>
+            )}
+          </div>
           {children}
         </div>
       )}

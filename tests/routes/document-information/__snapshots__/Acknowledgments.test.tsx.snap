@@ -24,7 +24,7 @@ exports[`Acknowledgments > Component Rendering > should render with empty acknow
     </a>
     <a
       data-testid="continue-link"
-      href="/product-management"
+      href="/product-families"
     >
       Continue
     </a>

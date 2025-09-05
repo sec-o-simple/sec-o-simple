@@ -38,6 +38,45 @@ exports[`PTBCreateEditForm > should render create form and match snapshot 1`] = 
           Hardware
         </option>
       </select>
+      <div
+        data-testid="autocomplete"
+        errormessage=""
+        inputprops="[object Object]"
+        label="product_family.parent"
+        labelplacement="outside"
+        placeholder=" "
+        selectedkey=""
+        variant="bordered"
+      >
+        <div
+          data-testid="autocomplete-item"
+          textvalue="Test Family 1"
+        >
+          <div
+            class="flex gap-1"
+          >
+            <p
+              class="font-bold"
+            >
+              Test Family 1
+            </p>
+          </div>
+        </div>
+        <div
+          data-testid="autocomplete-item"
+          textvalue="Test Family 2"
+        >
+          <div
+            class="flex gap-1"
+          >
+            <p
+              class="font-bold"
+            >
+              Test Family 2
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       data-testid="modal-footer"
@@ -102,6 +141,45 @@ exports[`PTBCreateEditForm > should render edit form with existing PTB and match
           Hardware
         </option>
       </select>
+      <div
+        data-testid="autocomplete"
+        errormessage=""
+        inputprops="[object Object]"
+        label="product_family.parent"
+        labelplacement="outside"
+        placeholder=" "
+        selectedkey=""
+        variant="bordered"
+      >
+        <div
+          data-testid="autocomplete-item"
+          textvalue="Test Family 1"
+        >
+          <div
+            class="flex gap-1"
+          >
+            <p
+              class="font-bold"
+            >
+              Test Family 1
+            </p>
+          </div>
+        </div>
+        <div
+          data-testid="autocomplete-item"
+          textvalue="Test Family 2"
+        >
+          <div
+            class="flex gap-1"
+          >
+            <p
+              class="font-bold"
+            >
+              Test Family 2
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       data-testid="modal-footer"

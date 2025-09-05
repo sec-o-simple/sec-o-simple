@@ -16,7 +16,6 @@ import {
 } from '@/routes/document-information/types/tDocumentReference'
 import { TTLPLevel } from '@/routes/document-information/types/tGeneralDocumentInformation'
 import { getDefaultRevisionHistoryEntry } from '@/routes/document-information/types/tRevisionHistoryEntry'
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import {
   CSAFRelationship,
   TRelationship,
@@ -202,9 +201,9 @@ export function parseCSAFDocument(
       }) ?? ([] as TAcknowledgment[]),
   }
 
-  const products: TProductTreeBranch[] = parseProductTree(
-    csafDocument as TCSAFDocument,
-  )
+  const productTreeResult = parseProductTree(csafDocument as TCSAFDocument)
+  const products = productTreeResult.products
+  const families = productTreeResult.families
 
   const relationships: TRelationship[] = parseRelationships(
     (csafDocument.product_tree?.relationships ?? []) as CSAFRelationship[],
@@ -221,6 +220,7 @@ export function parseCSAFDocument(
     sosDocumentType,
     documentInformation,
     products,
+    families,
     relationships,
     vulnerabilities,
   }

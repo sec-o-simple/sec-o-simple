@@ -1,6 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the Version component to test the actual implementation
+vi.unmock('../../../src/routes/products/Version')
+
 import Version from '../../../src/routes/products/Version'
 import type { TProductTreeBranchWithParents } from '../../../src/routes/products/types/tProductTreeBranch'
 import type { TRelationship } from '../../../src/routes/products/types/tRelationship'
@@ -25,10 +29,13 @@ vi.mock('react-i18next', () => ({
         'products.relationship.label': 'Relationship',
         'products.relationship.empty': 'No relationships found',
         'products.relationship.categories.installed_on': 'Installed On',
-        'products.relationship.categories.default_component_of': 'Default Component Of',
-        'products.relationship.categories.external_component_of': 'External Component Of',
+        'products.relationship.categories.default_component_of':
+          'Default Component Of',
+        'products.relationship.categories.external_component_of':
+          'External Component Of',
         'products.relationship.categories.installed_with': 'Installed With',
-        'products.relationship.categories.optional_component_of': 'Optional Component Of',
+        'products.relationship.categories.optional_component_of':
+          'Optional Component Of',
       }
       return translations[key] || key
     }),
@@ -40,7 +47,7 @@ const mockFindProductTreeBranch = vi.fn()
 const mockFindProductTreeBranchWithParents = vi.fn()
 const mockGetPTBName = vi.fn((product: any) => {
   let fallbackName = 'Untitled Product'
-  
+
   if (product.category === 'vendor') {
     fallbackName = 'Untitled Vendor'
   } else if (product.category === 'product_version') {
@@ -48,10 +55,10 @@ const mockGetPTBName = vi.fn((product: any) => {
   } else if (product.category === 'product_name') {
     fallbackName = 'Untitled Product'
   }
-  
+
   return {
     name: product.name || fallbackName,
-    isReadonly: false
+    isReadonly: false,
   }
 })
 const mockGetRelationshipsBySourceVersion = vi.fn()
@@ -71,7 +78,7 @@ vi.mock('../../../src/utils/useProductTreeBranch', () => ({
         fullProductName: 'Test Vendor / Test Product / Version 1.0',
       },
       {
-        id: 'version-2', 
+        id: 'version-2',
         fullProductName: 'Another Vendor / Related Product / Version 2.0',
       },
     ]),
@@ -97,10 +104,10 @@ const mockOnOpenChange = vi.fn()
 const mockUseDisclosure = vi.fn()
 
 vi.mock('@heroui/modal', () => ({
-  Modal: ({ children, isOpen, onOpenChange, size, isDismissable }: any) => 
+  Modal: ({ children, isOpen, onOpenChange, size, isDismissable }: any) =>
     isOpen ? (
-      <div 
-        data-testid="modal" 
+      <div
+        data-testid="modal"
         data-size={size}
         data-is-dismissable={isDismissable}
         onClick={() => onOpenChange(false)}
@@ -112,8 +119,15 @@ vi.mock('@heroui/modal', () => ({
 }))
 
 vi.mock('@heroui/accordion', () => ({
-  Accordion: ({ children, variant, selectionMode, defaultSelectedKeys, className, itemClasses }: any) => (
-    <div 
+  Accordion: ({
+    children,
+    variant,
+    selectionMode,
+    defaultSelectedKeys,
+    className,
+    itemClasses,
+  }: any) => (
+    <div
       data-testid="accordion"
       data-variant={variant}
       data-selection-mode={selectionMode}
@@ -125,7 +139,7 @@ vi.mock('@heroui/accordion', () => ({
     </div>
   ),
   AccordionItem: ({ children, title, className, key, ...props }: any) => (
-    <div 
+    <div
       data-testid="accordion-item"
       data-key={key}
       className={className}
@@ -139,7 +153,7 @@ vi.mock('@heroui/accordion', () => ({
 
 vi.mock('@heroui/chip', () => ({
   Chip: ({ children, color, variant, radius, size }: any) => (
-    <div 
+    <div
       data-testid="chip"
       data-color={color}
       data-variant={variant}
@@ -167,15 +181,13 @@ vi.mock('../../../src/components/forms/Breadcrumbs', () => ({
 }))
 
 vi.mock('../../../src/components/forms/VSplit', () => ({
-  default: ({ children }: any) => (
-    <div data-testid="vsplit">{children}</div>
-  ),
+  default: ({ children }: any) => <div data-testid="vsplit">{children}</div>,
 }))
 
 vi.mock('../../../src/components/WizardStep', () => ({
   default: ({ children, progress, noContentWrapper }: any) => (
-    <div 
-      data-testid="wizard-step" 
+    <div
+      data-testid="wizard-step"
       data-progress={progress}
       data-no-content-wrapper={noContentWrapper}
     >
@@ -185,15 +197,23 @@ vi.mock('../../../src/components/WizardStep', () => ({
 }))
 
 vi.mock('../../../src/routes/products/components/InfoCard', () => ({
-  default: ({ title, variant, onEdit, onDelete, startContent, children }: any) => (
-    <div 
-      data-testid="info-card" 
-      data-variant={variant}
-    >
+  default: ({
+    title,
+    variant,
+    onEdit,
+    onDelete,
+    startContent,
+    children,
+  }: any) => (
+    <div data-testid="info-card" data-variant={variant}>
       <div data-testid="info-card-title">{title}</div>
       {startContent && <div data-testid="start-content">{startContent}</div>}
-      <button data-testid="edit-button" onClick={onEdit}>Edit</button>
-      <button data-testid="delete-button" onClick={onDelete}>Delete</button>
+      <button data-testid="edit-button" onClick={onEdit}>
+        Edit
+      </button>
+      <button data-testid="delete-button" onClick={onDelete}>
+        Delete
+      </button>
       <div data-testid="info-card-content">{children}</div>
     </div>
   ),
@@ -203,8 +223,8 @@ vi.mock('../../../src/routes/products/components/RelationshipEditForm', () => ({
   default: ({ relationship, onSave }: any) => (
     <div data-testid="relationship-edit-form">
       <div data-testid="relationship-data">{JSON.stringify(relationship)}</div>
-      <button 
-        data-testid="save-relationship-button" 
+      <button
+        data-testid="save-relationship-button"
         onClick={() => onSave(relationship)}
       >
         Save Relationship
@@ -217,7 +237,9 @@ vi.mock('../../../src/routes/products/components/SubMenuHeader', () => ({
   default: ({ title, backLink, actionTitle, onAction }: any) => (
     <div data-testid="sub-menu-header">
       <div data-testid="title">{title}</div>
-      <div data-testid="back-link" data-href={backLink}>Back</div>
+      <div data-testid="back-link" data-href={backLink}>
+        Back
+      </div>
       {actionTitle && (
         <button data-testid="action-button" onClick={onAction}>
           {actionTitle}
@@ -231,7 +253,7 @@ vi.mock('../../../src/routes/products/components/TagList', () => ({
   default: ({ items, linkGenerator, labelGenerator }: any) => (
     <div data-testid="tag-list">
       {items.map((item: string, index: number) => (
-        <div 
+        <div
           key={index}
           data-testid="tag-item"
           data-link={linkGenerator ? linkGenerator(item) : ''}
@@ -277,8 +299,8 @@ describe('Version', () => {
         description: 'Test vendor description',
         subBranches: [],
         parent: null,
-      }
-    }
+      },
+    },
   }
 
   const mockRelationship: TRelationship = {
@@ -290,8 +312,8 @@ describe('Version', () => {
       {
         product1VersionId: 'version-1',
         product2VersionId: 'version-2',
-        relationshipId: 'rel-1-version-1-version-2'
-      }
+        relationshipId: 'rel-1-version-1-version-2',
+      },
     ],
     name: 'Test Relationship',
   }
@@ -307,14 +329,14 @@ describe('Version', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     // Setup default mock returns
     mockUseParams.mockReturnValue({ productVersionId: 'version-1' })
     mockFindProductTreeBranchWithParents.mockReturnValue(mockProductVersion)
     mockGetPTBName.mockClear()
     mockGetRelationshipsBySourceVersion.mockReturnValue([mockRelationship])
     mockSortRelationshipsByCategory.mockReturnValue({
-      installed_on: [mockRelationship]
+      installed_on: [mockRelationship],
     })
     mockFindProductTreeBranch.mockReturnValue(mockRelatedProduct)
     mockUseDocumentStore.mockReturnValue('CSAF')
@@ -330,26 +352,38 @@ describe('Version', () => {
       render(<Version />)
 
       expect(screen.getByTestId('wizard-step')).toBeInTheDocument()
-      expect(screen.getByTestId('wizard-step')).toHaveAttribute('data-progress', '2')
-      expect(screen.getByTestId('wizard-step')).toHaveAttribute('data-no-content-wrapper', 'true')
+      expect(screen.getByTestId('wizard-step')).toHaveAttribute(
+        'data-progress',
+        '2',
+      )
+      expect(screen.getByTestId('wizard-step')).toHaveAttribute(
+        'data-no-content-wrapper',
+        'true',
+      )
     })
 
     it('should render breadcrumbs with correct hierarchy', () => {
       render(<Version />)
 
       expect(screen.getByTestId('breadcrumbs')).toBeInTheDocument()
-      
+
       const breadcrumbItems = screen.getAllByTestId('breadcrumb-item')
       expect(breadcrumbItems).toHaveLength(3)
-      
+
       // Vendor breadcrumb
-      expect(breadcrumbItems[0]).toHaveAttribute('data-href', '/#/product-management')
+      expect(breadcrumbItems[0]).toHaveAttribute(
+        'data-href',
+        '/#/products/management',
+      )
       expect(breadcrumbItems[0]).toHaveTextContent('Test Vendor')
-      
+
       // Product breadcrumb
-      expect(breadcrumbItems[1]).toHaveAttribute('data-href', '/#/product-management/product/product-1')
+      expect(breadcrumbItems[1]).toHaveAttribute(
+        'data-href',
+        '/#/products/management/product/product-1',
+      )
       expect(breadcrumbItems[1]).toHaveTextContent('Test Product')
-      
+
       // Version breadcrumb
       expect(breadcrumbItems[2]).toHaveTextContent('Version 1.0')
     })
@@ -365,8 +399,8 @@ describe('Version', () => {
             ...mockProductVersion.parent!.parent!,
             name: '',
             parent: null,
-          }
-        }
+          },
+        },
       }
       mockFindProductTreeBranchWithParents.mockReturnValue(emptyNamesProduct)
 
@@ -383,19 +417,24 @@ describe('Version', () => {
 
       const subMenuHeader = screen.getByTestId('sub-menu-header')
       expect(subMenuHeader).toBeInTheDocument()
-      
+
       const title = screen.getByTestId('title')
       expect(title).toHaveTextContent('Version Version 1.0')
-      
+
       const backLink = screen.getByTestId('back-link')
-      expect(backLink).toHaveAttribute('data-href', '/product-management/product/product-1')
+      expect(backLink).toHaveAttribute(
+        'data-href',
+        '/products/management/product/product-1',
+      )
     })
 
     it('should render action button for non-Software document types', () => {
       render(<Version />)
 
       expect(screen.getByTestId('action-button')).toBeInTheDocument()
-      expect(screen.getByTestId('action-button')).toHaveTextContent('Add Relationship')
+      expect(screen.getByTestId('action-button')).toHaveTextContent(
+        'Add Relationship',
+      )
     })
 
     it('should not render action button for Software document type', () => {
@@ -439,13 +478,24 @@ describe('Version', () => {
       render(<Version />)
 
       expect(screen.getByTestId('accordion')).toBeInTheDocument()
-      expect(screen.getByTestId('accordion')).toHaveAttribute('data-variant', 'splitted')
-      expect(screen.getByTestId('accordion')).toHaveAttribute('data-selection-mode', 'multiple')
-      expect(screen.getByTestId('accordion')).toHaveAttribute('data-default-selected-keys', 'all')
+      expect(screen.getByTestId('accordion')).toHaveAttribute(
+        'data-variant',
+        'splitted',
+      )
+      expect(screen.getByTestId('accordion')).toHaveAttribute(
+        'data-selection-mode',
+        'multiple',
+      )
+      expect(screen.getByTestId('accordion')).toHaveAttribute(
+        'data-default-selected-keys',
+        'all',
+      )
 
       const accordionItem = screen.getByTestId('accordion-item')
       expect(accordionItem).toBeInTheDocument()
-      expect(screen.getByTestId('accordion-title')).toHaveTextContent('Installed On')
+      expect(screen.getByTestId('accordion-title')).toHaveTextContent(
+        'Installed On',
+      )
     })
 
     it('should display empty message when no relationships exist', () => {
@@ -464,11 +514,13 @@ describe('Version', () => {
       const infoCard = screen.getByTestId('info-card')
       expect(infoCard).toBeInTheDocument()
       expect(infoCard).toHaveAttribute('data-variant', 'boxed')
-      
-      expect(screen.getByTestId('info-card-title')).toHaveTextContent('Related Product')
+
+      expect(screen.getByTestId('info-card-title')).toHaveTextContent(
+        'Related Product',
+      )
       expect(screen.getByTestId('edit-button')).toBeInTheDocument()
       expect(screen.getByTestId('delete-button')).toBeInTheDocument()
-      
+
       // Check chip in start content
       const chip = screen.getByTestId('chip')
       expect(chip).toBeInTheDocument()
@@ -483,7 +535,10 @@ describe('Version', () => {
       expect(screen.getByTestId('tag-list')).toBeInTheDocument()
       const tagItems = screen.getAllByTestId('tag-item')
       expect(tagItems).toHaveLength(1)
-      expect(tagItems[0]).toHaveAttribute('data-link', '/product-management/version/version-2')
+      expect(tagItems[0]).toHaveAttribute(
+        'data-link',
+        '/products/management/version/version-2',
+      )
     })
 
     it('should not render InfoCard when related product is not found', () => {
@@ -502,14 +557,16 @@ describe('Version', () => {
 
       render(<Version />)
 
-      expect(screen.getByTestId('info-card-title')).toHaveTextContent('Untitled Product')
+      expect(screen.getByTestId('info-card-title')).toHaveTextContent(
+        'Untitled Product',
+      )
     })
   })
 
   describe('Modal Interactions', () => {
     it('should open modal when action button is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<Version />)
 
       const actionButton = screen.getByTestId('action-button')
@@ -520,20 +577,22 @@ describe('Version', () => {
 
     it('should set editing relationship when action button is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<Version />)
 
       const actionButton = screen.getByTestId('action-button')
       await user.click(actionButton)
 
       // Check that getDefaultRelationship was called
-      const { getDefaultRelationship } = await import('../../../src/routes/products/types/tRelationship')
+      const { getDefaultRelationship } = await import(
+        '../../../src/routes/products/types/tRelationship'
+      )
       expect(vi.mocked(getDefaultRelationship)).toHaveBeenCalled()
     })
 
     it('should open modal when edit button is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<Version />)
 
       const editButton = screen.getByTestId('edit-button')
@@ -544,7 +603,7 @@ describe('Version', () => {
 
     it('should call deleteRelationship when delete button is clicked', async () => {
       const user = userEvent.setup()
-      
+
       render(<Version />)
 
       const deleteButton = screen.getByTestId('delete-button')
@@ -581,7 +640,7 @@ describe('Version', () => {
       render(<Version />)
 
       const backLink = screen.getByTestId('back-link')
-      expect(backLink).toHaveAttribute('data-href', '/product-management')
+      expect(backLink).toHaveAttribute('data-href', '/products/management')
     })
 
     it('should handle version without name in title', () => {
@@ -604,20 +663,20 @@ describe('Version', () => {
           ...mockRelationship,
           id: 'rel-2',
           category: 'default_component_of' as const,
-        }
+        },
       ]
-      
+
       mockGetRelationshipsBySourceVersion.mockReturnValue(multipleRelationships)
       mockSortRelationshipsByCategory.mockReturnValue({
         installed_on: [mockRelationship],
-        default_component_of: [multipleRelationships[1]]
+        default_component_of: [multipleRelationships[1]],
       })
 
       render(<Version />)
 
       const accordionItems = screen.getAllByTestId('accordion-item')
       expect(accordionItems).toHaveLength(2)
-      
+
       const titles = screen.getAllByTestId('accordion-title')
       expect(titles[0]).toHaveTextContent('Installed On')
       expect(titles[1]).toHaveTextContent('Default Component Of')
@@ -628,10 +687,12 @@ describe('Version', () => {
         ...mockRelationship,
         relationships: [],
       }
-      
-      mockGetRelationshipsBySourceVersion.mockReturnValue([relationshipWithoutVersions])
+
+      mockGetRelationshipsBySourceVersion.mockReturnValue([
+        relationshipWithoutVersions,
+      ])
       mockSortRelationshipsByCategory.mockReturnValue({
-        installed_on: [relationshipWithoutVersions]
+        installed_on: [relationshipWithoutVersions],
       })
 
       render(<Version />)

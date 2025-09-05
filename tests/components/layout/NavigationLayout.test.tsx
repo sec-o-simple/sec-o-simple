@@ -1,6 +1,9 @@
 import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
+
+vi.unmock('../../../src/components/layout/NavigationLayout')
+
 import NavigationLayout from '../../../src/components/layout/NavigationLayout'
 
 // Mock React Router
@@ -73,7 +76,7 @@ describe('NavigationLayout', () => {
 
     // Check for navigation text (using actual translation keys from the component)
     expect(screen.getByText('nav.documentInfo')).toBeInTheDocument()
-    expect(screen.getByText('nav.products')).toBeInTheDocument()
+    expect(screen.getByText('nav.productManagement.title')).toBeInTheDocument()
     expect(screen.getByText('nav.vulnerabilities')).toBeInTheDocument()
     expect(screen.getByText('nav.tracking')).toBeInTheDocument()
   })
@@ -82,7 +85,7 @@ describe('NavigationLayout', () => {
     render(<NavigationLayout />)
 
     const statusIndicators = screen.getAllByTestId('status-indicator')
-    expect(statusIndicators).toHaveLength(8) // One for each navigation item that has validation
+    expect(statusIndicators).toHaveLength(9) // 5 document info subsections + 2 product management subsections + 1 vulnerabilities main + 1 tracking main
   })
 
   it('should render navigation links', () => {

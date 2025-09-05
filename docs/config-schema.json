@@ -157,6 +157,10 @@
                     "id": { "type": "string" },
                     "readonly": { "type": "boolean" },
                     "category": { "type": "string", "const": "product_name" },
+                    "familyId": {
+                      "type": "string",
+                      "description": "Reference to a product family ID from the product_families array"
+                    },
                     "name": { "type": "string" },
                     "description": { "type": "string" },
                     "type": { "type": "string" },
@@ -186,6 +190,13 @@
               }
             },
             "required": ["id", "category", "subBranches"]
+          }
+        },
+
+        "product_families": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProductFamilyTemplate"
           }
         },
 
@@ -293,6 +304,27 @@
           }
         }
       }
+    }
+  },
+  "definitions": {
+    "ProductFamilyTemplate": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the product family"
+        },
+        "name": {
+          "type": "string",
+          "description": "Human-readable name of the product family"
+        },
+        "subFamily": {
+          "$ref": "#/definitions/ProductFamilyTemplate",
+          "description": "Optional nested subfamily (recursive structure)"
+        }
+      },
+      "required": ["id", "name"],
+      "additionalProperties": false
     }
   }
 }

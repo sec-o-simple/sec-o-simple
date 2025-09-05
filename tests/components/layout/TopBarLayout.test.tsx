@@ -25,6 +25,8 @@ vi.mock('../../../src/utils/template', () => ({
   })),
 }))
 
+vi.unmock('../../../src/components/layout/TopBarLayout')
+
 import TopBarLayout from '../../../src/components/layout/TopBarLayout'
 
 // Mock React Router

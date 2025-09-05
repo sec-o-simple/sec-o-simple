@@ -2,6 +2,7 @@ import IconButton from '@/components/forms/IconButton'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { faCodeFork } from '@fortawesome/free-solid-svg-icons'
 import { Chip } from '@heroui/chip'
+import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import { TProductTreeBranch } from '../types/tProductTreeBranch'
@@ -11,11 +12,13 @@ import TagList from './TagList'
 export type ProductCardProps = Partial<InfoCardProps> & {
   product: TProductTreeBranch
   openEditModal?: boolean
+  chips?: ReactNode
 }
 
 export default function ProductCard({
   product,
   onEdit,
+  chips,
   ...props
 }: ProductCardProps) {
   const { t } = useTranslation()
@@ -47,17 +50,20 @@ export default function ProductCard({
       onDelete={() => deletePTB(product.id)}
       {...props}
     >
-      {product.subBranches.length > 0 && (
-        <TagList
-          items={product.subBranches}
-          linkGenerator={(version) =>
-            `/product-management/version/${version.id}`
-          }
-          labelGenerator={(x) =>
-            getPTBName(x).name ?? t('untitled.product_version')
-          }
-        />
-      )}
+      <div className="flex flex-row gap-2">
+        {chips}
+        {product.subBranches.length > 0 && (
+          <TagList
+            items={product.subBranches}
+            linkGenerator={(version) =>
+              `/products/management/version/${version.id}`
+            }
+            labelGenerator={(x) =>
+              getPTBName(x).name ?? t('untitled.product_version')
+            }
+          />
+        )}
+      </div>
     </InfoCard>
   )
 }

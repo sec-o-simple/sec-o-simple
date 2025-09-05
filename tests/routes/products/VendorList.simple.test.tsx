@@ -1,6 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
 import '@testing-library/jest-dom'
+import { render, screen } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+vi.unmock('../../../src/routes/products/Product')
+
 import VendorList from '../../../src/routes/products/VendorList'
 import { TProductTreeBranch } from '../../../src/routes/products/types/tProductTreeBranch'
 
@@ -60,9 +63,9 @@ vi.mock('../../../src/utils/useDocumentStoreUpdater', () => ({
   },
 }))
 
-// Mock HeroUI components 
+// Mock HeroUI components
 vi.mock('@heroui/modal', () => ({
-  Modal: ({ children, isOpen }: any) => 
+  Modal: ({ children, isOpen }: any) =>
     isOpen ? <div data-testid="modal">{children}</div> : null,
   useDisclosure: vi.fn(() => ({
     isOpen: false,
@@ -77,7 +80,15 @@ vi.mock('@heroui/modal', () => ({
 
 // Mock form components
 vi.mock('../../../src/components/forms/ComponentList', () => ({
-  default: ({ listState, itemLabel, title, titleProps, addEntry, customActions, content }: any) => (
+  default: ({
+    listState,
+    itemLabel,
+    title,
+    titleProps,
+    addEntry,
+    customActions,
+    content,
+  }: any) => (
     <div data-testid="component-list">
       <div data-testid="item-label">{itemLabel}</div>
       <div data-testid="title-field">{title}</div>
@@ -114,8 +125,8 @@ vi.mock('../../../src/components/forms/VSplit', () => ({
 
 vi.mock('../../../src/components/forms/AddItemButton', () => ({
   default: ({ fullWidth, label, onPress }: any) => (
-    <button 
-      data-testid="add-item-button" 
+    <button
+      data-testid="add-item-button"
       data-full-width={fullWidth}
       onClick={onPress}
     >
@@ -126,7 +137,7 @@ vi.mock('../../../src/components/forms/AddItemButton', () => ({
 
 vi.mock('../../../src/routes/products/components/ProductCard', () => ({
   default: ({ product, variant, onEdit }: any) => (
-    <div 
+    <div
       data-testid={`product-card-${product.id}`}
       data-variant={variant}
       onClick={onEdit}
@@ -167,7 +178,7 @@ const mockProduct1: TProductTreeBranch = {
 
 const mockProduct2: TProductTreeBranch = {
   id: 'product-2',
-  category: 'product_name', 
+  category: 'product_name',
   name: 'Test Product 2',
   description: 'Test product 2 description',
   subBranches: [],
@@ -189,7 +200,13 @@ describe('VendorList', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockGetPTBsByCategory.mockReturnValue(mockVendorData)
-    mockAddDataEntry.mockReturnValue({ id: 'new-vendor-entry', category: 'vendor', name: '', description: '', subBranches: [] })
+    mockAddDataEntry.mockReturnValue({
+      id: 'new-vendor-entry',
+      category: 'vendor',
+      name: '',
+      description: '',
+      subBranches: [],
+    })
     mockGetId.mockImplementation((entry: any) => entry.id)
   })
 
@@ -205,7 +222,9 @@ describe('VendorList', () => {
       render(<VendorList />)
 
       expect(screen.getByTestId('title-field')).toHaveTextContent('name')
-      expect(screen.getByTestId('title-props')).toHaveTextContent('{"className":"font-bold"}')
+      expect(screen.getByTestId('title-props')).toHaveTextContent(
+        '{"className":"font-bold"}',
+      )
     })
 
     it('should render custom actions for vendors', () => {
@@ -276,7 +295,7 @@ describe('VendorList', () => {
         ...mockVendor,
         subBranches: [],
       }
-      
+
       mockGetPTBsByCategory.mockReturnValue([vendorWithNoProducts])
 
       render(<VendorList />)
@@ -293,18 +312,18 @@ describe('VendorList', () => {
         description: 'Test vendor 2 description',
         subBranches: [],
       }
-      
+
       const multipleVendors = [mockVendor, vendor2]
-      
+
       // Update the mock to return multiple vendors for this test
       mockSetData.mockClear()
-      
+
       render(<VendorList />)
 
       // Check that setData was called with the original mock data
       expect(mockSetData).toHaveBeenCalledWith(mockVendorData)
-      
-      // For this test, we can't easily test multiple vendors without 
+
+      // For this test, we can't easily test multiple vendors without
       // more complex mocking, so just verify the component renders
       expect(screen.getByTestId('vendor-vendor-1')).toBeInTheDocument()
     })

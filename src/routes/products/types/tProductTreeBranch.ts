@@ -4,6 +4,7 @@ export const productTreeBranchCategories = [
   'vendor',
   'product_name',
   'product_version',
+  'product_family',
 ] as const
 
 export type TProductTreeBranchCategory =
@@ -42,6 +43,19 @@ export type TProductTreeBranch = {
   identificationHelper?: TProductIdentificationHelper
   subBranches: TProductTreeBranch[]
   type?: TProductTreeBranchProductType
+  familyId?: string
+}
+
+export type TProductFamily = {
+  id: string
+  name: string
+  parent: TProductFamily | null
+}
+
+export type TProductFamilyTemplate = {
+  id: string
+  name: string
+  subFamily?: TProductFamilyTemplate
 }
 
 export type TProductTreeBranchWithParents = TProductTreeBranch & {
@@ -58,6 +72,14 @@ export function getDefaultProductTreeBranch(
     description: '',
     subBranches: [] as TProductTreeBranch[],
     type: category === 'product_name' ? 'Software' : undefined,
+  }
+}
+
+export function getDefaultProductFamily(): TProductFamily {
+  return {
+    id: uid(),
+    name: '',
+    parent: null,
   }
 }
 

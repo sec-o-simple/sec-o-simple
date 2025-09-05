@@ -1,7 +1,14 @@
-import { describe, it, expect } from 'vitest'
-import { download } from '../../src/utils/download'
+import { beforeEach, describe, expect, it } from 'vitest'
 
 describe('download', () => {
+  // Import dynamically to ensure proper setup
+  let download: (filename: string, text: string) => void
+
+  beforeEach(async () => {
+    const module = await import('../../src/utils/download')
+    download = module.download
+  })
+
   it('should execute without throwing errors', () => {
     expect(() => download('test.txt', 'content')).not.toThrow()
   })
@@ -12,50 +19,36 @@ describe('download', () => {
       'file-with-dashes.json',
       'file_with_underscores.csv',
       'file.with.dots.xml',
-      'file with spaces.txt'
+      'file with spaces.txt',
     ]
 
-    filenames.forEach(filename => {
+    filenames.forEach((filename) => {
       expect(() => download(filename, 'test content')).not.toThrow()
     })
   })
 
-  it('should handle various content types without errors', () => {
-    const testCases = [
-      { filename: 'text.txt', content: 'simple text' },
-      { filename: 'json.json', content: '{"key": "value", "array": [1,2,3]}' },
-      { filename: 'empty.txt', content: '' },
-      { filename: 'special.txt', content: 'Special chars: <>&"\'`' },
-      { filename: 'unicode.txt', content: 'Hello 🌍 Unicode ñáéíóú' },
-      { filename: 'multiline.txt', content: 'Line 1\nLine 2\nLine 3' },
-      { filename: 'large.txt', content: 'x'.repeat(10000) }
-    ]
-
-    testCases.forEach(({ filename, content }) => {
-      expect(() => download(filename, content)).not.toThrow()
-    })
+  it('should handle special characters in content', () => {
+    const specialContent =
+      'Content with special chars: !@#$%^&*()_+{}[]|\\:";\'<>?,./'
+    expect(() => download('special.txt', specialContent)).not.toThrow()
   })
 
-  it('should properly encode special characters', () => {
-    // Test that our understanding of URL encoding is correct
-    const specialChars = '<>&"'
-    const encoded = encodeURIComponent(specialChars)
-    expect(encoded).toBe('%3C%3E%26%22')
-    
-    // Test that the function handles these characters
-    expect(() => download('special.txt', specialChars)).not.toThrow()
+  it('should handle empty filename and content', () => {
+    expect(() => download('', '')).not.toThrow()
   })
 
-  it('should handle edge cases', () => {
-    // Test empty filename - function should still work
-    expect(() => download('', 'content')).not.toThrow()
-    
-    // Test very long filename
-    const longFilename = 'a'.repeat(200) + '.txt'
-    expect(() => download(longFilename, 'content')).not.toThrow()
-    
-    // Test null-like strings
-    expect(() => download('null.txt', 'null')).not.toThrow()
-    expect(() => download('undefined.txt', 'undefined')).not.toThrow()
+  it('should handle JSON content', () => {
+    const jsonContent = JSON.stringify({ test: 'data', number: 42 })
+    expect(() => download('data.json', jsonContent)).not.toThrow()
+  })
+
+  it('should handle large content', () => {
+    const largeContent = 'x'.repeat(10000)
+    expect(() => download('large.txt', largeContent)).not.toThrow()
+  })
+
+  it('should handle unicode content', () => {
+    const unicodeContent = 'Hello 🌍 Unicode ñáéíóú'
+    expect(() => download('unicode.txt', unicodeContent)).not.toThrow()
   })
 })

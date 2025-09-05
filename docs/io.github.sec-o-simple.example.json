@@ -70,6 +70,17 @@
       }
     ],
 
+    "product_families": [
+      {
+        "id": "family1",
+        "name": "Product Family A",
+        "subFamily": {
+          "id": "subfamily1",
+          "name": "Product Subfamily A"
+        }
+      }
+    ],
+
     "products": [
       {
         "readonly": true,
@@ -84,6 +95,7 @@
             "name": "Product A",
             "description": "",
             "type": "Software",
+            "familyId": "family1",
             "subBranches": [
               {
                 "id": "version1",
@@ -130,7 +142,8 @@
             "title": "Vulnerability Description",
             "content": "An issue was discovered in OPC cardsystems Webapp Aufwertung 2.1.0. The reference assigned to transactions can be reused. When completing a payment, the first or all transactions with the same reference are completed, depending on timing. This can be used to transfer more money onto employee cards than is paid."
           }
-        ]
+        ],
+        "products": []
       }
     ],
 

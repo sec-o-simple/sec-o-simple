@@ -1,7 +1,10 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
+import { act, renderHook } from '@testing-library/react'
+import { beforeEach, describe, expect, it, Mock, vi } from 'vitest'
+import {
+  relationshipCategories,
+  TRelationship,
+} from '../../src/routes/products/types/tRelationship'
 import { useRelationships } from '../../src/utils/useRelationships'
-import { TRelationship, relationshipCategories } from '../../src/routes/products/types/tRelationship'
 
 // Mock the document store
 vi.mock('../../src/utils/useDocumentStore')
@@ -12,7 +15,9 @@ describe('useRelationships', () => {
   let mockGlobalRelationships: TRelationship[]
   let mockUpdateRelationships: Mock
 
-  const createMockRelationship = (overrides: Partial<TRelationship> = {}): TRelationship => ({
+  const createMockRelationship = (
+    overrides: Partial<TRelationship> = {},
+  ): TRelationship => ({
     id: 'rel-1',
     category: 'installed_on',
     productId1: 'product-1',
@@ -44,11 +49,13 @@ describe('useRelationships', () => {
         setSOSDocumentType: vi.fn(),
         documentInformation: {},
         products: [],
+        families: [],
         vulnerabilities: [],
         importedCSAFDocument: {},
         setImportedCSAFDocument: vi.fn(),
         updateDocumentInformation: vi.fn(),
         updateProducts: vi.fn(),
+        updateFamilies: vi.fn(),
         updateVulnerabilities: vi.fn(),
         reset: vi.fn(),
       }
@@ -95,7 +102,8 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsBySourceVersion('source-version-1')
+      const foundRelationships =
+        result.current.getRelationshipsBySourceVersion('source-version-1')
 
       expect(foundRelationships).toHaveLength(1)
       expect(foundRelationships[0]).toEqual(relationship1)
@@ -116,7 +124,9 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsBySourceVersion('non-existent-source')
+      const foundRelationships = result.current.getRelationshipsBySourceVersion(
+        'non-existent-source',
+      )
 
       expect(foundRelationships).toHaveLength(0)
       expect(foundRelationships).toEqual([])
@@ -131,7 +141,8 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsBySourceVersion('source-version-1')
+      const foundRelationships =
+        result.current.getRelationshipsBySourceVersion('source-version-1')
 
       expect(foundRelationships).toHaveLength(0)
     })
@@ -145,7 +156,8 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsBySourceVersion('source-version-1')
+      const foundRelationships =
+        result.current.getRelationshipsBySourceVersion('source-version-1')
 
       expect(foundRelationships).toHaveLength(0)
     })
@@ -177,7 +189,8 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsBySourceVersion('source-version-1')
+      const foundRelationships =
+        result.current.getRelationshipsBySourceVersion('source-version-1')
 
       expect(foundRelationships).toHaveLength(2)
       expect(foundRelationships).toContain(relationship1)
@@ -213,7 +226,8 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsByTargetVersion('target-version-1')
+      const foundRelationships =
+        result.current.getRelationshipsByTargetVersion('target-version-1')
 
       expect(foundRelationships).toHaveLength(1)
       expect(foundRelationships[0]).toEqual(relationship1)
@@ -234,7 +248,9 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsByTargetVersion('non-existent-target')
+      const foundRelationships = result.current.getRelationshipsByTargetVersion(
+        'non-existent-target',
+      )
 
       expect(foundRelationships).toHaveLength(0)
     })
@@ -248,7 +264,8 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsByTargetVersion('target-version-1')
+      const foundRelationships =
+        result.current.getRelationshipsByTargetVersion('target-version-1')
 
       expect(foundRelationships).toHaveLength(0)
     })
@@ -280,7 +297,8 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const foundRelationships = result.current.getRelationshipsByTargetVersion('target-version-1')
+      const foundRelationships =
+        result.current.getRelationshipsByTargetVersion('target-version-1')
 
       expect(foundRelationships).toHaveLength(2)
       expect(foundRelationships).toContain(relationship1)
@@ -344,7 +362,9 @@ describe('useRelationships', () => {
 
       const { result } = renderHook(() => useRelationships())
 
-      const categorized = result.current.sortRelationshipsByCategory([providedRelationship])
+      const categorized = result.current.sortRelationshipsByCategory([
+        providedRelationship,
+      ])
 
       expect(categorized.default_component_of).toHaveLength(1)
       expect(categorized.default_component_of).toContain(providedRelationship)
@@ -379,7 +399,7 @@ describe('useRelationships', () => {
         createMockRelationship({
           id: `rel-${index}`,
           category,
-        })
+        }),
       )
 
       mockGlobalRelationships = relationships
@@ -432,7 +452,9 @@ describe('useRelationships', () => {
         result.current.addOrUpdateRelationship(updatedRelationship)
       })
 
-      expect(mockUpdateRelationships).toHaveBeenCalledWith([updatedRelationship])
+      expect(mockUpdateRelationships).toHaveBeenCalledWith([
+        updatedRelationship,
+      ])
       expect(mockUpdateRelationships).toHaveBeenCalledTimes(1)
     })
 
@@ -531,7 +553,9 @@ describe('useRelationships', () => {
         result.current.deleteRelationship(nonExistentRelationship)
       })
 
-      expect(mockUpdateRelationships).toHaveBeenCalledWith([existingRelationship])
+      expect(mockUpdateRelationships).toHaveBeenCalledWith([
+        existingRelationship,
+      ])
       expect(mockUpdateRelationships).toHaveBeenCalledTimes(1)
     })
 
@@ -573,7 +597,10 @@ describe('useRelationships', () => {
         result.current.deleteRelationship(relationship2)
       })
 
-      expect(mockUpdateRelationships).toHaveBeenCalledWith([relationship1, relationship3])
+      expect(mockUpdateRelationships).toHaveBeenCalledWith([
+        relationship1,
+        relationship3,
+      ])
       expect(mockUpdateRelationships).toHaveBeenCalledTimes(1)
     })
   })
@@ -588,8 +615,12 @@ describe('useRelationships', () => {
       expect(result.current).toHaveProperty('addOrUpdateRelationship')
       expect(result.current).toHaveProperty('deleteRelationship')
 
-      expect(typeof result.current.getRelationshipsBySourceVersion).toBe('function')
-      expect(typeof result.current.getRelationshipsByTargetVersion).toBe('function')
+      expect(typeof result.current.getRelationshipsBySourceVersion).toBe(
+        'function',
+      )
+      expect(typeof result.current.getRelationshipsByTargetVersion).toBe(
+        'function',
+      )
       expect(typeof result.current.sortRelationshipsByCategory).toBe('function')
       expect(typeof result.current.addOrUpdateRelationship).toBe('function')
       expect(typeof result.current.deleteRelationship).toBe('function')
@@ -639,15 +670,18 @@ describe('useRelationships', () => {
       const { result } = renderHook(() => useRelationships())
 
       // Test filtering by source version
-      const sourceFiltered = result.current.getRelationshipsBySourceVersion('source-1')
+      const sourceFiltered =
+        result.current.getRelationshipsBySourceVersion('source-1')
       expect(sourceFiltered).toHaveLength(2)
 
       // Test filtering by target version
-      const targetFiltered = result.current.getRelationshipsByTargetVersion('target-1')
+      const targetFiltered =
+        result.current.getRelationshipsByTargetVersion('target-1')
       expect(targetFiltered).toHaveLength(2)
 
       // Test categorization of filtered results
-      const categorized = result.current.sortRelationshipsByCategory(sourceFiltered)
+      const categorized =
+        result.current.sortRelationshipsByCategory(sourceFiltered)
       expect(categorized.installed_on).toHaveLength(1)
       expect(categorized.default_component_of).toHaveLength(1)
     })
@@ -672,7 +706,9 @@ describe('useRelationships', () => {
       expect(mockUpdateRelationships).toHaveBeenCalledWith([newRelationship])
 
       // Test categorization with provided relationships (not global)
-      const categorized = result.current.sortRelationshipsByCategory([newRelationship])
+      const categorized = result.current.sortRelationshipsByCategory([
+        newRelationship,
+      ])
       expect(categorized.installed_with).toHaveLength(1)
 
       // Delete the relationship

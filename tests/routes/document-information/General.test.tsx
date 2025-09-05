@@ -1,6 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the General component to test the actual implementation
+vi.unmock('../../../src/routes/document-information/General')
+
 import General from '../../../src/routes/document-information/General'
 
 // Mock dependencies using vi.hoisted to avoid hoisting issues

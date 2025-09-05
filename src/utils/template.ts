@@ -2,7 +2,11 @@ import {
   getDefaultDocumentInformation,
   getDocumentInformationTemplateKeys,
 } from '@/routes/document-information/types/tDocumentInformation'
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import {
+  TProductFamily,
+  TProductFamilyTemplate,
+  TProductTreeBranch,
+} from '@/routes/products/types/tProductTreeBranch'
 import { TRelationship } from '@/routes/products/types/tRelationship'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { useEffect } from 'react'
@@ -105,6 +109,43 @@ export function useTemplate() {
   }
 }
 
+/**
+ * Parses hierarchical template family structure into flat array with parent references
+ */
+export function parseProductFamilies(
+  familyTemplates: TProductFamilyTemplate[],
+): TProductFamily[] {
+  const families: TProductFamily[] = []
+
+  // Recursively process each family template
+  function processFamilyTemplate(
+    template: TProductFamilyTemplate,
+    parent: TProductFamily | null = null,
+  ): void {
+    // Create the family
+    const family: TProductFamily = {
+      id: template.id,
+      name: template.name,
+      parent: parent,
+    }
+
+    // Add to our collections
+    families.push(family)
+
+    // Process subfamilies recursively
+    if (template.subFamily) {
+      processFamilyTemplate(template.subFamily, family)
+    }
+  }
+
+  // Process all root families
+  for (const familyTemplate of familyTemplates) {
+    processFamilyTemplate(familyTemplate)
+  }
+
+  return families
+}
+
 export function useTemplateInitializer() {
   const config = useConfigStore((state) => state.config)
   const { updateState: initialize } = useStateInitializer()
@@ -112,6 +153,7 @@ export function useTemplateInitializer() {
     (state) => state.updateDocumentInformation,
   )
   const updateProducts = useDocumentStore((state) => state.updateProducts)
+  const updateFamilies = useDocumentStore((state) => state.updateFamilies)
   const updateRelationships = useDocumentStore(
     (state) => state.updateRelationships,
   )
@@ -136,6 +178,12 @@ export function useTemplateInitializer() {
     )
     updateDocumentInformation(documentInformation)
     updateProducts(getTemplateValue<TProductTreeBranch[]>('products', []))
+    const families = getTemplateValue<TProductFamilyTemplate[]>(
+      'product_families',
+      [],
+    )
+    updateFamilies(parseProductFamilies(families))
+
     updateRelationships(getTemplateValue<TRelationship[]>('relationships', []))
     updateVulnerabilities(
       getTemplateValue<TVulnerability[]>('vulnerabilities', []),

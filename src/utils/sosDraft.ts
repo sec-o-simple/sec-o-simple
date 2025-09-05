@@ -1,18 +1,22 @@
 import { TDocumentInformation } from '@/routes/document-information/types/tDocumentInformation'
+import {
+  TProductFamily,
+  TProductTreeBranch,
+} from '@/routes/products/types/tProductTreeBranch'
+import { TRelationship } from '@/routes/products/types/tRelationship'
+import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
+import { getFilename } from './csafExport/helpers'
 import { download } from './download'
 import useDocumentStore, {
   TSOSDocumentType,
   sosDocumentTypes,
 } from './useDocumentStore'
-import { getFilename } from './csafExport/helpers'
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
-import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
-import { TRelationship } from '@/routes/products/types/tRelationship'
 
 export type SOSDraft = {
   sosDocumentType: TSOSDocumentType
   documentInformation: TDocumentInformation
   products: TProductTreeBranch[]
+  families: TProductFamily[]
   relationships: TRelationship[]
   vulnerabilities: TVulnerability[]
 }
@@ -38,6 +42,7 @@ export function useSOSImport() {
     (state) => state.updateDocumentInformation,
   )
   const updateProducts = useDocumentStore((state) => state.updateProducts)
+  const updateFamilies = useDocumentStore((state) => state.updateFamilies)
   const updateRelationships = useDocumentStore(
     (state) => state.updateRelationships,
   )
@@ -69,6 +74,13 @@ export function useSOSImport() {
     }
 
     if (
+      !('families' in jsonObject) ||
+      !(jsonObject.families instanceof Array)
+    ) {
+      return
+    }
+
+    if (
       !('relationships' in jsonObject) ||
       typeof jsonObject.relationships !== 'object'
     ) {
@@ -86,6 +98,7 @@ export function useSOSImport() {
       sosDocumentType: jsonObject.sosDocumentType,
       documentInformation: jsonObject.documentInformation,
       products: jsonObject.products,
+      families: jsonObject.families,
       relationships: jsonObject.relationships,
       vulnerabilities: jsonObject.vulnerabilities,
     } as SOSDraft
@@ -108,6 +121,7 @@ export function useSOSImport() {
     setSOSDocumentType(sosDraft.sosDocumentType)
     updateDocumentInformation(sosDraft.documentInformation)
     updateProducts(sosDraft.products)
+    updateFamilies(sosDraft.families)
     updateRelationships(sosDraft.relationships)
     updateVulnerabilities(sosDraft.vulnerabilities)
   }
