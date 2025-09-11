@@ -1,10 +1,10 @@
-import reactPlugin from 'eslint-plugin-react'
-import reactHooksPlugin from 'eslint-plugin-react-hooks'
-import prettierPlugin from 'eslint-plugin-prettier'
 import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import typescriptParser from '@typescript-eslint/parser'
-import reactRefreshPlugin from 'eslint-plugin-react-refresh'
 import importPlugin from 'eslint-plugin-import'
+import prettierPlugin from 'eslint-plugin-prettier'
+import reactPlugin from 'eslint-plugin-react'
+import reactHooksPlugin from 'eslint-plugin-react-hooks'
+import reactRefreshPlugin from 'eslint-plugin-react-refresh'
 import tailwind from 'eslint-plugin-tailwindcss'
 
 export default [
@@ -61,5 +61,15 @@ export default [
       },
     },
   },
-  ...tailwind.configs['flat/recommended'],
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      tailwindcss: tailwind,
+    },
+    rules: {
+      ...tailwind.configs['flat/recommended'][0].rules,
+      // Disable the no-custom-classname rule since you're using HeroUI theme tokens
+      'tailwindcss/no-custom-classname': 'off',
+    },
+  },
 ]

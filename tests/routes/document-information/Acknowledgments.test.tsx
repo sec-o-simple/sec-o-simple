@@ -371,7 +371,7 @@ describe('Acknowledgments', () => {
       )
       expect(screen.getByTestId('continue-link')).toHaveAttribute(
         'href',
-        '/product-families',
+        '/products/families',
       )
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
       expect(container.firstChild).toMatchSnapshot()
