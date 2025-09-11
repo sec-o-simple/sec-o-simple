@@ -22,7 +22,7 @@ export const noteCategories = [
   'legal_disclaimer',
   'other',
   'summary',
-] as const
+]
 
 export type TNoteCategory = (typeof noteCategories)[number]
 
