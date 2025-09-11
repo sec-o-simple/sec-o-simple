@@ -43,7 +43,7 @@ export function ProductFamilyChip({
       color="primary"
       variant="flat"
       className="cursor-pointer hover:underline"
-      onClick={() => navigate('/product-families')}
+      onClick={() => navigate('/products/families/')}
     >
       {getFamilyChain(family)
         .map((f) => f.name)
