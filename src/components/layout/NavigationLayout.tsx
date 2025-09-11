@@ -41,9 +41,18 @@ export default function NavigationLayout() {
           </Section>
           <Section
             number={2}
-            title={t('nav.products')}
-            to="/product-management"
-          />
+            title={t('nav.productManagement.title')}
+            to="/products/families"
+          >
+            <SubSection
+              title={t('nav.productManagement.productFamilies')}
+              to="/products/families"
+            />
+            <SubSection
+              title={t('nav.productManagement.products')}
+              to="/products/management"
+            />
+          </Section>
           <Section
             number={3}
             title={t('nav.vulnerabilities')}

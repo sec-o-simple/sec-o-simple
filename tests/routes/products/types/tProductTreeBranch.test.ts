@@ -1,26 +1,24 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
+import { uid } from 'uid'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import type {
+  TProductTreeBranch,
+  TProductTreeBranchWithParents,
+} from '../../../../src/routes/products/types/tProductTreeBranch'
 import {
   getDefaultProductTreeBranch,
   getPTBName,
   productTreeBranchCategories,
   productTreeBranchProductTypes,
 } from '../../../../src/routes/products/types/tProductTreeBranch'
-import type {
-  TProductTreeBranch,
-  TProductTreeBranchWithParents,
-  TProductTreeBranchCategory,
-} from '../../../../src/routes/products/types/tProductTreeBranch'
-import { uid } from 'uid'
 
 // Mock the uid module
 vi.mock('uid', () => ({
-  uid: vi.fn(() => 'mock-uid-123')
+  uid: vi.fn(() => 'mock-uid-123'),
 }))
 
 const mockUid = vi.mocked(uid)
 
 describe('tProductTreeBranch', () => {
-
   beforeEach(() => {
     mockUid.mockClear()
     mockUid.mockReturnValue('mock-uid-123')
@@ -96,7 +94,7 @@ describe('tProductTreeBranch', () => {
     })
 
     it('should always return empty subBranches array', () => {
-      productTreeBranchCategories.forEach(category => {
+      productTreeBranchCategories.forEach((category) => {
         const result = getDefaultProductTreeBranch(category)
         expect(result.subBranches).toEqual([])
         expect(Array.isArray(result.subBranches)).toBe(true)
@@ -104,7 +102,7 @@ describe('tProductTreeBranch', () => {
     })
 
     it('should always return empty name and description', () => {
-      productTreeBranchCategories.forEach(category => {
+      productTreeBranchCategories.forEach((category) => {
         const result = getDefaultProductTreeBranch(category)
         expect(result.name).toBe('')
         expect(result.description).toBe('')
@@ -189,7 +187,7 @@ describe('tProductTreeBranch', () => {
     })
 
     it('should handle different branch categories', () => {
-      productTreeBranchCategories.forEach(category => {
+      productTreeBranchCategories.forEach((category) => {
         const branch: TProductTreeBranch = {
           id: `test-${category}-id`,
           category: category,
@@ -206,8 +204,13 @@ describe('tProductTreeBranch', () => {
 
   describe('constants and types', () => {
     it('should export correct productTreeBranchCategories', () => {
-      expect(productTreeBranchCategories).toEqual(['vendor', 'product_name', 'product_version'])
-      expect(productTreeBranchCategories).toHaveLength(3)
+      expect(productTreeBranchCategories).toEqual([
+        'vendor',
+        'product_name',
+        'product_version',
+        'product_family',
+      ])
+      expect(productTreeBranchCategories).toHaveLength(4)
     })
 
     it('should export correct productTreeBranchProductTypes', () => {
@@ -217,9 +220,14 @@ describe('tProductTreeBranch', () => {
 
     it('should have readonly arrays for constants', () => {
       // Test that the constants are readonly by checking their type
-      expect(productTreeBranchCategories).toEqual(['vendor', 'product_name', 'product_version'])
+      expect(productTreeBranchCategories).toEqual([
+        'vendor',
+        'product_name',
+        'product_version',
+        'product_family',
+      ])
       expect(productTreeBranchProductTypes).toEqual(['Software', 'Hardware'])
-      
+
       // TypeScript will prevent mutations at compile time
       // The arrays are defined with 'as const' making them readonly tuples
       expect(Object.isFrozen(productTreeBranchCategories)).toBe(false) // 'as const' doesn't freeze, just makes readonly at type level
@@ -230,19 +238,17 @@ describe('tProductTreeBranch', () => {
   describe('integration tests', () => {
     it('should work together - create default branch and get its name', () => {
       mockUid.mockReturnValue('integration-test-id')
-      
+
       const branch = getDefaultProductTreeBranch('vendor')
       const name = getPTBName(branch)
-      
+
       expect(branch.id).toBe('integration-test-id')
       expect(branch.name).toBe('')
       expect(name).toBeNull() // Because default name is empty string
     })
 
     it('should demonstrate the relationship between all functions', () => {
-      mockUid
-        .mockReturnValueOnce('parent-uid')
-        .mockReturnValueOnce('child-uid')
+      mockUid.mockReturnValueOnce('parent-uid').mockReturnValueOnce('child-uid')
 
       // Create parent branch
       const parentBase = getDefaultProductTreeBranch('vendor')

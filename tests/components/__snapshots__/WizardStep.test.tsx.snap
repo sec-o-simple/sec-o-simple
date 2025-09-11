@@ -16,7 +16,7 @@ exports[`WizardStep > should render with progress bar and content 1`] = `
     <span
       data-testid="section-1"
     >
-      Products
+      Product Management
     </span>
     <span
       data-testid="section-2"
@@ -33,9 +33,13 @@ exports[`WizardStep > should render with progress bar and content 1`] = `
     class="border-default-200 bg-content1 border-default-200 flex flex-col gap-2 rounded-lg border p-8"
   >
     <div
-      class="mb-4 text-xl font-semibold"
+      class="gap-2"
     >
-      Test Step
+      <div
+        class="text-xl font-semibold"
+      >
+        Test Step
+      </div>
     </div>
     <div>
       Test content

@@ -58,14 +58,54 @@ vi.mock('@/utils/validation/useFieldValidation', () => ({
   })),
 }))
 
+vi.mock('@/utils/validation/usePathValidation', () => ({
+  usePathValidation: vi.fn(() => ({
+    isActive: vi.fn(() => false),
+    hasErrors: false,
+    hasWarnings: false,
+    hasInfos: false,
+  })),
+}))
+
+vi.mock('@/utils/validation/useValidationStore', () => {
+  const mockStore = vi.fn(() => ({
+    validationResults: {},
+    setValidationResults: vi.fn(),
+    reset: vi.fn(),
+    isValid: true,
+    messages: [],
+    isValidating: false,
+  }))
+  return {
+    default: mockStore,
+    useValidationStore: mockStore,
+  }
+})
+
 // Mock config store
 vi.mock('@/utils/useConfigStore', () => ({
   useConfigStore: vi.fn(() => ({
     config: null,
   })),
+  useConfigInitializer: vi.fn(),
   default: vi.fn(() => ({
     config: null,
   })),
+}))
+
+// Mock react-i18next
+vi.mock('react-i18next', () => ({
+  useTranslation: vi.fn(() => ({
+    t: vi.fn((key) => key),
+    i18n: {
+      language: 'en',
+      changeLanguage: vi.fn(),
+    },
+  })),
+  initReactI18next: {
+    type: '3rdParty',
+    init: vi.fn(),
+  },
 }))
 
 // Mock document store types
@@ -81,6 +121,76 @@ vi.mock('@/utils/useDebounceInput', () => ({
     handleBlur: vi.fn(),
     handleChange: vi.fn(),
   })),
+}))
+
+// Mock template utility
+vi.mock('@/utils/template', () => ({
+  useTemplateInitializer: vi.fn(() => ({
+    initializeTemplateData: vi.fn(),
+  })),
+  useTemplate: vi.fn(() => ({
+    getTemplateValue: vi.fn(),
+    getTemplateData: vi.fn(),
+  })),
+  checkReadOnly: vi.fn(() => false),
+}))
+
+// Mock document store
+vi.mock('@/utils/useDocumentStore', () => {
+  const mockStore = vi.fn(() => ({
+    documentInformation: {},
+    products: [],
+    families: [],
+    relationships: [],
+    vulnerabilities: [],
+    updateDocumentInformation: vi.fn(),
+    updateProducts: vi.fn(),
+    updateFamilies: vi.fn(),
+    updateRelationships: vi.fn(),
+    updateVulnerabilities: vi.fn(),
+    reset: vi.fn(),
+  }))
+  return {
+    default: mockStore,
+    useDocumentStore: mockStore,
+  }
+})
+
+// Mock CSAF export
+vi.mock('@/utils/csafExport/csafExport', () => ({
+  useCSAFExport: vi.fn(() => ({
+    exportCSAFDocument: vi.fn(),
+    isExporting: false,
+  })),
+}))
+
+// Mock Product Tree Branch utilities
+vi.mock('@/utils/useProductTreeBranch', () => ({
+  useProductTreeBranch: vi.fn(() => ({
+    getRelationshipFullProductName: vi.fn(() => 'Mock Product Name'),
+    getFullProductName: vi.fn(() => 'Mock Full Product Name'),
+  })),
+}))
+
+// Mock React Router navigation
+vi.mock('react-router', () => ({
+  HashRouter: ({ children }: { children: React.ReactNode }) => children,
+  Routes: ({ children }: { children: React.ReactNode }) => children,
+  Route: ({
+    children,
+    element,
+  }: {
+    children?: React.ReactNode
+    element?: React.ReactNode
+  }) => element || children,
+  Navigate: () => null,
+  Outlet: () => null,
+  NavLink: ({ children, ...props }: any) => {
+    const { createElement } = require('react')
+    return createElement('a', props, children)
+  },
+  useNavigate: vi.fn(() => vi.fn()),
+  useLocation: vi.fn(() => ({ pathname: '/' })),
 }))
 
 // Mock download utility

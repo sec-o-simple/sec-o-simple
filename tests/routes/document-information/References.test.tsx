@@ -1,6 +1,10 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the References component to test the actual implementation
+vi.unmock('../../../src/routes/document-information/References')
+
 import References from '../../../src/routes/document-information/References'
 import {
   getDefaultDocumentReference,

@@ -1,7 +1,11 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
+import { fireEvent, render, screen } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the Tracking component to test the actual implementation
+vi.unmock('../../../src/routes/document-information/Tracking')
+
 import Tracking from '../../../src/routes/document-information/Tracking'
 
 // Mock dependencies using vi.hoisted to avoid hoisting issues
@@ -11,7 +15,9 @@ vi.mock('@/components/WizardStep', () => ({
       <h1 data-testid="wizard-title">{title}</h1>
       <div data-testid="progress" data-progress={progress}></div>
       <div data-testid="navigation">
-        <a href={onBack} data-testid="back-link">Back</a>
+        <a href={onBack} data-testid="back-link">
+          Back
+        </a>
       </div>
       <div data-testid="wizard-content">{children}</div>
     </div>
@@ -27,30 +33,35 @@ vi.mock('@/components/forms/HSplit', () => ({
 }))
 
 vi.mock('@/components/forms/RevisionHistoryTable', () => ({
-  default: () => <div data-testid="revision-history-table">Revision History Table</div>,
+  default: () => (
+    <div data-testid="revision-history-table">Revision History Table</div>
+  ),
 }))
 
 vi.mock('@/components/forms/Select', () => ({
-  default: ({ 
-    label, 
-    selectedKeys, 
-    onSelectionChange, 
-    children, 
-    csafPath, 
-    className, 
-    isRequired, 
-    placeholder, 
-    isDisabled, 
-    isTouched 
+  default: ({
+    label,
+    selectedKeys,
+    onSelectionChange,
+    children,
+    csafPath,
+    className,
+    isRequired,
+    placeholder,
+    isDisabled,
+    isTouched,
   }: any) => {
     const selectId = `select-${csafPath || 'select'}`
-    const selectedValue = selectedKeys && Array.isArray(selectedKeys) && selectedKeys.length > 0 
-      ? String(selectedKeys[0]) 
-      : ''
-    
+    const selectedValue =
+      selectedKeys && Array.isArray(selectedKeys) && selectedKeys.length > 0
+        ? String(selectedKeys[0])
+        : ''
+
     return (
       <div data-testid="select-wrapper" className={className}>
-        <label data-testid="select-label" htmlFor={selectId}>{label}</label>
+        <label data-testid="select-label" htmlFor={selectId}>
+          {label}
+        </label>
         <select
           id={selectId}
           data-testid={selectId}
@@ -68,7 +79,7 @@ vi.mock('@/components/forms/Select', () => ({
                 anchorKey: newValue,
                 [Symbol.iterator]: function* () {
                   yield newValue
-                }
+                },
               }
               onSelectionChange(mockSet)
             } else {
@@ -76,7 +87,9 @@ vi.mock('@/components/forms/Select', () => ({
             }
           }}
         >
-          <option value="" disabled>{placeholder}</option>
+          <option value="" disabled>
+            {placeholder}
+          </option>
           {children}
         </select>
       </div>
@@ -88,11 +101,15 @@ vi.mock('@heroui/select', () => ({
   SelectItem: ({ children, key, ...props }: any) => {
     // Extract the status value from the children text since key is not accessible
     const statusText = String(children).toLowerCase()
-    const statusValue = statusText === 'draft' ? 'draft' : 
-                       statusText === 'final' ? 'final' : 
-                       statusText === 'interim' ? 'interim' : 
-                       statusText
-    
+    const statusValue =
+      statusText === 'draft'
+        ? 'draft'
+        : statusText === 'final'
+          ? 'final'
+          : statusText === 'interim'
+            ? 'interim'
+            : statusText
+
     return (
       <option value={statusValue} data-testid={`option-${statusValue}`}>
         {children}
@@ -144,8 +161,14 @@ describe('Tracking', () => {
 
       expect(screen.getByTestId('wizard-step')).toBeInTheDocument()
       expect(screen.getByTestId('wizard-title')).toHaveTextContent('Tracking')
-      expect(screen.getByTestId('progress')).toHaveAttribute('data-progress', '5')
-      expect(screen.getByTestId('back-link')).toHaveAttribute('href', '/vulnerabilities')
+      expect(screen.getByTestId('progress')).toHaveAttribute(
+        'data-progress',
+        '5',
+      )
+      expect(screen.getByTestId('back-link')).toHaveAttribute(
+        'href',
+        '/vulnerabilities',
+      )
     })
 
     it('should render HSplit with correct className', () => {
@@ -168,7 +191,10 @@ describe('Tracking', () => {
 
       const select = screen.getByTestId('select-/document/tracking/status')
       expect(select).toBeInTheDocument()
-      expect(select).toHaveAttribute('data-csaf-path', '/document/tracking/status')
+      expect(select).toHaveAttribute(
+        'data-csaf-path',
+        '/document/tracking/status',
+      )
       expect(select).toHaveAttribute('data-is-required', 'true')
       expect(select).toHaveAttribute('data-placeholder', 'Select status')
     })
@@ -196,8 +222,10 @@ describe('Tracking', () => {
     it('should handle status selection changes', async () => {
       render(<Tracking />)
 
-      const select = screen.getByTestId('select-/document/tracking/status') as HTMLSelectElement
-      
+      const select = screen.getByTestId(
+        'select-/document/tracking/status',
+      ) as HTMLSelectElement
+
       await user.selectOptions(select, 'final')
 
       // Verify the select value changed
@@ -207,8 +235,10 @@ describe('Tracking', () => {
     it('should handle status change to interim', async () => {
       render(<Tracking />)
 
-      const select = screen.getByTestId('select-/document/tracking/status') as HTMLSelectElement
-      
+      const select = screen.getByTestId(
+        'select-/document/tracking/status',
+      ) as HTMLSelectElement
+
       await user.selectOptions(select, 'interim')
 
       expect(select.value).toBe('interim')
@@ -217,8 +247,10 @@ describe('Tracking', () => {
     it('should handle status change to draft', async () => {
       render(<Tracking />)
 
-      const select = screen.getByTestId('select-/document/tracking/status') as HTMLSelectElement
-      
+      const select = screen.getByTestId(
+        'select-/document/tracking/status',
+      ) as HTMLSelectElement
+
       await user.selectOptions(select, 'draft')
 
       expect(select.value).toBe('draft')
@@ -227,8 +259,10 @@ describe('Tracking', () => {
     it('should handle empty selection gracefully', () => {
       render(<Tracking />)
 
-      const select = screen.getByTestId('select-/document/tracking/status') as HTMLSelectElement
-      
+      const select = screen.getByTestId(
+        'select-/document/tracking/status',
+      ) as HTMLSelectElement
+
       // The select will have a default value since the component initializes with 'draft'
       // Just verify it doesn't throw an error when changing values
       expect(() => {
@@ -264,8 +298,14 @@ describe('Tracking', () => {
       render(<Tracking />)
 
       // Verify WizardStep props
-      expect(screen.getByTestId('progress')).toHaveAttribute('data-progress', '5')
-      expect(screen.getByTestId('back-link')).toHaveAttribute('href', '/vulnerabilities')
+      expect(screen.getByTestId('progress')).toHaveAttribute(
+        'data-progress',
+        '5',
+      )
+      expect(screen.getByTestId('back-link')).toHaveAttribute(
+        'href',
+        '/vulnerabilities',
+      )
     })
 
     it('should pass all required props to Select', () => {
@@ -273,7 +313,10 @@ describe('Tracking', () => {
 
       // Verify Select props
       const select = screen.getByTestId('select-/document/tracking/status')
-      expect(select).toHaveAttribute('data-csaf-path', '/document/tracking/status')
+      expect(select).toHaveAttribute(
+        'data-csaf-path',
+        '/document/tracking/status',
+      )
       expect(select).toHaveAttribute('data-is-required', 'true')
     })
   })
@@ -309,15 +352,17 @@ describe('Tracking', () => {
     it('should allow user to change status selection via keyboard', async () => {
       render(<Tracking />)
 
-      const select = screen.getByTestId('select-/document/tracking/status') as HTMLSelectElement
-      
+      const select = screen.getByTestId(
+        'select-/document/tracking/status',
+      ) as HTMLSelectElement
+
       // Focus on the select element
       await user.click(select)
-      
+
       // Use keyboard navigation
       await user.keyboard('{ArrowDown}')
       await user.keyboard('{Enter}')
-      
+
       // The test validates that keyboard interactions work
       expect(select).toHaveFocus()
     })
@@ -325,16 +370,18 @@ describe('Tracking', () => {
     it('should handle multiple status changes', async () => {
       render(<Tracking />)
 
-      const select = screen.getByTestId('select-/document/tracking/status') as HTMLSelectElement
-      
+      const select = screen.getByTestId(
+        'select-/document/tracking/status',
+      ) as HTMLSelectElement
+
       // Change to final
       await user.selectOptions(select, 'final')
       expect(select.value).toBe('final')
-      
+
       // Change to interim
       await user.selectOptions(select, 'interim')
       expect(select.value).toBe('interim')
-      
+
       // Change back to draft
       await user.selectOptions(select, 'draft')
       expect(select.value).toBe('draft')
@@ -345,20 +392,24 @@ describe('Tracking', () => {
     it('should initialize with default state', () => {
       render(<Tracking />)
 
-      const select = screen.getByTestId('select-/document/tracking/status') as HTMLSelectElement
-      
-      // Component should render without errors, indicating proper initialization  
+      const select = screen.getByTestId(
+        'select-/document/tracking/status',
+      ) as HTMLSelectElement
+
+      // Component should render without errors, indicating proper initialization
       expect(select).toBeInTheDocument()
     })
 
     it('should handle status changes correctly', async () => {
       render(<Tracking />)
 
-      const select = screen.getByTestId('select-/document/tracking/status') as HTMLSelectElement
-      
+      const select = screen.getByTestId(
+        'select-/document/tracking/status',
+      ) as HTMLSelectElement
+
       // Test all possible status values
       const statusValues = ['draft', 'final', 'interim']
-      
+
       for (const status of statusValues) {
         await user.selectOptions(select, status)
         expect(select.value).toBe(status)
@@ -378,7 +429,10 @@ describe('Tracking', () => {
       render(<Tracking />)
 
       const select = screen.getByTestId('select-/document/tracking/status')
-      expect(select).toHaveAttribute('data-csaf-path', '/document/tracking/status')
+      expect(select).toHaveAttribute(
+        'data-csaf-path',
+        '/document/tracking/status',
+      )
     })
   })
 })

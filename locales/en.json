@@ -34,7 +34,13 @@
     },
     "nav": {
       "home": "Home",
-      "products": "Products",
+      "productManagement": {
+        "title": "Product Management",
+        "description": "Manage your products",
+        "products": "Products",
+        "productFamilies": "Product Families",
+        "productFamiliesSubtitle": "Organize your products into optional hierarchical families"
+      },
       "vendors": "Vendors",
       "document": "Document",
       "documentInfo": "Document Information",
@@ -252,6 +258,13 @@
       "label": "Version",
       "name": "Name",
       "description": "Description"
+    },
+    "product_family": {
+      "label": "Product Family",
+      "name": "Name",
+      "description": "Product Family Description",
+      "parent": "Parent Product Family",
+      "helpText": "Product families are optional organizational units that allow you to group related products hierarchically. They help structure your product catalog and can be nested to create deeper categorizations."
     },
     "product_name": {
       "label": "Product",

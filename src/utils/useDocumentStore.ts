@@ -2,7 +2,10 @@ import {
   TDocumentInformation,
   getDefaultDocumentInformation,
 } from '@/routes/document-information/types/tDocumentInformation'
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import {
+  TProductFamily,
+  TProductTreeBranch,
+} from '@/routes/products/types/tProductTreeBranch'
 import { TRelationship } from '@/routes/products/types/tRelationship'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
 import { create } from 'zustand'
@@ -29,6 +32,7 @@ export type TDocumentStore = {
 
   documentInformation: TDocumentInformation
   products: TProductTreeBranch[]
+  families: TProductFamily[]
   relationships: TRelationship[]
   vulnerabilities: TVulnerability[]
 
@@ -37,6 +41,7 @@ export type TDocumentStore = {
 
   updateDocumentInformation: (update: TDocumentInformation) => void
   updateProducts: (update: TProductTreeBranch[]) => void
+  updateFamilies: (update: TProductFamily[]) => void
   updateRelationships: (update: TRelationship[]) => void
   updateVulnerabilities: (update: TVulnerability[]) => void
 
@@ -54,6 +59,9 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
 
   products: [],
   updateProducts: (update: TProductTreeBranch[]) => set({ products: update }),
+
+  families: [],
+  updateFamilies: (update: TProductFamily[]) => set({ families: update }),
 
   relationships: [],
   updateRelationships: (update: TRelationship[]) =>
@@ -73,6 +81,7 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
     set({
       documentInformation: getDefaultDocumentInformation(),
       products: [],
+      families: [],
       relationships: [],
       vulnerabilities: [],
     }),

@@ -1,11 +1,14 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+
+// Unmock the Vulnerabilities component to test the actual implementation
+vi.unmock('../../../src/routes/vulnerabilities/Vulnerabilities')
 
 // Create mock implementations that can be controlled
 let mockListState: any = {
   data: [],
   setData: vi.fn(),
-  updateDataEntry: vi.fn()
+  updateDataEntry: vi.fn(),
 }
 
 let mockPageVisit: any = false
@@ -13,26 +16,26 @@ let mockPageVisit: any = false
 let mockListValidation: any = {
   hasErrors: false,
   isTouched: false,
-  errorMessages: []
+  errorMessages: [],
 }
 
 let mockPrefixValidation: any = {
-  hasErrors: false
+  hasErrors: false,
 }
 
 let mockValidationStore: any = {
-  messages: []
+  messages: [],
 }
 
 // Mock all dependencies with controllable implementations
 vi.mock('@/components/StatusIndicator', () => ({
-  default: () => <div>StatusIndicator</div>
+  default: () => <div>StatusIndicator</div>,
 }))
 
 vi.mock('@/components/WizardStep', () => ({
   default: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
-  )
+  ),
 }))
 
 vi.mock('@/components/forms/ComponentList', () => ({
@@ -46,33 +49,33 @@ vi.mock('@/components/forms/ComponentList', () => ({
         </div>
       ))}
     </div>
-  )
+  ),
 }))
 
 vi.mock('@/components/forms/VSplit', () => ({
   default: ({ children }: { children: React.ReactNode }) => (
     <div>{children}</div>
-  )
+  ),
 }))
 
 vi.mock('@/utils/useListState', () => ({
-  useListState: () => mockListState
+  useListState: () => mockListState,
 }))
 
 vi.mock('@/utils/useDocumentStoreUpdater', () => ({
-  default: () => vi.fn()
+  default: () => vi.fn(),
 }))
 
 vi.mock('@/utils/validation/useListValidation', () => ({
-  useListValidation: () => mockListValidation
+  useListValidation: () => mockListValidation,
 }))
 
 vi.mock('@/utils/validation/usePageVisit', () => ({
-  default: () => mockPageVisit
+  default: () => mockPageVisit,
 }))
 
 vi.mock('@/utils/validation/usePrefixValidation', () => ({
-  usePrefixValidation: () => mockPrefixValidation
+  usePrefixValidation: () => mockPrefixValidation,
 }))
 
 vi.mock('@/utils/validation/useValidationStore', () => ({
@@ -81,52 +84,62 @@ vi.mock('@/utils/validation/useValidationStore', () => ({
       return selector(mockValidationStore)
     }
     return mockValidationStore
-  }
+  },
 }))
 
 vi.mock('@heroui/chip', () => ({
-  Chip: ({ children }: { children: React.ReactNode }) => <span>{children}</span>
+  Chip: ({ children }: { children: React.ReactNode }) => (
+    <span>{children}</span>
+  ),
 }))
 
 vi.mock('@heroui/react', () => ({
-  Alert: ({ children }: { children: React.ReactNode }) => <div role="alert">{children}</div>
+  Alert: ({ children }: { children: React.ReactNode }) => (
+    <div role="alert">{children}</div>
+  ),
 }))
 
 vi.mock('@heroui/tabs', () => ({
   Tabs: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
-  Tab: ({ children, title }: { children: React.ReactNode; title: React.ReactNode }) => (
+  Tab: ({
+    children,
+    title,
+  }: {
+    children: React.ReactNode
+    title: React.ReactNode
+  }) => (
     <div>
       <div>{title}</div>
       <div>{children}</div>
     </div>
-  )
+  ),
 }))
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key
-  })
+    t: (key: string) => key,
+  }),
 }))
 
 // Mock sub-components
 vi.mock('../../../src/routes/vulnerabilities/General', () => ({
-  default: () => <div>General</div>
+  default: () => <div>General</div>,
 }))
 
 vi.mock('../../../src/routes/vulnerabilities/Notes', () => ({
-  default: () => <div>Notes</div>
+  default: () => <div>Notes</div>,
 }))
 
 vi.mock('../../../src/routes/vulnerabilities/Products', () => ({
-  default: () => <div>Products</div>
+  default: () => <div>Products</div>,
 }))
 
 vi.mock('../../../src/routes/vulnerabilities/Remediations', () => ({
-  default: () => <div>Remediations</div>
+  default: () => <div>Remediations</div>,
 }))
 
 vi.mock('../../../src/routes/vulnerabilities/Scores', () => ({
-  default: () => <div>Scores</div>
+  default: () => <div>Scores</div>,
 }))
 
 vi.mock('../../../src/routes/vulnerabilities/types/tVulnerability', () => ({
@@ -136,8 +149,8 @@ vi.mock('../../../src/routes/vulnerabilities/types/tVulnerability', () => ({
     notes: [],
     products: [],
     remediations: [],
-    scores: []
-  })
+    scores: [],
+  }),
 }))
 
 // Import the component after all mocks are set up
@@ -149,23 +162,23 @@ describe('Vulnerabilities', () => {
     mockListState = {
       data: [],
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
-    
+
     mockPageVisit = false
-    
+
     mockListValidation = {
       hasErrors: false,
       isTouched: false,
-      errorMessages: []
+      errorMessages: [],
     }
-    
+
     mockPrefixValidation = {
-      hasErrors: false
+      hasErrors: false,
     }
-    
+
     mockValidationStore = {
-      messages: []
+      messages: [],
     }
   })
 
@@ -179,9 +192,7 @@ describe('Vulnerabilities', () => {
     mockListValidation = {
       hasErrors: true,
       isTouched: false,
-      errorMessages: [
-        { path: '/test', message: 'Test error message' }
-      ]
+      errorMessages: [{ path: '/test', message: 'Test error message' }],
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -193,9 +204,7 @@ describe('Vulnerabilities', () => {
     mockListValidation = {
       hasErrors: true,
       isTouched: true,
-      errorMessages: [
-        { path: '/test', message: 'Another error message' }
-      ]
+      errorMessages: [{ path: '/test', message: 'Another error message' }],
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -209,8 +218,8 @@ describe('Vulnerabilities', () => {
       isTouched: false,
       errorMessages: [
         { path: '/test1', message: 'First error' },
-        { path: '/test2', message: 'Second error' }
-      ]
+        { path: '/test2', message: 'Second error' },
+      ],
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -223,7 +232,7 @@ describe('Vulnerabilities', () => {
     mockListValidation = {
       hasErrors: false,
       isTouched: true,
-      errorMessages: []
+      errorMessages: [],
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -239,14 +248,14 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -262,14 +271,14 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -284,14 +293,14 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -306,14 +315,14 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -337,16 +346,16 @@ describe('Vulnerabilities', () => {
             id: 'score-1',
             cvssVersion: null,
             vectorString: '',
-            productIds: []
-          }
-        ]
-      }
+            productIds: [],
+          },
+        ],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -366,16 +375,16 @@ describe('Vulnerabilities', () => {
             id: 'score-1',
             cvssVersion: '3.1',
             vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
-            productIds: []
-          }
-        ]
-      }
+            productIds: [],
+          },
+        ],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -390,21 +399,29 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     mockValidationStore = {
       messages: [
-        { path: '/vulnerabilities/0/cve', severity: 'error', message: 'CVE is required' },
-        { path: '/vulnerabilities/0/notes/0', severity: 'error', message: 'Note is required' }
-      ]
+        {
+          path: '/vulnerabilities/0/cve',
+          severity: 'error',
+          message: 'CVE is required',
+        },
+        {
+          path: '/vulnerabilities/0/notes/0',
+          severity: 'error',
+          message: 'Note is required',
+        },
+      ],
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -419,20 +436,24 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     mockValidationStore = {
       messages: [
-        { path: '/vulnerabilities/0/products/0', severity: 'error', message: 'Product error' }
-      ]
+        {
+          path: '/vulnerabilities/0/products/0',
+          severity: 'error',
+          message: 'Product error',
+        },
+      ],
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -447,20 +468,24 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     mockValidationStore = {
       messages: [
-        { path: '/vulnerabilities/0/product_status', severity: 'error', message: 'Product status error' }
-      ]
+        {
+          path: '/vulnerabilities/0/product_status',
+          severity: 'error',
+          message: 'Product status error',
+        },
+      ],
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -476,7 +501,7 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
+        scores: [],
       },
       {
         id: '2',
@@ -485,14 +510,14 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     const { container } = render(<Vulnerabilities />)
@@ -508,18 +533,18 @@ describe('Vulnerabilities', () => {
         notes: [],
         products: [],
         remediations: [],
-        scores: []
-      }
+        scores: [],
+      },
     ]
 
     mockListState = {
       data: mockVulnerabilities,
       setData: vi.fn(),
-      updateDataEntry: vi.fn()
+      updateDataEntry: vi.fn(),
     }
 
     mockPrefixValidation = {
-      hasErrors: true
+      hasErrors: true,
     }
 
     const { container } = render(<Vulnerabilities />)

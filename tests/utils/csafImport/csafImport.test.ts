@@ -1,6 +1,10 @@
-import { describe, it, expect, vi } from 'vitest'
-import { parseCSAFDocument, useCSAFImport, supportedCSAFVersions } from '../../../src/utils/csafImport/csafImport'
+import { describe, expect, it, vi } from 'vitest'
 import type { TCSAFDocument } from '../../../src/utils/csafExport/csafExport'
+import {
+  parseCSAFDocument,
+  supportedCSAFVersions,
+  useCSAFImport,
+} from '../../../src/utils/csafImport/csafImport'
 import type { DeepPartial } from '../../../src/utils/deepPartial'
 
 // Mock uid to return predictable values
@@ -15,11 +19,14 @@ vi.mock('../../../src/utils/sosDraft', () => ({
   }),
 }))
 
-vi.mock('../../../src/routes/vulnerabilities/types/tVulnerabilityProduct', () => ({
-  useVulnerabilityProductGenerator: () => ({
-    generateVulnerabilityProduct: vi.fn(() => ({ id: 'mock-vuln-product' })),
+vi.mock(
+  '../../../src/routes/vulnerabilities/types/tVulnerabilityProduct',
+  () => ({
+    useVulnerabilityProductGenerator: () => ({
+      generateVulnerabilityProduct: vi.fn(() => ({ id: 'mock-vuln-product' })),
+    }),
   }),
-}))
+)
 
 vi.mock('../../../src/routes/vulnerabilities/types/tRemediation', () => ({
   useRemediationGenerator: () => ({
@@ -28,47 +35,56 @@ vi.mock('../../../src/routes/vulnerabilities/types/tRemediation', () => ({
 }))
 
 // Mock default data functions
-vi.mock('../../../src/routes/document-information/types/tDocumentInformation', () => ({
-  getDefaultDocumentInformation: () => ({
-    id: 'default-id',
-    lang: 'en',
-    status: 'draft',
-    title: 'Default Title',
-    publisher: {
-      name: 'Default Publisher',
-      category: 'vendor',
-      namespace: 'https://default.example.com',
-      contactDetails: 'default@example.com',
-      issuingAuthority: 'Default Authority',
-    },
-    acknowledgments: [],
-    notes: [],
-    references: [],
-    revisionHistory: [],
+vi.mock(
+  '../../../src/routes/document-information/types/tDocumentInformation',
+  () => ({
+    getDefaultDocumentInformation: () => ({
+      id: 'default-id',
+      lang: 'en',
+      status: 'draft',
+      title: 'Default Title',
+      publisher: {
+        name: 'Default Publisher',
+        category: 'vendor',
+        namespace: 'https://default.example.com',
+        contactDetails: 'default@example.com',
+        issuingAuthority: 'Default Authority',
+      },
+      acknowledgments: [],
+      notes: [],
+      references: [],
+      revisionHistory: [],
+    }),
   }),
-}))
+)
 
-vi.mock('../../../src/routes/document-information/types/tDocumentReference', () => ({
-  getDefaultDocumentReference: () => ({
-    id: 'mock-uid-123',
-    summary: 'Default Reference',
-    url: 'https://default.example.com',
-    category: 'external',
+vi.mock(
+  '../../../src/routes/document-information/types/tDocumentReference',
+  () => ({
+    getDefaultDocumentReference: () => ({
+      id: 'mock-uid-123',
+      summary: 'Default Reference',
+      url: 'https://default.example.com',
+      category: 'external',
+    }),
   }),
-}))
+)
 
-vi.mock('../../../src/routes/document-information/types/tRevisionHistoryEntry', () => ({
-  getDefaultRevisionHistoryEntry: () => ({
-    id: 'default-revision-id',
-    date: '2023-01-01T00:00:00.000Z',
-    number: '1.0.0',
-    summary: 'Default Revision',
+vi.mock(
+  '../../../src/routes/document-information/types/tRevisionHistoryEntry',
+  () => ({
+    getDefaultRevisionHistoryEntry: () => ({
+      id: 'default-revision-id',
+      date: '2023-01-01T00:00:00.000Z',
+      number: '1.0.0',
+      summary: 'Default Revision',
+    }),
   }),
-}))
+)
 
 // Mock the parsing functions to return simple structures
 vi.mock('../../../src/utils/csafImport/parseProductTree', () => ({
-  parseProductTree: vi.fn(() => []),
+  parseProductTree: vi.fn(() => ({ products: [], families: [] })),
 }))
 
 vi.mock('../../../src/utils/csafImport/parseRelationships', () => ({
@@ -182,7 +198,7 @@ describe('csafImport', () => {
       const result = parseCSAFDocument(
         mockCSAFDocument,
         createMockVulnProductGenerator(),
-        createMockRemediationGenerator()
+        createMockRemediationGenerator(),
       )
 
       expect(result).toMatchSnapshot()
@@ -202,7 +218,7 @@ describe('csafImport', () => {
       const result = parseCSAFDocument(
         minimalCSAFDocument,
         createMockVulnProductGenerator(),
-        createMockRemediationGenerator()
+        createMockRemediationGenerator(),
       )
 
       expect(result).toMatchSnapshot()
@@ -238,7 +254,7 @@ describe('csafImport', () => {
       const result = parseCSAFDocument(
         partialCSAFDocument,
         createMockVulnProductGenerator(),
-        createMockRemediationGenerator()
+        createMockRemediationGenerator(),
       )
 
       expect(result).toMatchSnapshot()
@@ -248,7 +264,7 @@ describe('csafImport', () => {
       const result = parseCSAFDocument(
         {} as DeepPartial<TCSAFDocument>,
         createMockVulnProductGenerator(),
-        createMockRemediationGenerator()
+        createMockRemediationGenerator(),
       )
 
       expect(result).toBeDefined() // Actually returns a default structure
@@ -355,13 +371,19 @@ describe('csafImport', () => {
       const result = parseCSAFDocument(
         mockCSAFDocument,
         { generateVulnerabilityProduct: vi.fn() } as any,
-        { generateRemediation: vi.fn() } as any
+        { generateRemediation: vi.fn() } as any,
       )
 
       expect(result?.documentInformation.acknowledgments).toHaveLength(3)
-      expect(result?.documentInformation.acknowledgments[0].organization).toBe('Minimal Org')
-      expect(result?.documentInformation.acknowledgments[1].names).toHaveLength(1)
-      expect(result?.documentInformation.acknowledgments[2].organization).toBeUndefined()
+      expect(result?.documentInformation.acknowledgments[0].organization).toBe(
+        'Minimal Org',
+      )
+      expect(result?.documentInformation.acknowledgments[1].names).toHaveLength(
+        1,
+      )
+      expect(
+        result?.documentInformation.acknowledgments[2].organization,
+      ).toBeUndefined()
     })
 
     it('should handle TLP case conversion', () => {
@@ -381,11 +403,13 @@ describe('csafImport', () => {
       const result = parseCSAFDocument(
         mockCSAFDocument,
         { generateVulnerabilityProduct: vi.fn() } as any,
-        { generateRemediation: vi.fn() } as any
+        { generateRemediation: vi.fn() } as any,
       )
 
       expect(result?.documentInformation.tlp.label).toBe('red')
-      expect(result?.documentInformation.tlp.url).toBe('https://example.com/red')
+      expect(result?.documentInformation.tlp.url).toBe(
+        'https://example.com/red',
+      )
     })
   })
 })

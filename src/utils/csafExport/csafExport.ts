@@ -32,6 +32,7 @@ export function createCSAFDocument(
   const notes = parseNotes(documentStore, config)
   const productTree = parseProductTreeBranches(
     Object.values(documentStore.products),
+    Object.values(documentStore.families),
     getFullProductName,
   )
 

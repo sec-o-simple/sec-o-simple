@@ -1,6 +1,5 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { renderHook, act } from '@testing-library/react'
-import React from 'react'
+import { act, renderHook } from '@testing-library/react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 // Mock all dependencies
 vi.mock('@/utils/useConfigStore')
@@ -11,16 +10,16 @@ vi.mock('@/utils/validation/useValidationStore')
 
 import { useConfigStore } from '../../src/utils/useConfigStore'
 import useDocumentStore from '../../src/utils/useDocumentStore'
+import useDocumentStoreUpdater, {
+  useDocumentStoreUpdaterProps,
+  useDocumentValidation,
+} from '../../src/utils/useDocumentStoreUpdater'
 import { useProductTreeBranch } from '../../src/utils/useProductTreeBranch'
 import { validateDocument } from '../../src/utils/validation/documentValidator'
 import useValidationStore from '../../src/utils/validation/useValidationStore'
 
 // Import the hooks to test
 vi.unmock('@/utils/useDocumentStoreUpdater')
-import useDocumentStoreUpdater, { 
-  useDocumentValidation, 
-  useDocumentStoreUpdaterProps 
-} from '../../src/utils/useDocumentStoreUpdater'
 
 // Mock data types
 interface TestData {
@@ -55,6 +54,13 @@ describe('useDocumentStoreUpdater', () => {
           updateTestField: mockUpdateDocumentStoreValue,
           documents: [],
           products: [],
+          families: [],
+          relationships: [],
+          vulnerabilities: [],
+          updateProducts: vi.fn(),
+          updateFamilies: vi.fn(),
+          updateRelationships: vi.fn(),
+          updateVulnerabilities: vi.fn(),
         }
         return selector(mockState)
       }
@@ -63,17 +69,22 @@ describe('useDocumentStoreUpdater', () => {
 
     vi.mocked(useProductTreeBranch).mockReturnValue({
       rootBranch: [],
+      families: [],
       findProductTreeBranch: vi.fn(),
       findProductTreeBranchWithParents: vi.fn(),
       getFullProductName: mockGetFullProductName,
       getRelationshipFullProductName: mockGetRelationshipFullProductName,
       getFilteredPTBs: vi.fn(),
       getPTBsByCategory: vi.fn(),
+      getPTBName: vi.fn(),
       getSelectableRefs: vi.fn(),
       getGroupedSelectableRefs: vi.fn(),
       addPTB: vi.fn(),
+      addProductFamily: vi.fn(),
       updatePTB: vi.fn(),
+      updateFamily: vi.fn(),
       deletePTB: vi.fn(),
+      deleteFamily: vi.fn(),
     })
 
     vi.mocked(validateDocument).mockResolvedValue({
@@ -244,7 +255,7 @@ describe('useDocumentStoreUpdater', () => {
 
       const { rerender } = renderHook(
         (currentProps) => useDocumentStoreUpdater(currentProps),
-        { initialProps: props }
+        { initialProps: props },
       )
 
       expect(mockUpdateDocumentStoreValue).toHaveBeenCalledWith({
@@ -279,7 +290,7 @@ describe('useDocumentStoreUpdater', () => {
 
       const { rerender } = renderHook(
         (currentProps) => useDocumentStoreUpdater(currentProps),
-        { initialProps: props }
+        { initialProps: props },
       )
 
       expect(mockUpdateDocumentStoreValue).toHaveBeenCalledWith({
@@ -313,17 +324,17 @@ describe('useDocumentStoreUpdater', () => {
       renderHook(() => useDocumentValidation())
 
       expect(mockSetIsValidating).toHaveBeenCalledWith(true)
-      
+
       // Wait for async validation
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 0))
+        await new Promise((resolve) => setTimeout(resolve, 0))
       })
 
       expect(validateDocument).toHaveBeenCalledWith(
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
       expect(mockSetValidationState).toHaveBeenCalledWith({
         isValid: true,
@@ -342,17 +353,17 @@ describe('useDocumentStoreUpdater', () => {
       renderHook(() => useDocumentValidation())
 
       expect(mockSetIsValidating).toHaveBeenCalledWith(true)
-      
+
       // Wait for async validation
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 10))
+        await new Promise((resolve) => setTimeout(resolve, 10))
       })
 
       expect(validateDocument).toHaveBeenCalledWith(
         mockDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
       expect(mockSetValidationState).toHaveBeenCalledWith({
         isValid: false,
@@ -375,14 +386,14 @@ describe('useDocumentStoreUpdater', () => {
 
       // Wait for async validation
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 0))
+        await new Promise((resolve) => setTimeout(resolve, 0))
       })
 
       expect(validateDocument).toHaveBeenCalledWith(
         newDocumentStore,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
     })
 
@@ -409,14 +420,14 @@ describe('useDocumentStoreUpdater', () => {
       rerender()
 
       await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 0))
+        await new Promise((resolve) => setTimeout(resolve, 0))
       })
 
       expect(validateDocument).toHaveBeenCalledWith(
         store3,
         mockGetFullProductName,
         mockGetRelationshipFullProductName,
-        mockConfig
+        mockConfig,
       )
     })
   })
@@ -426,7 +437,7 @@ describe('useDocumentStoreUpdater', () => {
 
     it('should handle regular state object', () => {
       const state = { name: 'test', value: 42 }
-      
+
       const props: useDocumentStoreUpdaterProps<TestData> = {
         localState: state,
         valueField: 'testField' as any,
@@ -445,7 +456,7 @@ describe('useDocumentStoreUpdater', () => {
     it('should handle tuple with trigger and callback', () => {
       const callback = vi.fn().mockReturnValue({ name: 'from-callback' })
       const trigger = 'test-trigger'
-      
+
       const props: useDocumentStoreUpdaterProps<TestData> = {
         localState: [trigger, callback],
         valueField: 'testField' as any,
@@ -464,7 +475,7 @@ describe('useDocumentStoreUpdater', () => {
 
     it('should handle invalid tuple (not length 2)', () => {
       const invalidTuple = ['only-one-item'] as any
-      
+
       const props: useDocumentStoreUpdaterProps<TestData> = {
         localState: invalidTuple,
         valueField: 'testField' as any,
@@ -483,7 +494,7 @@ describe('useDocumentStoreUpdater', () => {
 
     it('should handle tuple with non-function second element', () => {
       const invalidTuple = ['trigger', 'not-a-function'] as any
-      
+
       const props: useDocumentStoreUpdaterProps<TestData> = {
         localState: invalidTuple,
         valueField: 'testField' as any,
@@ -512,7 +523,9 @@ describe('useDocumentStoreUpdater', () => {
 
       renderHook(() => useDocumentStoreUpdater(props))
 
-      expect(mockUpdateDocumentStoreValue).toHaveBeenCalledWith(mockDocumentStoreValue)
+      expect(mockUpdateDocumentStoreValue).toHaveBeenCalledWith(
+        mockDocumentStoreValue,
+      )
     })
 
     it('should handle null/undefined in localState gracefully', () => {
@@ -523,7 +536,9 @@ describe('useDocumentStoreUpdater', () => {
         init: mockInit,
       }
 
-      expect(() => renderHook(() => useDocumentStoreUpdater(props))).not.toThrow()
+      expect(() =>
+        renderHook(() => useDocumentStoreUpdater(props)),
+      ).not.toThrow()
     })
 
     it('should handle config changes correctly', () => {
@@ -551,8 +566,12 @@ describe('useDocumentStoreUpdater', () => {
     })
 
     it('should handle documentStoreValue changes', () => {
-      const newDocumentStoreValue: TestData = { id: '2', name: 'new', value: 20 }
-      
+      const newDocumentStoreValue: TestData = {
+        id: '2',
+        name: 'new',
+        value: 20,
+      }
+
       const { rerender } = renderHook(() => {
         const props: useDocumentStoreUpdaterProps<TestData> = {
           localState: { name: 'updated' },
@@ -575,6 +594,14 @@ describe('useDocumentStoreUpdater', () => {
           const mockState = {
             testField: newDocumentStoreValue,
             updateTestField: mockUpdateDocumentStoreValue,
+            products: [],
+            families: [],
+            relationships: [],
+            vulnerabilities: [],
+            updateProducts: vi.fn(),
+            updateFamilies: vi.fn(),
+            updateRelationships: vi.fn(),
+            updateVulnerabilities: vi.fn(),
           }
           return selector(mockState)
         }
@@ -603,7 +630,9 @@ describe('useDocumentStoreUpdater', () => {
         init: vi.fn(),
       }
 
-      expect(() => renderHook(() => useDocumentStoreUpdater(stringProps))).not.toThrow()
+      expect(() =>
+        renderHook(() => useDocumentStoreUpdater(stringProps)),
+      ).not.toThrow()
     })
 
     it('should work with complex nested objects', () => {
@@ -618,7 +647,7 @@ describe('useDocumentStoreUpdater', () => {
 
       const complexData: ComplexData = {
         nested: { deep: { value: 'test' } },
-        array: [1, 2, 3]
+        array: [1, 2, 3],
       }
 
       vi.mocked(useDocumentStore).mockImplementation((selector: any) => {
@@ -626,6 +655,14 @@ describe('useDocumentStoreUpdater', () => {
           const mockState = {
             testField: complexData,
             updateTestField: mockUpdateDocumentStoreValue,
+            products: [],
+            families: [],
+            relationships: [],
+            vulnerabilities: [],
+            updateProducts: vi.fn(),
+            updateFamilies: vi.fn(),
+            updateRelationships: vi.fn(),
+            updateVulnerabilities: vi.fn(),
           }
           return selector(mockState)
         }
@@ -643,7 +680,7 @@ describe('useDocumentStoreUpdater', () => {
 
       expect(mockUpdateDocumentStoreValue).toHaveBeenCalledWith({
         ...complexData,
-        nested: { deep: { value: 'updated' } }
+        nested: { deep: { value: 'updated' } },
       })
     })
   })

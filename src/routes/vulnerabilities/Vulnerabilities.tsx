@@ -46,7 +46,7 @@ export default function Vulnerabilities() {
     <WizardStep
       title={t('nav.vulnerabilities')}
       progress={3}
-      onBack={'/product-management'}
+      onBack={'/products/management'}
       onContinue={'/tracking'}
     >
       {(hasVisitedPage || listValidation.isTouched) &&
