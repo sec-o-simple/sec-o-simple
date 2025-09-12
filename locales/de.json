@@ -201,6 +201,10 @@
         "url": "URL",
         "products.empty": "Keine Produkte hinzugefügt",
         "productsDescription": "Wählen Sie die betroffenen Produkte aus"
+      },
+      "flags": "Kennzeichnungen",
+      "flag": {
+        "title": "Kennzeichnung"
       }
     },
     "notes": {
@@ -300,6 +304,7 @@
       },
       "product": {
         "label": "Produkt",
+        "label_plural": "Produkte",
         "name": "Produktname",
         "description": "Produktbeschreibung",
         "type": "Produktart",

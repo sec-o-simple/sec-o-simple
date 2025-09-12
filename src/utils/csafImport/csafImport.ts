@@ -122,7 +122,8 @@ export function parseCSAFDocument(
   generateVulnerabilityProduct: () => TVulnerabilityProduct,
   remediationGenerator: ReturnType<typeof useRemediationGenerator>,
 ): SOSDraft | undefined {
-  const sosDocumentType: TSOSDocumentType = 'Import'
+  const sosDocumentType: TSOSDocumentType =
+    csafDocument?.document?.category === 'csaf_vex' ? 'VexImport' : 'Import'
 
   const defaultDocumentInformation = getDefaultDocumentInformation()
   const defaultRevisionHistoryEntry = getDefaultRevisionHistoryEntry()

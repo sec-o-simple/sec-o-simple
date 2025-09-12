@@ -2,7 +2,6 @@ import { Input } from '@/components/forms/Input'
 import PTBSelect from '@/components/forms/PTBSelect'
 import Select from '@/components/forms/Select'
 import { checkReadOnly, getPlaceholder } from '@/utils/template'
-import useDocumentStore from '@/utils/useDocumentStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -35,16 +34,11 @@ export default function RelationshipEditForm({
 }: RelationshipEditFormProps) {
   const { t } = useTranslation()
   const { findProductTreeBranch } = useProductTreeBranch()
-  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
 
   const [updatedRelationship, setUpdateRelationship] = useState<TRelationship>({
     ...(relationship ?? {
       ...getDefaultRelationship(),
-      category:
-        sosDocumentType === 'HardwareSoftware' ||
-        sosDocumentType === 'HardwareFirmware'
-          ? 'installed_on'
-          : 'installed_on',
+      category: 'installed_on',
     }),
   })
 
