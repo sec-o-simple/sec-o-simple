@@ -148,6 +148,7 @@ describe('csafExport', () => {
               versions: [{ id: 'version-2', name: '2.0.0' }],
             },
           ],
+          flags: [],
           remediations: [
             {
               category: 'mitigation',
@@ -283,6 +284,7 @@ describe('csafExport', () => {
         cwe: undefined,
         notes: [],
         products: [],
+        flags: [],
         remediations: undefined,
         scores: [],
       },

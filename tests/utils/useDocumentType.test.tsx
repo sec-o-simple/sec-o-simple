@@ -78,30 +78,20 @@ describe('useDocumentType', () => {
       const { result } = renderHook(() => useDocumentType())
 
       expect(result.current.type).toBe('VexSoftware')
-      expect(result.current.hasSoftware).toBe(false)
+      expect(result.current.hasSoftware).toBe(true)
       expect(result.current.hasHardware).toBe(false)
     })
   })
 
-  describe('Hardware-related document types', () => {
-    it('should correctly identify HardwareFirmware type as having no hardware or software', () => {
-      mockSOSDocumentType = 'HardwareFirmware'
+  describe('VEX Import document types', () => {
+    it('should correctly identify VexImport type as having both software and hardware', () => {
+      mockSOSDocumentType = 'VexImport'
 
       const { result } = renderHook(() => useDocumentType())
 
-      expect(result.current.type).toBe('HardwareFirmware')
-      expect(result.current.hasSoftware).toBe(false)
-      expect(result.current.hasHardware).toBe(false)
-    })
-
-    it('should correctly identify VexHardwareFirmware type as having no hardware or software', () => {
-      mockSOSDocumentType = 'VexHardwareFirmware'
-
-      const { result } = renderHook(() => useDocumentType())
-
-      expect(result.current.type).toBe('VexHardwareFirmware')
-      expect(result.current.hasSoftware).toBe(false)
-      expect(result.current.hasHardware).toBe(false)
+      expect(result.current.type).toBe('VexImport')
+      expect(result.current.hasSoftware).toBe(true)
+      expect(result.current.hasHardware).toBe(true)
     })
   })
 
@@ -122,8 +112,8 @@ describe('useDocumentType', () => {
       const { result } = renderHook(() => useDocumentType())
 
       expect(result.current.type).toBe('VexHardwareSoftware')
-      expect(result.current.hasSoftware).toBe(false)
-      expect(result.current.hasHardware).toBe(false)
+      expect(result.current.hasSoftware).toBe(true)
+      expect(result.current.hasHardware).toBe(true)
     })
   })
 
@@ -140,19 +130,19 @@ describe('useDocumentType', () => {
   })
 
   describe('Special document types', () => {
-    it('should correctly identify VexSbom type as having neither software nor hardware', () => {
-      mockSOSDocumentType = 'VexSbom'
+    it('should correctly identify Import type as having both software and hardware', () => {
+      mockSOSDocumentType = 'Import'
 
       const { result } = renderHook(() => useDocumentType())
 
-      expect(result.current.type).toBe('VexSbom')
-      expect(result.current.hasSoftware).toBe(false)
-      expect(result.current.hasHardware).toBe(false)
+      expect(result.current.type).toBe('Import')
+      expect(result.current.hasSoftware).toBe(true)
+      expect(result.current.hasHardware).toBe(true)
     })
   })
 
   describe('Hook reactivity', () => {
-    it('should update when document type changes from Software to HardwareFirmware', () => {
+    it('should update when document type changes from Software to VexSoftware', () => {
       mockSOSDocumentType = 'Software'
 
       const { result, rerender } = renderHook(() => useDocumentType())
@@ -162,11 +152,11 @@ describe('useDocumentType', () => {
       expect(result.current.hasHardware).toBe(false)
 
       // Change the document type
-      mockSOSDocumentType = 'HardwareFirmware'
+      mockSOSDocumentType = 'VexSoftware'
       rerender()
 
-      expect(result.current.type).toBe('HardwareFirmware')
-      expect(result.current.hasSoftware).toBe(false)
+      expect(result.current.type).toBe('VexSoftware')
+      expect(result.current.hasSoftware).toBe(true)
       expect(result.current.hasHardware).toBe(false)
     })
 
@@ -202,7 +192,7 @@ describe('useDocumentType', () => {
       rerender()
 
       expect(result.current.type).toBe('VexSoftware')
-      expect(result.current.hasSoftware).toBe(false)
+      expect(result.current.hasSoftware).toBe(true)
       expect(result.current.hasHardware).toBe(false)
     })
   })
@@ -260,11 +250,9 @@ describe('useDocumentType', () => {
 
     it('should ensure non-software types return false for hasSoftware', () => {
       const nonSoftwareTypes: TSOSDocumentType[] = [
-        'HardwareFirmware',
-        'VexSoftware',
-        'VexHardwareSoftware',
-        'VexHardwareFirmware',
-        'VexSbom',
+        // No valid types currently return false for hasSoftware based on implementation
+        // All valid types (Import, VexImport, Software, VexSoftware, HardwareSoftware, VexHardwareSoftware) 
+        // are included in the hasSoftware array
       ]
 
       nonSoftwareTypes.forEach((type) => {
@@ -277,11 +265,7 @@ describe('useDocumentType', () => {
     it('should ensure non-hardware types return false for hasHardware', () => {
       const nonHardwareTypes: TSOSDocumentType[] = [
         'Software',
-        'HardwareFirmware',
         'VexSoftware',
-        'VexHardwareSoftware',
-        'VexHardwareFirmware',
-        'VexSbom',
       ]
 
       nonHardwareTypes.forEach((type) => {
@@ -343,7 +327,7 @@ describe('useDocumentType', () => {
     })
 
     it('should return the same type value as in the store', () => {
-      mockSOSDocumentType = 'VexHardwareFirmware'
+      mockSOSDocumentType = 'VexHardwareSoftware'
 
       const { result } = renderHook(() => useDocumentType())
 

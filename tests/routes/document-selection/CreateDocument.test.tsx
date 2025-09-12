@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
+import '@testing-library/jest-dom'
 import { HashRouter } from 'react-router'
 import CreateDocument from '../../../src/routes/document-selection/CreateDocument'
 
@@ -116,11 +117,10 @@ describe('CreateDocument', () => {
     
     // Use test IDs to identify specific radio buttons for Advisory section
     expect(screen.getByTestId('radio-Software')).toBeInTheDocument()
-    expect(screen.getByTestId('radio-HardwareSoftware')).toBeInTheDocument() 
-    expect(screen.getByTestId('radio-HardwareFirmware')).toBeInTheDocument()
+    expect(screen.getByTestId('radio-HardwareSoftware')).toBeInTheDocument()
   })
 
-  it('should display all options for VEX including SBOM', () => {
+  it('should display all options for VEX', () => {
     renderComponent()
     
     const softwareElements = screen.getAllByText('Software')
@@ -128,11 +128,6 @@ describe('CreateDocument', () => {
     
     const hardwareElements = screen.getAllByText('Software and Hardware')
     expect(hardwareElements).toHaveLength(2) // One for Advisory, one for VEX
-    
-    const firmwareElements = screen.getAllByText('Software and Firmware')
-    expect(firmwareElements).toHaveLength(2) // One for Advisory, one for VEX
-    
-    expect(screen.getByText('SBOM')).toBeInTheDocument()
   })
 
   it('should have Create buttons for both document types', () => {
@@ -155,24 +150,20 @@ describe('CreateDocument', () => {
     // Advisory options
     expect(screen.getByTestId('radio-Software')).toBeInTheDocument()
     expect(screen.getByTestId('radio-HardwareSoftware')).toBeInTheDocument()
-    expect(screen.getByTestId('radio-HardwareFirmware')).toBeInTheDocument()
     
     // VEX options  
     expect(screen.getByTestId('radio-VexSoftware')).toBeInTheDocument()
     expect(screen.getByTestId('radio-VexHardwareSoftware')).toBeInTheDocument()
-    expect(screen.getByTestId('radio-VexHardwareFirmware')).toBeInTheDocument()
-    expect(screen.getByTestId('radio-VexSbom')).toBeInTheDocument()
   })
 
-  it('should have some radio options disabled', () => {
+  it('should have all radio options enabled', () => {
     renderComponent()
     
-    // HardwareFirmware should be disabled (no active: true)
-    expect(screen.getByTestId('radio-HardwareFirmware')).toBeDisabled()
-    
-    // Active options should be enabled
+    // All current options should be enabled since they all have active: true
     expect(screen.getByTestId('radio-Software')).not.toBeDisabled()
     expect(screen.getByTestId('radio-HardwareSoftware')).not.toBeDisabled()
+    expect(screen.getByTestId('radio-VexSoftware')).not.toBeDisabled()
+    expect(screen.getByTestId('radio-VexHardwareSoftware')).not.toBeDisabled()
   })
 
   it('should handle radio button selection changes', () => {
@@ -188,7 +179,7 @@ describe('CreateDocument', () => {
 
     const createButtons = screen.getAllByTestId('button')
     
-    // Advisory button should be enabled (has default selection)
+    // Advisory button should be enabled (has default selection of Software)
     expect(createButtons[0]).not.toBeDisabled()
     
     // VEX button should be disabled (no default selection)

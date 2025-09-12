@@ -186,10 +186,11 @@ export function createCSAFDocument(
           url: remediation.url || undefined,
           product_ids: remediation.productIds,
         }))
-        const flags = vulnerability.flags.map((flag) => ({
-          label: flag.label,
-          product_ids: [...new Set(flag.productIds)],
-        }))
+        const flags =
+          vulnerability.flags?.map((flag) => ({
+            label: flag.label,
+            product_ids: [...new Set(flag.productIds)],
+          })) || []
         const cvss4References =
           vulnerability.scores
             ?.filter((score) => score.cvssVersion === '4.0')

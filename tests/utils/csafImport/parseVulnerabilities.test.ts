@@ -44,6 +44,7 @@ describe('parseVulnerabilities', () => {
     title: 'default-title',
     notes: [],
     products: [],
+    flags: [],
     remediations: [],
     scores: []
   }
@@ -148,6 +149,7 @@ describe('parseVulnerabilities', () => {
         title: mockDefaultVulnerability.title,
         notes: undefined,
         products: [mockVulnerabilityProduct],
+        flags: [],
         remediations: undefined,
         scores: undefined
       })
@@ -787,6 +789,7 @@ describe('parseVulnerabilities', () => {
           content: 'Content 1'
         })],
         products: [mockVulnerabilityProduct],
+        flags: [],
         remediations: [expect.objectContaining({
           id: mockRemediationGenerator.id,
           category: 'vendor_fix',
