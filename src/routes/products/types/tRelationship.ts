@@ -34,12 +34,14 @@ export function getDefaultRelationship(): TRelationship {
   }
 }
 
+export type TFullProductName = {
+  name: string
+  product_id: string
+}
+
 export type CSAFRelationship = {
   category: TRelationshipCategory
   product_reference: string
   relates_to_product_reference: string
-  full_product_name: {
-    name: string
-    product_id: string
-  }
+  full_product_name: TFullProductName
 }

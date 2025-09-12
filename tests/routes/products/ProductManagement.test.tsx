@@ -188,7 +188,7 @@ describe('ProductManagement', () => {
 
       const wizardStep = screen.getByTestId('wizard-step')
       expect(wizardStep).toHaveAttribute('data-progress', '2.5')
-      expect(wizardStep).toHaveAttribute('data-on-back', '/product-families')
+      expect(wizardStep).toHaveAttribute('data-on-back', '/product/families')
       expect(wizardStep).toHaveAttribute('data-on-continue', '/vulnerabilities')
       expect(wizardStep).toHaveAttribute('data-no-content-wrapper', 'true')
     })

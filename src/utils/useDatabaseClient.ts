@@ -1,5 +1,10 @@
+import {
+  CSAFRelationship,
+  TFullProductName,
+} from '@/routes/products/types/tRelationship'
 import axios from 'axios'
 import { useCallback, useEffect } from 'react'
+import { TCSAFDocument } from './csafExport/csafExport'
 import useProductDatabase from './useProductDatabase'
 
 export interface Vendor {
@@ -28,6 +33,14 @@ export interface IdentificationHelper {
   id: string
   category: string
   metadata: string
+}
+
+export interface TProductDatabaseCSAFProducttree {
+  product_tree: {
+    branches: TCSAFDocument['product_tree']['branches']
+    full_product_names: TFullProductName
+    relationships: CSAFRelationship[]
+  }
 }
 
 const client = axios.create({
@@ -59,6 +72,19 @@ export function useDatabaseClient() {
     return response.data
   }, [])
 
+  const fetchCSAFProducts = useCallback(
+    async (ids: string[]): Promise<TProductDatabaseCSAFProducttree> => {
+      const response = await client.post<TProductDatabaseCSAFProducttree>(
+        '/products/export',
+        {
+          product_ids: ids,
+        },
+      )
+      return response.data
+    },
+    [],
+  )
+
   const fetchProductVersions = useCallback(
     async (productId: string): Promise<ProductVersion[]> => {
       const response = await client.get<ProductVersion[]>(
@@ -83,6 +109,7 @@ export function useDatabaseClient() {
     url: url,
     fetchVendors,
     fetchProducts,
+    fetchCSAFProducts,
     fetchProductVersions,
     fetchIdentificationHelpers,
   }

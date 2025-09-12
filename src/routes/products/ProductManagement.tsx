@@ -25,7 +25,7 @@ export default function ProductManagement() {
   return (
     <WizardStep
       progress={2.5}
-      onBack={'/product-families'}
+      onBack={'/products/families'}
       onContinue={'/vulnerabilities'}
       noContentWrapper
     >

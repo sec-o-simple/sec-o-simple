@@ -50,7 +50,7 @@ export default function Acknowledgments() {
       title={t('nav.documentInformation.acknowledgments')}
       progress={1.8}
       onBack={'/document-information/references'}
-      onContinue="/product-families"
+      onContinue="/products/families"
     >
       {listValidation.isTouched && listValidation.hasErrors && (
         <Alert color="danger">

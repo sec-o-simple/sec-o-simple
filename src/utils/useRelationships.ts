@@ -13,7 +13,7 @@ export function useRelationships() {
   const getRelationshipsBySourceVersion = (
     sourceVersionId: string,
   ): TRelationship[] => {
-    return globalRelationships.filter((relationship) =>
+    return globalRelationships?.filter((relationship) =>
       relationship.relationships?.some(
         (rel) => rel.product1VersionId === sourceVersionId,
       ),

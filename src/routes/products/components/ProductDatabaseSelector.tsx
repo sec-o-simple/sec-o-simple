@@ -1,11 +1,13 @@
 import { Input } from '@/components/forms/Input'
 import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
+import { parseProductTree } from '@/utils/csafImport/parseProductTree'
+import { parseRelationships } from '@/utils/csafImport/parseRelationships'
 import { useConfigStore } from '@/utils/useConfigStore'
 import {
   Vendor as DatabaseVendor,
-  IdentificationHelper,
   Product,
   ProductVersion,
+  TProductDatabaseCSAFProducttree,
   useDatabaseClient,
 } from '@/utils/useDatabaseClient'
 import useDocumentStore from '@/utils/useDocumentStore'
@@ -36,8 +38,14 @@ type Vendor = DatabaseVendor & {
 export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
   const client = useDatabaseClient()
   const config = useConfigStore((state) => state.config)
-  const products = Object.values(useDocumentStore((store) => store.products))
-  const updateProducts = useDocumentStore((store) => store.updateProducts)
+  const products = Object.values(useDocumentStore((state) => state.products))
+  const {
+    updateProducts,
+    families,
+    updateFamilies,
+    relationships,
+    updateRelationships,
+  } = useDocumentStore()
 
   const { t } = useTranslation()
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
@@ -78,183 +86,163 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
 
   const [submitting, setSubmitting] = useState(false)
 
-  // Helper function to map database identification helpers to CSAF format
-  const mapIdentificationHelper = (helper: IdentificationHelper) => {
-    const metadata = JSON.parse(helper.metadata)
-
-    switch (helper.category) {
-      case 'cpe':
-        return { cpe: metadata.cpe }
-      case 'models':
-        return { model_numbers: metadata.models }
-      case 'sbom':
-        return { sbom_urls: metadata.sbom_urls }
-      case 'sku':
-        return { skus: metadata.skus }
-      case 'uri':
-        return { x_generic_uris: metadata.uris }
-      case 'hashes':
-        return {
-          hashes: metadata.file_hashes.map(
-            (hash: {
-              items: { algorithm: string; value: string }[]
-              filename: string
-            }) => ({
-              file_hashes: hash.items,
-              filename: hash.filename,
-            }),
-          ),
-        }
-      case 'purl':
-        return { purl: metadata.purl }
-      case 'serial':
-        return { serial_numbers: metadata.serial_numbers }
-      default:
-        return {}
-    }
-  }
-
-  // Helper function to create a product version branch
-  const createProductVersionBranch = async (
-    version: ProductVersion,
-  ): Promise<TProductTreeBranch | null> => {
-    try {
-      const helpers = await client.fetchIdentificationHelpers(version.id)
-      const mappedHelpers = helpers.map(mapIdentificationHelper)
-      const identificationHelper =
-        mappedHelpers.length > 0
-          ? Object.assign({}, ...mappedHelpers)
-          : undefined
-
-      return {
-        id: version.id,
-        category: 'product_version',
-        name: version.name,
-        description: '',
-        subBranches: [],
-        identificationHelper,
-      }
-    } catch (error) {
-      console.error(
-        `Failed to create version branch for ${version.name}:`,
-        error,
-      )
-      return null
-    }
-  }
-
-  // Helper function to create a product branch with its versions
-  const createProductBranch = async (
-    product: Product,
-  ): Promise<TProductTreeBranch> => {
-    const versions = await client.fetchProductVersions(product.id)
-    const versionResults = await Promise.allSettled(
-      versions.map(createProductVersionBranch),
-    )
-
-    const validVersionBranches = versionResults
-      .filter(
-        (result): result is PromiseFulfilledResult<TProductTreeBranch> =>
-          result.status === 'fulfilled' && result.value !== null,
-      )
-      .map((result) => result.value)
-
-    return {
-      id: product.id,
-      category: 'product_name',
-      name: product.name,
-      description: product.description || '',
-      type: product.type === 'software' ? 'Software' : 'Hardware',
-      subBranches: validVersionBranches,
-    }
-  }
-
-  // Helper function to find or create a vendor branch
-  const getOrCreateVendorBranch = (vendor: Vendor): TProductTreeBranch => {
-    const existingVendor = products.find(
-      (branch) => branch.category === 'vendor' && branch.id === vendor.id,
-    )
-
-    return (
-      existingVendor || {
-        id: vendor.id,
-        category: 'vendor',
-        name: vendor.name,
-        description: vendor.description || '',
-        subBranches: [],
-      }
-    )
-  }
-
-  // Helper function to process products for a vendor
-  const processVendorProducts = async (
-    vendor: Vendor,
-  ): Promise<TProductTreeBranch | null> => {
-    const selectedVendorProducts = vendor.products.filter((product) =>
-      selectedProducts.includes(product.id),
-    )
-
-    if (selectedVendorProducts.length === 0) {
-      return null
-    }
-
-    const vendorBranch = getOrCreateVendorBranch(vendor)
-
-    // Process each selected product
-    for (const product of selectedVendorProducts) {
-      // Skip if product already exists under this vendor
-      const productExists = vendorBranch.subBranches.some(
-        (branch) =>
-          branch.category === 'product_name' && branch.id === product.id,
-      )
-
-      if (productExists) {
-        continue
-      }
-
-      try {
-        const productBranch = await createProductBranch(product)
-        vendorBranch.subBranches.push(productBranch)
-      } catch (error) {
-        console.error(`Failed to process product ${product.name}:`, error)
-      }
-    }
-
-    return vendorBranch
-  }
-
   const handleAddProducts = async () => {
-    if (selectedProducts.length === 0) {
-      return
-    }
-
+    if (selectedProducts.length === 0) return
     setSubmitting(true)
-
     try {
-      let updatedProducts: TProductTreeBranch[] = [...products]
+      // Start from existing tree
+      const updatedProducts: TProductTreeBranch[] = [...products]
 
-      // Process all vendors in parallel
-      const vendorResults = await Promise.allSettled(
-        vendors.map(processVendorProducts),
-      )
+      // Attempt to fetch CSAF document (optional enrichment)
+      let csafDocument: TProductDatabaseCSAFProducttree | undefined
+      try {
+        csafDocument = await client.fetchCSAFProducts(selectedProducts)
+      } catch (e) {
+        console.error('Error fetching CSAF document:', e)
+      }
 
-      // Update the products list with processed vendors
-      for (const result of vendorResults) {
-        if (result.status === 'fulfilled' && result.value) {
-          const processedVendor = result.value
-          const existingVendorIndex = updatedProducts.findIndex(
-            (branch) => branch.id === processedVendor.id,
-          )
-
-          if (existingVendorIndex >= 0) {
-            updatedProducts[existingVendorIndex] = processedVendor
-          } else {
-            updatedProducts.push(processedVendor)
+      // Parse CSAF product tree if available
+      if (csafDocument) {
+        try {
+          const productTreeResult = parseProductTree(csafDocument)
+          const importedFamilies = productTreeResult.families
+          // Merge families (dedupe by id)
+          for (const fam of importedFamilies) {
+            if (!families.some((f) => f.id === fam.id)) {
+              families.push(fam)
+            }
+          }
+        } catch (e) {
+          console.error('Failed to parse CSAF product tree:', e)
+        }
+        // Relationships (optional)
+        if (csafDocument.product_tree?.relationships) {
+          try {
+            const importedRelationships = parseRelationships(
+              csafDocument.product_tree.relationships,
+              updatedProducts,
+            )
+            if (importedRelationships.length) {
+              updateRelationships([...relationships, ...importedRelationships])
+            }
+          } catch (e) {
+            console.error('Failed to parse CSAF relationships:', e)
           }
         }
       }
 
+      // Build vendor/product/version structure from database for selected products
+      for (const productId of selectedProducts) {
+        const vendorWithProduct = vendors.find((v) =>
+          v.products.some((p) => p.id === productId),
+        )
+        if (!vendorWithProduct) continue
+
+        // Find or create vendor branch
+        let vendorBranch = updatedProducts.find(
+          (b) => b.category === 'vendor' && b.id === vendorWithProduct.id,
+        )
+        if (!vendorBranch) {
+          vendorBranch = {
+            id: vendorWithProduct.id,
+            category: 'vendor',
+            name: vendorWithProduct.name,
+            description: vendorWithProduct.description || '',
+            subBranches: [],
+          }
+          updatedProducts.push(vendorBranch)
+        }
+
+        // Skip if product already exists
+        const dbProduct = vendorWithProduct.products.find(
+          (p) => p.id === productId,
+        )
+        if (!dbProduct) continue
+        const existingProduct = vendorBranch.subBranches.find(
+          (sb) => sb.category === 'product_name' && sb.id === productId,
+        )
+        if (existingProduct) continue
+
+        let versions: ProductVersion[] = []
+        try {
+          versions = await client.fetchProductVersions(productId)
+        } catch (e) {
+          console.error('Failed to process product', e)
+        }
+
+        // Build version branches
+        const versionBranches: TProductTreeBranch[] = []
+        for (const version of versions) {
+          try {
+            const helpers = await client.fetchIdentificationHelpers(version.id)
+            const mappedHelpers = helpers.map((h) => {
+              const metadata = JSON.parse(h.metadata)
+              switch (h.category) {
+                case 'cpe':
+                  return { cpe: metadata.cpe }
+                case 'models':
+                  return { model_numbers: metadata.models }
+                case 'sbom':
+                  return { sbom_urls: metadata.sbom_urls }
+                case 'sku':
+                  return { skus: metadata.skus }
+                case 'uri':
+                  return { x_generic_uris: metadata.uris }
+                case 'hashes':
+                  return {
+                    hashes: metadata.file_hashes?.map(
+                      (hash: {
+                        items: { algorithm: string; value: string }[]
+                        filename: string
+                      }) => ({
+                        file_hashes: hash.items,
+                        filename: hash.filename,
+                      }),
+                    ),
+                  }
+                case 'purl':
+                  return { purl: metadata.purl }
+                case 'serial':
+                  return { serial_numbers: metadata.serial_numbers }
+                default:
+                  return {}
+              }
+            })
+            const identificationHelper =
+              mappedHelpers.length > 0
+                ? Object.assign({}, ...mappedHelpers)
+                : undefined
+
+            versionBranches.push({
+              id: version.id,
+              category: 'product_version',
+              name: version.name,
+              description: version.description || '',
+              subBranches: [],
+              identificationHelper,
+            })
+          } catch (e) {
+            console.error(
+              `Failed to create version branch for ${version.name}:`,
+              e,
+            )
+          }
+        }
+
+        // Create product branch
+        const productBranch: TProductTreeBranch = {
+          id: dbProduct.id,
+          category: 'product_name',
+          name: dbProduct.name,
+          description: dbProduct.description || '',
+          type: dbProduct.type === 'software' ? 'Software' : 'Hardware',
+          subBranches: versionBranches,
+        }
+        vendorBranch.subBranches.push(productBranch)
+      }
+
       updateProducts(updatedProducts)
+      updateFamilies(families)
     } catch (error) {
       console.error('Failed to add products:', error)
     } finally {
@@ -296,7 +284,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
                   startContent={
                     <FontAwesomeIcon
                       icon={faSearch}
-                      className="text-neutral-foreground"
+                      className="text-slate-500"
                     />
                   }
                 />
