@@ -5,7 +5,6 @@ on:
   push:
     branches:
       - main
-      - chore/e2e-tests # Include current test branch for verification
 
 permissions:
   contents: read
@@ -14,6 +13,15 @@ permissions:
 jobs:
   e2e:
     runs-on: ubuntu-latest
+
+    services:
+      api:
+        image: ghcr.io/sec-o-simple/product-database-server:latest
+        ports:
+          - 9999:9999
+        env:
+          CORS_ORIGIN: '*'
+  
     steps:
       - uses: actions/checkout@v4
         with:

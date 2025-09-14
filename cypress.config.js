@@ -10,6 +10,7 @@ export default defineConfig({
     defaultCommandTimeout: 8000,
     viewportWidth: 1280,
     viewportHeight: 800,
+    supportFile: 'tests/e2e/support.js',
     screenshotsFolder: 'tests/screenshots',
     setupNodeEvents(on, config) {
       on('task', {

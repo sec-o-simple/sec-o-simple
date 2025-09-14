@@ -1,15 +1,102 @@
 import { compareCSAFExport } from './utils.js'
 
-describe('Create a new software advisory & export it', () => {
-  it('Create a new software advisory & export it', () => {
+describe('Product Database Import', () => {
+  before(() => {
+    const api = Cypress.env('DATABASE_BASE_URL') || 'http://127.0.0.1:9999';
+
+    const headers = {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    };
+
+    const requestJson = (method, path, body) =>
+      cy
+        .request({
+          method,
+          url: `${api}${path}`,
+          headers,
+          body,
+          failOnStatusCode: true,
+        })
+        .its('body');
+
+    const get = (path) => requestJson('GET', path);
+    const post = (path, body) => requestJson('POST', path, body);
+
+    let productId;
+    let v1Id;
+    let v2Id;
+
+    return get('/api/v1/vendors').then((all) => {
+      const allList = Array.isArray(all) ? all : all.items || [];
+      const existing = allList.find((v) => v.name === 'Vendor Name');
+
+      if (existing) {
+        cy.log('Vendor already exists, skipping bootstrap');
+        return;
+      }
+
+      return post('/api/v1/vendors', {
+        description: 'Vendor Description',
+        name: 'Vendor Name',
+      }).then((vendor) => {
+        return post('/api/v1/products', {
+          description: 'Product Description',
+          family_id: null,
+          name: 'Product Name',
+          type: 'software',
+          vendor_id: vendor.id,
+        });
+      }).then((product) => {
+        productId = product.id;
+
+        return post('/api/v1/product-versions', {
+          product_id: productId,
+          version: '1.0.0',
+        });
+
+      }).then((version) => {
+        v1Id = version.id;
+
+        return post('/api/v1/product-versions', {
+          product_id: productId,
+          version: '2.0.0',
+        });
+      }).then(async (version) => {
+        v2Id = version.id;
+
+        return post('/api/v1/relationships', {
+          category: 'default_component_of',
+          source_node_ids: [v1Id],
+          target_node_ids: [v2Id],
+        });
+      }).then(() => {
+        return post('/api/v1/identification-helper', {
+          category: 'purl',
+          metadata: JSON.stringify({ purl: 'pkg:pypi/django@1.11.1' }),
+          product_version_id: v2Id,
+        });
+      }).then(() => {
+        cy.log('Seed complete');
+      });
+    });
+  });
+
+  it('Import products from product database and export CSAF', () => {
+    // Mock the config file to enable product database import
+    cy.intercept(
+      { method: 'GET', url: '/.well-known/appspecific/io.github.sec-o-simple.json' },
+      { fixture: 'database-import-config.json' }
+    ).as('config');
+
     cy.visit('/');
     cy.contains('Create new Document').click();
     cy.contains('Software and Hardware').click();
     cy.contains('Create document').click();
 
-    // // Fill general
+    // Fill general
     cy.contains('Document Title').click().type('My first Software Advisory');
-    cy.contains('Document ID').click().type('Test-001');
+    cy.contains('Document ID').click().type('Test-002');
     cy.contains('Select TLP label').click();
     cy.contains('GREEN').click();
 
@@ -38,39 +125,11 @@ describe('Create a new software advisory & export it', () => {
 
     // Fill products
     cy.contains('Products').click();
-    cy.contains('Add Vendor').click();
-    cy.contains('Name').click().type('Test Vendor');
-    cy.wait(500);
-    cy.contains('Save').click();
-    // Create test software
-    cy.contains('Test Vendor').closest('[data-slot="trigger"]').click().click();
-    cy.contains('Add Product').click();
-    cy.contains('Name').click().type('Test Software');
-    cy.contains('Description').click().type('This is a test product');
-    cy.wait(500);
-    cy.contains('Save').click();
-    cy.contains('Test Software').parent().parent().parent().parent().find('button').first().click();
-    cy.contains('Add Version').click();
-    cy.contains('Name').click().type('1.0.0');
-    cy.wait(500);
-    cy.contains('Save').click();
+    cy.contains('Add from Database').click();
 
-    // Create test hardware
-    cy.contains('Products').click();
-    cy.contains('Test Vendor').closest('[data-slot="trigger"]').click().click();
-    cy.contains('Add Product').click();
-    cy.contains('Name').click().type('Test Hardware');
-    cy.contains('Description').click().type('This is a test hardware product');
-    cy.contains('Product Type').parent().parent().find('button').click();
-    cy.wait(100);
-    cy.contains('li', 'Hardware').click();
-    cy.wait(500);
-    cy.contains('Save').click();
-    cy.contains('Test Hardware').parent().parent().parent().parent().find('button').first().click();
-    cy.contains('Add Version').click();
-    cy.contains('Name').click().type('1.2.0');
-    cy.wait(500);
-    cy.contains('Save').click();
+    // click checkbox
+    cy.contains('Vendor Name').parent().find('input[type="checkbox"]').check({ force: true });
+    cy.contains('Add 1 product').click();
 
     // Fill vulnerabilities
     cy.contains('Vulnerabilities').click();
@@ -92,20 +151,20 @@ describe('Create a new software advisory & export it', () => {
       .find('[aria-haspopup="listbox"]').scrollIntoView().should('be.visible').click();
     cy.contains('li', 'Known Affected').click();
     cy.get('[aria-autocomplete="list"]').first().click();
-    cy.contains('li', 'Test Vendor Test Software 1.0.0 installed on Test Vendor Test Hardware 1.2.0').click();
+    cy.contains('li', 'Vendor Name Product Name 1.0.0').click();
 
     cy.get('[data-slot="tab"]').contains('Remediations').click();
     cy.contains('Add Remediation').click();
     cy.contains('Details').click().type('This is a test remediation');
     cy.get('[placeholder="Add Product"]').first().click();
-    cy.contains('li', 'Test Vendor Test Software 1.0.0 installed on Test Vendor Test Hardware 1.2.0').click();
+    cy.contains('li', 'Vendor Name Product Name 1.0.0').click();
 
     cy.get('[data-slot="tab"]').contains('Scores').click();
     cy.contains('Add Score').click();
     cy.contains('CVSS Vector String').click().type('CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N');
     cy.get('[placeholder="Add Product"]').first().click();
     cy.wait(100);
-    cy.contains('li', 'Test Vendor Test Software 1.0.0 installed on Test Vendor Test Hardware 1.2.0').click();
+    cy.contains('li', 'Vendor Name Product Name 1.0.0').click();
 
     // Set history
     cy.contains('History').click();
@@ -114,12 +173,12 @@ describe('Create a new software advisory & export it', () => {
     cy.wait(500);
 
     // Compare the downloaded CSAF export with expected results
-    const downloadPath = 'cypress/downloads/Test-001.json';
+    const downloadPath = 'cypress/downloads/Test-002.json';
     cy.task('deleteFileIfExists', downloadPath);
     cy.contains('CSAF Export').click();
     compareCSAFExport(
       downloadPath,
-      'tests/fixtures/expected-csaf-export.json'
+      'tests/fixtures/expected-csaf-export-database-import.json'
     );
   });
-})
+});
