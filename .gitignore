@@ -13,3 +13,5 @@ npm-debug.log*
 .env
 .vscode/
 .well-known/
+
+cypress/downloads
