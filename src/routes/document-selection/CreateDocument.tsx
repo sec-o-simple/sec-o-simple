@@ -56,10 +56,6 @@ export default function CreateDocument() {
             active: true,
             type: 'HardwareSoftware',
           },
-          {
-            label: t('documentSelection.softAndFirmware'),
-            type: 'HardwareFirmware',
-          },
         ]}
         onCreate={onCreate}
       />
@@ -67,16 +63,16 @@ export default function CreateDocument() {
         label={t('documentSelection.vex')}
         icon={faFileInvoice}
         options={[
-          { label: t('documentSelection.software'), type: 'VexSoftware' },
+          {
+            label: t('documentSelection.software'),
+            type: 'VexSoftware',
+            active: true,
+          },
           {
             label: t('documentSelection.softAndHardware'),
             type: 'VexHardwareSoftware',
+            active: true,
           },
-          {
-            label: t('documentSelection.softAndFirmware'),
-            type: 'VexHardwareFirmware',
-          },
-          { label: t('documentSelection.sbom'), type: 'VexSbom' },
         ]}
         onCreate={onCreate}
       />

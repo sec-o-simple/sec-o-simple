@@ -129,6 +129,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
         "id": "CWE-79",
         "name": "Improper Neutralization of Input During Web Page Generation",
       },
+      "flags": undefined,
       "notes": [
         {
           "category": "description",
@@ -349,6 +350,7 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
     {
       "cve": undefined,
       "cwe": undefined,
+      "flags": undefined,
       "notes": [],
       "product_status": {},
       "references": undefined,

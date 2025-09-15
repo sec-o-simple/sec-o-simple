@@ -36,6 +36,17 @@ export default function Products({
     `/vulnerabilities/${vulnerabilityIndex}/product_status`,
   )
 
+  // for each productsListState.data, we want the index of the product grouped by the status
+  // e.g. the first known_affected product has index 0, the second known_affected product has index 1, etc.
+  // this is needed to construct the correct csafPath for each VulnerabilityProduct component
+  const productsByStatus: Map<string, string[]> = new Map()
+  productsListState.data.forEach((product) => {
+    if (!productsByStatus.has(product.status)) {
+      productsByStatus.set(product.status, [])
+    }
+    productsByStatus.get(product.status)?.push(product.id)
+  })
+
   return (
     <VSplit className="gap-2">
       {validation.hasErrors && (
@@ -46,14 +57,20 @@ export default function Products({
         </Alert>
       )}
 
-      {productsListState.data.map((vulnerabilityProduct) => (
-        <VulnerabilityProduct
-          key={vulnerabilityProduct.id}
-          vulnerabilityProduct={vulnerabilityProduct}
-          onChange={productsListState.updateDataEntry}
-          onDelete={productsListState.removeDataEntry}
-        />
-      ))}
+      {productsListState.data.map((vulnerabilityProduct) => {
+        const statusGroup = productsByStatus.get(vulnerabilityProduct.status)
+        const statusIndex = statusGroup?.indexOf(vulnerabilityProduct.id) ?? 0
+
+        return (
+          <VulnerabilityProduct
+            key={vulnerabilityProduct.id}
+            vulnerabilityProduct={vulnerabilityProduct}
+            csafPath={`/vulnerabilities/${vulnerabilityIndex}/product_status/${vulnerabilityProduct.status}/${statusIndex}`}
+            onChange={productsListState.updateDataEntry}
+            onDelete={productsListState.removeDataEntry}
+          />
+        )
+      })}
       <AddItemButton
         onPress={() => {
           productsListState.setData((prev) => [

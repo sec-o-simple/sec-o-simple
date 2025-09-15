@@ -66,7 +66,14 @@ export function createCSAFDocument(
 
   const csafDocument = {
     document: {
-      category: 'csaf_security_advisory',
+      category: [
+        'VexSoftware',
+        'VexHardwareSoftware',
+        'VexHardwareFirmware',
+        'VexImport',
+      ].includes(documentStore.sosDocumentType)
+        ? 'csaf_vex'
+        : 'csaf_security_advisory',
       csaf_version: '2.0',
       tracking: {
         generator: {
@@ -179,6 +186,11 @@ export function createCSAFDocument(
           url: remediation.url || undefined,
           product_ids: remediation.productIds,
         }))
+        const flags =
+          vulnerability.flags?.map((flag) => ({
+            label: flag.label,
+            product_ids: [...new Set(flag.productIds)],
+          })) || []
         const cvss4References =
           vulnerability.scores
             ?.filter((score) => score.cvssVersion === '4.0')
@@ -200,6 +212,7 @@ export function createCSAFDocument(
             : undefined,
           notes,
           product_status: productStatus(),
+          flags: flags.length > 0 ? flags : undefined,
           remediations: remediations?.length > 0 ? remediations : undefined,
           scores: parseScores(vulnerability.scores),
         }

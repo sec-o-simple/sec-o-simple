@@ -16,6 +16,7 @@ import { TCSAFDocument } from '../csafExport/csafExport'
 import { TParsedNote } from '../csafExport/parseNote'
 import { parseNote } from './parseNote'
 import { parseVulnerabilityProducts } from './parseVulnerabilityProducts'
+import { uid } from 'uid'
 
 export function parseVulnerabilities(
   csafDocument: TCSAFDocument,
@@ -37,6 +38,12 @@ export function parseVulnerabilities(
           vulnerability.product_status,
           vulnerabilityProductGenerator,
         ),
+        flags:
+          vulnerability.flags?.map((flag) => ({
+            id: uid(),
+            label: flag.label,
+            productIds: flag.product_ids,
+          })) || [],
         remediations: vulnerability.remediations?.map((remediation) => {
           const defaultRemediation = remediationGenerator
           return {

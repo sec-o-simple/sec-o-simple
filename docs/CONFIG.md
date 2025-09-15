@@ -238,6 +238,14 @@ Products can reference families using the `familyId` field to establish hierarch
 |----------|----------------------------|-------------------------------------------|
 | `status` | Default product status     | `known_affected`, `known_not_affected`, `fixed`, `under_investigation` |
 
+#### Flags
+
+**Path:** `vulnerabilities.flags.default`
+
+| Key          | Description                 | Values                                                                                                                                                                                 |
+|--------------|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `label`      | Default flag label          | `component_not_present`, `inline_mitigations_already_exist`, `vulnerable_code_cannot_be_controlled_by_adversary`, `vulnerable_code_not_in_execute_path`, `vulnerable_code_not_present` |
+
 #### Remediations
 
 **Path:** `vulnerabilities.remediations.default`

@@ -165,6 +165,12 @@ export default {
         // recommended: [['string']],
         under_investigation: [['string']],
       },
+      flags: [
+        {
+          label: 'string',
+          product_ids: ['string'],
+        },
+      ],
       remediations: [
         {
           category: 'string',
