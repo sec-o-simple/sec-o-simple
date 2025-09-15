@@ -58,7 +58,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
         "date": "2023-07-31T12:00:00.000Z",
         "engine": {
           "name": "Sec-O-Simple",
-          "version": "0.0.1",
+          "version": "1.0.0",
         },
       },
       "id": "test-document-id",
@@ -91,7 +91,6 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
                 "product": {
                   "name": "Test Vendor Test Application 1.0.0",
                   "product_id": "version-1",
-                  "product_identification_helper": undefined,
                 },
               },
               {
@@ -100,7 +99,6 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
                 "product": {
                   "name": "Test Vendor Test Application 2.0.0",
                   "product_id": "version-2",
-                  "product_identification_helper": undefined,
                 },
               },
             ],
@@ -208,7 +206,7 @@ exports[`csafExport > should create a CSAF document with minimal data 1`] = `
         "date": "2023-07-31T12:00:00.000Z",
         "engine": {
           "name": "Sec-O-Simple",
-          "version": "0.0.1",
+          "version": "1.0.0",
         },
       },
       "id": "test-document-id",
@@ -284,7 +282,7 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
         "date": "2023-07-31T12:00:00.000Z",
         "engine": {
           "name": "Sec-O-Simple",
-          "version": "0.0.1",
+          "version": "1.0.0",
         },
       },
       "id": "test-document-id",
@@ -317,7 +315,6 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
                 "product": {
                   "name": "Test Vendor Test Application 1.0.0",
                   "product_id": "version-1",
-                  "product_identification_helper": undefined,
                 },
               },
               {
@@ -326,7 +323,6 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
                 "product": {
                   "name": "Test Vendor Test Application 2.0.0",
                   "product_id": "version-2",
-                  "product_identification_helper": undefined,
                 },
               },
             ],

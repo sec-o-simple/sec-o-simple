@@ -68,7 +68,12 @@ export function parseProductTreeBranches(
       pbObj['product'] = {
         name: branch.productName ?? getFullProductName(branch.id),
         product_id: branch.id,
-        product_identification_helper: branch.identificationHelper,
+        ...(branch.identificationHelper
+          ? {
+              product_identification_helper:
+                branch.identificationHelper ?? undefined,
+            }
+          : {}),
       }
     }
 

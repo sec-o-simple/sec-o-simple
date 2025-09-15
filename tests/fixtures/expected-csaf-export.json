@@ -6,7 +6,7 @@
       "generator": {
         "date": "TIMESTAMP_PLACEHOLDER",
         "engine": {
-          "version": "0.0.1",
+          "version": "1.0.0",
           "name": "Sec-O-Simple"
         }
       },
@@ -127,17 +127,13 @@
         }
       ],
       "product_status": {
-        "known_affected": [
-          "product_3"
-        ]
+        "known_affected": ["product_3"]
       },
       "remediations": [
         {
           "category": "mitigation",
           "details": "This is a test remediation",
-          "product_ids": [
-            "product_3"
-          ]
+          "product_ids": ["product_3"]
         }
       ],
       "scores": [
@@ -148,9 +144,7 @@
             "baseScore": 3.8,
             "baseSeverity": "LOW"
           },
-          "products": [
-            "product_3"
-          ]
+          "products": ["product_3"]
         }
       ]
     }
