@@ -9,7 +9,7 @@ import {
 } from '@/routes/products/types/tProductTreeBranch'
 import { TRelationship } from '@/routes/products/types/tRelationship'
 import { TVulnerability } from '@/routes/vulnerabilities/types/tVulnerability'
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useConfigStore } from './useConfigStore'
 import useDocumentStore from './useDocumentStore'
 import { UpdatePriority, useStateInitializer } from './useStateInitializer'
@@ -162,16 +162,7 @@ export function useTemplateInitializer() {
   )
   const { getTemplateValue, getTemplateData } = useTemplate()
 
-  // apply template to document state
-  useEffect(() => {
-    if (config) {
-      initialize(UpdatePriority.Low, () => {
-        initializeTemplateData()
-      })
-    }
-  }, [config])
-
-  function initializeTemplateData() {
+  const initializeTemplateData = useCallback(() => {
     const documentInformation = getTemplateData(
       getDocumentInformationTemplateKeys(),
       getDefaultDocumentInformation(),
@@ -188,7 +179,24 @@ export function useTemplateInitializer() {
     updateVulnerabilities(
       getTemplateValue<TVulnerability[]>('vulnerabilities', []),
     )
-  }
+  }, [
+    getTemplateData,
+    updateDocumentInformation,
+    updateProducts,
+    getTemplateValue,
+    updateFamilies,
+    updateRelationships,
+    updateVulnerabilities,
+  ])
+
+  // apply template to document state
+  useEffect(() => {
+    if (config) {
+      initialize(UpdatePriority.Low, () => {
+        initializeTemplateData()
+      })
+    }
+  }, [config, initialize, initializeTemplateData])
 
   return { initializeTemplateData }
 }
