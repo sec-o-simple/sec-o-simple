@@ -1,0 +1,139 @@
+{
+  "document": {
+    "category": "csaf_security_advisory",
+    "csaf_version": "2.0",
+    "tracking": {
+      "generator": {
+        "date": "TIMESTAMP_PLACEHOLDER",
+        "engine": {
+          "version": "0.0.1",
+          "name": "Sec-O-Simple"
+        }
+      },
+      "current_release_date": "TIMESTAMP_PLACEHOLDER",
+      "initial_release_date": "TIMESTAMP_PLACEHOLDER",
+      "revision_history": [
+        {
+          "date": "TIMESTAMP_PLACEHOLDER",
+          "number": "1",
+          "summary": "Initial Revision"
+        }
+      ],
+      "status": "final",
+      "version": "1",
+      "id": "Test-002"
+    },
+    "distribution": {
+      "tlp": {
+        "label": "GREEN",
+        "url": "https://www.first.org/tlp/"
+      }
+    },
+    "lang": "en",
+    "title": "My first Software Advisory",
+    "publisher": {
+      "category": "vendor",
+      "contact_details": "contact@testpublisher.com",
+      "name": "Test Publisher",
+      "namespace": "https://testpublisher.com"
+    },
+    "notes": [
+      {
+        "category": "description",
+        "text": "This is a test description",
+        "title": "Test Description"
+      },
+      {
+        "category": "description",
+        "text": "Product Description",
+        "title": "Product description for Product Name"
+      }
+    ],
+    "references": [
+      {
+        "summary": "Test Reference",
+        "url": "https://testreference.com",
+        "category": "external"
+      }
+    ],
+    "acknowledgments": [
+      {
+        "organization": "Test Org"
+      }
+    ]
+  },
+  "product_tree": {
+    "branches": [
+      {
+        "category": "vendor",
+        "name": "Vendor Name",
+        "branches": [
+          {
+            "category": "product_name",
+            "name": "Product Name",
+            "branches": [
+              {
+                "category": "product_version",
+                "name": "1.0.0",
+                "product": {
+                  "name": "Vendor Name Product Name 1.0.0",
+                  "product_id": "product_1"
+                }
+              },
+              {
+                "category": "product_version",
+                "name": "2.0.0",
+                "product": {
+                  "name": "Vendor Name Product Name 2.0.0",
+                  "product_id": "product_2",
+                  "product_identification_helper": {
+                    "purl": "pkg:pypi/django@1.11.1"
+                  }
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "vulnerabilities": [
+    {
+      "title": "Test Vulnerability",
+      "notes": [
+        {
+          "category": "description",
+          "text": "This is a test vulnerability note",
+          "title": "Test Vulnerability Note"
+        }
+      ],
+      "product_status": {
+        "known_affected": [
+          "product_1"
+        ]
+      },
+      "remediations": [
+        {
+          "category": "mitigation",
+          "details": "This is a test remediation",
+          "product_ids": [
+            "product_1"
+          ]
+        }
+      ],
+      "scores": [
+        {
+          "cvss_v3": {
+            "version": "3.1",
+            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N",
+            "baseScore": 3.8,
+            "baseSeverity": "LOW"
+          },
+          "products": [
+            "product_1"
+          ]
+        }
+      ]
+    }
+  ]
+}

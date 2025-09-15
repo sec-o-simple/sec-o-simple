@@ -1,0 +1,81 @@
+name: E2E Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+
+    services:
+      api:
+        image: ghcr.io/sec-o-simple/product-database-server:latest
+        ports:
+          - 9999:9999
+        env:
+          CORS_ORIGIN: '*'
+  
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'
+      
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Start application
+        run: npm run preview &
+        
+      - name: Wait for application to start
+        run: |
+          timeout 60s bash -c 'until curl -f http://localhost:4173 >/dev/null 2>&1; do sleep 1; done'
+      
+      - name: Run E2E tests
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headed: false
+          spec: tests/e2e/**/*.cy.js
+          wait-on: 'http://localhost:4173'
+          wait-on-timeout: 120
+        env:
+          CYPRESS_baseUrl: http://localhost:4173
+      
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: tests/screenshots
+          retention-days: 7
+      
+      - name: Upload videos  
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-videos
+          path: cypress/videos
+          retention-days: 7
+      
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-results
+          path: cypress/results
+          retention-days: 7
