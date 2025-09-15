@@ -10,6 +10,7 @@
     "test:ui": "vitest --ui",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "test:e2e": "cypress run --spec \"tests/e2e/**/*.cy.js\"",
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."
   },
