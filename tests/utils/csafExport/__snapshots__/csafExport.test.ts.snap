@@ -91,7 +91,6 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
                 "product": {
                   "name": "Test Vendor Test Application 1.0.0",
                   "product_id": "version-1",
-                  "product_identification_helper": undefined,
                 },
               },
               {
@@ -100,7 +99,6 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
                 "product": {
                   "name": "Test Vendor Test Application 2.0.0",
                   "product_id": "version-2",
-                  "product_identification_helper": undefined,
                 },
               },
             ],
@@ -316,7 +314,6 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
                 "product": {
                   "name": "Test Vendor Test Application 1.0.0",
                   "product_id": "version-1",
-                  "product_identification_helper": undefined,
                 },
               },
               {
@@ -325,7 +322,6 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
                 "product": {
                   "name": "Test Vendor Test Application 2.0.0",
                   "product_id": "version-2",
-                  "product_identification_helper": undefined,
                 },
               },
             ],
