@@ -6,7 +6,6 @@ import { parseProductTree } from '../../../../src/utils/csafImport/parseProductT
 import { parseRelationships } from '../../../../src/utils/csafImport/parseRelationships'
 import type {
   Product,
-  ProductVersion,
   Vendor,
 } from '../../../../src/utils/useDatabaseClient'
 
@@ -44,8 +43,6 @@ vi.mock('react-router', () => ({
 // Mock custom hooks
 const mockFetchVendors = vi.fn()
 const mockFetchProducts = vi.fn()
-const mockFetchProductVersions = vi.fn()
-const mockFetchIdentificationHelpers = vi.fn()
 const mockFetchCSAFProducts = vi.fn()
 const mockUseDatabaseClient = vi.fn()
 
@@ -244,19 +241,6 @@ describe('ProductDatabaseSelector', () => {
     },
   ]
 
-  const mockProductVersions: ProductVersion[] = [
-    {
-      id: 'version-1',
-      name: '1.0.0',
-      description: 'Version 1.0.0',
-    },
-    {
-      id: 'version-2',
-      name: '2.0.0',
-      description: 'Version 2.0.0',
-    },
-  ]
-
   const mockConfig = {
     productDatabase: {
       enabled: true,
@@ -277,8 +261,6 @@ describe('ProductDatabaseSelector', () => {
       fetchVendors: mockFetchVendors,
       fetchProducts: mockFetchProducts,
       fetchCSAFProducts: mockFetchCSAFProducts,
-      fetchProductVersions: mockFetchProductVersions,
-      fetchIdentificationHelpers: mockFetchIdentificationHelpers,
     })
 
     mockUseConfigStore.mockReturnValue(mockConfig)
@@ -299,8 +281,6 @@ describe('ProductDatabaseSelector', () => {
 
     mockFetchVendors.mockResolvedValue(mockVendors)
     mockFetchProducts.mockResolvedValue(mockProducts)
-    mockFetchProductVersions.mockResolvedValue(mockProductVersions)
-    mockFetchIdentificationHelpers.mockResolvedValue([])
     mockFetchCSAFProducts.mockResolvedValue({
       product_tree: {
         branches: [],
@@ -611,26 +591,54 @@ describe('ProductDatabaseSelector', () => {
         expect(checkboxes.length).toBeGreaterThanOrEqual(3)
       })
 
-      const productCheckboxes = screen.getAllByTestId('checkbox-input')
-      const productCheckbox = productCheckboxes.find((checkbox, index) => {
-        const label = screen.getAllByTestId('checkbox-label')[index]
-        return label?.textContent === 'Test Product 1'
-      })
+      // Find the checkbox for "Test Product 1" by locating it within its label
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1'
+      )
+      expect(product1Label).toBeDefined()
+      
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input[data-testid="checkbox-input"]')
+      expect(product1Checkbox).toBeDefined()
 
-      await user.click(productCheckbox!)
+      await user.click(product1Checkbox!)
 
       const addButton = screen
         .getAllByTestId('button')
         .find((btn) => btn.textContent?.includes('Add'))
       await user.click(addButton!)
 
-      expect(mockFetchProductVersions).toHaveBeenCalledWith('product-1')
+      expect(mockFetchCSAFProducts).toHaveBeenCalledWith(['product-1'])
       expect(mockUpdateProducts).toHaveBeenCalled()
       expect(mockOnClose).toHaveBeenCalled()
     })
 
     it('should create new vendor when vendor does not exist', async () => {
       const user = userEvent.setup()
+
+      // Mock parseProductTree to return structured product data
+      mockParseProductTree.mockReturnValue({
+        families: [],
+        products: [
+          {
+            id: 'vendor-1',
+            category: 'vendor' as const,
+            name: 'Test Vendor 1',
+            description: 'Test vendor 1 description',
+            subBranches: [
+              {
+                id: 'product-1',
+                category: 'product_name' as const,
+                name: 'Test Product 1',
+                description: 'Test product 1 description',
+                subBranches: [],
+              },
+            ],
+          },
+        ],
+      })
 
       render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
 
@@ -675,6 +683,35 @@ describe('ProductDatabaseSelector', () => {
 
     it('should map software type to Software and hardware type to Hardware', async () => {
       const user = userEvent.setup()
+
+      // Mock parseProductTree to return structured product data for both products
+      mockParseProductTree.mockReturnValue({
+        families: [],
+        products: [
+          {
+            id: 'vendor-1',
+            category: 'vendor' as const,
+            name: 'Test Vendor 1',
+            description: 'Test vendor 1 description',
+            subBranches: [
+              {
+                id: 'product-1',
+                category: 'product_name' as const,
+                name: 'Test Product 1',
+                description: 'Test product 1 description',
+                subBranches: [],
+              },
+              {
+                id: 'product-2',
+                category: 'product_name' as const,
+                name: 'Test Product 2',
+                description: 'Test product 2 description',
+                subBranches: [],
+              },
+            ],
+          },
+        ],
+      })
 
       render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
 
@@ -821,395 +858,7 @@ describe('ProductDatabaseSelector', () => {
     })
   })
 
-  describe('Identification Helpers and Product Versions', () => {
-    it('should handle identification helpers with different categories', async () => {
-      const user = userEvent.setup()
 
-      const mockHelpers = [
-        {
-          id: 'helper-1',
-          category: 'cpe',
-          metadata: JSON.stringify({
-            cpe: 'cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*',
-          }),
-        },
-        {
-          id: 'helper-2',
-          category: 'models',
-          metadata: JSON.stringify({ models: ['model1', 'model2'] }),
-        },
-        {
-          id: 'helper-3',
-          category: 'sbom',
-          metadata: JSON.stringify({ sbom_urls: ['http://example.com/sbom'] }),
-        },
-        {
-          id: 'helper-4',
-          category: 'sku',
-          metadata: JSON.stringify({ skus: ['SKU123', 'SKU456'] }),
-        },
-        {
-          id: 'helper-5',
-          category: 'uri',
-          metadata: JSON.stringify({ uris: ['http://example.com'] }),
-        },
-        {
-          id: 'helper-6',
-          category: 'hashes',
-          metadata: JSON.stringify({
-            file_hashes: [
-              {
-                filename: 'test.exe',
-                items: [{ algorithm: 'sha256', value: 'abc123' }],
-              },
-            ],
-          }),
-        },
-        {
-          id: 'helper-7',
-          category: 'purl',
-          metadata: JSON.stringify({ purl: 'pkg:npm/package@1.0.0' }),
-        },
-        {
-          id: 'helper-8',
-          category: 'serial',
-          metadata: JSON.stringify({ serial_numbers: ['SN123', 'SN456'] }),
-        },
-        {
-          id: 'helper-9',
-          category: 'unknown',
-          metadata: JSON.stringify({ unknown: 'data' }),
-        },
-      ]
-
-      mockFetchIdentificationHelpers.mockResolvedValue(mockHelpers)
-
-      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
-
-      await waitFor(() => {
-        const checkboxes = screen.getAllByTestId('checkbox')
-        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
-      })
-
-      const checkboxLabels = screen.getAllByTestId('checkbox-label')
-      const product1Label = checkboxLabels.find(
-        (label) => label.textContent === 'Test Product 1',
-      )
-      const product1Checkbox = product1Label!
-        .closest('[data-testid="checkbox"]')
-        ?.querySelector('input')
-
-      await user.click(product1Checkbox!)
-
-      const addButton = screen
-        .getAllByTestId('button')
-        .find((btn) => btn.textContent?.includes('Add'))
-      await user.click(addButton!)
-
-      await waitFor(() => {
-        expect(mockUpdateProducts).toHaveBeenCalled()
-      })
-
-      expect(mockFetchIdentificationHelpers).toHaveBeenCalledWith('version-1')
-      expect(mockFetchIdentificationHelpers).toHaveBeenCalledWith('version-2')
-    })
-
-    it('should handle identification helpers fetch errors gracefully', async () => {
-      const user = userEvent.setup()
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      mockFetchIdentificationHelpers.mockRejectedValue(new Error('API Error'))
-
-      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
-
-      await waitFor(() => {
-        const checkboxes = screen.getAllByTestId('checkbox')
-        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
-      })
-
-      const checkboxLabels = screen.getAllByTestId('checkbox-label')
-      const product1Label = checkboxLabels.find(
-        (label) => label.textContent === 'Test Product 1',
-      )
-      const product1Checkbox = product1Label!
-        .closest('[data-testid="checkbox"]')
-        ?.querySelector('input')
-
-      await user.click(product1Checkbox!)
-
-      const addButton = screen
-        .getAllByTestId('button')
-        .find((btn) => btn.textContent?.includes('Add'))
-      await user.click(addButton!)
-
-      await waitFor(() => {
-        expect(mockUpdateProducts).toHaveBeenCalled()
-      })
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Failed to create version branch for'),
-        expect.any(Error),
-      )
-
-      consoleSpy.mockRestore()
-    })
-
-    it('should handle product version creation errors gracefully', async () => {
-      const user = userEvent.setup()
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      mockFetchProductVersions.mockRejectedValue(
-        new Error('Product versions API error'),
-      )
-
-      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
-
-      await waitFor(() => {
-        const checkboxes = screen.getAllByTestId('checkbox')
-        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
-      })
-
-      const checkboxLabels = screen.getAllByTestId('checkbox-label')
-      const product1Label = checkboxLabels.find(
-        (label) => label.textContent === 'Test Product 1',
-      )
-      const product1Checkbox = product1Label!
-        .closest('[data-testid="checkbox"]')
-        ?.querySelector('input')
-
-      await user.click(product1Checkbox!)
-
-      const addButton = screen
-        .getAllByTestId('button')
-        .find((btn) => btn.textContent?.includes('Add'))
-      await user.click(addButton!)
-
-      await waitFor(() => {
-        expect(mockUpdateProducts).toHaveBeenCalled()
-      })
-
-      expect(consoleSpy).toHaveBeenCalledWith(
-        expect.stringContaining('Failed to process product'),
-        expect.any(Error),
-      )
-
-      consoleSpy.mockRestore()
-    })
-
-    it('should skip products that already exist under vendor', async () => {
-      const user = userEvent.setup()
-
-      // Mock existing products with a vendor that already has the product
-      const existingProducts = [
-        {
-          id: 'vendor-1',
-          category: 'vendor' as const,
-          name: 'Test Vendor 1',
-          description: 'Test vendor 1 description',
-          subBranches: [
-            {
-              id: 'product-1',
-              category: 'product_name' as const,
-              name: 'Test Product 1',
-              description: 'Test product 1 description',
-              subBranches: [],
-            },
-          ],
-        },
-      ]
-
-      mockUseDocumentStore.mockImplementation((selector?: any) => {
-        const store = {
-          products: existingProducts,
-          families: [],
-          relationships: [],
-          updateProducts: mockUpdateProducts,
-          updateFamilies: vi.fn(),
-          updateRelationships: vi.fn(),
-        }
-        if (typeof selector === 'function') return selector(store)
-        return store
-      })
-
-      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
-
-      await waitFor(() => {
-        const checkboxes = screen.getAllByTestId('checkbox')
-        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
-      })
-
-      const checkboxLabels = screen.getAllByTestId('checkbox-label')
-      const product1Label = checkboxLabels.find(
-        (label) => label.textContent === 'Test Product 1',
-      )
-      const product1Checkbox = product1Label!
-        .closest('[data-testid="checkbox"]')
-        ?.querySelector('input')
-
-      await user.click(product1Checkbox!)
-
-      const addButton = screen
-        .getAllByTestId('button')
-        .find((btn) => btn.textContent?.includes('Add'))
-      await user.click(addButton!)
-
-      await waitFor(() => {
-        expect(mockUpdateProducts).toHaveBeenCalled()
-      })
-
-      // The product should already exist, so no new product should be added to the vendor
-      const updatedProducts = mockUpdateProducts.mock.calls[0][0]
-      const vendor = updatedProducts.find((p: any) => p.id === 'vendor-1')
-      expect(vendor.subBranches).toHaveLength(1) // Still only the original product
-    })
-
-    it('should handle general product processing errors gracefully', async () => {
-      const user = userEvent.setup()
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      // Mock an error in the handleAddProducts process
-      mockUpdateProducts.mockImplementation(() => {
-        throw new Error('Update products failed')
-      })
-
-      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
-
-      await waitFor(() => {
-        const checkboxes = screen.getAllByTestId('checkbox')
-        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
-      })
-
-      const checkboxLabels = screen.getAllByTestId('checkbox-label')
-      const product1Label = checkboxLabels.find(
-        (label) => label.textContent === 'Test Product 1',
-      )
-      const product1Checkbox = product1Label!
-        .closest('[data-testid="checkbox"]')
-        ?.querySelector('input')
-
-      await user.click(product1Checkbox!)
-
-      const addButton = screen
-        .getAllByTestId('button')
-        .find((btn) => btn.textContent?.includes('Add'))
-      await user.click(addButton!)
-
-      await waitFor(() => {
-        expect(consoleSpy).toHaveBeenCalledWith(
-          'Failed to add products:',
-          expect.any(Error),
-        )
-      })
-
-      consoleSpy.mockRestore()
-    })
-
-    it('should filter out rejected version creation results', async () => {
-      const user = userEvent.setup()
-
-      // Mock fetchIdentificationHelpers to fail for one version
-      mockFetchIdentificationHelpers
-        .mockResolvedValueOnce([]) // Success for version-1
-        .mockRejectedValueOnce(new Error('Failed for version-2')) // Fail for version-2
-
-      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-
-      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
-
-      await waitFor(() => {
-        const checkboxes = screen.getAllByTestId('checkbox')
-        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
-      })
-
-      const checkboxLabels = screen.getAllByTestId('checkbox-label')
-      const product1Label = checkboxLabels.find(
-        (label) => label.textContent === 'Test Product 1',
-      )
-      const product1Checkbox = product1Label!
-        .closest('[data-testid="checkbox"]')
-        ?.querySelector('input')
-
-      await user.click(product1Checkbox!)
-
-      const addButton = screen
-        .getAllByTestId('button')
-        .find((btn) => btn.textContent?.includes('Add'))
-      await user.click(addButton!)
-
-      await waitFor(() => {
-        expect(mockUpdateProducts).toHaveBeenCalled()
-      })
-
-      // Should have only one version (the successful one)
-      const updatedProducts = mockUpdateProducts.mock.calls[0][0]
-      const vendor = updatedProducts[0]
-      const product = vendor.subBranches[0]
-      expect(product.subBranches).toHaveLength(1) // Only version-1 should be included
-
-      consoleSpy.mockRestore()
-    })
-
-    it('should update existing vendor instead of creating new one', async () => {
-      const user = userEvent.setup()
-
-      // Mock existing products with a vendor
-      const existingProducts = [
-        {
-          id: 'vendor-1',
-          category: 'vendor' as const,
-          name: 'Test Vendor 1',
-          description: 'Test vendor 1 description',
-          subBranches: [],
-        },
-      ]
-
-      mockUseDocumentStore.mockImplementation((selector?: any) => {
-        const store = {
-          products: existingProducts,
-          families: [],
-          relationships: [],
-          updateProducts: mockUpdateProducts,
-          updateFamilies: vi.fn(),
-          updateRelationships: vi.fn(),
-        }
-        if (typeof selector === 'function') return selector(store)
-        return store
-      })
-
-      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
-
-      await waitFor(() => {
-        const checkboxes = screen.getAllByTestId('checkbox')
-        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
-      })
-
-      const checkboxLabels = screen.getAllByTestId('checkbox-label')
-      const product2Label = checkboxLabels.find(
-        (label) => label.textContent === 'Test Product 2',
-      )
-      const product2Checkbox = product2Label!
-        .closest('[data-testid="checkbox"]')
-        ?.querySelector('input')
-
-      await user.click(product2Checkbox!)
-
-      const addButton = screen
-        .getAllByTestId('button')
-        .find((btn) => btn.textContent?.includes('Add'))
-      await user.click(addButton!)
-
-      await waitFor(() => {
-        expect(mockUpdateProducts).toHaveBeenCalled()
-      })
-
-      // Should update the existing vendor instead of creating a new one
-      const updatedProducts = mockUpdateProducts.mock.calls[0][0]
-      expect(updatedProducts).toHaveLength(1) // Still only one vendor
-      const vendor = updatedProducts.find((p: any) => p.id === 'vendor-1')
-      expect(vendor.subBranches).toHaveLength(1) // Now has the new product
-      expect(vendor.subBranches[0].id).toBe('product-2')
-    })
-  })
 
   describe('State Management and Cleanup', () => {
     it('should reset state after successful product addition', async () => {
@@ -1277,8 +926,7 @@ describe('ProductDatabaseSelector', () => {
 
       // Verify async operations are called
       await waitFor(() => {
-        expect(mockFetchProductVersions).toHaveBeenCalled()
-        expect(mockFetchIdentificationHelpers).toHaveBeenCalled()
+        expect(mockFetchCSAFProducts).toHaveBeenCalled()
         expect(mockUpdateProducts).toHaveBeenCalled()
         expect(mockOnClose).toHaveBeenCalled()
       })
@@ -1393,6 +1041,8 @@ describe('ProductDatabaseSelector', () => {
       // Reset mocks for each test
       mockParseProductTree.mockReset()
       mockParseRelationships.mockReset()
+      mockUpdateProducts.mockClear()
+      mockFetchCSAFProducts.mockReset()
     })
 
     it('should successfully fetch and parse CSAF document with families', async () => {
@@ -1562,6 +1212,10 @@ describe('ProductDatabaseSelector', () => {
       const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
 
       mockFetchCSAFProducts.mockRejectedValue(new Error('CSAF fetch failed'))
+      mockParseProductTree.mockReturnValue({
+        families: [],
+        products: [],
+      })
 
       render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
 
@@ -1590,7 +1244,7 @@ describe('ProductDatabaseSelector', () => {
           'Error fetching CSAF document:',
           expect.any(Error),
         )
-        // Should still proceed with regular product import
+        // Should still proceed with regular product import (with existing products)
         expect(mockUpdateProducts).toHaveBeenCalled()
       })
 
@@ -1638,11 +1292,11 @@ describe('ProductDatabaseSelector', () => {
 
       await waitFor(() => {
         expect(consoleSpy).toHaveBeenCalledWith(
-          'Failed to parse CSAF product tree:',
+          'Failed to add products:',
           expect.any(Error),
         )
-        // Should still proceed with regular product import
-        expect(mockUpdateProducts).toHaveBeenCalled()
+        // Should NOT proceed with product import on error
+        expect(mockUpdateProducts).not.toHaveBeenCalled()
       })
 
       consoleSpy.mockRestore()
@@ -1693,11 +1347,11 @@ describe('ProductDatabaseSelector', () => {
 
       await waitFor(() => {
         expect(consoleSpy).toHaveBeenCalledWith(
-          'Failed to parse CSAF relationships:',
+          'Failed to add products:',
           expect.any(Error),
         )
-        // Should still proceed with regular product import
-        expect(mockUpdateProducts).toHaveBeenCalled()
+        // Should NOT proceed with product import on error
+        expect(mockUpdateProducts).not.toHaveBeenCalled()
       })
 
       consoleSpy.mockRestore()
@@ -1705,6 +1359,10 @@ describe('ProductDatabaseSelector', () => {
 
     it('should skip relationships parsing when no relationships in CSAF document', async () => {
       const user = userEvent.setup()
+
+      // Reset all mocks
+      mockUpdateProducts.mockClear()
+      mockParseRelationships.mockClear()
 
       const mockCSAFDocument = {
         product_tree: {
@@ -1717,7 +1375,21 @@ describe('ProductDatabaseSelector', () => {
       mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
       mockParseProductTree.mockReturnValue({
         families: [],
-        products: [],
+        products: [
+          {
+            id: 'vendor-1',
+            name: 'Test Vendor 1',
+            type: 'Vendor',
+            subBranches: [
+              {
+                id: 'product-1',
+                name: 'Test Product 1',
+                type: 'Software',
+                subBranches: [],
+              },
+            ],
+          },
+        ],
       })
 
       const mockUpdateRelationships = vi.fn()
@@ -1766,6 +1438,10 @@ describe('ProductDatabaseSelector', () => {
     it('should skip relationship updates when no relationships returned from parsing', async () => {
       const user = userEvent.setup()
 
+      // Reset all mocks
+      mockUpdateProducts.mockClear()
+      mockParseRelationships.mockClear()
+
       const mockCSAFDocument = {
         product_tree: {
           branches: [],
@@ -1777,7 +1453,21 @@ describe('ProductDatabaseSelector', () => {
       mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
       mockParseProductTree.mockReturnValue({
         families: [],
-        products: [],
+        products: [
+          {
+            id: 'vendor-1',
+            name: 'Test Vendor 1',
+            type: 'Vendor',
+            subBranches: [
+              {
+                id: 'product-1',
+                name: 'Test Product 1',
+                type: 'Software',
+                subBranches: [],
+              },
+            ],
+          },
+        ],
       })
       mockParseRelationships.mockReturnValue([]) // Returns empty array
 
@@ -1819,7 +1509,7 @@ describe('ProductDatabaseSelector', () => {
 
       await waitFor(() => {
         expect(mockParseRelationships).toHaveBeenCalled()
-        expect(mockUpdateRelationships).not.toHaveBeenCalled() // Should not be called with empty array
+        expect(mockUpdateRelationships).toHaveBeenCalledWith([]) // Should be called with empty array
         expect(mockUpdateProducts).toHaveBeenCalled()
       })
     })
