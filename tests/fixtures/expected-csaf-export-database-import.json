@@ -119,13 +119,17 @@
         }
       ],
       "product_status": {
-        "known_affected": ["product_1"]
+        "known_affected": [
+          "product_1"
+        ]
       },
       "remediations": [
         {
           "category": "mitigation",
           "details": "This is a test remediation",
-          "product_ids": ["product_1"]
+          "product_ids": [
+            "product_1"
+          ]
         }
       ],
       "scores": [
@@ -136,7 +140,9 @@
             "baseScore": 3.8,
             "baseSeverity": "LOW"
           },
-          "products": ["product_1"]
+          "products": [
+            "product_1"
+          ]
         }
       ]
     }
