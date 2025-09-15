@@ -93,7 +93,6 @@ function extractFamilyFromBranch(
 
   // Create new family
   const familyId = uid()
-  console.log('branch', branch)
   const family: TProductFamily = {
     id: familyId,
     name: branch.name,
