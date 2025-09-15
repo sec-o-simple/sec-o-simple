@@ -2,6 +2,8 @@ import { act, render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ProductDatabaseSelector from '../../../../src/routes/products/components/ProductDatabaseSelector'
+import { parseProductTree } from '../../../../src/utils/csafImport/parseProductTree'
+import { parseRelationships } from '../../../../src/utils/csafImport/parseRelationships'
 import type {
   Product,
   ProductVersion,
@@ -61,6 +63,15 @@ const mockUpdateProducts = vi.fn()
 
 vi.mock('../../../../src/utils/useDocumentStore', () => ({
   default: (selector: any) => mockUseDocumentStore(selector),
+}))
+
+// Mock CSAF parsing functions
+vi.mock('../../../../src/utils/csafImport/parseProductTree', () => ({
+  parseProductTree: vi.fn(),
+}))
+
+vi.mock('../../../../src/utils/csafImport/parseRelationships', () => ({
+  parseRelationships: vi.fn(),
 }))
 
 // Mock HeroUI components
@@ -250,6 +261,8 @@ describe('ProductDatabaseSelector', () => {
   }
 
   const mockOnClose = vi.fn()
+  const mockParseProductTree = vi.mocked(parseProductTree)
+  const mockParseRelationships = vi.mocked(parseRelationships)
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -290,6 +303,13 @@ describe('ProductDatabaseSelector', () => {
         relationships: [],
       },
     })
+
+    // Reset CSAF parsing mocks
+    mockParseProductTree.mockReturnValue({
+      families: [],
+      products: [],
+    })
+    mockParseRelationships.mockReturnValue([])
   })
 
   describe('Component Rendering', () => {
@@ -1360,6 +1380,532 @@ describe('ProductDatabaseSelector', () => {
         .getAllByTestId('button')
         .find((btn) => btn.textContent?.includes('Add'))
       expect(addButton).toHaveAttribute('disabled')
+    })
+  })
+
+  describe('CSAF Import and Parsing Functionality', () => {
+    beforeEach(() => {
+      // Reset mocks for each test
+      mockParseProductTree.mockReset()
+      mockParseRelationships.mockReset()
+    })
+
+    it('should successfully fetch and parse CSAF document with families', async () => {
+      const user = userEvent.setup()
+
+      const mockCSAFDocument = {
+        product_tree: {
+          branches: [
+            {
+              category: 'vendor',
+              name: 'Test Vendor',
+              branches: [
+                {
+                  category: 'product_family',
+                  name: 'Test Family',
+                  branches: [],
+                },
+              ],
+            },
+          ],
+          full_product_names: [],
+          relationships: [],
+        },
+      }
+
+      const mockParsedFamilies = [
+        {
+          id: 'family-1',
+          name: 'Test Family',
+          description: 'Test family description',
+        },
+      ]
+
+      mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
+      mockParseProductTree.mockReturnValue({
+        families: mockParsedFamilies,
+        products: [],
+      })
+
+      const mockUpdateFamilies = vi.fn()
+      mockUseDocumentStore.mockImplementation((selector?: any) => {
+        const store = {
+          products: [],
+          families: [],
+          relationships: [],
+          updateProducts: mockUpdateProducts,
+          updateFamilies: mockUpdateFamilies,
+          updateRelationships: vi.fn(),
+        }
+        if (typeof selector === 'function') return selector(store)
+        return store
+      })
+
+      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
+
+      await waitFor(() => {
+        const checkboxes = screen.getAllByTestId('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
+      })
+
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1',
+      )
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input')
+
+      await user.click(product1Checkbox!)
+
+      const addButton = screen
+        .getAllByTestId('button')
+        .find((btn) => btn.textContent?.includes('Add'))
+      await user.click(addButton!)
+
+      await waitFor(() => {
+        expect(mockFetchCSAFProducts).toHaveBeenCalledWith(['product-1'])
+        expect(mockParseProductTree).toHaveBeenCalledWith(mockCSAFDocument)
+        expect(mockUpdateFamilies).toHaveBeenCalled()
+      })
+    })
+
+    it('should handle CSAF document with relationships', async () => {
+      const user = userEvent.setup()
+
+      const mockCSAFDocument = {
+        product_tree: {
+          branches: [],
+          full_product_names: [],
+          relationships: [
+            {
+              category: 'default_component_of',
+              full_product_name: {
+                name: 'Product A',
+                product_id: 'prod-a',
+              },
+              relates_to_product_reference: 'prod-b',
+            },
+          ],
+        },
+      }
+
+      const mockParsedRelationships = [
+        {
+          id: 'rel-1',
+          category: 'default_component_of',
+          productReference: 'prod-a',
+          relatesToProductReference: 'prod-b',
+        },
+      ]
+
+      mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
+      mockParseProductTree.mockReturnValue({
+        families: [],
+        products: [],
+      })
+      mockParseRelationships.mockReturnValue(mockParsedRelationships)
+
+      const mockUpdateRelationships = vi.fn()
+      mockUseDocumentStore.mockImplementation((selector?: any) => {
+        const store = {
+          products: [],
+          families: [],
+          relationships: [],
+          updateProducts: mockUpdateProducts,
+          updateFamilies: vi.fn(),
+          updateRelationships: mockUpdateRelationships,
+        }
+        if (typeof selector === 'function') return selector(store)
+        return store
+      })
+
+      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
+
+      await waitFor(() => {
+        const checkboxes = screen.getAllByTestId('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
+      })
+
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1',
+      )
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input')
+
+      await user.click(product1Checkbox!)
+
+      const addButton = screen
+        .getAllByTestId('button')
+        .find((btn) => btn.textContent?.includes('Add'))
+      await user.click(addButton!)
+
+      await waitFor(() => {
+        expect(mockParseRelationships).toHaveBeenCalledWith(
+          mockCSAFDocument.product_tree.relationships,
+          expect.any(Array),
+        )
+        expect(mockUpdateRelationships).toHaveBeenCalledWith(
+          expect.arrayContaining(mockParsedRelationships),
+        )
+      })
+    })
+
+    it('should handle CSAF fetch failure gracefully', async () => {
+      const user = userEvent.setup()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      mockFetchCSAFProducts.mockRejectedValue(new Error('CSAF fetch failed'))
+
+      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
+
+      await waitFor(() => {
+        const checkboxes = screen.getAllByTestId('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
+      })
+
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1',
+      )
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input')
+
+      await user.click(product1Checkbox!)
+
+      const addButton = screen
+        .getAllByTestId('button')
+        .find((btn) => btn.textContent?.includes('Add'))
+      await user.click(addButton!)
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Error fetching CSAF document:',
+          expect.any(Error),
+        )
+        // Should still proceed with regular product import
+        expect(mockUpdateProducts).toHaveBeenCalled()
+      })
+
+      consoleSpy.mockRestore()
+    })
+
+    it('should handle CSAF product tree parsing failure gracefully', async () => {
+      const user = userEvent.setup()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const mockCSAFDocument = {
+        product_tree: {
+          branches: [],
+          full_product_names: [],
+          relationships: [],
+        },
+      }
+
+      mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
+      mockParseProductTree.mockImplementation(() => {
+        throw new Error('Product tree parsing failed')
+      })
+
+      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
+
+      await waitFor(() => {
+        const checkboxes = screen.getAllByTestId('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
+      })
+
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1',
+      )
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input')
+
+      await user.click(product1Checkbox!)
+
+      const addButton = screen
+        .getAllByTestId('button')
+        .find((btn) => btn.textContent?.includes('Add'))
+      await user.click(addButton!)
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Failed to parse CSAF product tree:',
+          expect.any(Error),
+        )
+        // Should still proceed with regular product import
+        expect(mockUpdateProducts).toHaveBeenCalled()
+      })
+
+      consoleSpy.mockRestore()
+    })
+
+    it('should handle CSAF relationships parsing failure gracefully', async () => {
+      const user = userEvent.setup()
+      const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+      const mockCSAFDocument = {
+        product_tree: {
+          branches: [],
+          full_product_names: [],
+          relationships: [{ some: 'relationship' }],
+        },
+      }
+
+      mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
+      mockParseProductTree.mockReturnValue({
+        families: [],
+        products: [],
+      })
+      mockParseRelationships.mockImplementation(() => {
+        throw new Error('Relationships parsing failed')
+      })
+
+      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
+
+      await waitFor(() => {
+        const checkboxes = screen.getAllByTestId('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
+      })
+
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1',
+      )
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input')
+
+      await user.click(product1Checkbox!)
+
+      const addButton = screen
+        .getAllByTestId('button')
+        .find((btn) => btn.textContent?.includes('Add'))
+      await user.click(addButton!)
+
+      await waitFor(() => {
+        expect(consoleSpy).toHaveBeenCalledWith(
+          'Failed to parse CSAF relationships:',
+          expect.any(Error),
+        )
+        // Should still proceed with regular product import
+        expect(mockUpdateProducts).toHaveBeenCalled()
+      })
+
+      consoleSpy.mockRestore()
+    })
+
+    it('should deduplicate families by id when merging', async () => {
+      const user = userEvent.setup()
+
+      const existingFamilies = [
+        {
+          id: 'family-1',
+          name: 'Existing Family',
+          description: 'Existing family description',
+        },
+      ]
+
+      const mockCSAFDocument = {
+        product_tree: {
+          branches: [],
+          full_product_names: [],
+          relationships: [],
+        },
+      }
+
+      const mockParsedFamilies = [
+        {
+          id: 'family-1', // Same ID as existing family
+          name: 'Duplicate Family',
+          description: 'This should not be added',
+        },
+        {
+          id: 'family-2',
+          name: 'New Family',
+          description: 'This should be added',
+        },
+      ]
+
+      mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
+      mockParseProductTree.mockReturnValue({
+        families: mockParsedFamilies,
+        products: [],
+      })
+
+      const mockUpdateFamilies = vi.fn()
+      mockUseDocumentStore.mockImplementation((selector?: any) => {
+        const store = {
+          products: [],
+          families: existingFamilies,
+          relationships: [],
+          updateProducts: mockUpdateProducts,
+          updateFamilies: mockUpdateFamilies,
+          updateRelationships: vi.fn(),
+        }
+        if (typeof selector === 'function') return selector(store)
+        return store
+      })
+
+      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
+
+      await waitFor(() => {
+        const checkboxes = screen.getAllByTestId('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
+      })
+
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1',
+      )
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input')
+
+      await user.click(product1Checkbox!)
+
+      const addButton = screen
+        .getAllByTestId('button')
+        .find((btn) => btn.textContent?.includes('Add'))
+      await user.click(addButton!)
+
+      await waitFor(() => {
+        expect(mockUpdateFamilies).toHaveBeenCalled()
+        const updatedFamiliesCall = mockUpdateFamilies.mock.calls[0][0]
+        // Should have 2 families: the existing one and only the new one (family-2)
+        expect(updatedFamiliesCall).toHaveLength(2)
+        expect(
+          updatedFamiliesCall.find((f: any) => f.id === 'family-1'),
+        ).toEqual(existingFamilies[0])
+        expect(
+          updatedFamiliesCall.find((f: any) => f.id === 'family-2'),
+        ).toEqual(mockParsedFamilies[1])
+      })
+    })
+
+    it('should skip relationships parsing when no relationships in CSAF document', async () => {
+      const user = userEvent.setup()
+
+      const mockCSAFDocument = {
+        product_tree: {
+          branches: [],
+          full_product_names: [],
+          relationships: undefined, // No relationships
+        },
+      }
+
+      mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
+      mockParseProductTree.mockReturnValue({
+        families: [],
+        products: [],
+      })
+
+      const mockUpdateRelationships = vi.fn()
+      mockUseDocumentStore.mockImplementation((selector?: any) => {
+        const store = {
+          products: [],
+          families: [],
+          relationships: [],
+          updateProducts: mockUpdateProducts,
+          updateFamilies: vi.fn(),
+          updateRelationships: mockUpdateRelationships,
+        }
+        if (typeof selector === 'function') return selector(store)
+        return store
+      })
+
+      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
+
+      await waitFor(() => {
+        const checkboxes = screen.getAllByTestId('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
+      })
+
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1',
+      )
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input')
+
+      await user.click(product1Checkbox!)
+
+      const addButton = screen
+        .getAllByTestId('button')
+        .find((btn) => btn.textContent?.includes('Add'))
+      await user.click(addButton!)
+
+      await waitFor(() => {
+        expect(mockParseRelationships).not.toHaveBeenCalled()
+        expect(mockUpdateRelationships).not.toHaveBeenCalled()
+        expect(mockUpdateProducts).toHaveBeenCalled()
+      })
+    })
+
+    it('should skip relationship updates when no relationships returned from parsing', async () => {
+      const user = userEvent.setup()
+
+      const mockCSAFDocument = {
+        product_tree: {
+          branches: [],
+          full_product_names: [],
+          relationships: [{ some: 'relationship' }],
+        },
+      }
+
+      mockFetchCSAFProducts.mockResolvedValue(mockCSAFDocument)
+      mockParseProductTree.mockReturnValue({
+        families: [],
+        products: [],
+      })
+      mockParseRelationships.mockReturnValue([]) // Returns empty array
+
+      const mockUpdateRelationships = vi.fn()
+      mockUseDocumentStore.mockImplementation((selector?: any) => {
+        const store = {
+          products: [],
+          families: [],
+          relationships: [],
+          updateProducts: mockUpdateProducts,
+          updateFamilies: vi.fn(),
+          updateRelationships: mockUpdateRelationships,
+        }
+        if (typeof selector === 'function') return selector(store)
+        return store
+      })
+
+      render(<ProductDatabaseSelector isOpen={true} onClose={mockOnClose} />)
+
+      await waitFor(() => {
+        const checkboxes = screen.getAllByTestId('checkbox')
+        expect(checkboxes.length).toBeGreaterThanOrEqual(3)
+      })
+
+      const checkboxLabels = screen.getAllByTestId('checkbox-label')
+      const product1Label = checkboxLabels.find(
+        (label) => label.textContent === 'Test Product 1',
+      )
+      const product1Checkbox = product1Label!
+        .closest('[data-testid="checkbox"]')
+        ?.querySelector('input')
+
+      await user.click(product1Checkbox!)
+
+      const addButton = screen
+        .getAllByTestId('button')
+        .find((btn) => btn.textContent?.includes('Add'))
+      await user.click(addButton!)
+
+      await waitFor(() => {
+        expect(mockParseRelationships).toHaveBeenCalled()
+        expect(mockUpdateRelationships).not.toHaveBeenCalled() // Should not be called with empty array
+        expect(mockUpdateProducts).toHaveBeenCalled()
+      })
     })
   })
 })
