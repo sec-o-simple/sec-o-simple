@@ -45,7 +45,7 @@
       },
       {
         "category": "description",
-        "text": "Product Description",
+        "text": "Vendor Name Product Name",
         "title": "Product description for Product Name"
       }
     ],
@@ -95,6 +95,17 @@
           }
         ]
       }
+    ],
+    "relationships": [
+      {
+        "category": "default_component_of",
+        "product_reference": "product_1",
+        "relates_to_product_reference": "product_2",
+        "full_product_name": {
+          "name": "Vendor Name Product Name 1.0.0 default component of Vendor Name Product Name 2.0.0",
+          "product_id": "product_3"
+        }
+      }
     ]
   },
   "vulnerabilities": [
@@ -108,13 +119,17 @@
         }
       ],
       "product_status": {
-        "known_affected": ["product_1"]
+        "known_affected": [
+          "product_1"
+        ]
       },
       "remediations": [
         {
           "category": "mitigation",
           "details": "This is a test remediation",
-          "product_ids": ["product_1"]
+          "product_ids": [
+            "product_1"
+          ]
         }
       ],
       "scores": [
@@ -125,7 +140,9 @@
             "baseScore": 3.8,
             "baseSeverity": "LOW"
           },
-          "products": ["product_1"]
+          "products": [
+            "product_1"
+          ]
         }
       ]
     }

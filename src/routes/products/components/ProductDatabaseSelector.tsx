@@ -1,12 +1,10 @@
 import { Input } from '@/components/forms/Input'
-import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 import { parseProductTree } from '@/utils/csafImport/parseProductTree'
 import { parseRelationships } from '@/utils/csafImport/parseRelationships'
 import { useConfigStore } from '@/utils/useConfigStore'
 import {
   Vendor as DatabaseVendor,
   Product,
-  ProductVersion,
   TProductDatabaseCSAFProducttree,
   useDatabaseClient,
 } from '@/utils/useDatabaseClient'
@@ -25,6 +23,7 @@ import { Accordion, AccordionItem, Alert, Checkbox } from '@heroui/react'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router'
+import { TProductTreeBranch } from '../types/tProductTreeBranch'
 
 interface Props {
   isOpen: boolean
@@ -50,6 +49,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
   const { t } = useTranslation()
   const [selectedProducts, setSelectedProducts] = useState<string[]>([])
   const [vendors, setVendors] = useState<Vendor[]>([])
+  const [dbProducts, setDBProducts] = useState<Product[]>([])
 
   useEffect(() => {
     async function fetchVendors() {
@@ -57,6 +57,8 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
         client.fetchVendors(),
         client.fetchProducts(),
       ])
+
+      setDBProducts(products)
 
       setVendors(
         dbVendors
@@ -90,10 +92,7 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
     if (selectedProducts.length === 0) return
     setSubmitting(true)
     try {
-      // Start from existing tree
-      const updatedProducts: TProductTreeBranch[] = [...products]
-
-      // Attempt to fetch CSAF document (optional enrichment)
+      // Attempt to fetch CSAF document
       let csafDocument: TProductDatabaseCSAFProducttree | undefined
       try {
         csafDocument = await client.fetchCSAFProducts(selectedProducts)
@@ -101,148 +100,84 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
         console.error('Error fetching CSAF document:', e)
       }
 
-      // Parse CSAF product tree if available
-      if (csafDocument) {
-        try {
-          const productTreeResult = parseProductTree(csafDocument)
-          const importedFamilies = productTreeResult.families
-          // Merge families (dedupe by id)
-          for (const fam of importedFamilies) {
-            if (!families.some((f) => f.id === fam.id)) {
-              families.push(fam)
-            }
+      const { products: importedPTB, families: importedFamilies } =
+        parseProductTree({
+          product_tree: csafDocument?.product_tree,
+        })
+
+      // Filter out existing products to avoid ID conflicts, and avoid duplicate vendors too
+      // We identify vendors by their names, because Vendor-IDs are not within the CSAF standard
+      const mergedPTB = [...products]
+      importedPTB.forEach((importedVendor) => {
+        const existingVendorIndex = mergedPTB.findIndex(
+          (v) => v.name === importedVendor.name,
+        )
+
+        // Enrich products with type from database
+        const importedProducts: TProductTreeBranch[] =
+          importedVendor.subBranches.map((p) => ({
+            ...p,
+            type:
+              dbProducts.find((dbP) => dbP.id === p.id)?.type === 'hardware'
+                ? 'Hardware'
+                : 'Software',
+          }))
+
+        if (existingVendorIndex >= 0) {
+          // Vendor exists, merge products
+          const existingVendor = mergedPTB[existingVendorIndex]
+          const mergedSubBranches = [
+            ...existingVendor.subBranches.filter((existingProduct) => {
+              return !importedProducts.find(
+                (impProduct) => impProduct.id === existingProduct.id,
+              )
+            }),
+            ...importedProducts,
+          ]
+          mergedPTB[existingVendorIndex] = {
+            ...existingVendor,
+            subBranches: mergedSubBranches,
           }
-        } catch (e) {
-          console.error('Failed to parse CSAF product tree:', e)
+        } else {
+          // New vendor, add directly
+          mergedPTB.push({
+            ...importedVendor,
+            subBranches: importedProducts,
+          })
         }
-        // Relationships (optional)
-        if (csafDocument.product_tree?.relationships) {
-          try {
-            const importedRelationships = parseRelationships(
-              csafDocument.product_tree.relationships,
-              updatedProducts,
+      })
+      updateProducts(mergedPTB)
+
+      // Merge relationships, avoiding duplicates
+      if (csafDocument?.product_tree?.relationships) {
+        const newRelationships = parseRelationships(
+          csafDocument?.product_tree?.relationships,
+          mergedPTB,
+        )
+        const mergedRelationships = [
+          ...relationships.filter((rel) => {
+            return !newRelationships.find(
+              (newRel) =>
+                newRel.productId1 === rel.productId1 &&
+                newRel.productId2 === rel.productId2 &&
+                newRel.category === rel.category,
             )
-            if (importedRelationships.length) {
-              updateRelationships([...relationships, ...importedRelationships])
-            }
-          } catch (e) {
-            console.error('Failed to parse CSAF relationships:', e)
-          }
-        }
+          }),
+          ...newRelationships,
+        ]
+        updateRelationships(mergedRelationships)
       }
 
-      // Build vendor/product/version structure from database for selected products
-      for (const productId of selectedProducts) {
-        const vendorWithProduct = vendors.find((v) =>
-          v.products.some((p) => p.id === productId),
-        )
-        if (!vendorWithProduct) continue
-
-        // Find or create vendor branch
-        let vendorBranch = updatedProducts.find(
-          (b) => b.category === 'vendor' && b.id === vendorWithProduct.id,
-        )
-        if (!vendorBranch) {
-          vendorBranch = {
-            id: vendorWithProduct.id,
-            category: 'vendor',
-            name: vendorWithProduct.name,
-            description: vendorWithProduct.description || '',
-            subBranches: [],
-          }
-          updatedProducts.push(vendorBranch)
-        }
-
-        // Skip if product already exists
-        const dbProduct = vendorWithProduct.products.find(
-          (p) => p.id === productId,
-        )
-        if (!dbProduct) continue
-        const existingProduct = vendorBranch.subBranches.find(
-          (sb) => sb.category === 'product_name' && sb.id === productId,
-        )
-        if (existingProduct) continue
-
-        let versions: ProductVersion[] = []
-        try {
-          versions = await client.fetchProductVersions(productId)
-        } catch (e) {
-          console.error('Failed to process product', e)
-        }
-
-        // Build version branches
-        const versionBranches: TProductTreeBranch[] = []
-        for (const version of versions) {
-          try {
-            const helpers = await client.fetchIdentificationHelpers(version.id)
-            const mappedHelpers = helpers.map((h) => {
-              const metadata = JSON.parse(h.metadata)
-              switch (h.category) {
-                case 'cpe':
-                  return { cpe: metadata.cpe }
-                case 'models':
-                  return { model_numbers: metadata.models }
-                case 'sbom':
-                  return { sbom_urls: metadata.sbom_urls }
-                case 'sku':
-                  return { skus: metadata.skus }
-                case 'uri':
-                  return { x_generic_uris: metadata.uris }
-                case 'hashes':
-                  return {
-                    hashes: metadata.file_hashes?.map(
-                      (hash: {
-                        items: { algorithm: string; value: string }[]
-                        filename: string
-                      }) => ({
-                        file_hashes: hash.items,
-                        filename: hash.filename,
-                      }),
-                    ),
-                  }
-                case 'purl':
-                  return { purl: metadata.purl }
-                case 'serial':
-                  return { serial_numbers: metadata.serial_numbers }
-                default:
-                  return {}
-              }
-            })
-            const identificationHelper =
-              mappedHelpers.length > 0
-                ? Object.assign({}, ...mappedHelpers)
-                : undefined
-
-            versionBranches.push({
-              id: version.id,
-              category: 'product_version',
-              name: version.name,
-              description: version.description || '',
-              subBranches: [],
-              identificationHelper,
-            })
-          } catch (e) {
-            console.error(
-              `Failed to create version branch for ${version.name}:`,
-              e,
-            )
-          }
-        }
-
-        // Create product branch
-        const productBranch: TProductTreeBranch = {
-          id: dbProduct.id,
-          category: 'product_name',
-          name: dbProduct.name,
-          description: dbProduct.description || '',
-          type: dbProduct.type === 'software' ? 'Software' : 'Hardware',
-          subBranches: versionBranches,
-        }
-        vendorBranch.subBranches.push(productBranch)
-      }
-
-      updateProducts(updatedProducts)
-      updateFamilies(families)
+      // Filter out existing families to avoid ID conflicts
+      const mergedFamilies = [
+        ...families.filter((family) => {
+          return !importedFamilies.find(
+            (impFamily) => impFamily.id === family.id,
+          )
+        }),
+        ...importedFamilies,
+      ]
+      updateFamilies(mergedFamilies)
     } catch (error) {
       console.error('Failed to add products:', error)
     } finally {
