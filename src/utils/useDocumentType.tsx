@@ -5,11 +5,21 @@ export default function useDocumentType() {
 
   return {
     type: sosDocumentType,
-    hasSoftware: ['Software', 'Import', 'HardwareSoftware'].includes(
-      sosDocumentType,
-    ),
-    hasHardware: ['Hardware', 'Import', 'HardwareSoftware'].includes(
-      sosDocumentType,
-    ),
+    hasSoftware: [
+      'Software',
+      'VexSoftware',
+      'Import',
+      'VexImport',
+      'HardwareSoftware',
+      'VexHardwareSoftware',
+    ].includes(sosDocumentType),
+    hasHardware: [
+      'Hardware',
+      'VexHardware',
+      'Import',
+      'VexImport',
+      'HardwareSoftware',
+      'VexHardwareSoftware',
+    ].includes(sosDocumentType),
   }
 }

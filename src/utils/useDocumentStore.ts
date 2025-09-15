@@ -13,15 +13,12 @@ import { TCSAFDocument } from './csafExport/csafExport'
 import { DeepPartial } from './deepPartial'
 
 export const sosDocumentTypes = [
-  // Used for importing CSAF documents
   'Import',
+  'VexImport',
   'Software',
-  'HardwareSoftware',
-  'HardwareFirmware',
   'VexSoftware',
+  'HardwareSoftware',
   'VexHardwareSoftware',
-  'VexHardwareFirmware',
-  'VexSbom',
 ] as const
 
 export type TSOSDocumentType = (typeof sosDocumentTypes)[number]

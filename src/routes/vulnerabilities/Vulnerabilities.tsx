@@ -18,6 +18,9 @@ import Products from './Products'
 import Remediations from './Remediations'
 import Scores from './Scores'
 import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
+import useDocumentStore from '@/utils/useDocumentStore'
+import Flags from './Flags'
+import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
@@ -160,10 +163,20 @@ function VulnerabilityForm({
     onChange,
   }
 
+  const sosDocumentType = useDocumentStore((state) => state.sosDocumentType)
+
   const prefix = `/vulnerabilities/${vulnerabilityIndex}`
+  const validation = useFieldValidation(prefix)
 
   return (
     <VSplit>
+      {validation.hasErrors && (
+        <Alert color="danger">
+          {validation.errorMessages.map((m) => (
+            <p key={m.path}>{m.message}</p>
+          ))}
+        </Alert>
+      )}
       <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
         <Tab
           title={
@@ -193,23 +206,38 @@ function VulnerabilityForm({
           title={
             <TabTitle
               title={t('vulnerabilities.products.title')}
-              csafPrefix={`${prefix}/products`}
+              csafPrefix={`${prefix}/product_status`}
               csafPaths={[`${prefix}/product_status`]}
             />
           }
         >
           <Products {...tabProps} />
         </Tab>
-        <Tab
-          title={
-            <TabTitle
-              title={t('vulnerabilities.remediations')}
-              csafPrefix={`${prefix}/remediations`}
-            />
-          }
-        >
-          <Remediations {...tabProps} />
-        </Tab>
+        {sosDocumentType !== 'VexSoftware' &&
+        sosDocumentType !== 'VexImport' &&
+        sosDocumentType !== 'VexHardwareSoftware' ? (
+          <Tab
+            title={
+              <TabTitle
+                title={t('vulnerabilities.remediations')}
+                csafPrefix={`${prefix}/remediations`}
+              />
+            }
+          >
+            <Remediations {...tabProps} />
+          </Tab>
+        ) : (
+          <Tab
+            title={
+              <TabTitle
+                title={t('vulnerabilities.flags')}
+                csafPrefix={`${prefix}/flags`}
+              />
+            }
+          >
+            <Flags {...tabProps} />
+          </Tab>
+        )}
         <Tab
           title={
             <TabTitle

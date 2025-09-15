@@ -201,6 +201,15 @@
         "url": "URL",
         "products.empty": "No products added",
         "productsDescription": "Select the affected products"
+      },
+      "flags": "Flags",
+      "flag": {
+        "title": "Flag",
+        "component_not_present": "Component not present",
+        "inline_mitigations_already_exist": "Inline mitigations already exist",
+        "vulnerable_code_cannot_be_controlled_by_adversary": "Vulnerable code cannot be controlled by adversary",
+        "vulnerable_code_not_in_execute_path": "Vulnerable code not in execute path",
+        "vulnerable_code_not_present": "Vulnerable code not present"
       }
     },
     "notes": {
@@ -300,6 +309,7 @@
       },
       "product": {
         "label": "Product",
+        "label_plural": "Products",
         "name": "Product Name",
         "description": "Product Description",
         "type": "Product Type",

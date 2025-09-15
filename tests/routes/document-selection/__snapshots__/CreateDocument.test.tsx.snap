@@ -46,15 +46,6 @@ exports[`CreateDocument > should render correctly with both document types 1`] =
               />
               Software and Hardware
             </label>
-            <label>
-              <input
-                data-testid="radio-HardwareFirmware"
-                disabled=""
-                type="radio"
-                value="HardwareFirmware"
-              />
-              Software and Firmware
-            </label>
           </div>
         </div>
         <div
@@ -96,7 +87,6 @@ exports[`CreateDocument > should render correctly with both document types 1`] =
             <label>
               <input
                 data-testid="radio-VexSoftware"
-                disabled=""
                 type="radio"
                 value="VexSoftware"
               />
@@ -105,29 +95,10 @@ exports[`CreateDocument > should render correctly with both document types 1`] =
             <label>
               <input
                 data-testid="radio-VexHardwareSoftware"
-                disabled=""
                 type="radio"
                 value="VexHardwareSoftware"
               />
               Software and Hardware
-            </label>
-            <label>
-              <input
-                data-testid="radio-VexHardwareFirmware"
-                disabled=""
-                type="radio"
-                value="VexHardwareFirmware"
-              />
-              Software and Firmware
-            </label>
-            <label>
-              <input
-                data-testid="radio-VexSbom"
-                disabled=""
-                type="radio"
-                value="VexSbom"
-              />
-              SBOM
             </label>
           </div>
         </div>

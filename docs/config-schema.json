@@ -234,6 +234,23 @@
           "required": ["status"]
         },
 
+        "vulnerabilities.flags.default": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "enum": [
+                "component_not_present",
+                "inline_mitigations_already_exist",
+                "vulnerable_code_cannot_be_controlled_by_adversary",
+                "vulnerable_code_not_in_execute_path",
+                "vulnerable_code_not_present"
+              ]
+            }
+          },
+          "required": ["label"]
+        },
+
         "vulnerabilities.remediations.default": {
           "type": "object",
           "properties": {
