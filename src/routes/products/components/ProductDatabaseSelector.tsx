@@ -9,6 +9,7 @@ import {
   useDatabaseClient,
 } from '@/utils/useDatabaseClient'
 import useDocumentStore from '@/utils/useDocumentStore'
+import { TRelationship } from '@/routes/products/types/tRelationship'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Button } from '@heroui/button'
@@ -115,13 +116,19 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
 
         // Enrich products with type from database
         const importedProducts: TProductTreeBranch[] =
-          importedVendor.subBranches.map((p) => ({
-            ...p,
-            type:
-              dbProducts.find((dbP) => dbP.id === p.id)?.type === 'hardware'
-                ? 'Hardware'
-                : 'Software',
-          }))
+          importedVendor.subBranches.map((p) => {
+            const dbProduct = dbProducts.find((dbP) => dbP.id === p.id)
+
+            if (!dbProduct) {
+              return p
+            }
+
+            return {
+              ...p,
+              type: dbProduct.type === 'hardware' ? 'Hardware' : 'Software',
+              description: dbProduct.description || '',
+            }
+          })
 
         if (existingVendorIndex >= 0) {
           // Vendor exists, merge products
@@ -146,14 +153,21 @@ export default function ProductDatabaseSelector({ isOpen, onClose }: Props) {
           })
         }
       })
-      updateProducts(mergedPTB)
 
-      // Merge relationships, avoiding duplicates
+      // Parse and merge relationships first, to ensure all parsing succeeds before updating state
+      let newRelationships: TRelationship[] = []
       if (csafDocument?.product_tree?.relationships) {
-        const newRelationships = parseRelationships(
+        newRelationships = parseRelationships(
           csafDocument?.product_tree?.relationships,
           mergedPTB,
         )
+      }
+
+      // Update all state only after all parsing operations succeed
+      updateProducts(mergedPTB)
+
+      // Merge relationships, avoiding duplicates (always update if we attempted to parse relationships)
+      if (csafDocument?.product_tree?.relationships) {
         const mergedRelationships = [
           ...relationships.filter((rel) => {
             return !newRelationships.find(
