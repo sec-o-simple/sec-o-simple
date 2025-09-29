@@ -35,7 +35,7 @@
     "@secvisogram/csaf-validator-lib": "^2.0.8",
     "@tailwindcss/postcss": "^4.1.12",
     "@tailwindcss/vite": "^4.1.12",
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "cvss4": "^1.0.7",
     "framer-motion": "^12.23.12",
     "i18next": "^25.4.2",
@@ -80,7 +80,7 @@
     "prettier": "^3.6.2",
     "tailwindcss": "4.1.12",
     "typescript": "5.9.2",
-    "vite": "7.1.4",
+    "vite": "7.1.7",
     "vite-tsconfig-paths": "^5.1.4",
     "vite-plugin-version-mark": "^0.2.2",
     "vitest": "^3.2.4"

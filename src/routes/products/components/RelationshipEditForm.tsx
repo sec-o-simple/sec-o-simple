@@ -13,7 +13,7 @@ import {
   ModalHeader,
 } from '@heroui/modal'
 import { SelectItem } from '@heroui/select'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { getPTBName } from '../types/tProductTreeBranch'
 import {
@@ -22,6 +22,12 @@ import {
   getDefaultRelationship,
   relationshipCategories,
 } from '../types/tRelationship'
+
+// Local type for the dialog that includes selected version arrays
+type TRelationshipEditForm = TRelationship & {
+  selectedSourceVersionIds: string[]
+  selectedTargetVersionIds: string[]
+}
 
 export type RelationshipEditFormProps = {
   relationship?: TRelationship
@@ -35,12 +41,76 @@ export default function RelationshipEditForm({
   const { t } = useTranslation()
   const { findProductTreeBranch } = useProductTreeBranch()
 
-  const [updatedRelationship, setUpdateRelationship] = useState<TRelationship>({
-    ...(relationship ?? {
-      ...getDefaultRelationship(),
-      category: 'installed_on',
-    }),
-  })
+  const convertToEditForm = (rel: TRelationship): TRelationshipEditForm => {
+    const sourceVersionIds = [
+      ...new Set(rel.relationships?.map((r) => r.product1VersionId) ?? []),
+    ].filter((id) => id !== '')
+
+    const targetVersionIds = [
+      ...new Set(rel.relationships?.map((r) => r.product2VersionId) ?? []),
+    ].filter((id) => id !== '')
+
+    return {
+      ...rel,
+      selectedSourceVersionIds: sourceVersionIds,
+      selectedTargetVersionIds: targetVersionIds,
+    }
+  }
+
+  // Helper function to convert TRelationshipEditForm to TRelationship
+  const convertFromEditForm = (
+    editForm: TRelationshipEditForm,
+  ): TRelationship => {
+    const relationships = editForm.selectedSourceVersionIds.flatMap(
+      (sourceId) =>
+        editForm.selectedTargetVersionIds.length > 0
+          ? editForm.selectedTargetVersionIds.map((targetId) => ({
+              product1VersionId: sourceId,
+              product2VersionId: targetId,
+              relationshipId: editForm.id,
+            }))
+          : [
+              {
+                product1VersionId: sourceId,
+                product2VersionId: '',
+                relationshipId: editForm.id,
+              },
+            ],
+    )
+
+    return {
+      id: editForm.id,
+      category: editForm.category,
+      productId1: editForm.productId1,
+      productId2: editForm.productId2,
+      relationships,
+      name: editForm.name,
+    }
+  }
+
+  const [updatedRelationship, setUpdateRelationship] =
+    useState<TRelationshipEditForm>(
+      convertToEditForm(
+        relationship ?? {
+          ...getDefaultRelationship(),
+          category: 'installed_on',
+        },
+      ),
+    )
+
+  const canBeSaved = useMemo(() => {
+    if (!updatedRelationship.name) return false
+    if (!updatedRelationship.productId1 || !updatedRelationship.productId2) {
+      return false
+    }
+    if (
+      updatedRelationship.selectedSourceVersionIds.length === 0 ||
+      updatedRelationship.selectedTargetVersionIds.length === 0
+    ) {
+      return false
+    }
+    return true
+  }, [updatedRelationship])
 
   return (
     <ModalContent>
@@ -62,6 +132,7 @@ export default function RelationshipEditForm({
                   setUpdateRelationship({
                     ...updatedRelationship,
                     productId1: ptb.id,
+                    selectedSourceVersionIds: [], // Reset source versions when product changes
                   })
                 }
                 isDisabled={
@@ -82,21 +153,13 @@ export default function RelationshipEditForm({
                 allowedIds={findProductTreeBranch(
                   updatedRelationship.productId1,
                 )?.subBranches.map((x) => x.id)}
-                selectedIds={
-                  updatedRelationship.relationships?.map(
-                    (rel) => rel.product1VersionId,
-                  ) ?? []
-                }
-                onSelect={(ptbs) =>
+                selectedIds={updatedRelationship.selectedSourceVersionIds}
+                onSelect={(sourceVersions) => {
                   setUpdateRelationship({
                     ...updatedRelationship,
-                    relationships: ptbs.map((x) => ({
-                      product1VersionId: x.id,
-                      product2VersionId: updatedRelationship.productId2,
-                      relationshipId: updatedRelationship.id,
-                    })),
+                    selectedSourceVersionIds: sourceVersions.map((sv) => sv.id),
                   })
-                }
+                }}
                 isDisabled={
                   !updatedRelationship.productId1 ||
                   (relationship &&
@@ -120,6 +183,7 @@ export default function RelationshipEditForm({
                   setUpdateRelationship({
                     ...updatedRelationship,
                     productId2: ptb.id,
+                    selectedTargetVersionIds: [], // Reset target versions when product changes
                   })
                 }
                 isDisabled={
@@ -140,21 +204,13 @@ export default function RelationshipEditForm({
                 allowedIds={findProductTreeBranch(
                   updatedRelationship.productId2,
                 )?.subBranches.map((x) => x.id)}
-                selectedIds={
-                  updatedRelationship.relationships?.map(
-                    (rel) => rel.product2VersionId,
-                  ) ?? []
-                }
-                onSelect={(ptbs) =>
+                selectedIds={updatedRelationship.selectedTargetVersionIds}
+                onSelect={(targetVersions) => {
                   setUpdateRelationship({
                     ...updatedRelationship,
-                    relationships: ptbs.map((x) => ({
-                      product1VersionId: updatedRelationship.productId1,
-                      product2VersionId: x.id,
-                      relationshipId: updatedRelationship.id,
-                    })),
+                    selectedTargetVersionIds: targetVersions.map((tv) => tv.id),
                   })
-                }
+                }}
                 isDisabled={
                   !updatedRelationship.productId2 ||
                   (relationship &&
@@ -215,12 +271,12 @@ export default function RelationshipEditForm({
                 product={
                   findProductTreeBranch(updatedRelationship.productId1)?.name
                 }
-                versions={
-                  updatedRelationship.relationships?.map((rel) => {
-                    const version = findProductTreeBranch(rel.product1VersionId)
+                versions={updatedRelationship.selectedSourceVersionIds
+                  .map((versionId) => {
+                    const version = findProductTreeBranch(versionId)
                     return version ? (getPTBName(version) ?? '') : ''
-                  }) ?? []
-                }
+                  })
+                  .filter((name) => name !== '')}
               />
 
               <div className="flex flex-col items-center space-y-2">
@@ -234,18 +290,28 @@ export default function RelationshipEditForm({
                     `products.relationship.categories.${updatedRelationship.category}`,
                   )}
                 </p>
+                {updatedRelationship.selectedSourceVersionIds.length > 0 &&
+                  updatedRelationship.selectedTargetVersionIds.length > 0 && (
+                    <p className="text-xs text-zinc-400">
+                      {t('products.relationship.relationshipCount', {
+                        count:
+                          updatedRelationship.selectedSourceVersionIds.length *
+                          updatedRelationship.selectedTargetVersionIds.length,
+                      })}
+                    </p>
+                  )}
               </div>
 
               <ProductBox
                 product={
                   findProductTreeBranch(updatedRelationship.productId2)?.name
                 }
-                versions={
-                  updatedRelationship.relationships?.map((rel) => {
-                    const version = findProductTreeBranch(rel.product2VersionId)
+                versions={updatedRelationship.selectedTargetVersionIds
+                  .map((versionId) => {
+                    const version = findProductTreeBranch(versionId)
                     return version ? (getPTBName(version) ?? '') : ''
-                  }) ?? []
-                }
+                  })
+                  .filter((name) => name !== '')}
               />
             </div>
           </ModalBody>
@@ -255,8 +321,9 @@ export default function RelationshipEditForm({
             </Button>
             <Button
               color="primary"
+              isDisabled={!canBeSaved}
               onPress={() => {
-                onSave?.(updatedRelationship)
+                onSave?.(convertFromEditForm(updatedRelationship))
                 onClose()
               }}
             >
@@ -280,7 +347,7 @@ function ProductBox({
   return (
     <div>
       {versions.length > 0 && (
-        <div className="border-gray flex flex-col items-center rounded-lg border bg-white p-2 px-4">
+        <div className="border-default-200 flex flex-col items-center rounded-lg border bg-white p-2 px-4">
           <div className="flex flex-col gap-1">
             <p key={product}>
               {product && product !== '' ? product : t('untitled.product_name')}

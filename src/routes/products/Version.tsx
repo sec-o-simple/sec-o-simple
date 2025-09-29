@@ -150,6 +150,7 @@ export default function Version() {
                   <InfoCard
                     key={rel.id}
                     variant="boxed"
+                    linkTo={`/products/management/product/${product.id}`}
                     title={
                       product.name !== '' && product.name
                         ? product.name

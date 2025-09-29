@@ -335,6 +335,8 @@
         "version_plural": "Versions",
         "category": "Relationship Type",
         "categoryPlaceholder": "Select relationship type",
+        "relationshipCount": "{{count}} relationship",
+        "relationshipCount_plural": "{{count}} relationships",
         "categories": {
           "default_component_of": "Default component of",
           "external_component_of": "External component of",
