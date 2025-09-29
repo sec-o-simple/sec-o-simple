@@ -330,6 +330,8 @@
         "version_plural": "Versionen",
         "category": "Beziehungstyp",
         "categoryPlaceholder": "Beziehungstyp auswählen",
+        "relationshipCount": "{{count}} Beziehung",
+        "relationshipCount_plural": "{{count}} Beziehungen",
         "categories": {
           "default_component_of": "Standardkomponente von",
           "external_component_of": "Externe Komponente von",
