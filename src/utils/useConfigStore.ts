@@ -42,7 +42,7 @@ export function useConfigInitializer() {
   const updateConfig = useConfigStore((state) => state.updateConfig)
 
   const loadConfig = async () => {
-    await fetch(`/.well-known/appspecific/${CONFIG_NAME}`)
+    await fetch(`.well-known/appspecific/${CONFIG_NAME}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(
