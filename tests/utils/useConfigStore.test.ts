@@ -114,7 +114,7 @@ describe('useConfigStore', () => {
         await new Promise(resolve => setTimeout(resolve, 0))
       })
       
-      expect(mockFetch).toHaveBeenCalledWith('/.well-known/appspecific/io.github.sec-o-simple.json')
+      expect(mockFetch).toHaveBeenCalledWith('.well-known/appspecific/io.github.sec-o-simple.json')
       
       const { result: configResult } = renderHook(() => useConfigStore(state => state.config))
       expect(configResult.current).toEqual(mockConfig)
