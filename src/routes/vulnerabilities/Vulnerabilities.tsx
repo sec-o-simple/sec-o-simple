@@ -9,9 +9,10 @@ import usePageVisit from '@/utils/validation/usePageVisit'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 import useValidationStore from '@/utils/validation/useValidationStore'
 import { Chip } from '@heroui/chip'
-import { Alert } from '@heroui/react'
+import { Alert, Button } from '@heroui/react'
 import { Tab, Tabs } from '@heroui/tabs'
 import { useTranslation } from 'react-i18next'
+import { useState } from 'react'
 import General from './General'
 import Notes from './Notes'
 import Products from './Products'
@@ -156,6 +157,7 @@ function VulnerabilityForm({
   onChange: (vulnerability: TVulnerability) => void
 }) {
   const { t } = useTranslation()
+  const [activeTab, setActiveTab] = useState(0)
   const tabProps = {
     vulnerability,
     vulnerabilityIndex,
@@ -168,6 +170,74 @@ function VulnerabilityForm({
   const prefix = `/vulnerabilities/${vulnerabilityIndex}`
   const validation = useFieldValidation(prefix)
 
+  // Define tabs configuration
+  const tabs = [
+    {
+      key: 'general',
+      title: t('vulnerabilities.general.'),
+      component: <General {...tabProps} />,
+      csafPaths: [`${prefix}/cve`, `${prefix}/cwe/name`, `${prefix}/title`],
+    },
+    {
+      key: 'notes',
+      title: t('vulnerabilities.notes'),
+      component: <Notes {...tabProps} />,
+      csafPrefix: `${prefix}/notes`,
+    },
+    {
+      key: 'products',
+      title: t('vulnerabilities.products.title'),
+      component: <Products {...tabProps} />,
+      csafPrefix: `${prefix}/product_status`,
+      csafPaths: [`${prefix}/product_status`],
+    },
+    sosDocumentType !== 'VexSoftware' &&
+    sosDocumentType !== 'VexImport' &&
+    sosDocumentType !== 'VexHardwareSoftware'
+      ? {
+          key: 'remediations',
+          title: t('vulnerabilities.remediations'),
+          component: <Remediations {...tabProps} />,
+          csafPrefix: `${prefix}/remediations`,
+        }
+      : {
+          key: 'flags',
+          title: t('vulnerabilities.flags'),
+          component: <Flags {...tabProps} />,
+          csafPrefix: `${prefix}/flags`,
+        },
+    {
+      key: 'scores',
+      title: t('vulnerabilities.scores'),
+      component: <Scores {...tabProps} />,
+      csafPrefix: `${prefix}/scores`,
+      hasError: vulnerability.scores?.some((score) => !score.cvssVersion),
+    },
+  ]
+
+  const currentTab = tabs[activeTab]
+  const prevTab = activeTab > 0 ? tabs[activeTab - 1] : null
+  const nextTab = activeTab < tabs.length - 1 ? tabs[activeTab + 1] : null
+
+  const handleTabChange = (key: string) => {
+    const index = tabs.findIndex((tab) => tab.key === key)
+    if (index !== -1) {
+      setActiveTab(index)
+    }
+  }
+
+  const handlePrevTab = () => {
+    if (prevTab) {
+      setActiveTab(activeTab - 1)
+    }
+  }
+
+  const handleNextTab = () => {
+    if (nextTab) {
+      setActiveTab(activeTab + 1)
+    }
+  }
+
   return (
     <VSplit>
       {validation.hasErrors && (
@@ -177,81 +247,54 @@ function VulnerabilityForm({
           ))}
         </Alert>
       )}
-      <Tabs color="primary" radius="lg" className="gap-4 bg-transparent">
-        <Tab
-          title={
-            <TabTitle
-              title={t('vulnerabilities.general.')}
-              csafPaths={[
-                `${prefix}/cve`,
-                `${prefix}/cwe/name`,
-                `${prefix}/title`,
-              ]}
-            />
-          }
-        >
-          <General {...tabProps} />
-        </Tab>
-        <Tab
-          title={
-            <TabTitle
-              title={t('vulnerabilities.notes')}
-              csafPrefix={`${prefix}/notes`}
-            />
-          }
-        >
-          <Notes {...tabProps} />
-        </Tab>
-        <Tab
-          title={
-            <TabTitle
-              title={t('vulnerabilities.products.title')}
-              csafPrefix={`${prefix}/product_status`}
-              csafPaths={[`${prefix}/product_status`]}
-            />
-          }
-        >
-          <Products {...tabProps} />
-        </Tab>
-        {sosDocumentType !== 'VexSoftware' &&
-        sosDocumentType !== 'VexImport' &&
-        sosDocumentType !== 'VexHardwareSoftware' ? (
+      <Tabs
+        color="primary"
+        radius="lg"
+        className="gap-2 bg-transparent"
+        selectedKey={currentTab.key}
+        onSelectionChange={(key) => handleTabChange(key as string)}
+      >
+        {tabs.map((tab) => (
           <Tab
+            key={tab.key}
             title={
               <TabTitle
-                title={t('vulnerabilities.remediations')}
-                csafPrefix={`${prefix}/remediations`}
+                title={tab.title}
+                csafPrefix={tab.csafPrefix}
+                csafPaths={tab.csafPaths}
+                hasError={tab.hasError}
               />
             }
           >
-            <Remediations {...tabProps} />
+            {tab.component}
           </Tab>
-        ) : (
-          <Tab
-            title={
-              <TabTitle
-                title={t('vulnerabilities.flags')}
-                csafPrefix={`${prefix}/flags`}
-              />
-            }
-          >
-            <Flags {...tabProps} />
-          </Tab>
-        )}
-        <Tab
-          title={
-            <TabTitle
-              title={t('vulnerabilities.scores')}
-              csafPrefix={`${prefix}/scores`}
-              hasError={vulnerability.scores?.some(
-                (score) => !score.cvssVersion,
-              )}
-            />
-          }
-        >
-          <Scores {...tabProps} />
-        </Tab>
+        ))}
       </Tabs>
+
+      <div className="mx-2 flex justify-between">
+        <div>
+          {prevTab && (
+            <Button
+              variant="bordered"
+              className="bg-content1 border-1"
+              onPress={handlePrevTab}
+            >
+              {t('vulnerabilities.navigation.backTo', {
+                tabName: prevTab.title,
+              })}
+            </Button>
+          )}
+        </div>
+        <div>
+          {nextTab && (
+            <Button color="primary" tabIndex={1} onPress={handleNextTab}>
+              {t('vulnerabilities.navigation.continueTo', {
+                tabName: nextTab.title,
+              })}
+            </Button>
+          )}
+        </div>
+      </div>
     </VSplit>
   )
 }

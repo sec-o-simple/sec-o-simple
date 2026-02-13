@@ -25,7 +25,7 @@ export default function General({
   const cwes = useMemo<TCwe[]>(() => weaknesses, [])
 
   return (
-    <VSplit>
+    <VSplit className="rounded-lg border border-gray-200 p-4">
       <Input
         label={t('vulnerabilities.general.title')}
         csafPath={`/vulnerabilities/${vulnerabilityIndex}/title`}
