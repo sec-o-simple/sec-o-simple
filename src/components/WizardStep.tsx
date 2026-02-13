@@ -3,13 +3,17 @@ import { PropsWithChildren } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
 import ProgressBar from './ProgressBar'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
 
 export type WizardStepProps = PropsWithChildren<{
   title?: string
   subtitle?: string
   progress?: number
   onBack?: string | (() => void)
+  backLabel?: string
   onContinue?: string | (() => void)
+  continueLabel?: string
   noContentWrapper?: boolean
 }>
 
@@ -18,7 +22,9 @@ export default function WizardStep({
   subtitle,
   progress,
   onBack,
+  backLabel,
   onContinue,
+  continueLabel,
   children,
   noContentWrapper,
 }: WizardStepProps) {
@@ -37,7 +43,7 @@ export default function WizardStep({
         progress={progress ?? 1}
       />
       {(noContentWrapper && <>{children}</>) || (
-        <div className="border-default-200 bg-content1 border-default-200 flex flex-col gap-2 rounded-lg border p-8">
+        <div className="border-default-200 bg-content1 flex flex-col gap-2 rounded-lg border p-8">
           <div className="gap-2">
             {title && <div className="text-xl font-semibold">{title}</div>}
             {subtitle && (
@@ -47,7 +53,7 @@ export default function WizardStep({
           {children}
         </div>
       )}
-      <div className="flex justify-between">
+      <div className="flex justify-between pt-6">
         <div>
           {onBack !== undefined && (
             <Button
@@ -56,8 +62,9 @@ export default function WizardStep({
               }
               variant="bordered"
               className="bg-content1 border-1"
+              startContent={<FontAwesomeIcon icon={faArrowLeft} />}
             >
-              {t('common.back')}
+              {t(backLabel ?? 'common.back')}
             </Button>
           )}
         </div>
@@ -69,8 +76,9 @@ export default function WizardStep({
                 : onContinue?.()
             }
             color="primary"
+            endContent={<FontAwesomeIcon icon={faArrowRight} />}
           >
-            {t('common.next')}
+            {t(continueLabel ?? 'common.next')}
           </Button>
         )}
       </div>
