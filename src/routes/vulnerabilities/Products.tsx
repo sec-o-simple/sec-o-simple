@@ -48,7 +48,7 @@ export default function Products({
   })
 
   return (
-    <VSplit className="gap-2">
+    <VSplit className="gap-2 rounded-lg border border-gray-200 p-4">
       {validation.hasErrors && (
         <Alert color="danger">
           {validation.errorMessages.map((m) => (
