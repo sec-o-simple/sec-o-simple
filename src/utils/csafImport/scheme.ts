@@ -44,6 +44,7 @@ export default {
       version: 'string',
       current_release_date: 'string',
       initial_release_date: 'string',
+      aliases: ['string'],
       generator: {
         date: 'string',
         engine: {
