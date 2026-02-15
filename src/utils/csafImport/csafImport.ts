@@ -153,6 +153,10 @@ export function parseCSAFDocument(
         number: revision?.number ?? defaultRevisionHistoryEntry.number,
         summary: revision?.summary ?? defaultRevisionHistoryEntry.summary,
       })) ?? defaultDocumentInformation.revisionHistory,
+    aliases:
+      csafDoc?.tracking?.aliases?.filter(
+        (alias): alias is string => alias !== undefined,
+      ) ?? defaultDocumentInformation.aliases,
     publisher: {
       name:
         csafDoc?.publisher?.name ?? defaultDocumentInformation.publisher.name,
