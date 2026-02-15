@@ -37,6 +37,12 @@
           "type": "string",
           "enum": ["en", "de"]
         },
+        "document-information.aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
 
         "document-information.tlp.label": {
           "type": "string",

@@ -21,6 +21,7 @@ export type TDocumentInformation = TGeneralDocumentInformation & {
   revisionHistory: TRevisionHistoryEntry[]
   acknowledgments: TAcknowledgment[]
   notes: TNote[]
+  aliases: string[]
   references: TDocumentReference[]
 }
 
@@ -31,6 +32,7 @@ export function getDefaultDocumentInformation(): TDocumentInformation {
     acknowledgments: [],
     notes: [],
     references: [],
+    aliases: [],
     revisionHistory: [
       {
         id: uid(),
@@ -54,5 +56,6 @@ export function getDocumentInformationTemplateKeys(): TemplateKeys<TDocumentInfo
     references: 'document-information.references',
     revisionHistory: 'document-information.revision-history',
     acknowledgments: 'document-information.acknowledgments',
+    aliases: 'document-information.aliases',
   }
 }

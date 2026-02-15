@@ -6,6 +6,7 @@ import General from './routes/document-information/General'
 import Notes from './routes/document-information/Notes'
 import Publisher from './routes/document-information/Publisher'
 import References from './routes/document-information/References'
+import Aliases from './routes/document-information/Aliases'
 import Tracking from './routes/document-information/Tracking'
 import DocumentSelection from './routes/document-selection/DocumentSelection'
 import Product from './routes/products/Product'
@@ -32,6 +33,7 @@ export default function App() {
               <Route path="notes" element={<Notes />} />
               <Route path="publisher" element={<Publisher />} />
               <Route path="references" element={<References />} />
+              <Route path="aliases" element={<Aliases />} />
               <Route path="acknowledgments" element={<Acknowledgments />} />
             </Route>
             <Route path="products">

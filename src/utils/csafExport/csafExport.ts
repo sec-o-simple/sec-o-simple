@@ -91,6 +91,9 @@ export function createCSAFDocument(
           number: entry.number,
           summary: entry.summary,
         })),
+        aliases: documentInformation.aliases?.length
+          ? documentInformation.aliases
+          : undefined,
         status: documentStore.documentInformation.status,
         version: documentStore.documentInformation.revisionHistory.length
           ? retrieveLatestVersion(
