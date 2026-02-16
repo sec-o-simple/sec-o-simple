@@ -13,8 +13,8 @@
       "search": "Search",
       "save": "Save",
       "close": "Close",
-      "back": "Back",
-      "next": "Next",
+      "back": "Previous Step",
+      "next": "Next Step",
       "ok": "OK",
       "untitled": "Untitled",
       "add": "Add {{label}}",
@@ -212,6 +212,10 @@
         "vulnerable_code_cannot_be_controlled_by_adversary": "Vulnerable code cannot be controlled by adversary",
         "vulnerable_code_not_in_execute_path": "Vulnerable code not in execute path",
         "vulnerable_code_not_present": "Vulnerable code not present"
+      },
+      "navigation": {
+        "backTo": "Back to {{tabName}}",
+        "continueTo": "Continue to {{tabName}}"
       }
     },
     "notes": {

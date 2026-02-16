@@ -1,5 +1,6 @@
 import { render } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import React from 'react'
 
 // Unmock the Vulnerabilities component to test the actual implementation
 vi.unmock('../../../src/routes/vulnerabilities/Vulnerabilities')
@@ -97,27 +98,58 @@ vi.mock('@heroui/react', () => ({
   Alert: ({ children }: { children: React.ReactNode }) => (
     <div role="alert">{children}</div>
   ),
+  Button: ({ children, onClick, ...props }: any) => (
+    <button onClick={onClick} {...props}>
+      {children}
+    </button>
+  ),
 }))
 
 vi.mock('@heroui/tabs', () => ({
-  Tabs: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Tabs: ({ children, selectedKey, onSelectionChange, ...props }: any) => (
+    <div {...props}>
+      {React.Children.map(children, (child, index) => {
+        if (React.isValidElement(child)) {
+          const isSelected = selectedKey ? child.props.key === selectedKey : index === 0
+          return React.cloneElement(child, { 
+            ...child.props, 
+            isSelected,
+            onSelect: () => onSelectionChange?.(child.props.key)
+          })
+        }
+        return child
+      })}
+    </div>
+  ),
   Tab: ({
     children,
     title,
-  }: {
-    children: React.ReactNode
-    title: React.ReactNode
-  }) => (
-    <div>
-      <div>{title}</div>
-      <div>{children}</div>
+    key,
+    isSelected = false,
+    onSelect,
+  }: any) => (
+    <div key={key}>
+      <div onClick={onSelect}>{title}</div>
+      {isSelected && <div>{children}</div>}
     </div>
   ),
 }))
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string, options?: any) => {
+      const translations: Record<string, string> = {
+        'vulnerabilities.general.': 'General',
+        'vulnerabilities.notes': 'Notes',
+        'vulnerabilities.products.title': 'Products',
+        'vulnerabilities.remediations': 'Remediations',
+        'vulnerabilities.flags': 'Flags',
+        'vulnerabilities.scores': 'Scores',
+        'vulnerabilities.navigation.backTo': `Back to ${options?.tabName || 'Previous Tab'}`,
+        'vulnerabilities.navigation.continueTo': `Continue to ${options?.tabName || 'Next Tab'}`,
+      }
+      return translations[key] || key
+    },
   }),
 }))
 

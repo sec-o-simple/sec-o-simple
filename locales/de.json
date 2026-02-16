@@ -13,8 +13,8 @@
       "search": "Suchen",
       "save": "Speichern",
       "close": "Schließen",
-      "back": "Zurück",
-      "next": "Weiter",
+      "back": "Vorheriger Schritt",
+      "next": "Nächster Schritt",
       "ok": "OK",
       "untitled": "Unbenannt",
       "add": "{{label}} hinzufügen",
@@ -207,6 +207,10 @@
       "flags": "Kennzeichnungen",
       "flag": {
         "title": "Kennzeichnung"
+      },
+      "navigation": {
+        "backTo": "Zurück zu {{tabName}}",
+        "continueTo": "Weiter zu {{tabName}}"
       }
     },
     "notes": {
