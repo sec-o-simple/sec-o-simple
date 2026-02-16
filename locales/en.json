@@ -50,7 +50,8 @@
         "notes": "Notes",
         "publisher": "Publisher",
         "references": "References",
-        "acknowledgments": "Acknowledgements"
+        "acknowledgments": "Acknowledgements",
+        "aliases": "Aliases"
       },
       "tracking": "History"
     },
@@ -86,6 +87,7 @@
           "label.placeholder": "Select TLP label",
           "url": "TLP-URL"
         },
+        "alias": "Alias",
         "language": "Language",
         "languages": {
           "de": "German",

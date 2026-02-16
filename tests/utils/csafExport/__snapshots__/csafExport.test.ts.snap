@@ -53,6 +53,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
     ],
     "title": "Test Security Advisory",
     "tracking": {
+      "aliases": undefined,
       "current_release_date": "2023-02-01T00:00:00.000Z",
       "generator": {
         "date": "2023-07-31T12:00:00.000Z",
@@ -201,6 +202,7 @@ exports[`csafExport > should create a CSAF document with minimal data 1`] = `
     "references": undefined,
     "title": "Test Security Advisory",
     "tracking": {
+      "aliases": undefined,
       "current_release_date": "2023-07-31T12:00:00.000Z",
       "generator": {
         "date": "2023-07-31T12:00:00.000Z",
@@ -277,6 +279,7 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
     ],
     "title": "Test Security Advisory",
     "tracking": {
+      "aliases": undefined,
       "current_release_date": "2023-02-01T00:00:00.000Z",
       "generator": {
         "date": "2023-07-31T12:00:00.000Z",

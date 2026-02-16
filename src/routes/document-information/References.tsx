@@ -49,7 +49,7 @@ export default function References() {
       title={t('nav.documentInformation.references')}
       progress={1.6}
       onBack={'/document-information/publisher'}
-      onContinue="/document-information/acknowledgments"
+      onContinue="/document-information/aliases"
     >
       {listValidation.isTouched && listValidation.hasErrors && (
         <Alert color="danger">

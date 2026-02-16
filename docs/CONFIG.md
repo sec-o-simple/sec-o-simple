@@ -115,6 +115,27 @@ The following suffixes can be appended to most fields to enhance configurability
 
 ---
 
+### Aliases
+
+**Path:** `document-information.aliases[]`
+
+A list of alternative identifiers for the document.
+
+**Example Structure:**
+```json
+{
+  "document-information": {
+    "aliases": [
+      "legacy-doc-id-2023",
+      "VULN-2024-001",
+      "SA-2024-002"
+    ]
+  }
+}
+```
+
+---
+
 ## Product Families
 
 **Path:** `product_families[]`

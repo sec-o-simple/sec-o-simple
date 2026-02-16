@@ -124,6 +124,7 @@ describe('csafImport', () => {
           tracking: {
             id: 'TEST-2023-001',
             status: 'final',
+            aliases: ['CVE-2023-1234', 'AL2023-001'],
             revision_history: [
               {
                 date: '2023-01-01T00:00:00.000Z',

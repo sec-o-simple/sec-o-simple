@@ -70,6 +70,10 @@
       }
     ],
 
+    "document-information.aliases": [
+      "example-alias"
+    ],
+
     "product_families": [
       {
         "id": "family1",

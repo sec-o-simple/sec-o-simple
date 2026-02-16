@@ -367,7 +367,7 @@ describe('Acknowledgments', () => {
       )
       expect(screen.getByTestId('back-link')).toHaveAttribute(
         'href',
-        '/document-information/references',
+        '/document-information/aliases',
       )
       expect(screen.getByTestId('continue-link')).toHaveAttribute(
         'href',

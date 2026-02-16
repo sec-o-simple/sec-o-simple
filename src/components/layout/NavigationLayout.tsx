@@ -35,6 +35,10 @@ export default function NavigationLayout() {
               to="/document-information/references"
             />
             <SubSection
+              title={t('nav.documentInformation.aliases')}
+              to="/document-information/aliases"
+            />
+            <SubSection
               title={t('nav.documentInformation.acknowledgments')}
               to="/document-information/acknowledgments"
             />
