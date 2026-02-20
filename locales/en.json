@@ -19,9 +19,16 @@
       "untitled": "Untitled",
       "add": "Add {{label}}",
       "placeholder": "Enter {{label}}",
-      "actions": "Actions"
+      "actions": "Actions",
+      "from": "from",
+      "to": "to",
+      "for": "for",
+      "see": "see"
     },
-    "preview": "Preview",
+    "preview": {
+      "html": "Preview",
+      "raw": "HTML"
+    },
     "newDocument": "New Document",
     "confirm.newDocument.title": "Create New Document",
     "confirm.newDocument.body": "Are you sure you want to create a new document? This will reset the current document.",
@@ -53,7 +60,8 @@
         "acknowledgments": "Acknowledgements",
         "aliases": "Aliases"
       },
-      "tracking": "History"
+      "tracking": "History",
+      "preview": "Preview"
     },
     "hiddenFields": {
       "title": "Hidden Fields",
@@ -77,6 +85,10 @@
       "sbom": "SBOM"
     },
     "document": {
+      "engine": "Engine",
+      "buildDate": "Build Date",
+      "initialReleaseDate": "Initial Release Date",
+      "currentReleaseDate": "Current Release Date",
       "general": {
         "title": "Document Title",
         "id": "Document ID",
@@ -129,6 +141,7 @@
 
       "acknowledgments": {
         "title": "Acknowledgements",
+        "fromPublisher": "thanks the following parties for their efforts",
         "acknowledgment": "Acknowledgement",
         "acknowledgments": "Acknowledgements",
         "summary": "Summary",
@@ -164,6 +177,7 @@
       "products": {
         "title": "Products",
         "status": {
+          "title": "Product Status",
           "first_affected": "First Affected",
           "known_affected": "Known Affected",
           "known_not_affected": "Known Not Affected",

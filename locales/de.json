@@ -19,9 +19,16 @@
       "untitled": "Unbenannt",
       "add": "{{label}} hinzufügen",
       "placeholder": "{{label}} eingeben",
-      "actions": "Aktionen"
+      "actions": "Aktionen",
+      "from": "Von",
+      "to": "bis",
+      "for": "für",
+      "see": "siehe"
     },
-    "preview": "Vorschau",
+    "preview": {
+      "html": "Vorschau",
+      "raw": "HTML"
+    },
     "newDocument": "Neues Dokument",
     "confirm.newDocument.title": "Neues Dokument erstellen",
     "confirm.newDocument.body": "Sind Sie sicher, dass Sie ein neues Dokument erstellen möchten? Dadurch wird das aktuelle Dokument zurückgesetzt.",
@@ -53,7 +60,8 @@
         "aliases": "Aliase",
         "acknowledgments": "Danksagungen"
       },
-      "tracking": "Historie"
+      "tracking": "Historie",
+      "preview": "Vorschau"
     },
     "hiddenFields": {
       "title": "Versteckte Felder",
@@ -77,6 +85,10 @@
       "sbom": "SBOM"
     },
     "document": {
+      "engine": "Werkzeug",
+      "buildDate": "Erstellungsdatum",
+      "initialReleaseDate": "Erstveröffentlichungsdatum",
+      "currentReleaseDate": "Aktuelles Veröffentlichungsdatum",
       "general": {
         "title": "Dokumenttitel",
         "id": "Dokument-ID",
@@ -85,7 +97,8 @@
           "title": "Traffic Light Protocol (TLP)",
           "label": "TLP-Level",
           "label.placeholder": "TLP-Label auswählen",
-          "url": "TLP-URL"
+          "url": "TLP-URL",
+          "version.url": "Für die TLP-Version siehe"
         },
         "alias": "Alias",
         "language": "Sprache",
@@ -129,6 +142,7 @@
 
       "acknowledgments": {
         "title": "Danksagungen",
+        "fromPublisher": "dankt den folgenden Parteien für ihre Bemühungen",
         "acknowledgment": "Danksagung",
         "acknowledgments": "Danksagungen",
         "summary": "Zusammenfassung",
@@ -164,6 +178,7 @@
       "products": {
         "title": "Produkte",
         "status": {
+          "title": "Produktstatus",
           "first_affected": "Erste betroffene Version",
           "known_affected": "Bekannte betroffene Version",
           "known_not_affected": "Bekannte nicht betroffene Version",

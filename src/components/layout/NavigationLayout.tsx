@@ -63,6 +63,7 @@ export default function NavigationLayout() {
             to="/vulnerabilities"
           />
           <Section number={4} title={t('nav.tracking')} to="/tracking" />
+          <Section number={5} title={t('nav.preview')} to="/preview" />
         </div>
 
         <div className="flex flex-col gap-2">

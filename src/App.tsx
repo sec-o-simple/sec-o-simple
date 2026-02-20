@@ -16,6 +16,7 @@ import Version from './routes/products/Version'
 import Vulnerabilities from './routes/vulnerabilities/Vulnerabilities'
 import { useTemplateInitializer } from './utils/template'
 import { useConfigInitializer } from './utils/useConfigStore'
+import Preview from './routes/preview/Preview'
 
 export default function App() {
   useConfigInitializer()
@@ -46,6 +47,7 @@ export default function App() {
             </Route>
             <Route path="vulnerabilities" element={<Vulnerabilities />} />
             <Route path="tracking" element={<Tracking />} />
+            <Route path="preview" element={<Preview />} />
           </Route>
         </Route>
       </Routes>

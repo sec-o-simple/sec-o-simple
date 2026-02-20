@@ -198,4 +198,103 @@ describe('Autocomplete', () => {
       })
     )
   })
+
+  it('should call onChange callback when debounce handler is triggered', () => {
+    const onChange = vi.fn()
+    const onValueChange = vi.fn()
+    
+    // Mock useDebounceInput to actually call the onChange function
+    mockUseDebounceInput.mockImplementation(({ onChange: onChangeCb }) => ({
+      handleChange: (e: any) => {
+        if (onChangeCb) {
+          onChangeCb(e)
+        }
+      },
+    }))
+    
+    render(<Autocomplete onChange={onChange} onValueChange={onValueChange}><div>Option 1</div></Autocomplete>)
+    
+    // The useDebounceInput onChange should be called with a function that calls both callbacks
+    expect(mockUseDebounceInput).toHaveBeenCalledWith(
+      expect.objectContaining({
+        onChange: expect.any(Function),
+      })
+    )
+
+    // Test the actual onChange function that was passed to useDebounceInput
+    const { onChange: debounceOnChange } = mockUseDebounceInput.mock.calls[0][0]
+    const mockEvent = { target: { value: 'test-value' } }
+    
+    debounceOnChange(mockEvent)
+    
+    expect(onValueChange).toHaveBeenCalledWith('test-value')
+    expect(onChange).toHaveBeenCalledWith(mockEvent)
+  })
+
+  it('should handle onChange without onValueChange callback', () => {
+    const onChange = vi.fn()
+    
+    // Mock useDebounceInput to actually call the onChange function
+    mockUseDebounceInput.mockImplementation(({ onChange: onChangeCb }) => ({
+      handleChange: (e: any) => {
+        if (onChangeCb) {
+          onChangeCb(e)
+        }
+      },
+    }))
+    
+    render(<Autocomplete onChange={onChange}><div>Option 1</div></Autocomplete>)
+    
+    // Test the onChange function that was passed to useDebounceInput
+    const { onChange: debounceOnChange } = mockUseDebounceInput.mock.calls[0][0]
+    const mockEvent = { target: { value: 'test-value' } }
+    
+    debounceOnChange(mockEvent)
+    
+    expect(onChange).toHaveBeenCalledWith(mockEvent)
+  })
+
+  it('should handle onValueChange without onChange callback', () => {
+    const onValueChange = vi.fn()
+    
+    // Mock useDebounceInput to actually call the onChange function
+    mockUseDebounceInput.mockImplementation(({ onChange: onChangeCb }) => ({
+      handleChange: (e: any) => {
+        if (onChangeCb) {
+          onChangeCb(e)
+        }
+      },
+    }))
+    
+    render(<Autocomplete onValueChange={onValueChange}><div>Option 1</div></Autocomplete>)
+    
+    // Test the onChange function that was passed to useDebounceInput
+    const { onChange: debounceOnChange } = mockUseDebounceInput.mock.calls[0][0]
+    const mockEvent = { target: { value: 'test-value' } }
+    
+    debounceOnChange(mockEvent)
+    
+    expect(onValueChange).toHaveBeenCalledWith('test-value')
+  })
+
+  it('should join multiple error messages with commas', () => {
+    const mockValidation = {
+      messages: [{ message: 'Error 1', severity: 'error' }, { message: 'Error 2', severity: 'error' }],
+      errorMessages: [{ message: 'Error 1' }, { message: 'Error 2' }],
+      warningMessages: [],
+      infoMessages: [],
+      hasErrors: true,
+      hasWarnings: false,
+      hasInfos: false,
+      isTouched: true,
+      markFieldAsTouched: vi.fn(),
+    }
+    
+    mockUseFieldValidation.mockReturnValue(mockValidation)
+    
+    render(<Autocomplete csafPath="test.field"><div>Option 1</div></Autocomplete>)
+    
+    const autocomplete = screen.getByTestId('hero-autocomplete')
+    expect(autocomplete).toHaveAttribute('data-error-message', 'Error 1, Error 2')
+  })
 })
