@@ -35,6 +35,7 @@ export default function Tracking() {
     <WizardStep
       title={t('nav.tracking')}
       onBack={'/vulnerabilities'}
+      onContinue={'/preview'}
       progress={5}
     >
       <HSplit className="items-start">

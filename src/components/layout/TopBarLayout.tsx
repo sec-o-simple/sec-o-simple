@@ -5,6 +5,7 @@ import useValidationStore from '@/utils/validation/useValidationStore'
 import {
   faAdd,
   faCircleExclamation,
+  faEye,
   faFileExport,
   faShieldHalved,
 } from '@fortawesome/free-solid-svg-icons'
@@ -138,6 +139,15 @@ export default function TopBarLayout() {
         </div>
 
         <div className="flex gap-3">
+          <Button
+            variant="light"
+            color="primary"
+            onPress={() => navigate('/preview')}
+            startContent={<FontAwesomeIcon icon={faEye} />}
+          >
+            {t('nav.preview')}
+          </Button>
+
           <Tooltip
             content={t('export.error', {
               errorCount: messages.length,
