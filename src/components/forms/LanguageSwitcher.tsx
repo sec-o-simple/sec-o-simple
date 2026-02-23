@@ -20,7 +20,7 @@ export function LanguageSwitcher() {
     return (
       <Select
         aria-label={t('document.general.language')}
-        className="w-32 mx-auto"
+        className="mx-auto w-32"
         onChange={(e) => changeLanguage(e.target.value)}
         selectedKeys={[i18n.language]}
         size="sm"
