@@ -1,112 +1,157 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi, beforeEach } from 'vitest'
 
 describe('download', () => {
-  // Import dynamically to ensure proper setup
   let download: (filename: string, text: string) => void
+  let mockElement: any
+  let mockDocument: any
 
   beforeEach(async () => {
-    // Mock DOM methods
-    const createElementSpy = vi.spyOn(document, 'createElement')
-    const appendChildSpy = vi.spyOn(document.body, 'appendChild')
-    const removeChildSpy = vi.spyOn(document.body, 'removeChild')
-
-    // Create mock element with necessary methods
-    const mockElement = {
+    // Mock DOM element with all required methods
+    mockElement = {
       setAttribute: vi.fn(),
       click: vi.fn(),
-      style: { display: '' },
+      style: {},
     }
 
-    createElementSpy.mockReturnValue(mockElement as any)
-    appendChildSpy.mockImplementation(() => mockElement as any)
-    removeChildSpy.mockImplementation(() => mockElement as any)
+    mockDocument = {
+      createElement: vi.fn(() => mockElement),
+      body: {
+        appendChild: vi.fn(),
+        removeChild: vi.fn(),
+      },
+    }
 
-    const module = await import('../../src/utils/download')
-    download = module.download
+    global.document = mockDocument as any
+
+    const { download: downloadFn } = await import('../../src/utils/download')
+    download = downloadFn
   })
 
-  it('should create anchor element and trigger download', () => {
-    const createElementSpy = vi.spyOn(document, 'createElement')
-    const appendChildSpy = vi.spyOn(document.body, 'appendChild')
-    const removeChildSpy = vi.spyOn(document.body, 'removeChild')
+  it('should create anchor element with correct attributes', () => {
+    download('test.txt', 'Hello World')
 
-    const mockElement = {
-      setAttribute: vi.fn(),
-      click: vi.fn(),
-      style: { display: '' },
-    }
-
-    createElementSpy.mockReturnValue(mockElement as any)
-
-    download('test.txt', 'content')
-
-    expect(createElementSpy).toHaveBeenCalledWith('a')
+    expect(mockDocument.createElement).toHaveBeenCalledWith('a')
     expect(mockElement.setAttribute).toHaveBeenCalledWith(
       'href',
-      'data:text/plain;charset=utf-8,' + encodeURIComponent('content')
+      'data:text/plain;charset=utf-8,' + encodeURIComponent('Hello World'),
     )
-    expect(mockElement.setAttribute).toHaveBeenCalledWith('download', 'test.txt')
-    expect(mockElement.style.display).toBe('none')
-    expect(appendChildSpy).toHaveBeenCalledWith(mockElement)
-    expect(mockElement.click).toHaveBeenCalled()
-    expect(removeChildSpy).toHaveBeenCalledWith(mockElement)
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'download',
+      'test.txt',
+    )
   })
 
-  it('should handle various filename formats', () => {
-    const filenames = [
-      'simple.txt',
-      'file-with-dashes.json',
-      'file_with_underscores.csv',
-      'file.with.dots.xml',
-      'file with spaces.txt',
-    ]
+  it('should set element display style to none', () => {
+    download('test.txt', 'content')
 
-    filenames.forEach((filename) => {
-      expect(() => download(filename, 'test content')).not.toThrow()
-    })
+    expect(mockElement.style.display).toBe('none')
+  })
+
+  it('should append element to document body', () => {
+    download('test.txt', 'content')
+
+    expect(mockDocument.body.appendChild).toHaveBeenCalledWith(mockElement)
+  })
+
+  it('should click the element to trigger download', () => {
+    download('test.txt', 'content')
+
+    expect(mockElement.click).toHaveBeenCalled()
+  })
+
+  it('should remove element from document body after clicking', () => {
+    download('test.txt', 'content')
+
+    expect(mockDocument.body.removeChild).toHaveBeenCalledWith(mockElement)
+  })
+
+  it('should handle empty filename', () => {
+    download('', 'content')
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith('download', '')
+    expect(() => download('', 'content')).not.toThrow()
+  })
+
+  it('should handle empty content', () => {
+    download('test.txt', '')
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(''),
+    )
+    expect(() => download('test.txt', '')).not.toThrow()
+  })
+
+  it('should handle special characters in filename', () => {
+    const filename = 'test file (1).txt'
+    download(filename, 'content')
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith('download', filename)
+    expect(() => download(filename, 'content')).not.toThrow()
   })
 
   it('should handle special characters in content', () => {
-    const specialContent =
-      'Content with special chars: !@#$%^&*()_+{}[]|\\:";\'<>?,./'
-    expect(() => download('special.txt', specialContent)).not.toThrow()
-  })
-
-  it('should handle empty filename and content', () => {
-    expect(() => download('', '')).not.toThrow()
-  })
-
-  it('should handle JSON content', () => {
-    const jsonContent = JSON.stringify({ test: 'data', number: 42 })
-    expect(() => download('data.json', jsonContent)).not.toThrow()
-  })
-
-  it('should handle large content', () => {
-    const largeContent = 'x'.repeat(10000)
-    expect(() => download('large.txt', largeContent)).not.toThrow()
-  })
-
-  it('should handle unicode content', () => {
-    const unicodeContent = 'Hello 🌍 Unicode ñáéíóú'
-    expect(() => download('unicode.txt', unicodeContent)).not.toThrow()
-  })
-
-  it('should properly encode content with special characters', () => {
-    const mockElement = {
-      setAttribute: vi.fn(),
-      click: vi.fn(),
-      style: { display: '' },
-    }
-
-    const createElementSpy = vi.spyOn(document, 'createElement')
-    createElementSpy.mockReturnValue(mockElement as any)
-
-    const content = 'Special: & < > " \' \n \t'
+    const content = 'Special chars: & < > " \' \n \t 🚀 émoji'
     download('test.txt', content)
 
     expect(mockElement.setAttribute).toHaveBeenCalledWith(
       'href',
-      'data:text/plain;charset=utf-8,' + encodeURIComponent(content)
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(content),
     )
+    expect(() => download('test.txt', content)).not.toThrow()
+  })
+
+  it('should handle JSON content', () => {
+    const jsonContent = JSON.stringify({ key: 'value', number: 123 })
+    download('data.json', jsonContent)
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonContent),
+    )
+    expect(() => download('data.json', jsonContent)).not.toThrow()
+  })
+
+  it('should handle large content efficiently', () => {
+    const largeContent = 'x'.repeat(10000)
+    download('large.txt', largeContent)
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(largeContent),
+    )
+    expect(() => download('large.txt', largeContent)).not.toThrow()
+  })
+
+  it('should properly encode URI components', () => {
+    const content = 'Hello%20World&test=123'
+    download('encoded.txt', content)
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(content),
+    )
+  })
+
+  it('should handle Unicode characters in content', () => {
+    const content = '🌍 Hello 世界 नमस्ते мир'
+    download('unicode.txt', content)
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(content),
+    )
+  })
+
+  it('should complete full download workflow', () => {
+    download('workflow.txt', 'test workflow')
+
+    // Verify all steps were executed in order
+    expect(mockDocument.createElement).toHaveBeenCalledWith('a')
+    expect(mockElement.setAttribute).toHaveBeenCalledTimes(2)
+    expect(mockElement.style.display).toBe('none')
+    expect(mockDocument.body.appendChild).toHaveBeenCalledWith(mockElement)
+    expect(mockElement.click).toHaveBeenCalled()
+    expect(mockDocument.body.removeChild).toHaveBeenCalledWith(mockElement)
   })
 })
