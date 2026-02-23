@@ -90,6 +90,24 @@ const URL = `
 {{/.}}
 `
 
+const sanitizeForMustache = (value: unknown): unknown => {
+  if (Array.isArray(value)) {
+    return value
+      .filter((item) => item !== undefined && item !== null)
+      .map((item) => sanitizeForMustache(item))
+  }
+
+  if (value !== null && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([, item]) => item !== undefined)
+        .map(([key, item]) => [key, sanitizeForMustache(item)]),
+    )
+  }
+
+  return value
+}
+
 export default function HTMLTemplate({
   document,
   translations,
@@ -150,7 +168,11 @@ export default function HTMLTemplate({
     },
   }
 
-  return Mustache.render(HTMLTemplateRaw, documentWithTranslations, {
+  const sanitizedDocumentWithTranslations = sanitizeForMustache(
+    documentWithTranslations,
+  )
+
+  return Mustache.render(HTMLTemplateRaw, sanitizedDocumentWithTranslations, {
     product_status_header: getProductStatusHeader(),
     product_status_row: PRODUCT_STATUS_ROW,
     remediation: getRemediation(),
