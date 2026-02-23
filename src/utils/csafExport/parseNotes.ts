@@ -33,7 +33,7 @@ export function parseNotes(
 
       return {
         category: 'description',
-        text: product.description || '',
+        text: product.description,
         title: title,
       }
     })
