@@ -18,8 +18,7 @@ export type TConfig = {
   }
   exportTexts?: {
     productDescription?: {
-      en: string
-      de: string
+      [key: string]: string
     }
   }
   cveApiUrl?: string

@@ -4,14 +4,26 @@ import '@testing-library/jest-dom'
 import { LanguageSwitcher } from '../../../src/components/forms/LanguageSwitcher'
 
 // Mock react-i18next
-const mockChangeLanguage = vi.fn()
-const mockI18n = {
-  language: 'en',
-  changeLanguage: mockChangeLanguage,
-}
+const { mockI18n, mockChangeLanguage } = vi.hoisted(() => {
+  const changeLanguage = vi.fn()
+  return {
+    mockChangeLanguage: changeLanguage,
+    mockI18n: {
+      language: 'en',
+      changeLanguage,
+      store: {
+        data: {
+          en: {},
+          de: {},
+        },
+      },
+    },
+  }
+})
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
+    t: (key: string) => key,
     i18n: mockI18n,
   }),
 }))

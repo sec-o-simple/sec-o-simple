@@ -14,11 +14,7 @@
       "properties": {
         "productDescription": {
           "type": "object",
-          "properties": {
-            "de": { "type": "string" },
-            "en": { "type": "string" }
-          },
-          "required": ["de", "en"]
+          "additionalProperties": { "type": "string" }
         }
       }
     },

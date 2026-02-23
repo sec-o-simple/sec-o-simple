@@ -32,7 +32,7 @@ export default function General() {
   })
 
   const hasVisitedPage = usePageVisit()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { isFieldReadonly, getFieldPlaceholder } = useTemplate()
   const message = useValidationStore((state) => state.messages).filter(
     (m) => m.path === `/document/distribution/tlp`,
@@ -83,7 +83,7 @@ export default function General() {
           isRequired
           placeholder={getFieldPlaceholder('document-information.lang')}
         >
-          {['de', 'en'].map((key) => (
+          {Object.keys(i18n.store.data).map((key) => (
             <SelectItem key={key} textValue={key}>
               {t(`document.general.languages.${key}`)}
             </SelectItem>
