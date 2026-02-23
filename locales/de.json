@@ -92,8 +92,7 @@
         "language": "Sprache",
         "languages": {
           "de": "Deutsch",
-          "en": "Englisch",
-          "nl": "Niederländisch"
+          "en": "Englisch"
         },
         "status": {
           "draft": "Entwurf",
