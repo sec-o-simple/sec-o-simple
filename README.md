@@ -7,6 +7,7 @@
     - [Prerequisites](#prerequisites)
     - [Clone \& Setup](#clone--setup)
     - [Configuration](#configuration)
+    - [Adding new Languages](#adding-new-languages)
     - [Running Locally](#running-locally)
     - [Building for Production](#building-for-production)
   - [Run with Docker](#run-with-docker)
@@ -45,7 +46,18 @@ npm install
 
 ### Configuration
 
-Further information about the configuration can be found in the [Configuration](./docs/CONFIG.md)
+Further information about the configuration can be found in the [Configuration](./docs/CONFIG.md).
+
+### Adding new Languages
+
+To add a new language to the application:
+
+1. Create a new translation file in the `locales/` directory (e.g., `fr.json`).
+2. Import the new locale file in `src/main.tsx`.
+3. Register the new language in the `i18n` initialization object in `src/main.tsx`.
+4. Add the new language name to the existing language files (e.g. `locales/en.json`, `locales/de.json`) under the key `document.general.languages.<language_code>`.
+
+The new language will automatically appear in the document language selection dropdown.
 
 ### Running Locally
 
