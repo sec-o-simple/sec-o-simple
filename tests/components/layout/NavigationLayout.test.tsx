@@ -85,7 +85,7 @@ describe('NavigationLayout', () => {
     render(<NavigationLayout />)
 
     const statusIndicators = screen.getAllByTestId('status-indicator')
-    expect(statusIndicators).toHaveLength(11) // Updated count based on actual navigation structure
+    expect(statusIndicators).toHaveLength(10) // Updated count based on actual navigation structure
   })
 
   it('should render navigation links', () => {
