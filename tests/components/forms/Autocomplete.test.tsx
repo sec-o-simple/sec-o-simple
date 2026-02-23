@@ -29,20 +29,34 @@ vi.mock('../../../src/utils/useDebounceInput', () => ({
 
 // Mock HeroUI Autocomplete component
 vi.mock('@heroui/react', () => ({
-  Autocomplete: vi.fn(({ children, errorMessage, isInvalid, onChange, onBlur, labelPlacement, variant, inputProps, ...props }: any) => (
-    <input 
-      type="text" 
-      data-testid="hero-autocomplete"
-      data-error-message={errorMessage || ''}
-      data-is-invalid={isInvalid?.toString() || 'false'}
-      data-label-placement={labelPlacement}
-      data-variant={variant}
-      data-input-classnames={inputProps?.classNames ? JSON.stringify(inputProps.classNames) : ''}
-      onChange={onChange}
-      onBlur={onBlur}
-      {...props}
-    />
-  )),
+  Autocomplete: vi.fn(
+    ({
+      children,
+      errorMessage,
+      isInvalid,
+      onChange,
+      onBlur,
+      labelPlacement,
+      variant,
+      inputProps,
+      ...props
+    }: any) => (
+      <input
+        type="text"
+        data-testid="hero-autocomplete"
+        data-error-message={errorMessage || ''}
+        data-is-invalid={isInvalid?.toString() || 'false'}
+        data-label-placement={labelPlacement}
+        data-variant={variant}
+        data-input-classnames={
+          inputProps?.classNames ? JSON.stringify(inputProps.classNames) : ''
+        }
+        onChange={onChange}
+        onBlur={onBlur}
+        {...props}
+      />
+    ),
+  ),
 }))
 
 const mockUseFieldValidation = vi.mocked(useFieldValidation)
@@ -51,7 +65,7 @@ const mockUseDebounceInput = vi.mocked(useDebounceInput)
 describe('Autocomplete', () => {
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     mockUseFieldValidation.mockReturnValue({
       messages: [],
       errorMessages: [],
@@ -63,15 +77,19 @@ describe('Autocomplete', () => {
       isTouched: false,
       markFieldAsTouched: vi.fn(),
     })
-    
+
     mockUseDebounceInput.mockReturnValue({
       handleChange: vi.fn(),
     } as any)
   })
 
   it('should render with default props', () => {
-    render(<Autocomplete><div>Option 1</div></Autocomplete>)
-    
+    render(
+      <Autocomplete>
+        <div>Option 1</div>
+      </Autocomplete>,
+    )
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
     expect(autocomplete).toBeInTheDocument()
     expect(autocomplete).toHaveAttribute('data-variant', 'bordered')
@@ -86,9 +104,9 @@ describe('Autocomplete', () => {
         placeholder="Custom placeholder"
       >
         <div>Option 1</div>
-      </Autocomplete>
+      </Autocomplete>,
     )
-    
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
     expect(autocomplete).toHaveAttribute('data-variant', 'underlined')
     expect(autocomplete).toHaveAttribute('data-label-placement', 'inside')
@@ -96,28 +114,39 @@ describe('Autocomplete', () => {
   })
 
   it('should apply custom classNames for inputWrapper', () => {
-    render(<Autocomplete><div>Option 1</div></Autocomplete>)
-    
+    render(
+      <Autocomplete>
+        <div>Option 1</div>
+      </Autocomplete>,
+    )
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
-    expect(autocomplete).toHaveAttribute('data-input-classnames', JSON.stringify({
-      inputWrapper: 'border-1 shadow-none',
-    }))
+    expect(autocomplete).toHaveAttribute(
+      'data-input-classnames',
+      JSON.stringify({
+        inputWrapper: 'border-1 shadow-none',
+      }),
+    )
   })
 
   it('should handle onChange and onValueChange events', () => {
     const onChange = vi.fn()
     const onValueChange = vi.fn()
     const mockHandleChange = vi.fn()
-    
+
     mockUseDebounceInput.mockReturnValue({
       handleChange: mockHandleChange,
     } as any)
-    
-    render(<Autocomplete onChange={onChange} onValueChange={onValueChange}><div>Option 1</div></Autocomplete>)
-    
+
+    render(
+      <Autocomplete onChange={onChange} onValueChange={onValueChange}>
+        <div>Option 1</div>
+      </Autocomplete>,
+    )
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
     fireEvent.change(autocomplete, { target: { value: 'test value' } })
-    
+
     expect(mockHandleChange).toHaveBeenCalled()
   })
 
@@ -133,11 +162,15 @@ describe('Autocomplete', () => {
       isTouched: true,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
-    render(<Autocomplete csafPath="test.field"><div>Option 1</div></Autocomplete>)
-    
+
+    render(
+      <Autocomplete csafPath="test.field">
+        <div>Option 1</div>
+      </Autocomplete>,
+    )
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
     expect(autocomplete).toHaveAttribute('data-error-message', 'Invalid input')
     expect(autocomplete).toHaveAttribute('data-is-invalid', 'true')
@@ -155,19 +188,27 @@ describe('Autocomplete', () => {
       isTouched: false,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
-    render(<Autocomplete csafPath="test.field" isTouched><div>Option 1</div></Autocomplete>)
-    
+
+    render(
+      <Autocomplete csafPath="test.field" isTouched>
+        <div>Option 1</div>
+      </Autocomplete>,
+    )
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
     expect(autocomplete).toHaveAttribute('data-error-message', 'Required field')
     expect(autocomplete).toHaveAttribute('data-is-invalid', 'true')
   })
 
   it('should not display validation errors when field has no errors', () => {
-    render(<Autocomplete csafPath="test.field"><div>Option 1</div></Autocomplete>)
-    
+    render(
+      <Autocomplete csafPath="test.field">
+        <div>Option 1</div>
+      </Autocomplete>,
+    )
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
     expect(autocomplete).toHaveAttribute('data-error-message', '')
     expect(autocomplete).toHaveAttribute('data-is-invalid', 'false')
@@ -175,9 +216,13 @@ describe('Autocomplete', () => {
 
   it('should work without csafPath (no validation)', () => {
     const onChange = vi.fn()
-    
-    render(<Autocomplete onChange={onChange}><div>Option 1</div></Autocomplete>)
-    
+
+    render(
+      <Autocomplete onChange={onChange}>
+        <div>Option 1</div>
+      </Autocomplete>,
+    )
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
     expect(autocomplete).toHaveAttribute('data-error-message', '')
     expect(autocomplete).toHaveAttribute('data-is-invalid', 'false')
@@ -185,17 +230,21 @@ describe('Autocomplete', () => {
 
   it('should handle onBlur events', () => {
     const onBlur = vi.fn()
-    
-    render(<Autocomplete onBlur={onBlur}><div>Option 1</div></Autocomplete>)
-    
+
+    render(
+      <Autocomplete onBlur={onBlur}>
+        <div>Option 1</div>
+      </Autocomplete>,
+    )
+
     const autocomplete = screen.getByTestId('hero-autocomplete')
     fireEvent.blur(autocomplete)
-    
+
     // Check that useDebounceInput was called with onBlur
     expect(mockUseDebounceInput).toHaveBeenCalledWith(
       expect.objectContaining({
         onBlur: onBlur,
-      })
+      }),
     )
   })
 

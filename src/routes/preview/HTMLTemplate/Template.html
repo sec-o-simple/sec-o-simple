@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/gutenberg-css" charset="utf-8">
+  <link rel="stylesheet" href="https://unpkg.com/gutenberg-css/dist/themes/modern.min.css" charset="utf-8">
+  <link rel="stylesheet" href="/preview.css" charset="utf-8">
+  <meta charset="utf-8" />
+</head>
+
+<body>
+  <h1>{{#document.tracking.id}}{{document.tracking.id}}: {{/document.tracking.id}}{{document.title}}</h1>
+
+  <table>
+    <tr>
+      <td>{{t_publisher}}: {{document.publisher.name}}</td>
+      <td>{{t_document_category}}: {{document.category}}</td>
+    </tr>
+    <tr>
+      <td>{{t_initial_release_date}}: {{document.tracking.initial_release_date}}</td>
+      <td>{{t_engine}}: {{#document.tracking.generator.engine}}{{name}}{{#version}} {{.}}{{/version}}{{/document.tracking.generator.engine}}</td>
+    </tr>
+    <tr>
+      <td>{{t_current_release_date}}: {{document.tracking.current_release_date}}</td>
+      <td>{{t_build_date}}: {{document.tracking.generator.date}}</td>
+    </tr>
+    <tr>
+      <td>{{t_current_version}}: {{document.tracking.version}}</td>
+      <td>{{t_status}}: {{document.tracking.status}}</td>
+    </tr>
+    <tr>
+      <td>{{t_cvss_base_score}}: {{document.max_base_score}}</td>
+      <td>{{t_severity}}:
+        {{#document.aggregate_severity.namespace}} <a {{#secureHref}}{{document.aggregate_severity.namespace}}{{/secureHref}}>{{document.aggregate_severity.text}}</a>{{/document.aggregate_severity.namespace}}
+        {{^document.aggregate_severity.namespace}} {{document.aggregate_severity.text}}{{/document.aggregate_severity.namespace}}
+      </td>
+    </tr>
+    <tr>
+      <td>{{t_language}}: {{document.lang}}</td>
+      <td colspan="2">{{t_also_referred_to}}: {{#removeTrailingComma}}{{#document.tracking.aliases}}{{.}}, {{/document.tracking.aliases}}{{/removeTrailingComma}}</td>
+    </tr>
+  </table>
+
+  {{#document.notes_summary}}
+    {{> document_note}}
+  {{/document.notes_summary}}
+  {{#document.notes_details}}
+  {{> document_note}}
+  {{/document.notes_details}}
+  {{#document.notes_general}}
+  {{> document_note}}
+  {{/document.notes_general}}
+  {{#document.notes_description}}
+  {{> document_note}}
+  {{/document.notes_description}}
+  {{#document.notes_faq}}
+  {{> document_note}}
+  {{/document.notes_faq}}
+  {{#document.notes_unknown}}
+  {{> document_note}}
+  {{/document.notes_unknown}}
+
+  {{#product_tree.product_groups.length}}
+  <h2>{{t_product_groups}}</h2>
+  {{#product_tree.product_groups}}
+    <b>{{#summary}}{{{.}}}{{/summary}}{{^summary}}{{group_id}}{{/summary}}</b>
+    <ul>
+    {{#product_ids}}
+      <li>{{name}}</li>
+    {{/product_ids}}
+    </ul>
+  {{/product_tree.product_groups}}
+  {{/product_tree.product_groups.length}}
+
+  <h2>{{t_vulnerabilities}}</h2>
+  {{#vulnerabilities}}
+    <h3>{{title}}{{#cve}} ({{.}}){{/cve}}</h3>
+
+    {{#notes_summary}}
+      {{> vulnerability_note}}
+    {{/notes_summary}}
+    {{#notes_details}}
+      {{> vulnerability_note}}
+    {{/notes_details}}
+    {{#notes_general}}
+     {{> vulnerability_note}}
+    {{/notes_general}}
+    {{#notes_description}}
+     {{> vulnerability_note}}
+    {{/notes_description}}
+    {{#notes_other}}
+     {{> vulnerability_note}}
+    {{/notes_other}}
+    {{#notes_faq}}
+      {{> vulnerability_note}}
+    {{/notes_faq}}
+    {{#notes_unknown}}
+      {{> vulnerability_note}}
+    {{/notes_unknown}}
+
+    <table>
+      <tr>
+        <th>{{t_cwe}}:</th>
+        <td>{{#cwe}}{{id}}:{{name}}{{/cwe}}</td>
+      </tr>
+      {{#id}}
+        <tr>
+          <th>{{t_id}}:</th>
+          <td>{{text}}{{#system_name}} ({{.}}){{/system_name}}</td>
+        </tr>
+      {{/id}}
+      {{#discovery_date}}
+        <tr>
+          <th>{{t_discovery_date}}:</th>
+          <td>{{discovery_date}}</td>
+        </tr>
+      {{/discovery_date}}
+      {{#release_date}}
+        <tr>
+          <th>{{t_release_date}}:</th>
+          <td>{{release_date}}</td>
+        </tr>
+      {{/release_date}}
+    </table>
+
+    <h4>{{t_product_status}}</h4>
+    {{#product_status.known_affected.length}}
+    <h5>{{t_known_affected}}</h5>
+    <table>
+      {{> product_status_header}}
+      <tbody>
+        {{#product_status.known_affected}}
+          {{> product_status_row}}
+        {{/product_status.known_affected}}
+      </tbody>
+    </table>
+    {{/product_status.known_affected.length}}
+
+    {{#product_status.first_affected.length}}
+    <h5>{{t_first_affected}}</h5>
+    <table>
+      {{> product_status_header}}
+      <tbody>
+        {{#product_status.first_affected}}
+          {{> product_status_row}}
+        {{/product_status.first_affected}}
+      </tbody>
+    </table>
+    {{/product_status.first_affected.length}}
+
+    {{#product_status.last_affected.length}}
+    <h5>{{t_last_affected}}</h5>
+    <table>
+      {{> product_status_header}}
+      <tbody>
+        {{#product_status.last_affected}}
+          {{> product_status_row}}
+        {{/product_status.last_affected}}
+      </tbody>
+    </table>
+    {{/product_status.last_affected.length}}
+
+    {{#product_status.known_not_affected.length}}
+    <h5>{{t_known_not_affected}}</h5>
+    <ul>
+      {{#product_status.known_not_affected}}
+        <li>
+          {{name}}{{#flags.length}} ({{#removeTrailingComma}}{{#flags}}{{#replaceUnderscores}}{{.}}{{/replaceUnderscores}}, {{/flags}}{{/removeTrailingComma}}){{/flags.length}}
+        </li>
+      {{/product_status.known_not_affected}}
+    </ul>
+    {{/product_status.known_not_affected.length}}
+
+    {{#product_status.recommended.length}}
+    <h5>{{t_recommended}}</h5>
+    <ul>
+      {{#product_status.recommended}}
+        <li>{{name}}</li>
+      {{/product_status.recommended}}
+    </ul>
+    {{/product_status.recommended.length}}
+
+    {{#product_status.fixed.length}}
+    <h5>{{t_fixed}}</h5>
+    <ul>
+      {{#product_status.fixed}}
+        <li>{{name}}</li>
+      {{/product_status.fixed}}
+    </ul>
+    {{/product_status.fixed.length}}
+
+    {{#product_status.first_fixed.length}}
+    <h5>{{t_first_fixed}}</h5>
+    <ul>
+      {{#product_status.first_fixed}}
+        <li>{{name}}</li>
+      {{/product_status.first_fixed}}
+    </ul>
+    {{/product_status.first_fixed.length}}
+
+    {{#product_status.under_investigation.length}}
+    <h5>{{t_under_investigation}}</h5>
+    <ul>
+      {{#product_status.under_investigation}}
+        <li>{{name}}</li>
+      {{/product_status.under_investigation}}
+    </ul>
+    {{/product_status.under_investigation.length}}
+
+    {{#remediations.length}}
+      <h4>{{t_remediations}}</h4>
+      {{#remediations_vendor_fix}}
+        {{> remediation}}
+      {{/remediations_vendor_fix}}
+      {{#remediations_mitigation}}
+        {{> remediation}}
+      {{/remediations_mitigation}}
+      {{#remediations_workaround}}
+        {{> remediation}}
+      {{/remediations_workaround}}
+      {{#remediations_none_available}}
+        {{> remediation}}
+      {{/remediations_none_available}}
+      {{#remediations_no_fix_planned}}
+        {{> remediation}}
+      {{/remediations_no_fix_planned}}
+      {{#remediations_unknown}}
+        {{> remediation}}
+      {{/remediations_unknown}}
+    {{/remediations.length}}
+
+    {{#acknowledgments.length}}
+    <h4>{{t_acknowledgments}}</h4>
+    <ul>
+    {{#acknowledgments}}
+      {{> acknowledgment}}
+    {{/acknowledgments}}
+    </ul>
+    {{/acknowledgments.length}}
+
+    {{#involvements.length}}
+      <h4>{{t_involvement}}</h4>
+      <ul>
+      {{#involvements}}
+        {{#.}}
+      <li>{{#date}}{{.}} {{/date}}{{#upperCase}}{{party}}{{/upperCase}}{{#status}} ({{#replaceUnderscores}}{{.}}{{/replaceUnderscores}}){{/status}}{{#summary}}: {{{.}}}{{/summary}}</li>
+        {{/.}}
+      {{/involvements}}
+      </ul>
+    {{/involvements.length}}
+
+    {{#references.length}}
+      <h4>{{t_references}}</h4>
+      <ul>
+      {{#references}}
+        {{> reference}}
+      {{/references}}
+      </ul>
+    {{/references.length}}
+
+    {{#threats.length}}
+      <h4>{{t_threats}}</h4>
+      {{#threats_exploit_status}}
+        {{> threat}}
+      {{/threats_exploit_status}}
+      {{#threats_impact}}
+        {{> threat}}
+      {{/threats_impact}}
+      {{#threats_target_set}}
+        {{> threat}}
+      {{/threats_target_set}}
+      {{#threats_unknown}}
+        {{> threat}}
+      {{/threats_unknown}}
+    {{/threats.length}}
+
+  {{/vulnerabilities}}
+
+  {{#document.acknowledgments.length}}
+  <h2>{{t_acknowledgments}}</h2>
+  {{document.publisher.name}} {{t_acknowledgments_from_publisher}}:
+  <ul>
+  {{#document.acknowledgments}}
+    {{> acknowledgment}}
+  {{/document.acknowledgments}}
+  </ul>
+  {{/document.acknowledgments.length}}
+
+  {{#document.notes_other}}
+    {{> document_note}}
+  {{/document.notes_other}}
+
+  {{#document.publisher}}
+    <h2>{{name}}</h2>
+    <p>{{t_namespace}}: {{namespace}}</p>
+    <p>{{contact_details}}</p>
+    <p>{{{issuing_authority}}}</p>
+  {{/document.publisher}}
+
+  {{#document.references.length}}
+    <h2>{{t_references}}</h2>
+    <ul>
+      {{#document.references}}
+        {{> reference}}
+      {{/document.references}}
+    </ul>
+  {{/document.references.length}}
+
+  <h2>{{t_revision_history}}</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>{{t_version}}</th>
+        <th>{{t_date_of_revision}}</th>
+        <th>{{t_summary_of_revision}}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{#document.tracking.revision_history}}
+        <tr>
+          <td>{{number}}</td>
+          <td>{{date}}</td>
+          <td>{{{summary}}}</td>
+        </tr>
+      {{/document.tracking.revision_history}}
+    </tbody>
+  </table>
+
+  {{#document.distribution}}
+    <h2>{{t_sharing_rules}}</h2>
+    <p>
+      {{#tlp}}
+        <b>{{#label}}TLP:{{.}}{{/label}}</b><br>
+        {{t_for_tlp_version_see}}: <a {{#secureHref}}{{#url}}{{.}}{{/url}}{{/secureHref}}{{^url}}href=https://www.first.org/tlp/{{/url}}>{{#url}}{{.}}{{/url}}{{^url}}https://www.first.org/tlp/{{/url}}</a>
+      {{/tlp}}
+    </p>
+    <p>{{{text}}}</p>
+  {{/document.distribution}}
+
+  {{#document.notes_legal_disclaimer}}
+    {{> document_note}}
+  {{/document.notes_legal_disclaimer}}
+
+</body>
+
+</html>
