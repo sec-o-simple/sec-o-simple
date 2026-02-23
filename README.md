@@ -50,6 +50,8 @@ Further information about the configuration can be found in the [Configuration](
 
 ### Adding new Languages
 
+> Ensure: That the language code is standardized according to IETF BCP 47 / RFC 5646. Otherwise, the CSAF validator may reject documents with the new language code as invalid.
+> 
 To add a new language to the application:
 
 1. Create a new translation file in the `locales/` directory (e.g., `fr.json`).
