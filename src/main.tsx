@@ -8,6 +8,11 @@ import App from './App'
 import deLocales from '../locales/de.json'
 import enLocales from '../locales/en.json'
 
+const i18nResources = {
+  en: enLocales,
+  de: deLocales,
+}
+
 function getBrowserLanguage(): string {
   // Get browser language (returns full code like 'en-US' or 'de-DE')
   const browserLang = navigator.language
@@ -15,7 +20,7 @@ function getBrowserLanguage(): string {
   const primaryLang = browserLang.split('-')[0]
 
   // Only return if it's one of our supported languages
-  const supportedLanguages = ['en', 'de']
+  const supportedLanguages = Object.keys(i18nResources)
   return supportedLanguages.includes(primaryLang) ? primaryLang : 'en'
 }
 
@@ -28,10 +33,7 @@ const root = ReactDOM.createRoot(rootElement)
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
-    resources: {
-      en: enLocales,
-      de: deLocales,
-    },
+    resources: i18nResources,
     lng: defaultLang,
     fallbackLng: 'en',
     interpolation: {

@@ -247,4 +247,30 @@ describe('Autocomplete', () => {
       }),
     )
   })
+
+  it('should call onChange and onValueChange from useDebounceInput', () => {
+    const onValueChange = vi.fn()
+    const onChange = vi.fn()
+    
+    mockUseDebounceInput.mockClear()
+    
+    render(
+      <Autocomplete 
+        onValueChange={onValueChange} 
+        onChange={onChange}
+      >
+        <div>Option 1</div>
+      </Autocomplete>
+    )
+    
+    expect(mockUseDebounceInput).toHaveBeenCalled()
+    const callArgs = mockUseDebounceInput.mock.calls[0][0]
+    expect(callArgs).toHaveProperty('onChange')
+    
+    const event = { target: { value: 'foo' } }
+    callArgs.onChange(event)
+    
+    expect(onValueChange).toHaveBeenCalledWith('foo')
+    expect(onChange).toHaveBeenCalledWith(event)
+  })
 })

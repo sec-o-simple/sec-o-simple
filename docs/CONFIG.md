@@ -38,6 +38,7 @@ These texts are used as a prefix to export product descriptions
 |-------------|----------------------------------------|
 | `de` | `Produktbeschreibung für`     |
 | `en` | `Product description for`     |
+| '...' | `...`     |
 
 ---
 

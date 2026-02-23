@@ -35,6 +35,7 @@
     "export": {
       "draft": "Export",
       "csaf": "CSAF Export",
+      "productDescriptionPrefix": "Product description for",
       "error": "{{ errorCount }} errors in the document. Please fix them before exporting.",
       "invalidExport": "Invalid CSAF Document",
       "invalidExportConfirm": "Are you sure you want to export an invalid CSAF document?"
