@@ -2,6 +2,20 @@ import { render, screen, fireEvent } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { Input, Textarea } from '../../../src/components/forms/Input'
+import { useDebounceInput } from '../../../src/utils/useDebounceInput'
+
+vi.mock('../../../src/utils/useDebounceInput', () => ({
+  useDebounceInput: vi.fn((options) => ({
+    value: options?.value || '',
+    isDebouncing: false,
+    handleBlur: (e: any) => {
+      if (options?.onBlur) options.onBlur(e)
+    },
+    handleChange: (e: any) => {
+      if (options?.onChange) options.onChange(e)
+    },
+  })),
+}))
 
 describe('Input', () => {
   beforeEach(() => {
@@ -50,7 +64,7 @@ describe('Input', () => {
     render(<Input onValueChange={mockOnValueChange} onChange={mockOnChange} />)
 
     const input = screen.getByTestId('hero-input')
-    
+
     await userEvent.type(input, 'test')
 
     expect(mockOnValueChange).toHaveBeenCalled()

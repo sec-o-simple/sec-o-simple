@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Preview from '../../../src/routes/preview/Preview'
-import { BrowserRouter } from 'react-router-dom'
+import { HashRouter } from 'react-router'
 import { createHTMLTemplateTranslations } from '../../../src/routes/preview/htmlTemplateTranslations'
 import { parseMarkdown } from '../../../src/routes/preview/markdownParser'
 import HTMLTemplate from '../../../src/routes/preview/HTMLTemplate'
+import { createCSAFDocument } from '../../../src/utils/csafExport/csafExport'
 
 // Mock all the dependencies
 vi.mock('../../../src/routes/preview/HTMLTemplate', () => ({
@@ -63,26 +64,24 @@ describe('Preview', () => {
     vi.clearAllMocks()
 
     // Mock iframe functionality
-    const mockIframe = {
-      contentDocument: {
-        open: vi.fn(),
-        write: vi.fn(),
-        close: vi.fn(),
-        addEventListener: vi.fn(),
+    Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
+      configurable: true,
+      get() {
+        return {
+          open: vi.fn(),
+          write: vi.fn(),
+          close: vi.fn(),
+          addEventListener: vi.fn(),
+        }
       },
-      blur: vi.fn(),
-    }
-
-    vi.spyOn(HTMLElement.prototype, 'querySelector').mockReturnValue(
-      mockIframe as any,
-    )
+    })
   })
 
   const renderPreview = () => {
     return render(
-      <BrowserRouter>
+      <HashRouter>
         <Preview />
-      </BrowserRouter>,
+      </HashRouter>,
     )
   }
 
@@ -152,9 +151,7 @@ describe('Preview', () => {
   })
 
   it('handles empty CSAF document gracefully', () => {
-    vi.mocked(
-      require('../../../src/utils/csafExport/csafExport').createCSAFDocument,
-    ).mockReturnValue(null)
+    vi.mocked(createCSAFDocument).mockReturnValue(null as any)
 
     expect(() => renderPreview()).not.toThrow()
   })

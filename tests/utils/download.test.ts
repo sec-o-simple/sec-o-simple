@@ -1,11 +1,13 @@
-import { describe, expect, it, vi, beforeEach } from 'vitest'
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
+import { download } from '../../src/utils/download'
+
+vi.unmock('../../src/utils/download')
+vi.unmock('@/utils/download')
 
 describe('download', () => {
-  let download: (filename: string, text: string) => void
   let mockElement: any
-  let mockDocument: any
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // Mock DOM element with all required methods
     mockElement = {
       setAttribute: vi.fn(),
@@ -13,24 +15,19 @@ describe('download', () => {
       style: {},
     }
 
-    mockDocument = {
-      createElement: vi.fn(() => mockElement),
-      body: {
-        appendChild: vi.fn(),
-        removeChild: vi.fn(),
-      },
-    }
+    vi.spyOn(document, 'createElement').mockReturnValue(mockElement as any)
+    vi.spyOn(document.body, 'appendChild').mockImplementation(() => mockElement)
+    vi.spyOn(document.body, 'removeChild').mockImplementation(() => mockElement)
+  })
 
-    global.document = mockDocument as any
-
-    const { download: downloadFn } = await import('../../src/utils/download')
-    download = downloadFn
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
   it('should create anchor element with correct attributes', () => {
     download('test.txt', 'Hello World')
 
-    expect(mockDocument.createElement).toHaveBeenCalledWith('a')
+    expect(document.createElement).toHaveBeenCalledWith('a')
     expect(mockElement.setAttribute).toHaveBeenCalledWith(
       'href',
       'data:text/plain;charset=utf-8,' + encodeURIComponent('Hello World'),
@@ -50,7 +47,7 @@ describe('download', () => {
   it('should append element to document body', () => {
     download('test.txt', 'content')
 
-    expect(mockDocument.body.appendChild).toHaveBeenCalledWith(mockElement)
+    expect(document.body.appendChild).toHaveBeenCalledWith(mockElement)
   })
 
   it('should click the element to trigger download', () => {
@@ -62,7 +59,7 @@ describe('download', () => {
   it('should remove element from document body after clicking', () => {
     download('test.txt', 'content')
 
-    expect(mockDocument.body.removeChild).toHaveBeenCalledWith(mockElement)
+    expect(document.body.removeChild).toHaveBeenCalledWith(mockElement)
   })
 
   it('should handle empty filename', () => {
@@ -147,11 +144,11 @@ describe('download', () => {
     download('workflow.txt', 'test workflow')
 
     // Verify all steps were executed in order
-    expect(mockDocument.createElement).toHaveBeenCalledWith('a')
+    expect(document.createElement).toHaveBeenCalledWith('a')
     expect(mockElement.setAttribute).toHaveBeenCalledTimes(2)
     expect(mockElement.style.display).toBe('none')
-    expect(mockDocument.body.appendChild).toHaveBeenCalledWith(mockElement)
+    expect(document.body.appendChild).toHaveBeenCalledWith(mockElement)
     expect(mockElement.click).toHaveBeenCalled()
-    expect(mockDocument.body.removeChild).toHaveBeenCalledWith(mockElement)
+    expect(document.body.removeChild).toHaveBeenCalledWith(mockElement)
   })
 })
