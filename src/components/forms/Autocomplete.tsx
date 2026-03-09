@@ -15,7 +15,6 @@ export function Autocomplete(
     csafPath,
     isTouched,
     onBlur,
-    onChange,
     onValueChange,
     value: propValue,
     ...rest
@@ -25,7 +24,6 @@ export function Autocomplete(
   const { handleChange } = useDebounceInput({
     onChange: (e) => {
       onValueChange?.(e.target.value)
-      onChange?.(e)
     },
     onBlur,
     value: propValue as string,
