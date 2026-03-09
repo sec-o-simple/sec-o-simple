@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react'
+import { Key, useEffect, useRef, useState } from 'react'
 
 type InputElement = HTMLInputElement | HTMLTextAreaElement
-type InputChangeEvent<T> = React.ChangeEvent<T>
+type InputChangeEvent<T> = Key | null | React.ChangeEvent<T>
 type InputBlurEvent<T> = React.FocusEvent<T>
 
 interface UseDebounceInputOptions<T extends InputElement> {
@@ -52,7 +52,16 @@ export function useDebounceInput<T extends InputElement>({
   }
 
   const handleChange = (e: InputChangeEvent<T>) => {
-    const value = e.target.value
+    if (!e) return
+
+    let value: string = ''
+
+    if (typeof e === 'object' && 'target' in e) {
+      value = e.target.value
+    } else if (typeof e === 'string') {
+      value = e
+    }
+
     setDebouncedValue(value)
     setIsDebouncing(true)
 

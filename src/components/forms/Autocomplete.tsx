@@ -30,6 +30,10 @@ export function Autocomplete(props: Props) {
 
   const { handleChange } = useDebounceInput({
     onChange: (e) => {
+      if (!e || typeof e !== 'object' || !('target' in e)) {
+        return
+      }
+
       onValueChange?.(e.target.value)
       onChange?.(e)
     },
