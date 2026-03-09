@@ -5,9 +5,15 @@ import {
   AutocompleteProps,
 } from '@heroui/react'
 
-export function Autocomplete(
-  props: AutocompleteProps & { csafPath?: string; isTouched?: boolean },
-) {
+type AutocompleteInputChangeEvent = React.ChangeEvent<HTMLInputElement>
+
+type Props = Omit<AutocompleteProps, 'onChange'> & {
+  csafPath?: string
+  isTouched?: boolean
+  onChange?: (e: AutocompleteInputChangeEvent) => void
+}
+
+export function Autocomplete(props: Props) {
   const {
     placeholder,
     labelPlacement,
@@ -24,6 +30,10 @@ export function Autocomplete(
 
   const { handleChange } = useDebounceInput({
     onChange: (e) => {
+      if (!e || typeof e !== 'object' || !('target' in e)) {
+        return
+      }
+
       onValueChange?.(e.target.value)
       onChange?.(e)
     },

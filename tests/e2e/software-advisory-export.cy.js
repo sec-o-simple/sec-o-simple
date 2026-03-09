@@ -75,7 +75,7 @@ describe('Create a new software advisory & export it', () => {
     cy.wait(500)
     cy.contains('Save').click()
     // Create test software
-    cy.contains('Test Vendor').closest('[data-slot="trigger"]').click().click()
+    cy.contains('Test Vendor').closest('[data-slot="trigger"]').click()
     cy.contains('Add Product').click()
     cy.contains('Name').parent().find('input').click().type('Test Software')
     cy.contains('Description')
@@ -100,7 +100,7 @@ describe('Create a new software advisory & export it', () => {
 
     // Create test hardware
     cy.contains('Products').click()
-    cy.contains('Test Vendor').closest('[data-slot="trigger"]').click().click()
+    cy.contains('Test Vendor').closest('[data-slot="trigger"]').click()
     cy.contains('Add Product').click()
     cy.contains('Name').parent().find('input').click().type('Test Hardware')
     cy.contains('Description')

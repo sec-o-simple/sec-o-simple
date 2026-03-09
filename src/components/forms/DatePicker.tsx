@@ -26,6 +26,12 @@ export default function DatePicker({
   ...pickerProps
 }: DatePickerProps) {
   const validation = useFieldValidation(csafPath)
+  const parsedValue: HeroUIDatePickerProps['value'] = value
+    ? (parseAbsolute(
+        value,
+        getLocalTimeZone(),
+      ) as unknown as HeroUIDatePickerProps['value'])
+    : undefined
 
   return (
     <HeroUIDatePicker
@@ -39,7 +45,7 @@ export default function DatePicker({
         validation.hasErrors &&
         (isTouched || validation.isTouched || !!value?.length)
       }
-      value={value ? parseAbsolute(value, getLocalTimeZone()) : undefined}
+      value={parsedValue}
       onBlur={(e) => {
         if (csafPath) {
           validation.markFieldAsTouched(csafPath)
