@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createCSAFDocument } from '../../../src/utils/csafExport/csafExport'
+import {
+  createCSAFDocument,
+  createCSAFExportFilename,
+} from '../../../src/utils/csafExport/csafExport'
 import type { TDocumentStore } from '../../../src/utils/useDocumentStore'
 
 // Mock the current date to ensure consistent snapshots
@@ -362,5 +365,26 @@ describe('csafExport', () => {
     )
 
     expect(result.vulnerabilities[0].references).toHaveLength(1)
+  })
+
+  describe('createCSAFExportFilename', () => {
+    it('converts tracking id to lowercase and keeps valid characters', () => {
+      expect(createCSAFExportFilename('ESA-2023-B-001', true)).toBe(
+        'esa-2023-b-001.json',
+      )
+    })
+
+    it('replaces invalid character sequences with single underscores', () => {
+      expect(createCSAFExportFilename('2022_#01-A', true)).toBe('2022_01-a.json')
+      expect(createCSAFExportFilename('ESA##+2023-A*', true)).toBe(
+        'esa_2023-a_.json',
+      )
+    })
+
+    it('appends invalid suffix when document is invalid', () => {
+      expect(createCSAFExportFilename('ESA-2023-B-001', false)).toBe(
+        'esa-2023-b-001_invalid.json',
+      )
+    })
   })
 })

@@ -98,7 +98,8 @@
           "title": "Traffic Light Protocol (TLP)",
           "label": "TLP-Level",
           "label.placeholder": "Select TLP label",
-          "url": "TLP-URL"
+          "url": "TLP-URL",
+          "sharingRules": "Sharing Rules"
         },
         "alias": "Alias",
         "language": "Language",
@@ -106,6 +107,7 @@
           "de": "German",
           "en": "English"
         },
+        "originalLanguage": "Original Language",
         "status": {
           "draft": "Draft",
           "final": "Final",
@@ -150,12 +152,14 @@
         "names": "Acknowledged Names",
         "organization": "Organization",
         "url": "URL",
-        "empty": "No acknowledgements added yet"
+        "empty": "No acknowledgements added yet",
+        "involvement": "Involvement"
       }
     },
     "vulnerabilities": {
       "vulnerability": "Vulnerability",
       "vulnerabilities": "Vulnerabilities",
+      "threats": "Threats",
       "general": {
         "": "General",
         "title": "Title",
@@ -172,7 +176,9 @@
         "dataOverrideWarning": "Data Override Warning",
         "dataOverrideWarningDescription": "Fetching CVE data will override existing {{fields}}. Do you want to continue?",
         "dataAddedWarning": "Data Added Warning",
-        "dataAddedWarningDescription": "{{count}} new {{type}} have been added to existing data"
+        "dataAddedWarningDescription": "{{count}} new {{type}} have been added to existing data",
+        "discoveryDate": "Discovery Date",
+        "releaseDate": "Release Date"
       },
       "notes": "Notes",
       "references": "References",
@@ -218,7 +224,8 @@
         "details": "Details",
         "url": "URL",
         "products.empty": "No products added",
-        "productsDescription": "Select the affected products"
+        "productsDescription": "Select the affected products",
+        "restartRequired": "Restart required"
       },
       "flags": "Flags",
       "flag": {
@@ -319,6 +326,7 @@
       },
       "vendors": "Vendors",
       "products": "Products",
+      "productGroups": "Product Groups",
       "manage": "Product Management",
       "empty": "You haven't created any {{ type }} product yet.\nYou can add one by creating a vendor and adding a product to it.",
       "software": "Software",
