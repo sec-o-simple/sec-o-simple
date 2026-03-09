@@ -99,7 +99,8 @@
           "label": "TLP-Level",
           "label.placeholder": "TLP-Label auswählen",
           "url": "TLP-URL",
-          "version.url": "Für die TLP-Version siehe"
+          "version.url": "Für die TLP-Version siehe",
+          "sharingRules": "Sharing Rules"
         },
         "alias": "Alias",
         "language": "Sprache",
@@ -107,6 +108,7 @@
           "de": "Deutsch",
           "en": "Englisch"
         },
+        "originalLanguage": "Originalsprache",
         "status": {
           "draft": "Entwurf",
           "final": "Final",
@@ -151,12 +153,14 @@
         "names": "Namen",
         "organization": "Organisation",
         "url": "URL",
-        "empty": "Keine Danksagungen hinzugefügt"
+        "empty": "Keine Danksagungen hinzugefügt",
+        "involvement": "Einbindung"
       }
     },
     "vulnerabilities": {
       "vulnerability": "Schwachstelle",
       "vulnerabilities": "Schwachstellen",
+      "threats": "Bedrohungen",
       "general": {
         "": "Allgemein",
         "title": "Title",
@@ -173,7 +177,9 @@
         "dataOverrideWarning": "Datenüberschreibung Warnung",
         "dataOverrideWarningDescription": "Das Laden der CVE-Daten wird bestehende {{fields}} überschreiben. Möchten Sie fortfahren?",
         "dataAddedWarning": "Daten hinzugefügt Warnung",
-        "dataAddedWarningDescription": "{{count}} neue {{type}} wurden zu den bestehenden Daten hinzugefügt"
+        "dataAddedWarningDescription": "{{count}} neue {{type}} wurden zu den bestehenden Daten hinzugefügt",
+        "discoveryDate": "Entdeckungsdatum",
+        "releaseDate": "Veröffentlichungsdatum"
       },
       "notes": "Notizen",
       "products": {
@@ -218,7 +224,8 @@
         "details": "Details",
         "url": "URL",
         "products.empty": "Keine Produkte hinzugefügt",
-        "productsDescription": "Wählen Sie die betroffenen Produkte aus"
+        "productsDescription": "Wählen Sie die betroffenen Produkte aus",
+        "restartRequired": "Neustart erforderlich"
       },
       "flags": "Kennzeichnungen",
       "flag": {
@@ -314,6 +321,7 @@
       },
       "vendors": "Hersteller",
       "products": "Produkte",
+      "productGroups": "Produktgruppen",
       "manage": "Produktverwaltung",
       "empty": "Sie haben noch kein {{ type }}-Produkt erstellt.\nSie können eines hinzufügen, indem Sie einen Hersteller erstellen und ihm ein Produkt hinzufügen.",
       "software": "Software",
