@@ -15,6 +15,27 @@ import parseScores from './parseScores'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
+/**
+ * Builds the CSAF export file name from /document/tracking/id.
+ * Rules:
+ * - Convert the tracking ID to lowercase first.
+ * - Replace each sequence of characters outside [+\-a-z0-9] with a single underscore.
+ * - Collapse consecutive underscores to avoid duplicate separators.
+ * - Append "_invalid" when the document is invalid, then append ".json".
+ */
+export function createCSAFExportFilename(
+  trackingId: string | undefined,
+  isValid: boolean,
+): string {
+  const normalizedTrackingId = (trackingId || 'csaf_document')
+    .toLowerCase()
+    .replace(/[^+\-a-z0-9]+/g, '_')
+    .replace(/\++/g, '_')
+    .replace(/_+/g, '_')
+  const suffix = !isValid ? '_invalid' : ''
+  return `${normalizedTrackingId}${suffix}.json`
+}
+
 export function createCSAFDocument(
   documentStore: TDocumentStore,
   getFullProductName: (id: string) => string,
@@ -245,9 +266,10 @@ export function useCSAFExport() {
     // Our created CSAF document has priority, and is handled as the base
     csafDocument = _.merge({}, documentStore.importedCSAFDocument, csafDocument)
 
-    const suffix = !isValid ? '_invalid' : ''
-    const id = documentStore.documentInformation.id || 'csaf_document'
-    const filename = id + suffix + '.json'
+    const filename = createCSAFExportFilename(
+      documentStore.documentInformation.id,
+      isValid,
+    )
 
     download(filename, JSON.stringify(csafDocument, null, 2))
   }
