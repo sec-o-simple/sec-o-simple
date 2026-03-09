@@ -181,6 +181,7 @@
         "releaseDate": "Release Date"
       },
       "notes": "Notes",
+      "references": "References",
       "products": {
         "title": "Products",
         "status": {

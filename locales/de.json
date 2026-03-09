@@ -182,6 +182,7 @@
         "releaseDate": "Veröffentlichungsdatum"
       },
       "notes": "Notizen",
+      "references": "Referenzen",
       "products": {
         "title": "Produkte",
         "status": {

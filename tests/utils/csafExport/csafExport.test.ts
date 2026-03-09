@@ -306,6 +306,67 @@ describe('csafExport', () => {
     expect(result).toMatchSnapshot()
   })
 
+  it('should export user vulnerability references and CVSS v4 references', () => {
+    const mockStore = createMockDocumentStore()
+    mockStore.vulnerabilities['vuln-1'].references = [
+      {
+        id: 'vuln-ref-1',
+        summary: 'Vendor Security Advisory',
+        url: 'https://example.com/vuln-advisory',
+        category: 'self',
+      },
+    ]
+
+    const result = createCSAFDocument(
+      mockStore,
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      {
+        template: {},
+        productDatabase: { enabled: false },
+      },
+    )
+
+    expect(result.vulnerabilities[0].references).toEqual(
+      expect.arrayContaining([
+        {
+          summary: 'Vendor Security Advisory',
+          url: 'https://example.com/vuln-advisory',
+          category: 'self',
+        },
+        {
+          summary: 'CVSS v4.0 Score',
+          url: 'https://www.first.org/cvss/calculator/4-0#CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N',
+          category: 'external',
+        },
+      ]),
+    )
+  })
+
+  it('should deduplicate vulnerability references when they match generated CVSS v4 references', () => {
+    const mockStore = createMockDocumentStore()
+    mockStore.vulnerabilities['vuln-1'].references = [
+      {
+        id: 'vuln-ref-1',
+        summary: 'CVSS v4.0 Score',
+        url: 'https://www.first.org/cvss/calculator/4-0#CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N',
+        category: 'external',
+      },
+    ]
+
+    const result = createCSAFDocument(
+      mockStore,
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      {
+        template: {},
+        productDatabase: { enabled: false },
+      },
+    )
+
+    expect(result.vulnerabilities[0].references).toHaveLength(1)
+  })
+
   describe('createCSAFExportFilename', () => {
     it('converts tracking id to lowercase and keeps valid characters', () => {
       expect(createCSAFExportFilename('ESA-2023-B-001', true)).toBe(

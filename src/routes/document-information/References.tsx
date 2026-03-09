@@ -1,21 +1,14 @@
-import StatusIndicator from '@/components/StatusIndicator'
 import WizardStep from '@/components/WizardStep'
-import ComponentList from '@/components/forms/ComponentList'
-import { Input, Textarea } from '@/components/forms/Input'
-import Select from '@/components/forms/Select'
-import VSplit from '@/components/forms/VSplit'
-import { checkReadOnly, getPlaceholder } from '@/utils/template'
+import { ReferencesList } from '@/routes/shared/ReferencesList'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import { useListState } from '@/utils/useListState'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import usePageVisit from '@/utils/validation/usePageVisit'
-import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
-import { Alert, SelectItem } from '@heroui/react'
+import { Alert } from '@heroui/react'
 import { useTranslation } from 'react-i18next'
 import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TDocumentReference,
-  TReferenceCategory,
   getDefaultDocumentReference,
 } from './types/tDocumentReference'
 
@@ -58,90 +51,10 @@ export default function References() {
           ))}
         </Alert>
       )}
-      <ComponentList
-        listState={referencesListState}
-        title="summary"
-        itemLabel={t('ref.reference')}
-        itemBgColor="bg-zinc-50"
-        startContent={StartContent}
-        content={(reference, index) => (
-          <ReferenceForm
-            referenceIndex={index}
-            reference={reference}
-            onChange={referencesListState.updateDataEntry}
-          />
-        )}
+      <ReferencesList
+        referencesListState={referencesListState}
+        csafPath="/document/references"
       />
     </WizardStep>
-  )
-}
-
-function StartContent({ index }: { index: number }) {
-  const { hasErrors } = usePrefixValidation(`/document/references/${index}`)
-
-  return <StatusIndicator hasErrors={hasErrors} hasVisited={true} />
-}
-
-function ReferenceForm({
-  reference,
-  referenceIndex,
-  onChange,
-}: {
-  reference: TDocumentReference
-  referenceIndex: number
-  onChange: (reference: TDocumentReference) => void
-}) {
-  const { t } = useTranslation()
-
-  return (
-    <VSplit>
-      <Select
-        label={t('ref.category')}
-        csafPath={`/document/references/${referenceIndex}/category`}
-        selectedKeys={[reference.category]}
-        isRequired
-        onSelectionChange={(selected) => {
-          if (!selected.anchorKey) return
-
-          onChange({
-            ...reference,
-            category: [...selected][0] as TReferenceCategory,
-          })
-        }}
-        renderValue={(selected) => {
-          if (!selected[0].key) return ''
-          return t(`ref.categories.${selected[0].key}`)
-        }}
-        isDisabled={checkReadOnly(reference, 'category')}
-      >
-        {['external', 'self'].map((key) => (
-          <SelectItem key={key} textValue={key}>
-            {t(`ref.categories.${key}`)}
-          </SelectItem>
-        ))}
-      </Select>
-      <Textarea
-        label={t('ref.summary')}
-        csafPath={`/document/references/${referenceIndex}/summary`}
-        value={reference.summary}
-        onValueChange={(newValue) =>
-          onChange({ ...reference, summary: newValue })
-        }
-        autoFocus={true}
-        placeholder={getPlaceholder(reference, 'summary')}
-        isDisabled={checkReadOnly(reference, 'summary')}
-        isRequired
-      />
-      <Input
-        label={t('ref.url')}
-        type="url"
-        csafPath={`/document/references/${referenceIndex}/url`}
-        value={reference.url}
-        onValueChange={(newValue) => onChange({ ...reference, url: newValue })}
-        isDisabled={checkReadOnly(reference, 'url')}
-        placeholder={getPlaceholder(reference, 'url')}
-        isRequired
-      />
-    </VSplit>
   )
 }

@@ -22,6 +22,7 @@ import { TVulnerability, getDefaultVulnerability } from './types/tVulnerability'
 import useDocumentStore from '@/utils/useDocumentStore'
 import Flags from './Flags'
 import { useFieldValidation } from '@/utils/validation/useFieldValidation'
+import References from './References'
 
 export default function Vulnerabilities() {
   const vulnerabilitiesListState = useListState<TVulnerability>({
@@ -183,6 +184,12 @@ function VulnerabilityForm({
       title: t('vulnerabilities.notes'),
       component: <Notes {...tabProps} />,
       csafPrefix: `${prefix}/notes`,
+    },
+    {
+      key: 'references',
+      title: t('vulnerabilities.references'),
+      component: <References {...tabProps} />,
+      csafPrefix: `${prefix}/references`,
     },
     {
       key: 'products',

@@ -155,6 +155,13 @@ export default {
           title: 'string',
         },
       ],
+      references: [
+        {
+          summary: 'string',
+          url: 'string',
+          category: 'string',
+        },
+      ],
       // Not all statuses are used in the UI, but they are defined here for completeness
       product_status: {
         known_affected: [['string']],
