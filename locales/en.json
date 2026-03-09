@@ -175,6 +175,7 @@
         "dataAddedWarningDescription": "{{count}} new {{type}} have been added to existing data"
       },
       "notes": "Notes",
+      "references": "References",
       "products": {
         "title": "Products",
         "status": {

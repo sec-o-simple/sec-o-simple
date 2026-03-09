@@ -220,6 +220,18 @@
           }
         },
 
+        "vulnerabilities.references.default": {
+          "type": "object",
+          "properties": {
+            "summary": { "type": "string" },
+            "url": { "type": "string", "format": "uri" },
+            "category": {
+              "type": "string",
+              "enum": ["self", "external"]
+            }
+          }
+        },
+
         "vulnerabilities.products.default": {
           "type": "object",
           "properties": {
@@ -297,6 +309,23 @@
                     "category": { "type": "string" },
                     "title": { "type": "string" },
                     "content": { "type": "string" }
+                  },
+                  "required": ["id"]
+                }
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "readonly": { "type": "boolean" },
+                    "id": { "type": "string" },
+                    "summary": { "type": "string" },
+                    "url": { "type": "string", "format": "uri" },
+                    "category": {
+                      "type": "string",
+                      "enum": ["self", "external"]
+                    }
                   },
                   "required": ["id"]
                 }

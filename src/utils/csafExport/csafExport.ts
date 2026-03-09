@@ -202,11 +202,30 @@ export function createCSAFDocument(
               summary: `CVSS v4.0 Score`,
               category: 'external',
             })) || []
+        const userReferences =
+          vulnerability.references?.map((reference) => ({
+            summary: reference.summary,
+            url: reference.url,
+            category: reference.category,
+          })) || []
+        const combinedReferences = [
+          ...userReferences,
+          ...cvss4References,
+        ].filter(
+          (reference, index, references) =>
+            references.findIndex(
+              (candidate) =>
+                candidate.url === reference.url &&
+                candidate.summary === reference.summary &&
+                candidate.category === reference.category,
+            ) === index,
+        )
 
         return {
           cve: vulnerability.cve || undefined,
           title: vulnerability.title,
-          references: cvss4References.length > 0 ? cvss4References : undefined,
+          references:
+            combinedReferences.length > 0 ? combinedReferences : undefined,
           cwe: vulnerability.cwe
             ? {
                 id: vulnerability.cwe.id,

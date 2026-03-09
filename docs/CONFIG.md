@@ -260,6 +260,16 @@ Products can reference families using the `familyId` field to establish hierarch
 |----------|----------------------------|-------------------------------------------|
 | `status` | Default product status     | `known_affected`, `known_not_affected`, `fixed`, `under_investigation` |
 
+#### References
+
+**Path:** `vulnerabilities.references.default`
+
+| Key        | Description                  | Values                |
+|------------|------------------------------|-----------------------|
+| `summary`  | Default reference summary    | `string`              |
+| `url`      | Default reference URL        | `string`              |
+| `category` | Default reference source     | `self`, `external`    |
+
 #### Flags
 
 **Path:** `vulnerabilities.flags.default`
@@ -290,6 +300,7 @@ Products can reference families using the `familyId` field to establish hierarch
 | `cwe`      | CWE object                   | `object`               |
 | `title`    | Vulnerability title          | `string`               |
 | `notes`    | Notes (array)                | `object[]`             |
+| `references` | References (array)         | `object[]`             |
 | `products` | Products (array)             | `object[]`             |
 
 **Path:** `vulernabilities[].cwe`
@@ -319,6 +330,18 @@ Each key refers to an array of product IDs:
 - `vulnerabilities[].products[].known_not_affected[]`
 - `vulnerabilities[].products[].fixed[]`
 - `vulnerabilities[].products[].under_investigation[]`
+
+#### References (within vulnerability)
+
+**Path:** `vulnerabilities[].references[]`
+
+| Key        | Description             | Values                  |
+|------------|-------------------------|--------------------------|
+| `id`       | Reference ID            | `string`                 |
+| `summary`  | Summary                 | `string`                 |
+| `url`      | URL                     | `string`                 |
+| `category` | Reference source        | `self`, `external`       |
+| `readonly` | Read-only flag          | `boolean`                |
 
 ---
 

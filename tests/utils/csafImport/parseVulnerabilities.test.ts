@@ -346,6 +346,67 @@ describe('parseVulnerabilities', () => {
     })
   })
 
+  describe('References Handling', () => {
+    it('should parse references when provided', () => {
+      const csafDocument: DeepPartial<TCSAFDocument> = {
+        vulnerabilities: [
+          {
+            references: [
+              {
+                summary: 'Vendor Advisory',
+                url: 'https://example.com/advisory',
+                category: 'self',
+              },
+              {
+                summary: 'External Source',
+                url: 'https://example.com/source',
+                category: 'external',
+              },
+            ],
+            product_status: {},
+          },
+        ],
+      }
+
+      const result = parseVulnerabilities(
+        csafDocument as TCSAFDocument,
+        mockVulnerabilityProductGenerator,
+        mockRemediationGenerator,
+      )
+
+      expect(result[0].references).toHaveLength(2)
+      expect(result[0].references?.[0].summary).toBe('Vendor Advisory')
+      expect(result[0].references?.[0].category).toBe('self')
+      expect(result[0].references?.[1].category).toBe('external')
+      expect(result[0].references?.[0].id).toBeDefined()
+    })
+
+    it('should fallback to external category for unknown categories', () => {
+      const csafDocument: DeepPartial<TCSAFDocument> = {
+        vulnerabilities: [
+          {
+            references: [
+              {
+                summary: 'Unknown Category',
+                url: 'https://example.com/unknown',
+                category: 'other',
+              },
+            ],
+            product_status: {},
+          },
+        ],
+      }
+
+      const result = parseVulnerabilities(
+        csafDocument as TCSAFDocument,
+        mockVulnerabilityProductGenerator,
+        mockRemediationGenerator,
+      )
+
+      expect(result[0].references?.[0].category).toBe('external')
+    })
+  })
+
   describe('Products Handling', () => {
     it('should call parseVulnerabilityProducts with correct parameters', () => {
       const mockProductStatus = { known_affected: ['product-1'] }
