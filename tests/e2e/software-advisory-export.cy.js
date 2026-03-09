@@ -200,7 +200,7 @@ describe('Create a new software advisory & export it', () => {
     cy.wait(500)
 
     // Compare the downloaded CSAF export with expected results
-    const downloadPath = 'cypress/downloads/Test-001.json'
+    const downloadPath = 'cypress/downloads/test-001.json'
     cy.task('deleteFileIfExists', downloadPath)
     cy.contains('CSAF Export').click()
     compareCSAFExport(downloadPath, 'tests/fixtures/expected-csaf-export.json')
