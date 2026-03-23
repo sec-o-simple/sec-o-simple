@@ -167,7 +167,7 @@
         "fetchCVEData": "Fetches CVE data from the provided API",
         "cveFetchError": "CVE Fetch Error",
         "cveFetchErrorDescription": "Failed to fetch CVE data. Please check the API URL and the CVE ID.",
-        "description": "Description",
+        "cveDescription": "CVE Description",
         "cveNotesFetched": "CVE Notes fetched",
         "cveNotesFetchedDescription_one": "{{count}} CVE note fetched and added successfully",
         "cveNotesFetchedDescription": "{{count}} CVE notes fetched and added successfully",
