@@ -22,7 +22,10 @@ export type TConfig = {
     }
   }
   cveApiUrl?: string
-  template: { [key: string]: unknown }
+  template: {
+    required?: string[]
+    [key: string]: unknown
+  }
 }
 
 export type TConfigStore = {

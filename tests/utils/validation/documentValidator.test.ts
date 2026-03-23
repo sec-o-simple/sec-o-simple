@@ -501,6 +501,301 @@ describe('documentValidator', () => {
         expect.any(Object),
       )
     })
+
+    it('should add required-field errors from template configuration', async () => {
+      ;(createCSAFDocument as Mock).mockReturnValue({
+        document: {
+          tracking: {
+            id: '',
+          },
+        },
+      })
+      ;(validate as Mock).mockResolvedValue({
+        isValid: true,
+        tests: [{ errors: [], warnings: [], infos: [] }],
+      })
+
+      const result = await validateDocument(
+        mockDocumentStore,
+        mockGetFullProductName,
+        mockGetRelationshipFullProductName,
+        {
+          ...mockConfig,
+          template: {
+            required: ['/document/tracking/id'],
+          },
+        },
+      )
+
+      expect(result.isValid).toBe(false)
+      expect(result.messages).toContainEqual({
+        path: '/document/tracking/id',
+        message: expect.any(String),
+        severity: 'error',
+      })
+    })
+
+    it('should validate wildcard required paths for all existing list entries', async () => {
+      ;(createCSAFDocument as Mock).mockReturnValue({
+        document: {
+          references: [
+            {
+              url: '',
+            },
+            {
+              url: 'https://example.org',
+            },
+            {
+              url: '   ',
+            },
+          ],
+        },
+      })
+      ;(validate as Mock).mockResolvedValue({
+        isValid: true,
+        tests: [{ errors: [], warnings: [], infos: [] }],
+      })
+
+      const result = await validateDocument(
+        mockDocumentStore,
+        mockGetFullProductName,
+        mockGetRelationshipFullProductName,
+        {
+          ...mockConfig,
+          template: {
+            required: ['/document/references/*/url'],
+          },
+        },
+      )
+
+      expect(result.isValid).toBe(false)
+      expect(result.messages).toContainEqual({
+        path: '/document/references/0/url',
+        message: expect.any(String),
+        severity: 'error',
+      })
+      expect(result.messages).toContainEqual({
+        path: '/document/references/2/url',
+        message: expect.any(String),
+        severity: 'error',
+      })
+      expect(result.messages).not.toContainEqual({
+        path: '/document/references/1/url',
+        message: expect.any(String),
+        severity: 'error',
+      })
+    })
+
+    it('should not duplicate an existing validator error at the same path', async () => {
+      ;(createCSAFDocument as Mock).mockReturnValue({
+        document: {
+          title: '',
+        },
+      })
+      ;(validate as Mock).mockResolvedValue({
+        isValid: false,
+        tests: [
+          {
+            errors: [
+              {
+                instancePath: '/document/title',
+                message: 'Title is required',
+              },
+            ],
+            warnings: [],
+            infos: [],
+          },
+        ],
+      })
+
+      const result = await validateDocument(
+        mockDocumentStore,
+        mockGetFullProductName,
+        mockGetRelationshipFullProductName,
+        {
+          ...mockConfig,
+          template: {
+            required: ['/document/title'],
+          },
+        },
+      )
+
+      expect(result.messages).toHaveLength(1)
+      expect(result.messages[0]).toEqual({
+        path: '/document/title',
+        message: 'Title is required',
+        severity: 'error',
+      })
+    })
+
+    it('should ignore invalid required configuration entries and still normalize paths', async () => {
+      ;(createCSAFDocument as Mock).mockReturnValue({
+        document: {
+          tracking: {
+            id: '',
+          },
+        },
+      })
+      ;(validate as Mock).mockResolvedValue({
+        isValid: true,
+        tests: [{ errors: [], warnings: [], infos: [] }],
+      })
+
+      const result = await validateDocument(
+        mockDocumentStore,
+        mockGetFullProductName,
+        mockGetRelationshipFullProductName,
+        {
+          ...mockConfig,
+          template: {
+            required: ['', '   ', 'document/tracking/id'],
+          },
+        },
+      )
+
+      expect(result.isValid).toBe(false)
+      expect(result.messages).toContainEqual({
+        path: '/document/tracking/id',
+        message: expect.any(String),
+        severity: 'error',
+      })
+    })
+
+    it('should treat root path as required and fail for empty root object', async () => {
+      ;(createCSAFDocument as Mock).mockReturnValue({})
+      ;(validate as Mock).mockResolvedValue({
+        isValid: true,
+        tests: [{ errors: [], warnings: [], infos: [] }],
+      })
+
+      const result = await validateDocument(
+        mockDocumentStore,
+        mockGetFullProductName,
+        mockGetRelationshipFullProductName,
+        {
+          ...mockConfig,
+          template: {
+            required: ['/'],
+          },
+        },
+      )
+
+      expect(result.isValid).toBe(false)
+      expect(result.messages).toContainEqual({
+        path: '/',
+        message: expect.any(String),
+        severity: 'error',
+      })
+    })
+
+    it('should add required error for missing nested non-wildcard path', async () => {
+      ;(createCSAFDocument as Mock).mockReturnValue({
+        document: {
+          tracking: {},
+        },
+      })
+      ;(validate as Mock).mockResolvedValue({
+        isValid: true,
+        tests: [{ errors: [], warnings: [], infos: [] }],
+      })
+
+      const result = await validateDocument(
+        mockDocumentStore,
+        mockGetFullProductName,
+        mockGetRelationshipFullProductName,
+        {
+          ...mockConfig,
+          template: {
+            required: ['/document/tracking/id'],
+          },
+        },
+      )
+
+      expect(result.isValid).toBe(false)
+      expect(result.messages).toContainEqual({
+        path: '/document/tracking/id',
+        message: expect.any(String),
+        severity: 'error',
+      })
+    })
+
+    it('should support wildcard traversal over objects', async () => {
+      ;(createCSAFDocument as Mock).mockReturnValue({
+        document: {
+          publisher: {
+            vendor: {
+              name: '',
+            },
+            translator: {
+              name: 'Translator Team',
+            },
+          },
+        },
+      })
+      ;(validate as Mock).mockResolvedValue({
+        isValid: true,
+        tests: [{ errors: [], warnings: [], infos: [] }],
+      })
+
+      const result = await validateDocument(
+        mockDocumentStore,
+        mockGetFullProductName,
+        mockGetRelationshipFullProductName,
+        {
+          ...mockConfig,
+          template: {
+            required: ['/document/publisher/*/name'],
+          },
+        },
+      )
+
+      expect(result.isValid).toBe(false)
+      expect(result.messages).toContainEqual({
+        path: '/document/publisher/vendor/name',
+        message: expect.any(String),
+        severity: 'error',
+      })
+      expect(result.messages).not.toContainEqual({
+        path: '/document/publisher/translator/name',
+        message: expect.any(String),
+        severity: 'error',
+      })
+    })
+
+    it('should create missing path from wildcard pattern when property is absent', async () => {
+      ;(createCSAFDocument as Mock).mockReturnValue({
+        document: {
+          references: [
+            {
+              summary: 'Reference without URL',
+            },
+          ],
+        },
+      })
+      ;(validate as Mock).mockResolvedValue({
+        isValid: true,
+        tests: [{ errors: [], warnings: [], infos: [] }],
+      })
+
+      const result = await validateDocument(
+        mockDocumentStore,
+        mockGetFullProductName,
+        mockGetRelationshipFullProductName,
+        {
+          ...mockConfig,
+          template: {
+            required: ['/document/references/*/url'],
+          },
+        },
+      )
+
+      expect(result.isValid).toBe(false)
+      expect(result.messages).toContainEqual({
+        path: '/document/references/0/url',
+        message: expect.any(String),
+        severity: 'error',
+      })
+    })
   })
 
   describe('ValidationResult interface', () => {
