@@ -16,6 +16,10 @@ export type TSelectableFullProductName = {
   }
 }
 
+export type TProductTreeBranchReadonlyReason =
+  | 'imported_with_identification_helper'
+  | 'full_product_name_mismatch'
+
 export function useProductTreeBranch() {
   const { t } = useTranslation()
   const products = Object.values(useDocumentStore((store) => store.products))
@@ -88,9 +92,11 @@ export function useProductTreeBranch() {
   ): {
     isReadonly?: boolean
     name?: string
+    readonlyReason?: TProductTreeBranchReadonlyReason
   } => {
     let isNameReadonly = false
     let name = branch.name
+    let readonlyReason: TProductTreeBranchReadonlyReason | undefined
 
     if (
       branch.category === 'product_version' &&
@@ -99,9 +105,11 @@ export function useProductTreeBranch() {
     ) {
       isNameReadonly = true
       name = branch.productName
+      readonlyReason = 'full_product_name_mismatch'
     } else if (!!branch.identificationHelper) {
       isNameReadonly = true
       name = getFullProductName(branch.id)
+      readonlyReason = 'imported_with_identification_helper'
     }
 
     if (!name) {
@@ -111,6 +119,7 @@ export function useProductTreeBranch() {
     return {
       name,
       isReadonly: isNameReadonly,
+      readonlyReason,
     }
   }
 

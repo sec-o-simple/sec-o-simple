@@ -4,10 +4,12 @@ import WizardStep from '@/components/WizardStep'
 import useDocumentStore from '@/utils/useDocumentStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { useRelationships } from '@/utils/useRelationships'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Accordion, AccordionItem } from '@heroui/accordion'
 import { Chip } from '@heroui/chip'
 import { Modal, useDisclosure } from '@heroui/modal'
-import { BreadcrumbItem } from '@heroui/react'
+import { BreadcrumbItem, Tooltip } from '@heroui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
@@ -181,16 +183,42 @@ export default function Version() {
                           `/products/management/version/${x}`
                         }
                         labelGenerator={(x) => {
-                          const findProductTreeBranch =
+                          const versionBranch =
                             findProductTreeBranchWithParents(x)
 
-                          if (!findProductTreeBranch) {
+                          if (!versionBranch) {
                             return t('untitled.product_version')
                           }
 
+                          const { name, isReadonly, readonlyReason } =
+                            getPTBName(versionBranch)
+
+                          const displayName =
+                            name ?? t('untitled.product_version')
+                          const readonlyReasonText =
+                            isReadonly && readonlyReason
+                              ? t(
+                                  `product_version.readonly_reason.${readonlyReason}`,
+                                )
+                              : undefined
+
                           return (
-                            getPTBName(findProductTreeBranch).name ??
-                            t('untitled.product_version')
+                            <span className="flex items-center gap-1">
+                              <span>{displayName}</span>
+                              {readonlyReasonText && (
+                                <Tooltip showArrow content={readonlyReasonText}>
+                                  <span
+                                    className="inline-flex text-zinc-500"
+                                    aria-label={readonlyReasonText}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faCircleInfo}
+                                      size="sm"
+                                    />
+                                  </span>
+                                </Tooltip>
+                              )}
+                            </span>
                           )
                         }}
                       />

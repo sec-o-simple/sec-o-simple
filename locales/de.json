@@ -291,7 +291,11 @@
     "product_version": {
       "label": "Version",
       "name": "Versionname",
-      "description": "Versionbeschreibung"
+      "description": "Versionbeschreibung",
+      "readonly_reason": {
+        "imported_with_identification_helper": "Dieser Versionsname ist gesperrt, weil das importierte Produkt einen oder mehrere Identifikationshelfer hat.",
+        "full_product_name_mismatch": "Dieser Versionsname ist gesperrt, weil der festgelegte vollständige Produktname nicht mit dem automatisch generierten übereinstimmt."
+      }
     },
     "product_family": {
       "label": "Produktfamilie",

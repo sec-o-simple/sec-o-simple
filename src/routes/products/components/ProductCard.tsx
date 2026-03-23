@@ -1,7 +1,9 @@
 import IconButton from '@/components/forms/IconButton'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
-import { faCodeFork } from '@fortawesome/free-solid-svg-icons'
+import { faCircleInfo, faCodeFork } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Chip } from '@heroui/chip'
+import { Tooltip } from '@heroui/react'
 import { ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router'
@@ -58,9 +60,30 @@ export default function ProductCard({
             linkGenerator={(version) =>
               `/products/management/version/${version.id}`
             }
-            labelGenerator={(x) =>
-              getPTBName(x).name ?? t('untitled.product_version')
-            }
+            labelGenerator={(x) => {
+              const { name, isReadonly, readonlyReason } = getPTBName(x)
+              const displayName = name ?? t('untitled.product_version')
+              const readonlyReasonText =
+                isReadonly && readonlyReason
+                  ? t(`product_version.readonly_reason.${readonlyReason}`)
+                  : undefined
+
+              return (
+                <span className="flex items-center gap-1">
+                  <span>{displayName}</span>
+                  {readonlyReasonText && (
+                    <Tooltip showArrow content={readonlyReasonText}>
+                      <span
+                        className="inline-flex text-zinc-500"
+                        aria-label={readonlyReasonText}
+                      >
+                        <FontAwesomeIcon icon={faCircleInfo} size="sm" />
+                      </span>
+                    </Tooltip>
+                  )}
+                </span>
+              )
+            }}
           />
         )}
       </div>
