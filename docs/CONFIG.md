@@ -55,6 +55,22 @@ The following suffixes can be appended to most fields to enhance configurability
 | `.placeholder`       | UI placeholder text for the field   |
 | `.readonly`          | Marks the field as read-only        |
 
+### Additional Required Fields
+
+**Path:** `template.required[]`
+
+Adds required validation on top of `csaf-validator-lib` (additive logic). Each item must be a CSAF JSON pointer path.
+
+| Key | Description | Values |
+|-----|-------------|--------|
+| `required[]` | List of additional required field paths | JSON pointer strings like `/document/title` |
+
+Notes:
+- Use `*` as a wildcard segment to apply a rule to all existing entries at that level (for example `/document/references/*/url`).
+- To enforce at least one list entry, target index `0` (for example `/document/references/0/url`). This fails when the list is empty and also requires the first entry to contain a value.
+- Empty strings, missing values, empty arrays and empty objects are treated as missing.
+- Existing validator errors are kept; this only adds template-driven required errors.
+
 ### Document Information
 
 **Path:** `document-information`

@@ -13,6 +13,11 @@
     }
   },
   "template": {
+    "required": [
+      "/document/tracking/id",
+      "/document/references/*/url"
+    ],
+
     "document-information.title": "Test Document",
     "document-information.title.readonly": true,
     "document-information.id.placeholder": "Put your ID here",
