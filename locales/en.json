@@ -384,6 +384,7 @@
     "validation": {
       "error": "Error",
       "error_plural": "Error",
+      "requiredByTemplate": "This field is required",
       "errors": {
         "title": "Validation Errors",
         "column": {

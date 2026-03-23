@@ -380,6 +380,7 @@
     "validation": {
       "error": "Fehler",
       "error_plural": "Fehler",
+      "requiredByTemplate": "Dieses Feld ist erforderlich",
       "errors": {
         "title": "Validierungsfehler",
         "column": {
