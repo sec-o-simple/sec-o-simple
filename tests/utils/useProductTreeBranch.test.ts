@@ -1105,6 +1105,53 @@ describe('useProductTreeBranch', () => {
     })
   })
 
+  describe('getPTBName', () => {
+    it('should return readonly reason for identification helper imports', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const importedVersion = {
+        ...mockProducts[0].subBranches[0].subBranches[0],
+        identificationHelper: {
+          cpe: 'cpe:2.3:a:vendor:product:1.0:*:*:*:*:*:*:*',
+        },
+      }
+
+      const ptbName = result.current.getPTBName(importedVersion)
+
+      expect(ptbName.isReadonly).toBe(true)
+      expect(ptbName.readonlyReason).toBe(
+        'imported_with_identification_helper',
+      )
+      expect(ptbName.name).toBe('Vendor A Product A Version 1.0')
+    })
+
+    it('should return readonly reason for full product name mismatch', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const mismatchedVersion = {
+        ...mockProducts[0].subBranches[0].subBranches[0],
+        productName: 'Old Stored Full Product Name',
+      }
+
+      const ptbName = result.current.getPTBName(mismatchedVersion)
+
+      expect(ptbName.isReadonly).toBe(true)
+      expect(ptbName.readonlyReason).toBe('full_product_name_mismatch')
+      expect(ptbName.name).toBe('Old Stored Full Product Name')
+    })
+
+    it('should return editable name without readonly reason by default', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const version = mockProducts[0].subBranches[0].subBranches[0]
+      const ptbName = result.current.getPTBName(version)
+
+      expect(ptbName.isReadonly).toBe(false)
+      expect(ptbName.readonlyReason).toBeUndefined()
+      expect(ptbName.name).toBe('Version 1.0')
+    })
+  })
+
   describe('Edge Cases', () => {
     it('should handle circular references gracefully in filter operations', () => {
       const { result } = renderHook(() => useProductTreeBranch())

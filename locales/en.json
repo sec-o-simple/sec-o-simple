@@ -295,7 +295,11 @@
     "product_version": {
       "label": "Version",
       "name": "Name",
-      "description": "Description"
+      "description": "Description",
+      "readonly_reason": {
+        "imported_with_identification_helper": "This version name is locked because the imported product has one or more identification helpers.",
+        "full_product_name_mismatch": "This version name is locked because the set full product name does not match the automatically generated one."
+      }
     },
     "product_family": {
       "label": "Product Family",

@@ -38,9 +38,17 @@ export function PTBCreateEditForm({
 }: PTBCreateEditFormProps) {
   const { t } = useTranslation()
   const { getPTBName, families } = useProductTreeBranch()
-  const { name: ptbName, isReadonly } = ptb
-    ? getPTBName(ptb)
-    : { name: '', isReadonly: false }
+  const {
+    name: ptbName,
+    isReadonly,
+    readonlyReason,
+  } = ptb ? getPTBName(ptb) : { name: '', isReadonly: false }
+  const isNameDisabled = ptb
+    ? checkTemplateReadonly(ptb, 'name') || isReadonly
+    : false
+  const versionNameReadonlyReason = readonlyReason
+    ? t(`product_version.readonly_reason.${readonlyReason}`)
+    : undefined
   const [name, setName] = useState(ptb?.name ?? '')
   const [description, setDescription] = useState(ptb?.description ?? '')
   const [type, setType] = useState(ptb?.type ?? 'Software')
@@ -66,11 +74,16 @@ export function PTBCreateEditForm({
               autoFocus
               value={isReadonly ? (ptbName ?? '') : name}
               onValueChange={setName}
-              isDisabled={
-                ptb ? checkTemplateReadonly(ptb, 'name') || isReadonly : false
-              }
+              isDisabled={isNameDisabled}
               placeholder={ptb ? getPlaceholder(ptb, 'name') : undefined}
             />
+            {category === 'product_version' &&
+              isNameDisabled &&
+              versionNameReadonlyReason && (
+                <p className="text-sm text-zinc-500">
+                  {versionNameReadonlyReason}
+                </p>
+              )}
             {category === 'product_name' && (
               <Textarea
                 label={t(`${category}.description`)}
