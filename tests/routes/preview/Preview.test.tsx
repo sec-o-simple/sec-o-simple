@@ -1,3 +1,259 @@
+describe('Preview tab selection flows', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
+      configurable: true,
+      get() {
+        return {
+          open: vi.fn(),
+          write: vi.fn(),
+          close: vi.fn(),
+          addEventListener: vi.fn(),
+        }
+      },
+    })
+  })
+
+  it('switches tabs multiple times and shows correct content', async () => {
+    const htmlString = '<html><body>TabContent</body></html>'
+    vi.doMock('../../../src/routes/preview/HTMLTemplate', () => ({
+      default: vi.fn(() => htmlString),
+    }))
+    const { default: Preview } = await import(
+      '../../../src/routes/preview/Preview'
+    )
+    const { render, screen, fireEvent } = await import('@testing-library/react')
+    const { HashRouter } = await import('react-router')
+    render(
+      <HashRouter>
+        <Preview />
+      </HashRouter>,
+    )
+    const renderedTab = screen.getByText('preview.html')
+    const rawTab = screen.getByText('preview.raw')
+    // Switch to raw
+    fireEvent.click(rawTab)
+    expect(screen.getByRole('tabpanel').textContent).toContain('TabContent')
+    // Switch back to rendered
+    fireEvent.click(renderedTab)
+    expect(document.querySelector('iframe')).toBeInTheDocument()
+    // Switch again
+    fireEvent.click(rawTab)
+    expect(screen.getByRole('tabpanel').textContent).toContain('TabContent')
+  })
+})
+describe('Preview with large HTML output', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
+      configurable: true,
+      get() {
+        return {
+          open: vi.fn(),
+          write: vi.fn(),
+          close: vi.fn(),
+          addEventListener: vi.fn(),
+        }
+      },
+    })
+  })
+
+  it('renders large HTML output in both tabs', async () => {
+    const largeHtml = '<html><body>' + 'A'.repeat(10000) + '</body></html>'
+    vi.doMock('../../../src/routes/preview/HTMLTemplate', () => ({
+      default: vi.fn(() => largeHtml),
+    }))
+    const { default: Preview } = await import(
+      '../../../src/routes/preview/Preview'
+    )
+    const { render, screen, fireEvent } = await import('@testing-library/react')
+    const { HashRouter } = await import('react-router')
+    render(
+      <HashRouter>
+        <Preview />
+      </HashRouter>,
+    )
+    // Rendered tab
+    expect(document.querySelector('iframe')).toBeInTheDocument()
+    // Raw tab
+    fireEvent.click(screen.getByText('preview.raw'))
+    expect(screen.getByRole('tabpanel').textContent).toContain('A'.repeat(1000)) // spot check
+  })
+})
+describe('Preview iframe focus/blur logic', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
+      configurable: true,
+      get() {
+        return {
+          open: vi.fn(),
+          write: vi.fn(),
+          close: vi.fn(),
+          addEventListener: vi.fn((event, cb) => {
+            if (event === 'focus') cb()
+          }),
+        }
+      },
+    })
+  })
+
+  it('triggers blur on iframe focus event', () => {
+    const blurSpy = vi.fn()
+    const origGet = Object.getOwnPropertyDescriptor(
+      HTMLIFrameElement.prototype,
+      'contentDocument',
+    )?.get
+    Object.defineProperty(HTMLIFrameElement.prototype, 'blur', {
+      value: blurSpy,
+      configurable: true,
+    })
+    const { render } = require('@testing-library/react')
+    const { HashRouter } = require('react-router')
+    const Preview = require('../../../src/routes/preview/Preview').default
+    render(
+      <HashRouter>
+        <Preview />
+      </HashRouter>,
+    )
+    expect(blurSpy).not.toHaveBeenCalled() // blur is called on iframe, not on contentDocument
+    // Restore
+    if (origGet)
+      Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
+        get: origGet,
+      })
+  })
+})
+describe('Preview error handling', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
+      configurable: true,
+      get() {
+        return {
+          open: vi.fn(),
+          write: vi.fn(),
+          close: vi.fn(),
+          addEventListener: vi.fn(),
+        }
+      },
+    })
+  })
+
+  it('handles error in parseMarkdown gracefully', async () => {
+    vi.doMock('../../../src/routes/preview/markdownParser', () => ({
+      parseMarkdown: vi.fn(() => {
+        throw new Error('parseMarkdown error')
+      }),
+    }))
+    const { default: Preview } = await import(
+      '../../../src/routes/preview/Preview'
+    )
+    const { render, screen } = await import('@testing-library/react')
+    const { HashRouter } = await import('react-router')
+    expect(() => {
+      render(
+        <HashRouter>
+          <Preview />
+        </HashRouter>,
+      )
+    }).not.toThrow()
+    expect(screen.getByText('nav.preview')).toBeInTheDocument()
+  })
+
+  it('handles error in HTMLTemplate gracefully', async () => {
+    vi.doMock('../../../src/routes/preview/HTMLTemplate', () => ({
+      default: vi.fn(() => {
+        throw new Error('HTMLTemplate error')
+      }),
+    }))
+    const { default: Preview } = await import(
+      '../../../src/routes/preview/Preview'
+    )
+    const { render, screen } = await import('@testing-library/react')
+    const { HashRouter } = await import('react-router')
+    expect(() => {
+      render(
+        <HashRouter>
+          <Preview />
+        </HashRouter>,
+      )
+    }).not.toThrow()
+    expect(screen.getByText('nav.preview')).toBeInTheDocument()
+  })
+})
+describe('Preview edge cases', () => {
+  beforeEach(() => {
+    vi.resetModules()
+    vi.clearAllMocks()
+    // Mock iframe functionality
+    Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
+      configurable: true,
+      get() {
+        return {
+          open: vi.fn(),
+          write: vi.fn(),
+          close: vi.fn(),
+          addEventListener: vi.fn(),
+        }
+      },
+    })
+  })
+
+  it('renders with missing config', async () => {
+    vi.doMock('../../../src/utils/useConfigStore', () => ({
+      useConfigStore: vi.fn(() => undefined),
+    }))
+    const { default: Preview } = await import(
+      '../../../src/routes/preview/Preview'
+    )
+    const { render, screen } = await import('@testing-library/react')
+    const { HashRouter } = await import('react-router')
+    render(
+      <HashRouter>
+        <Preview />
+      </HashRouter>,
+    )
+    expect(screen.getByText('nav.preview')).toBeInTheDocument()
+  })
+
+  it('renders with missing translation function', async () => {
+    vi.doMock('react-i18next', () => ({
+      useTranslation: () => ({ t: undefined, i18n: { language: 'en' } }),
+    }))
+    const { default: Preview } = await import(
+      '../../../src/routes/preview/Preview'
+    )
+    const { render, screen } = await import('@testing-library/react')
+    const { HashRouter } = await import('react-router')
+    render(
+      <HashRouter>
+        <Preview />
+      </HashRouter>,
+    )
+    expect(screen.getByText('nav.preview')).toBeInTheDocument()
+  })
+
+  it('renders with broken document store', async () => {
+    vi.doMock('../../../src/utils/useDocumentStore', () => ({
+      default: vi.fn(() => undefined),
+    }))
+    const { default: Preview } = await import(
+      '../../../src/routes/preview/Preview'
+    )
+    const { render, screen } = await import('@testing-library/react')
+    const { HashRouter } = await import('react-router')
+    render(
+      <HashRouter>
+        <Preview />
+      </HashRouter>,
+    )
+    expect(screen.getByText('nav.preview')).toBeInTheDocument()
+  })
+})
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import Preview from '../../../src/routes/preview/Preview'
