@@ -198,8 +198,6 @@ describe('Product Database Import', () => {
       .find('textarea')
       .click()
       .type('This is a test remediation')
-    cy.get('[placeholder="Add Product"]').first().click()
-    cy.contains('li', 'Vendor Name Product Name 1.0.0').click()
 
     cy.get('[data-slot="tab"]').contains('Scores').click()
     cy.contains('Add Score').click()
@@ -208,9 +206,6 @@ describe('Product Database Import', () => {
       .find('input')
       .click()
       .type('CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N')
-    cy.get('[placeholder="Add Product"]').first().click()
-    cy.wait(100)
-    cy.contains('li', 'Vendor Name Product Name 1.0.0').click()
 
     // Set history
     cy.contains('History').click()

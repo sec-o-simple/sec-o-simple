@@ -173,11 +173,8 @@ describe('Create a new software advisory & export it', () => {
       .find('textarea')
       .click()
       .type('This is a test remediation')
-    cy.get('[placeholder="Add Product"]').first().click()
-    cy.contains(
-      'li',
-      'Test Vendor Test Software 1.0.0 installed on Test Vendor Test Hardware 1.2.0',
-    ).click()
+
+    cy.wait(500)
 
     cy.get('[data-slot="tab"]').contains('Scores').click()
     cy.contains('Add Score').click()
@@ -186,12 +183,6 @@ describe('Create a new software advisory & export it', () => {
       .find('input')
       .click()
       .type('CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N')
-    cy.get('[placeholder="Add Product"]').first().click()
-    cy.wait(100)
-    cy.contains(
-      'li',
-      'Test Vendor Test Software 1.0.0 installed on Test Vendor Test Hardware 1.2.0',
-    ).click()
 
     // Set history
     cy.contains('History').click()

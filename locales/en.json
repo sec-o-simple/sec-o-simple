@@ -207,6 +207,7 @@
         "baseScoreDescription": "Base score is calculated from the vector string",
         "baseSeverity": "Base Severity",
         "baseSeverityDescription": "Base severity is calculated from the vector string",
+        "applyAllKnownAffectedProducts": "Apply all known affected products",
         "productsDescription": "Select the affected products or those currently under investigation"
       },
       "remediations": "Remediations",
@@ -224,6 +225,7 @@
         "details": "Details",
         "url": "URL",
         "products.empty": "No products added",
+        "applyAllKnownAffectedProducts": "Apply all known affected products",
         "productsDescription": "Select the affected products",
         "restartRequired": "Restart required"
       },
