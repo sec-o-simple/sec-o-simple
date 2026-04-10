@@ -27,7 +27,9 @@
     },
     "preview": {
       "html": "Vorschau",
-      "raw": "HTML"
+      "raw": "HTML",
+      "for_products": "Für Produkte",
+      "for_tlp_version_see": "Für die TLP-Version siehe:"
     },
     "newDocument": "Neues Dokument",
     "confirm.newDocument.title": "Neues Dokument erstellen",

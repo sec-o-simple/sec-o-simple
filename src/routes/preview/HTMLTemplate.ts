@@ -71,7 +71,7 @@ const VULNERABILITY_NOTE = `{{#title}}<b>{{.}}</b>{{/title}}{{#audience}} ({{.}}
 {{#text}}<p>{{{text}}}</p>{{/text}}`
 
 const DOCUMENT_NOTE = `{{#title}}<h2>{{.}}</h2>{{/title}}
-{{#audience}}<small>{{.}}</small>{{/audience}}
+{{#category}}<small>{{.}}</small>{{/category}}
 {{#text}}<p>{{{text}}}</p>{{/text}}`
 
 const ACKNOWLEDGEMENT = `
@@ -89,6 +89,186 @@ const URL = `
   <a {{#secureHref}}{{.}}{{/secureHref}}>{{.}}</a>
 {{/.}}
 `
+
+const PRODUCT_STATUS_FIELDS = [
+  'known_affected',
+  'first_affected',
+  'last_affected',
+  'known_not_affected',
+  'recommended',
+  'fixed',
+  'first_fixed',
+  'under_investigation',
+] as const
+
+type TProductScore = { vectorString: string; baseScore: string | number }
+
+const asObject = (value: unknown): Record<string, unknown> | null => {
+  if (value === null || typeof value !== 'object') return null
+  return value as Record<string, unknown>
+}
+
+const createNameMaps = (document: TCSAFDocument) => {
+  const productNameMap = new Map<string, string>()
+  const productGroupNameMap = new Map<string, string>()
+
+  const collectProductNamesFromBranches = (branches: unknown) => {
+    if (!Array.isArray(branches)) return
+
+    branches.forEach((branch) => {
+      const branchObject = asObject(branch)
+      if (!branchObject) return
+
+      const product = asObject(branchObject.product)
+      const productId = product?.product_id
+      const productName = product?.name
+      if (typeof productId === 'string' && typeof productName === 'string') {
+        productNameMap.set(productId, productName)
+      }
+
+      collectProductNamesFromBranches(branchObject.branches)
+    })
+  }
+
+  collectProductNamesFromBranches(document.product_tree?.branches)
+
+  document.product_tree?.relationships?.forEach((relationship) => {
+    if (!relationship) return
+    const productId = relationship.full_product_name?.product_id
+    const productName = relationship.full_product_name?.name
+    if (typeof productId === 'string' && typeof productName === 'string') {
+      productNameMap.set(productId, productName)
+    }
+  })
+
+  const productGroups = (
+    document as { product_tree?: { product_groups?: unknown } }
+  ).product_tree?.product_groups
+
+  if (Array.isArray(productGroups)) {
+    productGroups.forEach((group) => {
+      const groupObject = asObject(group)
+      if (!groupObject) return
+
+      const groupId = groupObject.group_id
+      const groupName = groupObject.summary || groupObject.group_id
+      if (typeof groupId === 'string' && typeof groupName === 'string') {
+        productGroupNameMap.set(groupId, groupName)
+      }
+    })
+  }
+
+  return { productNameMap, productGroupNameMap }
+}
+
+const expandNamedIds = (
+  list: unknown,
+  idToNameMap: Map<string, string>,
+  idKey: 'product_id' | 'group_id',
+  scoreByProductId?: Map<string, TProductScore>,
+) => {
+  if (!Array.isArray(list)) return list
+
+  return list.map((entry) => {
+    if (entry !== null && typeof entry === 'object') {
+      return entry
+    }
+
+    const id = String(entry)
+    const expanded: Record<string, unknown> = {
+      [idKey]: id,
+      name: idToNameMap.get(id) || id,
+    }
+
+    if (idKey === 'product_id') {
+      const score = scoreByProductId?.get(id)
+      expanded.vectorString = score?.vectorString || ''
+      expanded.baseScore = score?.baseScore ?? ''
+    }
+
+    return expanded
+  })
+}
+
+const createExpandedProductStatus = (document: TCSAFDocument) => {
+  const { productNameMap, productGroupNameMap } = createNameMaps(document)
+
+  return {
+    ...document,
+    vulnerabilities:
+      document.vulnerabilities?.map((vulnerability) => {
+        const scoreByProductId = new Map<string, TProductScore>()
+
+        vulnerability.scores?.forEach((score) => {
+          const vectorString = score.cvss_v3?.vectorString
+          const baseScore = score.cvss_v3?.baseScore
+
+          if (vectorString === undefined || baseScore === undefined) return
+
+          score.products?.forEach((productId) => {
+            if (!scoreByProductId.has(productId)) {
+              scoreByProductId.set(productId, { vectorString, baseScore })
+            }
+          })
+        })
+
+        const currentProductStatus = vulnerability.product_status || {}
+
+        const expandedProductStatus = PRODUCT_STATUS_FIELDS.reduce(
+          (accumulator, field) => {
+            const ids = currentProductStatus[field] as unknown[] | undefined
+            if (!Array.isArray(ids)) return accumulator
+
+            accumulator[field] = expandNamedIds(
+              ids,
+              productNameMap,
+              'product_id',
+              scoreByProductId,
+            ) as unknown[]
+
+            return accumulator
+          },
+          {} as Record<string, unknown[]>,
+        )
+
+        return {
+          ...vulnerability,
+          product_status: {
+            ...currentProductStatus,
+            ...expandedProductStatus,
+          } as unknown as TCSAFDocument['vulnerabilities'][number]['product_status'],
+          remediations: vulnerability.remediations?.map((remediation) => ({
+            ...remediation,
+            product_ids: expandNamedIds(
+              remediation.product_ids,
+              productNameMap,
+              'product_id',
+            ),
+            group_ids: expandNamedIds(
+              (remediation as { group_ids?: unknown }).group_ids,
+              productGroupNameMap,
+              'group_id',
+            ),
+          })) as unknown as TCSAFDocument['vulnerabilities'][number]['remediations'],
+          threats: (vulnerability as { threats?: unknown[] }).threats?.map(
+            (threat) => ({
+              ...(threat as Record<string, unknown>),
+              product_ids: expandNamedIds(
+                (threat as { product_ids?: unknown }).product_ids,
+                productNameMap,
+                'product_id',
+              ),
+              group_ids: expandNamedIds(
+                (threat as { group_ids?: unknown }).group_ids,
+                productGroupNameMap,
+                'group_id',
+              ),
+            }),
+          ),
+        }
+      }) || [],
+  }
+}
 
 const sanitizeForMustache = (value: unknown): unknown => {
   if (Array.isArray(value)) {
@@ -115,8 +295,10 @@ export default function HTMLTemplate({
   document: TCSAFDocument
   translations: HTMLTemplateTranslations
 }) {
+  const expandedDocument = createExpandedProductStatus(document)
+
   const documentWithTranslations = {
-    ...document,
+    ...expandedDocument,
     ...translations,
     // Custom Mustache functions for template rendering
     removeTrailingComma: () => {

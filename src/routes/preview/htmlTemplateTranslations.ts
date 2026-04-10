@@ -14,10 +14,7 @@ export function createHTMLTemplateTranslations(
     t_product: t('products.product.label'),
     t_cvss_vector: t('vulnerabilities.score.cvss') + '-Vector',
     t_cvss_base_score: t('vulnerabilities.score.baseScore'),
-    t_for_products: t('vulnerabilities.remediation.productsDescription')
-      .split(' ')
-      .slice(0, 2)
-      .join(' '),
+    t_for_products: t('preview.for_products'),
     t_for_groups: t('vulnerabilities.products.groups'),
     t_restart_required: t('vulnerabilities.remediation.restartRequired'),
     t_publisher: t('nav.documentInformation.publisher'),
@@ -67,7 +64,7 @@ export function createHTMLTemplateTranslations(
     t_namespace: t('document.publisher.namespace'),
     t_contact_details: t('document.publisher.contactDetails'),
     t_issuing_authority: t('document.publisher.issuingAuthority'),
-    t_for_tlp_version_see: t('document.general.tlp.version.url'),
+    t_for_tlp_version_see: t('preview.for_tlp_version_see'),
     t_from: t('common.from'),
     t_to: t('common.to'),
     t_for: t('common.for'),

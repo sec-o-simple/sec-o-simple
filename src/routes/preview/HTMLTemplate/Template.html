@@ -41,24 +41,9 @@
     </tr>
   </table>
 
-  {{#document.notes_summary}}
+  {{#document.notes}}
     {{> document_note}}
-  {{/document.notes_summary}}
-  {{#document.notes_details}}
-  {{> document_note}}
-  {{/document.notes_details}}
-  {{#document.notes_general}}
-  {{> document_note}}
-  {{/document.notes_general}}
-  {{#document.notes_description}}
-  {{> document_note}}
-  {{/document.notes_description}}
-  {{#document.notes_faq}}
-  {{> document_note}}
-  {{/document.notes_faq}}
-  {{#document.notes_unknown}}
-  {{> document_note}}
-  {{/document.notes_unknown}}
+  {{/document.notes}}
 
   {{#product_tree.product_groups.length}}
   <h2>{{t_product_groups}}</h2>
@@ -76,27 +61,9 @@
   {{#vulnerabilities}}
     <h3>{{title}}{{#cve}} ({{.}}){{/cve}}</h3>
 
-    {{#notes_summary}}
+    {{#notes}}
       {{> vulnerability_note}}
-    {{/notes_summary}}
-    {{#notes_details}}
-      {{> vulnerability_note}}
-    {{/notes_details}}
-    {{#notes_general}}
-     {{> vulnerability_note}}
-    {{/notes_general}}
-    {{#notes_description}}
-     {{> vulnerability_note}}
-    {{/notes_description}}
-    {{#notes_other}}
-     {{> vulnerability_note}}
-    {{/notes_other}}
-    {{#notes_faq}}
-      {{> vulnerability_note}}
-    {{/notes_faq}}
-    {{#notes_unknown}}
-      {{> vulnerability_note}}
-    {{/notes_unknown}}
+    {{/notes}}
 
     <table>
       <tr>
@@ -209,24 +176,9 @@
 
     {{#remediations.length}}
       <h4>{{t_remediations}}</h4>
-      {{#remediations_vendor_fix}}
+      {{#remediations}}
         {{> remediation}}
-      {{/remediations_vendor_fix}}
-      {{#remediations_mitigation}}
-        {{> remediation}}
-      {{/remediations_mitigation}}
-      {{#remediations_workaround}}
-        {{> remediation}}
-      {{/remediations_workaround}}
-      {{#remediations_none_available}}
-        {{> remediation}}
-      {{/remediations_none_available}}
-      {{#remediations_no_fix_planned}}
-        {{> remediation}}
-      {{/remediations_no_fix_planned}}
-      {{#remediations_unknown}}
-        {{> remediation}}
-      {{/remediations_unknown}}
+      {{/remediations}}
     {{/remediations.length}}
 
     {{#acknowledgments.length}}
