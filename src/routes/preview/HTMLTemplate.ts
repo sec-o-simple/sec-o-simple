@@ -292,9 +292,14 @@ export default function HTMLTemplate({
   document,
   translations,
 }: {
-  document: TCSAFDocument
+  document: TCSAFDocument | null
   translations: HTMLTemplateTranslations
 }) {
+  if (!document) {
+    // Return an empty string or a fallback template if document is null
+    return ''
+  }
+
   const expandedDocument = createExpandedProductStatus(document)
 
   const documentWithTranslations = {
