@@ -97,6 +97,16 @@ vi.mock('@heroui/react', () => ({
       {children}
     </div>
   ),
+  Checkbox: ({ children, isSelected, onChange }: any) => (
+    <label data-testid="apply-known-affected-checkbox">
+      <input
+        type="checkbox"
+        checked={!!isSelected}
+        onChange={(e) => onChange?.(e)}
+      />
+      {children}
+    </label>
+  ),
   Chip: ({ children, color, variant, radius, size }: any) => (
     <div 
       data-testid="chip" 
@@ -198,16 +208,15 @@ describe('Scores Component', () => {
       {
         id: 'prod1',
         productId: 'product1',
-        versions: ['v1.0'],
         status: 'known_affected'
       },
       {
         id: 'prod2',
         productId: 'product2',
-        versions: ['v2.0'],
         status: 'under_investigation'
       }
     ],
+    flags: [],
     remediations: [],
     scores: []
   }
@@ -252,11 +261,14 @@ describe('Scores Component', () => {
     
     mockUseProductTreeBranch.mockReturnValue({
       rootBranch: mockProductTreeBranches,
+      families: [],
       findProductTreeBranch: vi.fn(),
       findProductTreeBranchWithParents: vi.fn(),
+      getFullProductName: vi.fn((id: string) => id),
+      getRelationshipFullProductName: vi.fn(() => ''),
       getFilteredPTBs: vi.fn(),
       getPTBsByCategory: vi.fn(),
-      getSelectablePTBs: vi.fn(() => mockProductTreeBranches),
+      getPTBName: vi.fn(() => ({ name: 'Product', isReadonly: false })),
       getSelectableRefs: vi.fn(() => [
         {
           category: 'product_version',
@@ -273,9 +285,13 @@ describe('Scores Component', () => {
           }
         }
       ]),
+      getGroupedSelectableRefs: vi.fn(() => ({})),
       addPTB: vi.fn(),
+      addProductFamily: vi.fn(),
       updatePTB: vi.fn(),
-      deletePTB: vi.fn()
+      updateFamily: vi.fn(),
+      deletePTB: vi.fn(),
+      deleteFamily: vi.fn(),
     })
     
     mockUseFieldValidation.mockReturnValue({
@@ -734,6 +750,45 @@ describe('Scores Component', () => {
       
       expect(screen.getByTestId('products-error')).toHaveTextContent('Products are required')
     })
+
+          it('shows product validation error when apply-all hides product selector', () => {
+            const onChange = vi.fn()
+            const applyAllScore = {
+              ...mockScore,
+              productIds: [],
+              applyAllKnownAffectedProducts: true,
+            }
+            const listStateWithScore = {
+              ...mockListState,
+              data: [applyAllScore]
+            }
+
+            mockUseListState.mockReturnValue(listStateWithScore)
+            mockUseFieldValidation.mockReturnValue({
+              hasErrors: true,
+              errorMessages: [
+                { path: '/vulnerabilities/0/scores/0/products', message: 'Products are required' }
+              ],
+              hasWarnings: false,
+              warningMessages: [],
+              hasInfos: false,
+              infoMessages: [],
+              isTouched: false,
+              markFieldAsTouched: vi.fn(),
+              messages: []
+            })
+
+            render(
+              <Scores
+                vulnerability={{ ...mockVulnerability, scores: [applyAllScore] }}
+                vulnerabilityIndex={0}
+                onChange={onChange}
+              />
+            )
+
+            expect(screen.queryByTestId('products-tag-list')).not.toBeInTheDocument()
+            expect(screen.getByTestId('products-hidden-error')).toHaveTextContent('Products are required')
+          })
 
     it('updates product IDs when ProductsTagList changes', async () => {
       const user = userEvent.setup()

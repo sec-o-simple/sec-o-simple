@@ -59,6 +59,7 @@ export function parseVulnerabilities(
           })) || [],
         remediations: vulnerability.remediations?.map((remediation) => {
           const defaultRemediation = remediationGenerator
+
           return {
             id: defaultRemediation.id,
             category: remediation.category ?? defaultRemediation.category,
@@ -66,6 +67,7 @@ export function parseVulnerabilities(
             details: remediation.details ?? defaultRemediation.details,
             url: remediation.url ?? defaultRemediation.url,
             productIds: remediation.product_ids,
+            applyAllKnownAffectedProducts: false,
           } as TRemediation
         }),
         scores: vulnerability.scores?.map((score) => {
@@ -86,6 +88,7 @@ export function parseVulnerabilities(
           return {
             id: defaultScore.id,
             productIds: score.products,
+            applyAllKnownAffectedProducts: false,
             cvssVersion: cvssInfos?.version ?? defaultScore.cvssVersion,
             vectorString: cvssInfos?.vectorString ?? defaultScore.vectorString,
           } as TVulnerabilityScore

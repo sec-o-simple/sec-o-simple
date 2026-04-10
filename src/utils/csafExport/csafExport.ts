@@ -180,6 +180,15 @@ export function createCSAFDocument(
     },
     vulnerabilities: Object.values(documentStore.vulnerabilities).map(
       (vulnerability) => {
+        const knownAffectedProductIds = [
+          ...new Set(
+            vulnerability.products
+              .filter((product) => product.status === 'known_affected')
+              .map((product) => product.productId)
+              .filter((id): id is string => Boolean(id)),
+          ),
+        ]
+
         const productStatus = () => {
           const products = vulnerability.products
 
@@ -206,9 +215,13 @@ export function createCSAFDocument(
         const remediations = vulnerability.remediations?.map((remediation) => ({
           category: remediation.category,
           date: remediation.date || undefined,
-          details: remediation.details,
+          details: remediation.details || '',
           url: remediation.url || undefined,
-          product_ids: remediation.productIds,
+          product_ids:
+            (remediation.applyAllKnownAffectedProducts ??
+            remediation.productIds.length === 0)
+              ? knownAffectedProductIds
+              : remediation.productIds,
         }))
         const flags =
           vulnerability.flags?.map((flag) => ({
@@ -257,7 +270,7 @@ export function createCSAFDocument(
           product_status: productStatus(),
           flags: flags.length > 0 ? flags : undefined,
           remediations: remediations?.length > 0 ? remediations : undefined,
-          scores: parseScores(vulnerability.scores),
+          scores: parseScores(vulnerability.scores, knownAffectedProductIds),
         }
       },
     ),

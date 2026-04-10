@@ -496,7 +496,8 @@ describe('parseVulnerabilities', () => {
         date: '2023-01-01',
         details: 'Update to version 1.2.3',
         url: 'https://example.com/fix',
-        productIds: ['product-1']
+        productIds: ['product-1'],
+        applyAllKnownAffectedProducts: false,
       })
       expect(result[0].remediations[1]).toEqual({
         id: mockRemediationGenerator.id,
@@ -504,7 +505,8 @@ describe('parseVulnerabilities', () => {
         date: '2023-01-02',
         details: 'Disable feature X',
         url: 'https://example.com/workaround',
-        productIds: ['product-2']
+        productIds: ['product-2'],
+        applyAllKnownAffectedProducts: false,
       })
     })
 
@@ -540,7 +542,8 @@ describe('parseVulnerabilities', () => {
         date: mockRemediationGenerator.date,
         details: mockRemediationGenerator.details,
         url: mockRemediationGenerator.url,
-        productIds: ['product-1']
+        productIds: ['product-1'],
+        applyAllKnownAffectedProducts: false,
       })
     })
 
@@ -614,6 +617,7 @@ describe('parseVulnerabilities', () => {
       expect(result[0].scores[0]).toEqual({
         id: mockDefaultScore.id,
         productIds: ['product-1'],
+        applyAllKnownAffectedProducts: false,
         cvssVersion: '3.1',
         vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
       })
@@ -648,6 +652,7 @@ describe('parseVulnerabilities', () => {
       expect(result[0].scores[0]).toEqual({
         id: mockDefaultScore.id,
         productIds: ['product-1'],
+        applyAllKnownAffectedProducts: false,
         cvssVersion: '4.0',
         vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
       })
@@ -679,6 +684,7 @@ describe('parseVulnerabilities', () => {
       expect(result[0].scores[0]).toEqual({
         id: mockDefaultScore.id,
         productIds: ['product-1'],
+        applyAllKnownAffectedProducts: false,
         cvssVersion: mockDefaultScore.cvssVersion,
         vectorString: mockDefaultScore.vectorString
       })
@@ -710,6 +716,7 @@ describe('parseVulnerabilities', () => {
       expect(result[0].scores[0]).toEqual({
         id: mockDefaultScore.id,
         productIds: ['product-1'],
+        applyAllKnownAffectedProducts: false,
         cvssVersion: mockDefaultScore.cvssVersion,
         vectorString: mockDefaultScore.vectorString
       })
@@ -1007,6 +1014,7 @@ describe('parseVulnerabilities', () => {
       expect(result[0].scores[0]).toEqual({
         id: mockDefaultScore.id,
         productIds: ['product-1'],
+        applyAllKnownAffectedProducts: false,
         cvssVersion: mockDefaultScore.cvssVersion,
         vectorString: mockDefaultScore.vectorString
       })

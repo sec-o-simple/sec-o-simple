@@ -208,6 +208,7 @@
         "baseScoreDescription": "Basis Bewertung wird aus dem Vektorstring berechnet",
         "baseSeverity": "Basis Schweregrad",
         "baseSeverityDescription": "Basis Schweregrad wird aus dem Vektorstring berechnet",
+        "applyAllKnownAffectedProducts": "Alle bekannten betroffenen Produkte anwenden",
         "productsDescription": "Wählen Sie die betroffenen Produkte oder diejenigen aus, die derzeit untersucht werden"
       },
       "remediations": "Behebungen",
@@ -225,6 +226,7 @@
         "details": "Details",
         "url": "URL",
         "products.empty": "Keine Produkte hinzugefügt",
+        "applyAllKnownAffectedProducts": "Alle bekannten betroffenen Produkte anwenden",
         "productsDescription": "Wählen Sie die betroffenen Produkte aus",
         "restartRequired": "Neustart erforderlich"
       },
