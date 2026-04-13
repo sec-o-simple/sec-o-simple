@@ -5,12 +5,15 @@ export default function parseScores(
   scores: TVulnerabilityScore[],
   knownAffectedProductIds: string[] = [],
 ) {
-  const v3scores = scores?.filter(
-    (score) => score.cvssVersion === '3.0' || score.cvssVersion === '3.1',
+  const validScores = scores?.filter(
+    (score) =>
+      score.cvssVersion === '3.0' ||
+      score.cvssVersion === '3.1' ||
+      score.cvssVersion === '4.0',
   )
 
-  return v3scores?.length
-    ? v3scores.map((score) => {
+  return validScores?.length
+    ? validScores.map((score) => {
         let baseScore = 0
         let baseSeverity = ''
 
@@ -28,12 +31,20 @@ export default function parseScores(
           ? knownAffectedProductIds
           : score.productIds
 
+        const key = {
+          '3.0': 'cvss_v3',
+          '3.1': 'cvss_v3',
+          '4.0': 'cvss_v4',
+        }[score.cvssVersion as '3.0' | '3.1' | '4.0'];
+
         return {
-          cvss_v3: {
-            version: score.cvssVersion,
-            vectorString: score.vectorString,
-            baseScore,
-            baseSeverity,
+          content: {
+            [key]: {
+              version: score.cvssVersion,
+              vectorString: score.vectorString,
+              baseScore,
+              baseSeverity,
+            },
           },
           products: [...new Set(products)],
         }

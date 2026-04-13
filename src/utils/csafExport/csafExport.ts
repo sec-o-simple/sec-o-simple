@@ -86,6 +86,7 @@ export function createCSAFDocument(
     .flat()
 
   const csafDocument = {
+    $schema: 'https://docs.oasis-open.org/csaf/csaf/v2.1/schema/csaf.json',
     document: {
       category: [
         'VexSoftware',
@@ -95,7 +96,7 @@ export function createCSAFDocument(
       ].includes(documentStore.sosDocumentType)
         ? 'csaf_vex'
         : 'csaf_security_advisory',
-      csaf_version: '2.0',
+      csaf_version: '2.1',
       tracking: {
         generator: {
           date: currentDate,
@@ -123,14 +124,12 @@ export function createCSAFDocument(
           : '1',
         id: documentInformation.id,
       },
-      distribution: documentInformation.tlp?.label
-        ? {
-            tlp: {
-              label: documentInformation.tlp?.label?.toUpperCase() || undefined,
-              url: 'https://www.first.org/tlp/',
-            },
-          }
-        : undefined,
+      distribution: {
+        tlp: {
+          label: documentInformation.tlp?.label?.toUpperCase(),
+          url: 'https://www.first.org/tlp/',
+        },
+      },
       lang: documentInformation.lang,
       title: documentInformation.title,
       publisher: {
@@ -228,24 +227,13 @@ export function createCSAFDocument(
             label: flag.label,
             product_ids: [...new Set(flag.productIds)],
           })) || []
-        const cvss4References =
-          vulnerability.scores
-            ?.filter((score) => score.cvssVersion === '4.0')
-            .map((score) => ({
-              url: `https://www.first.org/cvss/calculator/4-0#${score.vectorString}`,
-              summary: `CVSS v4.0 Score`,
-              category: 'external',
-            })) || []
         const userReferences =
           vulnerability.references?.map((reference) => ({
             summary: reference.summary,
             url: reference.url,
             category: reference.category,
           })) || []
-        const combinedReferences = [
-          ...userReferences,
-          ...cvss4References,
-        ].filter(
+        const filteredReferences = userReferences.filter(
           (reference, index, references) =>
             references.findIndex(
               (candidate) =>
@@ -259,18 +247,21 @@ export function createCSAFDocument(
           cve: vulnerability.cve || undefined,
           title: vulnerability.title,
           references:
-            combinedReferences.length > 0 ? combinedReferences : undefined,
-          cwe: vulnerability.cwe
-            ? {
-                id: vulnerability.cwe.id,
-                name: vulnerability.cwe.name,
-              }
+            filteredReferences.length > 0 ? filteredReferences : undefined,
+          cwes: vulnerability.cwe
+            ? [
+                {
+                  id: vulnerability.cwe.id,
+                  name: vulnerability.cwe.name,
+                  version: '4.0',
+                },
+              ]
             : undefined,
           notes,
           product_status: productStatus(),
           flags: flags.length > 0 ? flags : undefined,
           remediations: remediations?.length > 0 ? remediations : undefined,
-          scores: parseScores(vulnerability.scores, knownAffectedProductIds),
+          metrics: parseScores(vulnerability.scores, knownAffectedProductIds),
         }
       },
     ),

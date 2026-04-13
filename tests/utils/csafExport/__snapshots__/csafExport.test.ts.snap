@@ -17,7 +17,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
       },
     ],
     "category": "csaf_security_advisory",
-    "csaf_version": "2.0",
+    "csaf_version": "2.1",
     "distribution": {
       "tlp": {
         "label": "WHITE",
@@ -123,8 +123,8 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
       },
     ],
   },
-  "vulnerabilities": [
-    {
+  "vulnerabilities": {
+    "vuln-1": {
       "cve": "CVE-2023-12345",
       "cwe": {
         "id": "CWE-79",
@@ -146,13 +146,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
           undefined,
         ],
       },
-      "references": [
-        {
-          "category": "external",
-          "summary": "CVSS v4.0 Score",
-          "url": "https://www.first.org/cvss/calculator/4-0#CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
-        },
-      ],
+      "references": undefined,
       "remediations": [
         {
           "category": "mitigation",
@@ -176,10 +170,21 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
             "version-1",
           ],
         },
+        {
+          "cvss_v3": {
+            "baseScore": 0,
+            "baseSeverity": "",
+            "vectorString": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+            "version": "4.0",
+          },
+          "products": [
+            "version-1",
+          ],
+        },
       ],
       "title": "Cross-site Scripting Vulnerability",
     },
-  ],
+  },
 }
 `;
 
@@ -188,7 +193,7 @@ exports[`csafExport > should create a CSAF document with minimal data 1`] = `
   "document": {
     "acknowledgments": undefined,
     "category": "csaf_security_advisory",
-    "csaf_version": "2.0",
+    "csaf_version": "2.1",
     "distribution": undefined,
     "lang": "en",
     "notes": undefined,
@@ -222,7 +227,7 @@ exports[`csafExport > should create a CSAF document with minimal data 1`] = `
     "branches": [],
     "relationships": undefined,
   },
-  "vulnerabilities": [],
+  "vulnerabilities": {},
 }
 `;
 
@@ -243,7 +248,7 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
       },
     ],
     "category": "csaf_security_advisory",
-    "csaf_version": "2.0",
+    "csaf_version": "2.1",
     "distribution": {
       "tlp": {
         "label": "WHITE",
@@ -349,8 +354,8 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
       },
     ],
   },
-  "vulnerabilities": [
-    {
+  "vulnerabilities": {
+    "basic-vuln": {
       "cve": undefined,
       "cwe": undefined,
       "flags": undefined,
@@ -361,6 +366,6 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
       "scores": undefined,
       "title": "Basic Vulnerability",
     },
-  ],
+  },
 }
 `;

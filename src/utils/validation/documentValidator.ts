@@ -1,7 +1,7 @@
 import { TDocumentStore } from '@/utils/useDocumentStore'
 import { createCSAFDocument } from '../csafExport/csafExport'
 
-import * as basic from '@secvisogram/csaf-validator-lib/basic.js'
+import * as basic from '@secvisogram/csaf-validator-lib/csaf_2_1/basic.js'
 import validate from '@secvisogram/csaf-validator-lib/validate.js'
 import { TConfig } from '../useConfigStore'
 import { ValidationMessage } from './useValidationStore'

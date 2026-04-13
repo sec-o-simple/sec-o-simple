@@ -19,6 +19,9 @@ export type TTLPLevel = (typeof tlpLevel)[number]
 
 export function getDefaultGeneralDocumentInformation(): TGeneralDocumentInformation {
   return {
+    tlp: {
+      label: 'GREEN',
+    },
     title: '',
     id: '',
     lang: 'en', // Default to English

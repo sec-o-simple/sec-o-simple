@@ -243,32 +243,28 @@ function ScoreForm({
         description={t('vulnerabilities.score.baseSeverityDescription')}
         isReadOnly={true}
       />
-      {score.cvssVersion !== '4.0' && (
-        <Checkbox
-          isSelected={applyAllKnownAffectedProducts}
-          onChange={(event) => {
-            const isChecked = event.target.checked
-            onChange({
-              ...score,
-              applyAllKnownAffectedProducts: isChecked,
-              productIds: isChecked ? [] : score.productIds,
-            })
-          }}
+      <Checkbox
+        isSelected={applyAllKnownAffectedProducts}
+        onChange={(event) => {
+          const isChecked = event.target.checked
+          onChange({
+            ...score,
+            applyAllKnownAffectedProducts: isChecked,
+            productIds: isChecked ? [] : score.productIds,
+          })
+        }}
+      >
+        {t('vulnerabilities.score.applyAllKnownAffectedProducts')}
+      </Checkbox>
+      {applyAllKnownAffectedProducts && productError && (
+        <p
+          className="text-danger-500 text-sm"
+          data-testid="products-hidden-error"
         >
-          {t('vulnerabilities.score.applyAllKnownAffectedProducts')}
-        </Checkbox>
+          {productError}
+        </p>
       )}
-      {score.cvssVersion !== '4.0' &&
-        applyAllKnownAffectedProducts &&
-        productError && (
-          <p
-            className="text-danger-500 text-sm"
-            data-testid="products-hidden-error"
-          >
-            {productError}
-          </p>
-        )}
-      {score.cvssVersion !== '4.0' && !applyAllKnownAffectedProducts && (
+      {!applyAllKnownAffectedProducts && (
         <ProductsTagList
           isRequired
           error={productError}
