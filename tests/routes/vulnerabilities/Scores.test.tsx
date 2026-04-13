@@ -677,7 +677,7 @@ describe('Scores Component', () => {
       )
     })
 
-    it('does not show ProductsTagList for CVSS 4.0', () => {
+    it('shows ProductsTagList for CVSS 4.0 when apply-all is disabled', () => {
       const onChange = vi.fn()
       const cvss4Score = { ...mockScore, cvssVersion: '4.0' as const }
       const listStateWithScore = {
@@ -695,7 +695,7 @@ describe('Scores Component', () => {
         />
       )
       
-      expect(screen.queryByTestId('products-tag-list')).not.toBeInTheDocument()
+      expect(screen.getByTestId('products-tag-list')).toBeInTheDocument()
     })
 
     it('shows ProductsTagList for CVSS 3.x versions', () => {

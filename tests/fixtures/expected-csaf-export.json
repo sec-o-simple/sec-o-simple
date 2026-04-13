@@ -1,7 +1,8 @@
 {
+  "$schema": "https://docs.oasis-open.org/csaf/csaf/v2.1/schema/csaf.json",
   "document": {
     "category": "csaf_security_advisory",
-    "csaf_version": "2.0",
+    "csaf_version": "2.1",
     "tracking": {
       "generator": {
         "date": "TIMESTAMP_PLACEHOLDER",
@@ -136,13 +137,15 @@
           "product_ids": ["product_3"]
         }
       ],
-      "scores": [
+      "metrics": [
         {
-          "cvss_v3": {
-            "version": "3.1",
-            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N",
-            "baseScore": 3.8,
-            "baseSeverity": "LOW"
+          "content": {
+            "cvss_v3": {
+              "version": "3.1",
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:N",
+              "baseScore": 3.8,
+              "baseSeverity": "LOW"
+            }
           },
           "products": ["product_3"]
         }

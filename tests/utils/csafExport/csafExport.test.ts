@@ -327,20 +327,13 @@ describe('csafExport', () => {
       },
     )
 
-    expect(result.vulnerabilities[0].references).toEqual(
-      expect.arrayContaining([
-        {
-          summary: 'Vendor Security Advisory',
-          url: 'https://example.com/vuln-advisory',
-          category: 'self',
-        },
-        {
-          summary: 'CVSS v4.0 Score',
-          url: 'https://www.first.org/cvss/calculator/4-0#CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N',
-          category: 'external',
-        },
-      ]),
-    )
+    expect(result.vulnerabilities[0].references).toEqual([
+      {
+        summary: 'Vendor Security Advisory',
+        url: 'https://example.com/vuln-advisory',
+        category: 'self',
+      },
+    ])
   })
 
   it('should deduplicate vulnerability references when they match generated CVSS v4 references', () => {
@@ -414,7 +407,7 @@ describe('csafExport', () => {
     expect(result.vulnerabilities[0].remediations?.[0].product_ids).toEqual([
       'version-1',
     ])
-    expect(result.vulnerabilities[0].scores?.[0].products).toEqual([
+    expect(result.vulnerabilities[0].metrics?.[0].products).toEqual([
       'version-1',
     ])
   })

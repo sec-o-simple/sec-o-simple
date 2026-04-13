@@ -2,6 +2,7 @@
 
 exports[`csafExport > should create a CSAF document with complete data 1`] = `
 {
+  "$schema": "https://docs.oasis-open.org/csaf/csaf/v2.1/schema/csaf.json",
   "document": {
     "acknowledgments": [
       {
@@ -123,14 +124,45 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
       },
     ],
   },
-  "vulnerabilities": {
-    "vuln-1": {
+  "vulnerabilities": [
+    {
       "cve": "CVE-2023-12345",
-      "cwe": {
-        "id": "CWE-79",
-        "name": "Improper Neutralization of Input During Web Page Generation",
-      },
+      "cwes": [
+        {
+          "id": "CWE-79",
+          "name": "Improper Neutralization of Input During Web Page Generation",
+          "version": "4.0",
+        },
+      ],
       "flags": undefined,
+      "metrics": [
+        {
+          "content": {
+            "cvss_v3": {
+              "baseScore": 6.1,
+              "baseSeverity": "MEDIUM",
+              "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+              "version": "3.1",
+            },
+          },
+          "products": [
+            "version-1",
+          ],
+        },
+        {
+          "content": {
+            "cvss_v4": {
+              "baseScore": 0,
+              "baseSeverity": "",
+              "vectorString": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+              "version": "4.0",
+            },
+          },
+          "products": [
+            "version-1",
+          ],
+        },
+      ],
       "notes": [
         {
           "category": "description",
@@ -158,43 +190,25 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
           "url": "https://example.com/update-guide",
         },
       ],
-      "scores": [
-        {
-          "cvss_v3": {
-            "baseScore": 6.1,
-            "baseSeverity": "MEDIUM",
-            "vectorString": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
-            "version": "3.1",
-          },
-          "products": [
-            "version-1",
-          ],
-        },
-        {
-          "cvss_v3": {
-            "baseScore": 0,
-            "baseSeverity": "",
-            "vectorString": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
-            "version": "4.0",
-          },
-          "products": [
-            "version-1",
-          ],
-        },
-      ],
       "title": "Cross-site Scripting Vulnerability",
     },
-  },
+  ],
 }
 `;
 
 exports[`csafExport > should create a CSAF document with minimal data 1`] = `
 {
+  "$schema": "https://docs.oasis-open.org/csaf/csaf/v2.1/schema/csaf.json",
   "document": {
     "acknowledgments": undefined,
     "category": "csaf_security_advisory",
     "csaf_version": "2.1",
-    "distribution": undefined,
+    "distribution": {
+      "tlp": {
+        "label": undefined,
+        "url": "https://www.first.org/tlp/",
+      },
+    },
     "lang": "en",
     "notes": undefined,
     "publisher": {
@@ -227,12 +241,13 @@ exports[`csafExport > should create a CSAF document with minimal data 1`] = `
     "branches": [],
     "relationships": undefined,
   },
-  "vulnerabilities": {},
+  "vulnerabilities": [],
 }
 `;
 
 exports[`csafExport > should handle vulnerabilities without optional fields 1`] = `
 {
+  "$schema": "https://docs.oasis-open.org/csaf/csaf/v2.1/schema/csaf.json",
   "document": {
     "acknowledgments": [
       {
@@ -354,18 +369,18 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
       },
     ],
   },
-  "vulnerabilities": {
-    "basic-vuln": {
+  "vulnerabilities": [
+    {
       "cve": undefined,
-      "cwe": undefined,
+      "cwes": undefined,
       "flags": undefined,
+      "metrics": undefined,
       "notes": [],
       "product_status": {},
       "references": undefined,
       "remediations": undefined,
-      "scores": undefined,
       "title": "Basic Vulnerability",
     },
-  },
+  ],
 }
 `;
