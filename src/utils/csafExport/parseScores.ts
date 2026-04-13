@@ -35,7 +35,7 @@ export default function parseScores(
           '3.0': 'cvss_v3',
           '3.1': 'cvss_v3',
           '4.0': 'cvss_v4',
-        }[score.cvssVersion as '3.0' | '3.1' | '4.0'];
+        }[score.cvssVersion as '3.0' | '3.1' | '4.0']
 
         return {
           content: {
