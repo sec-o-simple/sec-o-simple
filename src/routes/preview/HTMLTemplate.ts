@@ -199,13 +199,14 @@ const createExpandedProductStatus = (document: TCSAFDocument) => {
       document.vulnerabilities?.map((vulnerability) => {
         const scoreByProductId = new Map<string, TProductScore>()
 
-        vulnerability.scores?.forEach((score) => {
-          const vectorString = score.cvss_v3?.vectorString
-          const baseScore = score.cvss_v3?.baseScore
+        vulnerability.metrics?.forEach((metric) => {
+          const cvssMetric = metric.content?.cvss_v4 || metric.content?.cvss_v3
+          const vectorString = cvssMetric?.vectorString
+          const baseScore = cvssMetric?.baseScore
 
           if (vectorString === undefined || baseScore === undefined) return
 
-          score.products?.forEach((productId) => {
+          metric.products?.forEach((productId: string) => {
             if (!scoreByProductId.has(productId)) {
               scoreByProductId.set(productId, { vectorString, baseScore })
             }

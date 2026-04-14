@@ -125,12 +125,12 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             cve: undefined,
-            cwe: undefined,
+            cwes: undefined,
             title: undefined,
             notes: undefined,
             product_status: {},
             remediations: undefined,
-            scores: undefined
+            metrics: undefined
           }
         ]
       }
@@ -202,7 +202,7 @@ describe('parseVulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            cwe: mockCwe,
+            cwes: [{ ...mockCwe, version: '4.0' }],
             product_status: {}
           }
         ]
@@ -221,7 +221,7 @@ describe('parseVulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            cwe: undefined,
+            cwes: undefined,
             product_status: {}
           }
         ]
@@ -587,13 +587,15 @@ describe('parseVulnerabilities', () => {
   })
 
   describe('Scores Handling', () => {
-    it('should parse scores with cvss_v3 when provided', () => {
-      const mockScores = [
+    it('should parse metrics with cvss_v3 when provided', () => {
+      const mockMetrics = [
         {
           products: ['product-1'],
-          cvss_v3: {
-            version: '3.1',
-            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+          content: {
+            cvss_v3: {
+              version: '3.1',
+              vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+            }
           }
         }
       ]
@@ -601,7 +603,7 @@ describe('parseVulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: mockScores,
+            metrics: mockMetrics,
             product_status: {}
           }
         ]
@@ -623,13 +625,15 @@ describe('parseVulnerabilities', () => {
       })
     })
 
-    it('should parse scores with cvss_v4 when provided', () => {
-      const mockScores = [
+    it('should parse metrics with cvss_v4 when provided', () => {
+      const mockMetrics = [
         {
           products: ['product-1'],
-          cvss_v4: {
-            version: '4.0',
-            vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
+          content: {
+            cvss_v4: {
+              version: '4.0',
+              vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
+            }
           }
         }
       ]
@@ -637,7 +641,7 @@ describe('parseVulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: mockScores,
+            metrics: mockMetrics,
             product_status: {}
           }
         ]
@@ -658,18 +662,18 @@ describe('parseVulnerabilities', () => {
       })
     })
 
-    it('should default to cvss_v3 when no CVSS version key is found', () => {
-      const mockScores = [
+    it('should use defaults when metric content has no CVSS payload', () => {
+      const mockMetrics = [
         {
           products: ['product-1'],
-          someOtherField: 'value'
+          content: {}
         }
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: mockScores,
+            metrics: mockMetrics,
             product_status: {}
           }
         ]
@@ -691,17 +695,19 @@ describe('parseVulnerabilities', () => {
     })
 
     it('should use default values when CVSS info is undefined', () => {
-      const mockScores = [
+      const mockMetrics = [
         {
           products: ['product-1'],
-          cvss_v3: undefined
+          content: {
+            cvss_v3: undefined
+          }
         }
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: mockScores,
+            metrics: mockMetrics,
             product_status: {}
           }
         ]
@@ -722,11 +728,11 @@ describe('parseVulnerabilities', () => {
       })
     })
 
-    it('should handle undefined scores', () => {
+    it('should handle undefined metrics', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: undefined,
+            metrics: undefined,
             product_status: {}
           }
         ]
@@ -741,11 +747,11 @@ describe('parseVulnerabilities', () => {
       expect(result[0].scores).toBeUndefined()
     })
 
-    it('should handle empty scores array', () => {
+    it('should handle empty metrics array', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: [],
+            metrics: [],
             product_status: {}
           }
         ]
@@ -760,20 +766,24 @@ describe('parseVulnerabilities', () => {
       expect(result[0].scores).toEqual([])
     })
 
-    it('should handle multiple scores', () => {
-      const mockScores = [
+    it('should handle multiple metrics', () => {
+      const mockMetrics = [
         {
           products: ['product-1'],
-          cvss_v3: {
-            version: '3.1',
-            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+          content: {
+            cvss_v3: {
+              version: '3.1',
+              vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+            }
           }
         },
         {
           products: ['product-2'],
-          cvss_v4: {
-            version: '4.0',
-            vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
+          content: {
+            cvss_v4: {
+              version: '4.0',
+              vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
+            }
           }
         }
       ]
@@ -781,7 +791,7 @@ describe('parseVulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: mockScores,
+            metrics: mockMetrics,
             product_status: {}
           }
         ]
@@ -814,12 +824,14 @@ describe('parseVulnerabilities', () => {
           product_ids: ['product-1']
         }
       ]
-      const mockScores = [
+      const mockMetrics = [
         {
           products: ['product-1'],
-          cvss_v3: {
-            version: '3.1',
-            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+          content: {
+            cvss_v3: {
+              version: '3.1',
+              vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+            }
           }
         }
       ]
@@ -828,12 +840,12 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             cve: 'CVE-2023-1234',
-            cwe: mockCwe,
+            cwes: [{ ...mockCwe, version: '4.0' }],
             title: 'Sample Vulnerability',
             notes: mockNotes,
             product_status: { known_affected: ['product-1'] },
             remediations: mockRemediations,
-            scores: mockScores
+            metrics: mockMetrics
           }
         ]
       }
@@ -912,17 +924,19 @@ describe('parseVulnerabilities', () => {
       expect(mockGetDefaultVulnerability).toHaveBeenCalledTimes(3)
     })
 
-    it('should handle edge case with cvss key detection', () => {
-      const mockScores = [
+    it('should prefer cvss_v4 when both cvss_v4 and cvss_v3 are provided', () => {
+      const mockMetrics = [
         {
           products: ['product-1'],
-          cvss_v2: {
-            version: '2.0',
-            vectorString: 'AV:N/AC:L/Au:N/C:P/I:P/A:P'
-          },
-          cvss_v3: {
-            version: '3.1',
-            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+          content: {
+            cvss_v3: {
+              version: '3.1',
+              vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+            },
+            cvss_v4: {
+              version: '4.0',
+              vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
+            }
           }
         }
       ]
@@ -930,7 +944,7 @@ describe('parseVulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: mockScores,
+            metrics: mockMetrics,
             product_status: {}
           }
         ]
@@ -942,9 +956,10 @@ describe('parseVulnerabilities', () => {
         mockRemediationGenerator
       )
 
-      // Should pick the first cvss_ key found (cvss_v2 in this case)
-      expect(result[0].scores[0].cvssVersion).toBe('2.0')
-      expect(result[0].scores[0].vectorString).toBe('AV:N/AC:L/Au:N/C:P/I:P/A:P')
+      expect(result[0].scores[0].cvssVersion).toBe('4.0')
+      expect(result[0].scores[0].vectorString).toBe(
+        'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N',
+      )
     })
   })
 
@@ -964,12 +979,12 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             cve: null,
-            cwe: null,
+            cwes: null,
             title: null,
             notes: null,
             product_status: null,
             remediations: null,
-            scores: null
+            metrics: null
           } as any
         ]
       }
@@ -986,12 +1001,14 @@ describe('parseVulnerabilities', () => {
     })
 
     it('should handle scores with missing version and vectorString', () => {
-      const mockScores = [
+      const mockMetrics = [
         {
           products: ['product-1'],
-          cvss_v3: {
-            version: undefined,
-            vectorString: undefined
+          content: {
+            cvss_v3: {
+              version: undefined,
+              vectorString: undefined
+            }
           }
         }
       ]
@@ -999,7 +1016,7 @@ describe('parseVulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            scores: mockScores,
+            metrics: mockMetrics,
             product_status: {}
           }
         ]

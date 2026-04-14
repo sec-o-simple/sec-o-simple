@@ -28,11 +28,13 @@ describe('HTMLTemplate', () => {
         product_status: {
           known_affected: ['p1'],
         },
-        scores: [
+        metrics: [
           {
-            cvss_v3: {
-              vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
-              baseScore: 9.8,
+            content: {
+              cvss_v3: {
+                vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+                baseScore: 9.8,
+              },
             },
             products: ['p1'],
           },

@@ -3,7 +3,6 @@ import {
   useRemediationGenerator,
 } from '@/routes/vulnerabilities/types/tRemediation'
 import {
-  TCwe,
   TVulnerability,
   getDefaultVulnerability,
 } from '@/routes/vulnerabilities/types/tVulnerability'
@@ -27,6 +26,8 @@ export function parseVulnerabilities(
   return (
     csafDocument.vulnerabilities?.map((vulnerability) => {
       const defaultVulnerability = getDefaultVulnerability()
+      const cweFromCwes = vulnerability.cwes?.[0]
+
       const references = vulnerability.references?.map((reference) => ({
         id: uid(),
         summary: reference.summary,
@@ -41,7 +42,9 @@ export function parseVulnerabilities(
       return {
         id: defaultVulnerability.id,
         cve: vulnerability.cve ?? defaultVulnerability.cve,
-        cwe: vulnerability.cwe as TCwe | undefined,
+        cwe: cweFromCwes
+          ? { id: cweFromCwes.id, name: cweFromCwes.name }
+          : undefined,
         title: vulnerability.title ?? defaultVulnerability.title,
         notes: vulnerability.notes?.map((note) =>
           parseNote(note as TParsedNote),
@@ -70,24 +73,14 @@ export function parseVulnerabilities(
             applyAllKnownAffectedProducts: false,
           } as TRemediation
         }),
-        scores: vulnerability.scores?.map((score) => {
+        scores: vulnerability.metrics?.map((score) => {
           const defaultScore = getDefaultVulnerabilityScore()
 
-          const cvssVersion =
-            Object.keys(score).find((x) => x.startsWith('cvss_')) ?? 'cvss_v3'
-
-          const cvssInfos = (score as { [key: string]: unknown })[
-            cvssVersion
-          ] as
-            | undefined
-            | {
-                version: string
-                vectorString: string
-              }
+          const cvssInfos = score.content?.cvss_v4 || score.content?.cvss_v3
 
           return {
             id: defaultScore.id,
-            productIds: score.products,
+            productIds: score.products || [],
             applyAllKnownAffectedProducts: false,
             cvssVersion: cvssInfos?.version ?? defaultScore.cvssVersion,
             vectorString: cvssInfos?.vectorString ?? defaultScore.vectorString,
