@@ -342,7 +342,7 @@ describe('csafImport', () => {
     })
 
     it('should have correct supported versions', () => {
-      expect(supportedCSAFVersions).toEqual(['2.0'])
+      expect(supportedCSAFVersions).toEqual(['2.1'])
     })
   })
 
