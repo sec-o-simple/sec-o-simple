@@ -32,6 +32,7 @@ describe('tDocumentInformation', () => {
       expect(result).toHaveProperty('title')
       expect(result).toHaveProperty('id')
       expect(result).toHaveProperty('lang')
+      expect(result).toHaveProperty('licenseExpression')
       expect(result).toHaveProperty('status')
       expect(result).toHaveProperty('publisher')
       expect(result).toHaveProperty('revisionHistory')
@@ -105,6 +106,9 @@ describe('tDocumentInformation', () => {
       expect(typeof doc1.title).toBe(typeof doc2.title)
       expect(typeof doc1.id).toBe(typeof doc2.id)
       expect(typeof doc1.lang).toBe(typeof doc2.lang)
+      expect(typeof doc1.licenseExpression).toBe(
+        typeof doc2.licenseExpression,
+      )
       expect(doc1.acknowledgments.length).toBe(doc2.acknowledgments.length)
       expect(doc1.notes.length).toBe(doc2.notes.length)
       expect(doc1.references.length).toBe(doc2.references.length)
@@ -187,6 +191,7 @@ describe('tDocumentInformation', () => {
       expect(typeof defaultDoc.title).toBe('string')
       expect(typeof defaultDoc.id).toBe('string')
       expect(typeof defaultDoc.lang).toBe('string')
+      expect(typeof defaultDoc.licenseExpression).toBe('string')
       expect(Array.isArray(defaultDoc.acknowledgments)).toBe(true)
       expect(Array.isArray(defaultDoc.notes)).toBe(true)
       expect(Array.isArray(defaultDoc.references)).toBe(true)

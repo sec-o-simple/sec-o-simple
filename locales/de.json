@@ -106,6 +106,7 @@
         },
         "alias": "Alias",
         "language": "Sprache",
+        "licenseExpression": "Lizenz",
         "languages": {
           "de": "Deutsch",
           "en": "Englisch"

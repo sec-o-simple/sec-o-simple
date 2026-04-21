@@ -23,8 +23,10 @@ const IdentificationHelper = {
 }
 
 export default {
+  $schema: 'string',
   document: {
     lang: 'string',
+    license_expression: 'string',
     title: 'string',
     // Gets automatically generated
     // and is not part of the original CSAF document.

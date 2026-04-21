@@ -7,6 +7,7 @@ exports[`csafImport > parseCSAFDocument > should handle empty/undefined fields g
     "aliases": undefined,
     "id": "PARTIAL-001",
     "lang": "de",
+    "licenseExpression": "CC-BY-SA-4.0",
     "notes": [],
     "publisher": {
       "category": "coordinator",
@@ -68,6 +69,7 @@ exports[`csafImport > parseCSAFDocument > should parse a complete CSAF document 
     ],
     "id": "TEST-2023-001",
     "lang": "en",
+    "licenseExpression": "CC-BY-SA-4.0",
     "notes": [
       {
         "category": "description",
@@ -139,6 +141,7 @@ exports[`csafImport > parseCSAFDocument > should parse a minimal CSAF document a
     "aliases": undefined,
     "id": "MINIMAL-001",
     "lang": "en",
+    "licenseExpression": "CC-BY-SA-4.0",
     "notes": [],
     "publisher": {
       "category": "vendor",

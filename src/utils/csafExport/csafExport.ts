@@ -1,5 +1,6 @@
 import pck from '@/../package.json'
 import { TAcknowledgmentOutput } from '@/routes/document-information/types/tDocumentAcknowledgments'
+import { defaultLicenseExpression } from '@/routes/document-information/types/tGeneralDocumentInformation'
 import { TVulnerabilityProduct } from '@/routes/vulnerabilities/types/tVulnerabilityProduct'
 import _ from 'lodash'
 import { download } from '../download'
@@ -131,6 +132,8 @@ export function createCSAFDocument(
         },
       },
       lang: documentInformation.lang,
+      license_expression:
+        documentInformation.licenseExpression ?? defaultLicenseExpression,
       title: documentInformation.title,
       publisher: {
         category: documentInformation.publisher.category,

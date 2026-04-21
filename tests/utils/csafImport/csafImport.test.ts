@@ -118,7 +118,7 @@ describe('csafImport', () => {
       const mockCSAFDocument: DeepPartial<TCSAFDocument> = {
         document: {
           category: 'csaf_security_advisory',
-          csaf_version: '2.0',
+          csaf_version: '2.1',
           lang: 'en',
           title: 'Test Security Advisory',
           tracking: {
@@ -209,7 +209,7 @@ describe('csafImport', () => {
       const minimalCSAFDocument: DeepPartial<TCSAFDocument> = {
         document: {
           category: 'csaf_security_advisory',
-          csaf_version: '2.0',
+          csaf_version: '2.1',
           tracking: {
             id: 'MINIMAL-001',
           },
@@ -229,7 +229,7 @@ describe('csafImport', () => {
       const partialCSAFDocument: DeepPartial<TCSAFDocument> = {
         document: {
           category: 'csaf_security_advisory',
-          csaf_version: '2.0',
+          csaf_version: '2.1',
           lang: 'de',
           title: 'Teilweise gefülltes Dokument',
           tracking: {
@@ -279,7 +279,7 @@ describe('csafImport', () => {
 
       const validCSAF = {
         document: {
-          csaf_version: '2.0',
+          csaf_version: '2.1',
           category: 'csaf_security_advisory',
         },
       }
@@ -297,7 +297,7 @@ describe('csafImport', () => {
 
       const supportedVersion = {
         document: {
-          csaf_version: '2.0',
+          csaf_version: '2.1',
         },
       }
 
@@ -321,7 +321,7 @@ describe('csafImport', () => {
 
       const testDocument = {
         document: {
-          csaf_version: '2.0',
+          csaf_version: '2.1',
           category: 'csaf_security_advisory',
           title: 'Test Document',
           tracking: {
@@ -342,7 +342,7 @@ describe('csafImport', () => {
     })
 
     it('should have correct supported versions', () => {
-      expect(supportedCSAFVersions).toEqual(['2.0'])
+      expect(supportedCSAFVersions).toEqual(['2.1'])
     })
   })
 
@@ -350,7 +350,7 @@ describe('csafImport', () => {
     it('should handle acknowledgments with missing fields', () => {
       const mockCSAFDocument: DeepPartial<TCSAFDocument> = {
         document: {
-          csaf_version: '2.0',
+          csaf_version: '2.1',
           tracking: { id: 'TEST-ACK' },
           acknowledgments: [
             {
@@ -390,7 +390,7 @@ describe('csafImport', () => {
     it('should handle TLP case conversion', () => {
       const mockCSAFDocument: DeepPartial<TCSAFDocument> = {
         document: {
-          csaf_version: '2.0',
+          csaf_version: '2.1',
           tracking: { id: 'TEST-TLP' },
           distribution: {
             tlp: {
