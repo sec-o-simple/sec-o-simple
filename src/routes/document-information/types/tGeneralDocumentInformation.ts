@@ -1,9 +1,12 @@
 import { TemplateKeys } from '@/utils/template'
 
+export const defaultLicenseExpression = 'CC-BY-SA-4.0' as const
+
 export type TGeneralDocumentInformation = {
   title: string
   id: string
   lang: string
+  licenseExpression: string
   status: TDocumentStatus
   tlp?: {
     label?: TTLPLevel
@@ -25,6 +28,7 @@ export function getDefaultGeneralDocumentInformation(): TGeneralDocumentInformat
     title: '',
     id: '',
     lang: 'en', // Default to English
+    licenseExpression: defaultLicenseExpression,
     status: 'draft', // Default to draft status
   }
 }
@@ -34,6 +38,7 @@ export function getGeneralDocumentInformationTemplateKeys(): TemplateKeys<TGener
     title: 'document-information.title',
     id: 'document-information.id',
     lang: 'document-information.language',
+    licenseExpression: 'document-information.license-expression',
     status: 'document-information.tracking.status',
     tlp: {
       label: 'document-information.tlp.label',

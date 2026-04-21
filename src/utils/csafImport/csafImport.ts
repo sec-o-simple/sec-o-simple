@@ -14,7 +14,10 @@ import {
   TDocumentReference,
   getDefaultDocumentReference,
 } from '@/routes/document-information/types/tDocumentReference'
-import { TTLPLevel } from '@/routes/document-information/types/tGeneralDocumentInformation'
+import {
+  TTLPLevel,
+  defaultLicenseExpression,
+} from '@/routes/document-information/types/tGeneralDocumentInformation'
 import { getDefaultRevisionHistoryEntry } from '@/routes/document-information/types/tRevisionHistoryEntry'
 import {
   CSAFRelationship,
@@ -39,7 +42,7 @@ import { parseRelationships } from './parseRelationships'
 import { parseVulnerabilities } from './parseVulnerabilities'
 import { default as secOSimpleScheme } from './scheme'
 
-export const supportedCSAFVersions = ['2.0']
+export const supportedCSAFVersions = ['2.1']
 
 export type JSONValue =
   | string
@@ -136,6 +139,10 @@ export function parseCSAFDocument(
   const documentInformation: TDocumentInformation = {
     id: csafDoc?.tracking?.id || defaultDocumentInformation.id,
     lang: csafDoc?.lang ?? defaultDocumentInformation.lang,
+    licenseExpression:
+      csafDoc?.license_expression ??
+      defaultDocumentInformation.licenseExpression ??
+      defaultLicenseExpression,
     status:
       (csafDoc?.tracking?.status as TDocumentInformation['status']) ??
       defaultDocumentInformation.status,

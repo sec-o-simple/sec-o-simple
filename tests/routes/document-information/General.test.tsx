@@ -84,9 +84,10 @@ vi.mock('@/components/forms/Select', () => ({
     renderValue,
   }: any) => {
     const selectId = `select-${csafPath || 'select'}`
-    const selectedValue =
-      selectedKeys && selectedKeys.size > 0
-        ? String(Array.from(selectedKeys)[0])
+    const selectedValue = selectedKeys?.size
+      ? String(Array.from(selectedKeys)[0])
+      : selectedKeys?.length
+        ? String(selectedKeys[0])
         : ''
 
     return (
@@ -121,9 +122,45 @@ vi.mock('@/components/forms/Select', () => ({
   },
 }))
 
+vi.mock('@/components/forms/Autocomplete', () => ({
+  Autocomplete: ({
+    label,
+    selectedKey,
+    onSelectionChange,
+    children,
+    csafPath,
+    className,
+    isRequired,
+    placeholder,
+    isDisabled,
+  }: any) => {
+    const inputId = `autocomplete-${csafPath || 'autocomplete'}`
+
+    return (
+      <div data-testid="autocomplete-wrapper" className={className}>
+        <label data-testid="autocomplete-label" htmlFor={inputId}>
+          {label}
+        </label>
+        <input
+          id={inputId}
+          data-testid={inputId}
+          data-csaf-path={csafPath}
+          data-is-required={isRequired}
+          data-placeholder={placeholder}
+          list={`${inputId}-list`}
+          value={selectedKey || ''}
+          onChange={(e) => onSelectionChange?.(e.target.value)}
+          disabled={isDisabled}
+        />
+        <datalist id={`${inputId}-list`}>{children}</datalist>
+      </div>
+    )
+  },
+}))
+
 vi.mock('@heroui/select', () => ({
   SelectItem: ({ children, ...props }: any) => (
-    <option value={props.key || children}>{children}</option>
+    <option value={props.textValue || children}>{children}</option>
   ),
 }))
 
@@ -133,9 +170,9 @@ vi.mock('@heroui/react', () => ({
       {children}
     </div>
   ),
-}))
-
-vi.mock('@heroui/react', () => ({
+  AutocompleteItem: ({ children, ...props }: any) => (
+    <option value={props.key || children}>{children}</option>
+  ),
   cn: (...classes: string[]) => classes.filter(Boolean).join(' '),
 }))
 
@@ -166,6 +203,7 @@ vi.mock('react-i18next', () => ({
         'document.general.title': 'Document Title',
         'document.general.id': 'Document ID',
         'document.general.language': 'Language',
+        'document.general.licenseExpression': 'License',
         'document.general.languages.de': 'German',
         'document.general.languages.en': 'English',
         'document.general.tlp.title': 'Traffic Light Protocol',
@@ -230,6 +268,12 @@ describe('General', () => {
       expect(screen.getByTestId('select-/document/lang')).toBeInTheDocument()
       expect(screen.getByLabelText('Language')).toBeInTheDocument()
 
+      // License select
+      expect(
+        screen.getByTestId('autocomplete-/document/license_expression'),
+      ).toBeInTheDocument()
+      expect(screen.getByLabelText('License')).toBeInTheDocument()
+
       // TLP section
       expect(screen.getByText('Traffic Light Protocol')).toBeInTheDocument()
       expect(
@@ -252,16 +296,16 @@ describe('General', () => {
       render(<General />)
 
       // Check all TLP levels are rendered
-      expect(screen.getByText('GREEN')).toBeInTheDocument()
-      expect(screen.getByText('AMBER')).toBeInTheDocument()
-      expect(screen.getByText('RED')).toBeInTheDocument()
-      expect(screen.getByText('WHITE')).toBeInTheDocument()
+      expect(screen.getAllByText('GREEN').length).toBeGreaterThan(0)
+      expect(screen.getAllByText('AMBER').length).toBeGreaterThan(0)
+      expect(screen.getAllByText('RED').length).toBeGreaterThan(0)
+      expect(screen.getAllByText('WHITE').length).toBeGreaterThan(0)
     })
 
     it('should render layout components correctly', () => {
       render(<General />)
 
-      expect(screen.getAllByTestId('hsplit')).toHaveLength(2)
+      expect(screen.getAllByTestId('hsplit')).toHaveLength(3)
       expect(screen.getByTestId('vsplit')).toBeInTheDocument()
     })
   })
@@ -297,6 +341,22 @@ describe('General', () => {
       // Verify the select element is rendered and interactive
       expect(languageSelect).toBeInTheDocument()
       expect(languageSelect.tagName).toBe('SELECT')
+    })
+
+    it('should handle license selection changes', async () => {
+      render(<General />)
+      const licenseInput = screen.getByTestId(
+        'autocomplete-/document/license_expression',
+      ) as HTMLInputElement
+
+      expect(licenseInput).toHaveValue('CC-BY-SA-4.0')
+
+      expect(() => {
+        fireEvent.change(licenseInput, { target: { value: 'MIT' } })
+      }).not.toThrow()
+
+      expect(licenseInput).toBeInTheDocument()
+      expect(licenseInput.tagName).toBe('INPUT')
     })
 
     it('should handle TLP level selection changes', async () => {
@@ -340,6 +400,9 @@ describe('General', () => {
         'data-csaf-path',
         '/document/lang',
       )
+      expect(
+        screen.getByTestId('autocomplete-/document/license_expression'),
+      ).toHaveAttribute('data-csaf-path', '/document/license_expression')
       expect(
         screen.getByTestId('select-/document/distribution/tlp/label'),
       ).toHaveAttribute('data-csaf-path', '/document/distribution/tlp/label')

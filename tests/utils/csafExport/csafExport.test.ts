@@ -22,6 +22,7 @@ describe('csafExport', () => {
         id: 'test-document-id',
         title: 'Test Security Advisory',
         lang: 'en',
+        licenseExpression: 'MIT',
         status: 'final',
         revisionHistory: [
           {
@@ -358,6 +359,22 @@ describe('csafExport', () => {
     )
 
     expect(result.vulnerabilities[0].references).toHaveLength(1)
+  })
+
+  it('should export document license expression', () => {
+    const mockStore = createMockDocumentStore()
+
+    const result = createCSAFDocument(
+      mockStore,
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      {
+        template: {},
+        productDatabase: { enabled: false },
+      },
+    )
+
+    expect(result.document.license_expression).toBe('MIT')
   })
 
   it('applies known affected products to remediations and scores when enabled', () => {

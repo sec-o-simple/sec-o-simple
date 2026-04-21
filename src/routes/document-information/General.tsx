@@ -1,13 +1,15 @@
 import WizardStep from '@/components/WizardStep'
+import { Autocomplete } from '@/components/forms/Autocomplete'
 import HSplit from '@/components/forms/HSplit'
 import { Input } from '@/components/forms/Input'
 import Select from '@/components/forms/Select'
 import VSplit from '@/components/forms/VSplit'
+import licenseData from '@/utils/licenses.json'
 import { useTemplate } from '@/utils/template'
 import useDocumentStoreUpdater from '@/utils/useDocumentStoreUpdater'
 import usePageVisit from '@/utils/validation/usePageVisit'
 import useValidationStore from '@/utils/validation/useValidationStore'
-import { Alert, cn } from '@heroui/react'
+import { Alert, AutocompleteItem, cn } from '@heroui/react'
 import { SelectItem } from '@heroui/select'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -15,9 +17,17 @@ import { TDocumentInformation } from './types/tDocumentInformation'
 import {
   TGeneralDocumentInformation,
   TTLPLevel,
+  defaultLicenseExpression,
   getDefaultGeneralDocumentInformation,
   tlpLevel,
 } from './types/tGeneralDocumentInformation'
+
+type TLicense = {
+  name: string
+  licenseId: string
+}
+
+const licenses = licenseData.licenses as TLicense[]
 
 export default function General() {
   const [localState, setLocalState] = useState<TGeneralDocumentInformation>(
@@ -89,6 +99,40 @@ export default function General() {
             </SelectItem>
           ))}
         </Select>
+      </HSplit>
+
+      <HSplit className="items-start">
+        <Autocomplete
+          className="w-full"
+          label={t('document.general.licenseExpression')}
+          csafPath="/document/license_expression"
+          isTouched={hasVisitedPage}
+          selectedKey={localState.licenseExpression ?? defaultLicenseExpression}
+          onSelectionChange={(v) =>
+            setLocalState({
+              ...localState,
+              licenseExpression: (v as string) ?? defaultLicenseExpression,
+            })
+          }
+          isDisabled={isFieldReadonly(
+            'document-information.license-expression',
+          )}
+          maxListboxHeight={400}
+          itemHeight={48}
+          isRequired
+          placeholder={getFieldPlaceholder(
+            'document-information.license-expression',
+          )}
+        >
+          {licenses.map((license) => (
+            <AutocompleteItem
+              key={license.licenseId}
+              textValue={`${license.name} (${license.licenseId})`}
+            >
+              {license.name}
+            </AutocompleteItem>
+          ))}
+        </Autocomplete>
       </HSplit>
 
       <div className="mt-4">

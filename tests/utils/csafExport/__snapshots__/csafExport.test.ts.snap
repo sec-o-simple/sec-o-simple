@@ -26,6 +26,7 @@ exports[`csafExport > should create a CSAF document with complete data 1`] = `
       },
     },
     "lang": "en",
+    "license_expression": "MIT",
     "notes": [
       {
         "category": "description",
@@ -210,6 +211,7 @@ exports[`csafExport > should create a CSAF document with minimal data 1`] = `
       },
     },
     "lang": "en",
+    "license_expression": "MIT",
     "notes": undefined,
     "publisher": {
       "category": "vendor",
@@ -271,6 +273,7 @@ exports[`csafExport > should handle vulnerabilities without optional fields 1`] 
       },
     },
     "lang": "en",
+    "license_expression": "MIT",
     "notes": [
       {
         "category": "description",

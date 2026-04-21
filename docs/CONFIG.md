@@ -80,6 +80,7 @@ Notes:
 | `title`                      | Document title                | `string`                      |
 | `tracking.status`            | Document status               | `draft`, `interim`, `final`   |
 | `language`                   | Document language             | `en`, `de`                    |
+| `license-expression`         | Document license expression   | SPDX license expression, e.g. `CC-BY-SA-4.0` |
 | `tlp.label`                  | TLP label                     | `AMBER`, `GREEN`, `RED`, `WHITE`                      |
 
 ### Notes (Default)
