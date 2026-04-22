@@ -78,6 +78,12 @@ describe('NavigationLayout', () => {
     expect(screen.getByText('nav.documentInfo')).toBeInTheDocument()
     expect(screen.getByText('nav.productManagement.title')).toBeInTheDocument()
     expect(screen.getByText('nav.vulnerabilities')).toBeInTheDocument()
+    expect(
+      screen.getByText('nav.vulnerabilitiesNavigation.vulnerabilities'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByText('nav.vulnerabilitiesNavigation.productMatrix'),
+    ).toBeInTheDocument()
     expect(screen.getByText('nav.tracking')).toBeInTheDocument()
   })
 
@@ -85,7 +91,7 @@ describe('NavigationLayout', () => {
     render(<NavigationLayout />)
 
     const statusIndicators = screen.getAllByTestId('status-indicator')
-    expect(statusIndicators).toHaveLength(10) // Updated count based on actual navigation structure
+    expect(statusIndicators).toHaveLength(11)
   })
 
   it('should render navigation links', () => {

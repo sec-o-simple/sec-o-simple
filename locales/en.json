@@ -55,6 +55,10 @@
       "document": "Document",
       "documentInfo": "Document Information",
       "vulnerabilities": "Vulnerabilities",
+      "vulnerabilitiesNavigation": {
+        "vulnerabilities": "Vulnerabilities",
+        "productMatrix": "Product Selection"
+      },
       "documentInformation": {
         "general": "General",
         "notes": "Notes",
@@ -232,6 +236,20 @@
         "restartRequired": "Restart required"
       },
       "flags": "Flags",
+      "matrix": {
+        "title": "Product Selection",
+        "description": "Set the vulnerability status per product version.",
+        "empty": "Add at least one product version and one vulnerability to use the matrix.",
+        "productVersion": "Product Version",
+        "vulnerabilityFallback": "Vulnerability {{index}}",
+        "required": "Required",
+        "notSet": "Not set",
+        "applyFirst": "Apply first",
+        "applyRow": "Apply to row",
+        "applyColumn": "Apply to column",
+        "applyRowShort": "Row",
+        "applyColumnShort": "Col"
+      },
       "flag": {
         "title": "Flag",
         "component_not_present": "Component not present",

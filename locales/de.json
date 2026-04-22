@@ -55,6 +55,10 @@
       "document": "Dokument",
       "documentInfo": "Dokument Informationen",
       "vulnerabilities": "Schwachstellen",
+      "vulnerabilitiesNavigation": {
+        "vulnerabilities": "Schwachstellen",
+        "productMatrix": "Produktauswahl"
+      },
       "documentInformation": {
         "general": "Allgemein",
         "notes": "Notizen",
@@ -233,6 +237,20 @@
         "restartRequired": "Neustart erforderlich"
       },
       "flags": "Kennzeichnungen",
+      "matrix": {
+        "title": "Produktauswahl",
+        "description": "Setzen Sie den Schwachstellenstatus pro Produktversion.",
+        "empty": "Fügen Sie mindestens eine Produktversion und eine Schwachstelle hinzu, um die Matrix zu verwenden.",
+        "productVersion": "Produktversion",
+        "vulnerabilityFallback": "Schwachstelle {{index}}",
+        "required": "Pflicht",
+        "notSet": "Nicht gesetzt",
+        "applyFirst": "Erste anwenden",
+        "applyRow": "Auf Zeile anwenden",
+        "applyColumn": "Auf Spalte anwenden",
+        "applyRowShort": "Zeile",
+        "applyColumnShort": "Spalte"
+      },
       "flag": {
         "title": "Kennzeichnung"
       },

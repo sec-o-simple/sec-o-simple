@@ -13,6 +13,7 @@ import ProductFamily from './routes/products/ProductFamily'
 import ProductManagement from './routes/products/ProductManagement'
 import Version from './routes/products/Version'
 import Vulnerabilities from './routes/vulnerabilities/Vulnerabilities'
+import ProductMatrix from '@/routes/vulnerabilities/ProductMatrix'
 import { useTemplateInitializer } from './utils/template'
 import { useConfigInitializer } from './utils/useConfigStore'
 import Preview from './routes/preview/Preview'
@@ -43,7 +44,11 @@ export default function App() {
                 <Route path="version/:productVersionId" element={<Version />} />
               </Route>
             </Route>
-            <Route path="vulnerabilities" element={<Vulnerabilities />} />
+            <Route path="vulnerabilities">
+              <Route index element={<Navigate to="list" replace />} />
+              <Route path="list" element={<Vulnerabilities />} />
+              <Route path="matrix" element={<ProductMatrix />} />
+            </Route>
             <Route path="tracking" element={<Tracking />} />
             <Route path="preview" element={<Preview />} />
           </Route>
