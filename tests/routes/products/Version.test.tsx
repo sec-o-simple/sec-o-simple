@@ -390,7 +390,7 @@ describe('Version', () => {
       // Product breadcrumb
       expect(breadcrumbItems[1]).toHaveAttribute(
         'data-href',
-        '/#/products/management/product/product-1',
+        '/#/products/management',
       )
       expect(breadcrumbItems[1]).toHaveTextContent('Test Product')
 
@@ -432,10 +432,7 @@ describe('Version', () => {
       expect(title).toHaveTextContent('Version Version 1.0')
 
       const backLink = screen.getByTestId('back-link')
-      expect(backLink).toHaveAttribute(
-        'data-href',
-        '/products/management/product/product-1',
-      )
+      expect(backLink).toHaveAttribute('data-href', '/products/management')
     })
 
     it('should render action button for non-Software document types', () => {

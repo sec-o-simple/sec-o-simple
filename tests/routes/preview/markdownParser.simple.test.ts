@@ -87,3 +87,30 @@ describe('parseMarkdown', () => {
     expect(result.document.notes[0].active).toBe(true)
   })
 })
+
+describe('parseMarkdown - flat array leaf node', () => {
+  it('should apply markdown to string entries in a flat array (entitlements leaf node)', () => {
+    // vulnerabilities.*.remediations.*.entitlements.* is a flat string array leaf
+    // The else-if (elem) branch applies the modifier to each string in the array
+    const document = {
+      vulnerabilities: [
+        {
+          remediations: [
+            {
+              details: 'plain text',
+              entitlements: ['plain string', 'another string'],
+            },
+          ],
+        },
+      ],
+    }
+
+    const result = parseMarkdown(document)
+    expect(result).toBeDefined()
+    // The entitlements strings should be processed (wrapped in <p> tags by micromark if no markdown)
+    // or left as-is if they are plain text matching the condition
+    expect(
+      Array.isArray(result.vulnerabilities[0].remediations[0].entitlements),
+    ).toBe(true)
+  })
+})

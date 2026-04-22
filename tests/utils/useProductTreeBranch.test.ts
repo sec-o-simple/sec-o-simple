@@ -10,6 +10,7 @@ import { useProductTreeBranch } from '../../src/utils/useProductTreeBranch'
 // Mock dependencies
 const mockUseDocumentStore = vi.fn()
 const mockUpdateProducts = vi.fn()
+const mockUpdateFamilies = vi.fn()
 const mockGetRelationshipsBySourceVersion = vi.fn()
 const mockGetRelationshipsByTargetVersion = vi.fn()
 const mockDeleteRelationship = vi.fn()
@@ -72,6 +73,11 @@ const createMockRelationship = (id: string) => ({
 
 describe('useProductTreeBranch', () => {
   let mockProducts: TProductTreeBranch[]
+  let mockFamilies: {
+    id: string
+    name: string
+    parent: null
+  }[]
 
   beforeEach(() => {
     vi.clearAllMocks()
@@ -95,15 +101,19 @@ describe('useProductTreeBranch', () => {
     const vendor2 = createMockVendor('vendor-2', 'Vendor B', [product2])
 
     mockProducts = [vendor1, vendor2]
+    mockFamilies = [
+      { id: 'family-1', name: 'Family One', parent: null },
+      { id: 'family-2', name: 'Family Two', parent: null },
+    ]
 
     // Setup default mocks
     mockUseDocumentStore.mockImplementation((selector) => {
       const mockStore = {
         products: Object.fromEntries(mockProducts.map((p) => [p.id, p])),
-        families: {}, // Add families
+        families: Object.fromEntries(mockFamilies.map((f) => [f.id, f])),
         relationships: {}, // Empty relationships object
         updateProducts: mockUpdateProducts,
-        updateFamilies: vi.fn(), // Add updateFamilies
+        updateFamilies: mockUpdateFamilies,
       }
       return selector(mockStore)
     })
@@ -1149,6 +1159,64 @@ describe('useProductTreeBranch', () => {
       expect(ptbName.isReadonly).toBe(false)
       expect(ptbName.readonlyReason).toBeUndefined()
       expect(ptbName.name).toBe('Version 1.0')
+    })
+
+    it('should use translated untitled fallback when branch name is empty', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      const unnamedVersion = {
+        ...mockProducts[0].subBranches[0].subBranches[0],
+        name: '',
+      }
+
+      const ptbName = result.current.getPTBName(unnamedVersion)
+
+      expect(ptbName.name).toBe('untitled.product_version')
+      expect(ptbName.isReadonly).toBe(false)
+    })
+  })
+
+  describe('family helpers', () => {
+    it('should add a product family', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+      const newFamily = { id: 'family-3', name: 'Family Three', parent: null }
+
+      act(() => {
+        result.current.addProductFamily(newFamily)
+      })
+
+      expect(mockUpdateFamilies).toHaveBeenCalledWith([
+        ...mockFamilies,
+        newFamily,
+      ])
+    })
+
+    it('should update an existing family', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+      const updatedFamily = {
+        id: 'family-2',
+        name: 'Updated Family Two',
+        parent: null,
+      }
+
+      act(() => {
+        result.current.updateFamily(updatedFamily)
+      })
+
+      expect(mockUpdateFamilies).toHaveBeenCalledWith([
+        mockFamilies[0],
+        updatedFamily,
+      ])
+    })
+
+    it('should delete a family by id', () => {
+      const { result } = renderHook(() => useProductTreeBranch())
+
+      act(() => {
+        result.current.deleteFamily('family-1')
+      })
+
+      expect(mockUpdateFamilies).toHaveBeenCalledWith([mockFamilies[1]])
     })
   })
 

@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { TCSAFDocument } from '../../../src/utils/csafExport/csafExport'
 import {
   parseCSAFDocument,
@@ -12,10 +12,12 @@ vi.mock('uid', () => ({
   uid: vi.fn(() => 'mock-uid-123'),
 }))
 
+const mockImportSOSDraft = vi.fn()
+
 // Mock only the required hook dependencies
 vi.mock('../../../src/utils/sosDraft', () => ({
   useSOSImport: () => ({
-    importSOSDraft: vi.fn(),
+    importSOSDraft: mockImportSOSDraft,
   }),
 }))
 
@@ -105,6 +107,10 @@ vi.mock('../../../src/utils/csafImport/parseNote', () => ({
 }))
 
 describe('csafImport', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   describe('parseCSAFDocument', () => {
     const createMockVulnProductGenerator = () => ({
       generateVulnerabilityProduct: vi.fn(() => ({ id: 'mock-vuln-product' })),
@@ -410,6 +416,108 @@ describe('csafImport', () => {
       expect(result?.documentInformation.tlp.label).toBe('red')
       expect(result?.documentInformation.tlp.url).toBe(
         'https://example.com/red',
+      )
+    })
+
+    it('should parse acknowledgment urls (first url used as url field)', () => {
+      const mockCSAFDocument: DeepPartial<TCSAFDocument> = {
+        document: {
+          csaf_version: '2.0',
+          tracking: { id: 'TEST-ACK-URL' },
+          acknowledgments: [
+            {
+              organization: 'Test Org',
+              summary: 'Thanks',
+              urls: ['https://example.com/first', 'https://example.com/second'],
+              names: [],
+            },
+          ],
+        },
+      }
+
+      const result = parseCSAFDocument(
+        mockCSAFDocument,
+        { generateVulnerabilityProduct: vi.fn() } as any,
+        { generateRemediation: vi.fn() } as any,
+      )
+
+      expect(result?.documentInformation.acknowledgments[0].url).toBe(
+        'https://example.com/first',
+      )
+    })
+
+    it('should use default reference category when missing in input', () => {
+      const mockCSAFDocument: DeepPartial<TCSAFDocument> = {
+        document: {
+          csaf_version: '2.0',
+          tracking: { id: 'TEST-REF-CAT' },
+          references: [
+            {
+              summary: 'No category provided',
+              url: 'https://example.com/reference',
+            } as any,
+          ],
+        },
+      }
+
+      const result = parseCSAFDocument(
+        mockCSAFDocument,
+        { generateVulnerabilityProduct: vi.fn() } as any,
+        { generateRemediation: vi.fn() } as any,
+      )
+
+      expect(result?.documentInformation.references).toHaveLength(1)
+      expect(result?.documentInformation.references[0].category).toBe('external')
+    })
+  })
+
+  describe('hidden fields array/schema mismatch', () => {
+    it('should group unknown array entries and call importSOSDraft', () => {
+      const { importCSAFDocument } = useCSAFImport()
+
+      const testDocument = {
+        document: [
+          { arbitrary: 'one' },
+          { arbitrary: 'two' },
+        ],
+      } as any
+
+      const hiddenFields = importCSAFDocument(testDocument)
+
+      expect(mockImportSOSDraft).toHaveBeenCalledTimes(1)
+      expect(hiddenFields).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({ path: '/document/*' }),
+        ]),
+      )
+    })
+
+    it('should recurse into schema-defined arrays and collect unknown item fields', () => {
+      const { importCSAFDocument } = useCSAFImport()
+
+      const testDocument = {
+        document: {
+          csaf_version: '2.0',
+          tracking: { id: 'TEST-ARRAY-ITEMS' },
+          acknowledgments: [
+            {
+              organization: 'Test Org',
+              names: [],
+              unexpected_field: 'hidden value',
+            },
+          ],
+        },
+      } as any
+
+      const hiddenFields = importCSAFDocument(testDocument)
+
+      expect(mockImportSOSDraft).toHaveBeenCalledTimes(1)
+      expect(hiddenFields).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: '/document/acknowledgments/*/unexpected_field',
+          }),
+        ]),
       )
     })
   })
