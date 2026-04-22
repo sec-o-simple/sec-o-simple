@@ -2,6 +2,18 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
+const {
+  mockUseDocumentStoreUpdater,
+  mockUpdateFamily,
+  mockDeleteFamily,
+  mockAddProductFamily,
+} = vi.hoisted(() => ({
+  mockUseDocumentStoreUpdater: vi.fn(),
+  mockUpdateFamily: vi.fn(),
+  mockDeleteFamily: vi.fn(),
+  mockAddProductFamily: vi.fn(),
+}))
+
 // Mock all dependencies BEFORE importing the component
 vi.mock('@/components/forms/AddItemButton', () => ({
   default: ({ label, onPress, ...props }: any) => (
@@ -20,7 +32,7 @@ vi.mock('@/components/WizardStep', () => ({
 }))
 
 vi.mock('@/utils/useDocumentStoreUpdater', () => ({
-  default: vi.fn(),
+  default: mockUseDocumentStoreUpdater,
 }))
 
 const mockListState = {
@@ -42,10 +54,10 @@ const mockFamilies = [
 
 vi.mock('@/utils/useProductTreeBranch', () => ({
   useProductTreeBranch: vi.fn(() => ({
-    updateFamily: vi.fn(),
-    deleteFamily: vi.fn(),
+    updateFamily: mockUpdateFamily,
+    deleteFamily: mockDeleteFamily,
     families: mockFamilies,
-    addProductFamily: vi.fn(),
+    addProductFamily: mockAddProductFamily,
   })),
 }))
 
@@ -60,8 +72,15 @@ const mockDisclosure = {
 }
 
 vi.mock('@heroui/modal', () => ({
-  Modal: ({ children, isOpen }: any) =>
-    isOpen ? <div data-testid="modal">{children}</div> : null,
+  Modal: ({ children, isOpen, onOpenChange }: any) =>
+    isOpen ? (
+      <div data-testid="modal">
+        <button data-testid="modal-open-change" onClick={onOpenChange}>
+          Toggle Modal
+        </button>
+        {children}
+      </div>
+    ) : null,
   useDisclosure: vi.fn(() => mockDisclosure),
 }))
 
@@ -100,6 +119,12 @@ vi.mock('../../../src/routes/products/components/PFEditForm', () => ({
         onClick={() => onSave({ id: '', name: 'Test' })}
       >
         Save
+      </button>
+      <button
+        data-testid="save-existing-button"
+        onClick={() => onSave({ id: 'family1', name: 'Updated Family' })}
+      >
+        Save Existing
       </button>
     </div>
   ),
@@ -214,6 +239,21 @@ describe('ProductFamily Component', () => {
     mockDisclosure.isOpen = false
   })
 
+  it('should initialize list state from document store updater data', () => {
+    render(<ProductFamily />)
+
+    const updaterConfig = mockUseDocumentStoreUpdater.mock.calls[0][0]
+    updaterConfig.init({
+      family1: { id: 'family1', name: 'Root Family', parent: null },
+      family2: { id: 'family2', name: 'Child Family', parent: null },
+    })
+
+    expect(mockListState.setData).toHaveBeenCalledWith([
+      { id: 'family1', name: 'Root Family', parent: null },
+      { id: 'family2', name: 'Child Family', parent: null },
+    ])
+  })
+
   it('should render wizard step with correct title', () => {
     render(<ProductFamily />)
 
@@ -271,6 +311,17 @@ describe('ProductFamily Component', () => {
     expect(screen.getByTestId('modal')).toBeInTheDocument()
   })
 
+  it('should reset editing family when modal open state changes', async () => {
+    mockDisclosure.isOpen = true
+
+    render(<ProductFamily />)
+
+    const user = userEvent.setup()
+    await user.click(screen.getByTestId('modal-open-change'))
+
+    expect(mockDisclosure.onOpenChange).toHaveBeenCalled()
+  })
+
   it('should handle form save', async () => {
     mockDisclosure.isOpen = true
 
@@ -281,5 +332,19 @@ describe('ProductFamily Component', () => {
 
     await user.click(saveButton)
     expect(mockListState.addDataEntry).toHaveBeenCalled()
+  })
+
+  it('should update an existing family when saved with an id', async () => {
+    mockDisclosure.isOpen = true
+
+    render(<ProductFamily />)
+
+    const user = userEvent.setup()
+    await user.click(screen.getByTestId('save-existing-button'))
+
+    expect(mockUpdateFamily).toHaveBeenCalledWith({
+      id: 'family1',
+      name: 'Updated Family',
+    })
   })
 })

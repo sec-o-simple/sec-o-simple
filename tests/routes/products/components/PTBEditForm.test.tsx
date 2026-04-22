@@ -6,8 +6,14 @@ vi.mock('@heroui/react', async (importOriginal) => {
   const actual = (await importOriginal()) as any
   return {
     ...actual,
-    Autocomplete: ({ children, ...props }: any) => (
+    Autocomplete: ({ children, onSelectionChange, ...props }: any) => (
       <div data-testid="autocomplete" {...props}>
+        <button
+          data-testid="autocomplete-clear"
+          onClick={() => onSelectionChange?.(null)}
+        >
+          clear
+        </button>
         {children}
       </div>
     ),
@@ -72,7 +78,6 @@ vi.mock('../../../../src/utils/useProductTreeBranch', () => ({
   })),
 }))
 
-// Mock HeroUI components
 vi.mock('@heroui/modal', () => ({
   ModalContent: ({ children }: { children: any }) => (
     <div data-testid="modal-content">
@@ -235,5 +240,33 @@ describe('PTBCreateEditForm', () => {
         familyId: null,
       }),
     )
+  })
+
+  it('should not update type when Select onChange fires with empty value', () => {
+    const onSave = vi.fn()
+    render(<PTBCreateEditForm category="product_name" onSave={onSave} />)
+
+    const select = screen.getByTestId('select')
+    // Fire change with empty value – should not update type (guard: if (!e.target.value) return)
+    fireEvent.change(select, { target: { value: '' } })
+
+    // Type should still be the initial 'Software' value
+    const saveButton = screen.getByText('common.save')
+    fireEvent.click(saveButton)
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ type: 'Software' }))
+  })
+
+  it('should set family to null when autocomplete selection is cleared (key === null)', () => {
+    const onSave = vi.fn()
+    render(<PTBCreateEditForm category="product_name" onSave={onSave} />)
+
+    const autocomplete = screen.getByTestId('autocomplete-clear')
+    // Trigger onSelectionChange with null to test the null guard branch
+    fireEvent.click(autocomplete)
+
+    // Call onSave and verify familyId is null
+    const saveButton = screen.getByText('common.save')
+    fireEvent.click(saveButton)
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ familyId: null }))
   })
 })

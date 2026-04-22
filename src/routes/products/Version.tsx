@@ -64,9 +64,7 @@ export default function Version() {
             ? productVersion.parent?.parent?.name
             : t('untitled.vendor')}
         </BreadcrumbItem>
-        <BreadcrumbItem
-          href={`/#/products/management/product/${productVersion.parent?.id}`}
-        >
+        <BreadcrumbItem href="/#/products/management">
           {productVersion.parent?.name !== ''
             ? productVersion.parent?.name
             : t('untitled.product_name')}
@@ -84,11 +82,7 @@ export default function Version() {
             ? `${t('products.product.version.label')} ${name}`
             : t('untitled.product_version')
         }
-        backLink={
-          productVersion.parent?.id
-            ? `/products/management/product/${productVersion.parent?.id}`
-            : '/products/management'
-        }
+        backLink={'/products/management'}
         actionTitle={
           sosDocumentType !== 'Software'
             ? t('common.add', {
@@ -152,7 +146,6 @@ export default function Version() {
                   <InfoCard
                     key={rel.id}
                     variant="boxed"
-                    linkTo={`/products/management/product/${product.id}`}
                     title={
                       product.name !== '' && product.name
                         ? product.name

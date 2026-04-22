@@ -9,7 +9,6 @@ import References from './routes/document-information/References'
 import Aliases from './routes/document-information/Aliases'
 import Tracking from './routes/document-information/Tracking'
 import DocumentSelection from './routes/document-selection/DocumentSelection'
-import Product from './routes/products/Product'
 import ProductFamily from './routes/products/ProductFamily'
 import ProductManagement from './routes/products/ProductManagement'
 import Version from './routes/products/Version'
@@ -41,7 +40,6 @@ export default function App() {
               <Route path="families" element={<ProductFamily />} />
               <Route path="management">
                 <Route index element={<ProductManagement />} />
-                <Route path="product/:productId" element={<Product />} />
                 <Route path="version/:productVersionId" element={<Version />} />
               </Route>
             </Route>

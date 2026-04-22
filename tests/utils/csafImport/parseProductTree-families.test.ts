@@ -190,4 +190,60 @@ describe('parseProductTree - Family Integration', () => {
     // iPhone 15 should reference iPhone family (the parent family context)
     expect(iphone15?.familyId).toBe(iphoneFamily?.id)
   })
+
+  it('should reuse existing family when the same family path appears multiple times', () => {
+    const csafDocument = {
+      product_tree: {
+        branches: [
+          {
+            category: 'vendor',
+            name: 'Vendor A',
+            branches: [
+              {
+                category: 'product_family',
+                name: 'Shared Family',
+                branches: [
+                  {
+                    category: 'product_name',
+                    name: 'Product One',
+                    product: {
+                      product_id: 'prod-one',
+                      name: 'Product One',
+                    },
+                  },
+                ],
+              },
+              {
+                category: 'product_family',
+                name: 'Shared Family',
+                branches: [
+                  {
+                    category: 'product_name',
+                    name: 'Product Two',
+                    product: {
+                      product_id: 'prod-two',
+                      name: 'Product Two',
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    }
+
+    const result = parseProductTree(csafDocument)
+
+    // The same family path should be represented once and reused.
+    expect(result.families).toHaveLength(1)
+    const sharedFamily = result.families[0]
+
+    const vendor = result.products[0]
+    const productOne = vendor.subBranches.find((p) => p.id === 'prod-one')
+    const productTwo = vendor.subBranches.find((p) => p.id === 'prod-two')
+
+    expect(productOne?.familyId).toBe(sharedFamily.id)
+    expect(productTwo?.familyId).toBe(sharedFamily.id)
+  })
 })
