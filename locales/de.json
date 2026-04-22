@@ -349,6 +349,7 @@
         "type": "Produktart",
         "version": {
           "label": "Version",
+          "label_plural": "Versionen",
           "empty": "Keine Versionen vorhanden",
           "edit": "Produktversion bearbeiten",
           "edit_plural": "Produktversionen bearbeiten",
