@@ -41,6 +41,14 @@ const validationSections: Record<string, HasErrorFunction> = {
   '/vulnerabilities': (errorPaths) => {
     return errorPaths.some((path) => path.startsWith('/vulnerabilities'))
   },
+  '/vulnerabilities/list': (errorPaths) => {
+    return errorPaths.some((path) => path.startsWith('/vulnerabilities'))
+  },
+  '/vulnerabilities/matrix': (errorPaths) => {
+    return errorPaths.some((path) =>
+      /^\/vulnerabilities\/\d+\/product_status$/.test(path),
+    )
+  },
 }
 
 export function usePathValidation(path: string) {

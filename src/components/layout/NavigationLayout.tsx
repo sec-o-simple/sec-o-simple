@@ -61,7 +61,16 @@ export default function NavigationLayout() {
             number={3}
             title={t('nav.vulnerabilities')}
             to="/vulnerabilities"
-          />
+          >
+            <SubSection
+              title={t('nav.vulnerabilitiesNavigation.vulnerabilities')}
+              to="/vulnerabilities/list"
+            />
+            <SubSection
+              title={t('nav.vulnerabilitiesNavigation.productMatrix')}
+              to="/vulnerabilities/matrix"
+            />
+          </Section>
           <Section number={4} title={t('nav.tracking')} to="/tracking" />
           <Section
             number={5}

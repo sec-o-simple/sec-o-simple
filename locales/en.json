@@ -55,6 +55,10 @@
       "document": "Document",
       "documentInfo": "Document Information",
       "vulnerabilities": "Vulnerabilities",
+      "vulnerabilitiesNavigation": {
+        "vulnerabilities": "Vulnerabilities",
+        "productMatrix": "Product Selection"
+      },
       "documentInformation": {
         "general": "General",
         "notes": "Notes",
@@ -186,6 +190,14 @@
       "references": "References",
       "products": {
         "title": "Products",
+        "matrixHint": "Hint: edit product selection across all vulnerabilities in one overview via",
+        "openMatrix": "Product Selection",
+        "copySectionTitle": "Copy from another vulnerability",
+        "copyFromLabel": "Copy selection from",
+        "copyFromPlaceholder": "Select vulnerability",
+        "copyButton": "Copy Product Selection",
+        "noProductVersions": "No products available yet.",
+        "noProductVersionsLinkPrefix": "Please add them in",
         "status": {
           "title": "Product Status",
           "first_affected": "First Affected",
@@ -232,6 +244,20 @@
         "restartRequired": "Restart required"
       },
       "flags": "Flags",
+      "matrix": {
+        "title": "Product Selection",
+        "description": "Set the vulnerability status per product version.",
+        "empty": "Add at least one product version and one vulnerability to use the matrix.",
+        "productVersion": "Product",
+        "vulnerabilityFallback": "Vulnerability {{index}}",
+        "required": "Required",
+        "notSet": "Not set",
+        "applyFirst": "Apply first",
+        "applyRow": "Apply to row",
+        "applyColumn": "Apply to column",
+        "applyRowShort": "Row",
+        "applyColumnShort": "Col"
+      },
       "flag": {
         "title": "Flag",
         "component_not_present": "Component not present",

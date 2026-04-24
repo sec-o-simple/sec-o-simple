@@ -82,6 +82,9 @@ export default function VendorList() {
   const [editingProduct, setEditingProduct] = useState<
     TProductTreeBranch | undefined
   >()
+  const [selectedVendorForProduct, setSelectedVendorForProduct] = useState<
+    TProductTreeBranch | undefined
+  >()
   const [editingVersion, setEditingVersion] = useState<
     TProductTreeBranch | undefined
   >()
@@ -245,6 +248,7 @@ export default function VendorList() {
                     )}
                     onEdit={() => {
                       setEditingProduct(product)
+                      setSelectedVendorForProduct(vendor)
                       onProductOpen()
                     }}
                     onEditVersion={(version) => {
@@ -267,7 +271,11 @@ export default function VendorList() {
                 label={t('common.add', {
                   label: t('products.product.label'),
                 })}
-                onPress={() => onProductOpen()}
+                onPress={() => {
+                  setSelectedVendorForProduct(vendor)
+                  setEditingProduct(undefined)
+                  onProductOpen()
+                }}
               />
 
               <Modal
@@ -276,6 +284,7 @@ export default function VendorList() {
                 onOpenChange={() => {
                   onProductOpenChange()
                   setEditingProduct(undefined)
+                  setSelectedVendorForProduct(undefined)
                 }}
               >
                 <PTBCreateEditForm
@@ -285,13 +294,18 @@ export default function VendorList() {
                     if (ptb.id) {
                       updatePTB(ptb)
                     } else {
+                      if (!selectedVendorForProduct) return
+
                       const newProduct = {
                         ...getDefaultProductTreeBranch('product_name'),
                         ...ptb,
                       }
                       vendorListState.updateDataEntry({
-                        ...vendor,
-                        subBranches: [...vendor.subBranches, newProduct],
+                        ...selectedVendorForProduct,
+                        subBranches: [
+                          ...selectedVendorForProduct.subBranches,
+                          newProduct,
+                        ],
                       })
                       setNewlyCreatedProductId(newProduct.id)
                     }

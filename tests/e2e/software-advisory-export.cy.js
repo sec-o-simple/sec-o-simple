@@ -134,20 +134,15 @@ describe('Create a new software advisory & export it', () => {
     cy.wait(500)
 
     cy.get('[data-slot="tab"]').contains('Products').click()
-    cy.contains('Add New Item').click()
     cy.wait(500)
-    cy.contains('label[data-slot="label"]', 'Status')
-      .parent()
-      .find('[aria-haspopup="listbox"]')
-      .scrollIntoView()
-      .should('be.visible')
-      .click()
-    cy.contains('li', 'Known Affected').click()
-    cy.get('[aria-autocomplete="list"]').first().click()
     cy.contains(
-      'li',
+      'td',
       'Test Vendor Test Software 1.0.0 installed on Test Vendor Test Hardware 1.2.0',
-    ).click()
+    )
+      .closest('tr')
+      .find('input[type="radio"]')
+      .first()
+      .click({ force: true })
 
     cy.get('[data-slot="tab"]').contains('Remediations').click()
     cy.contains('Add Remediation').click()
