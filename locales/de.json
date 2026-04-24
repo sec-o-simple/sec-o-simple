@@ -191,6 +191,14 @@
       "references": "Referenzen",
       "products": {
         "title": "Produkte",
+        "matrixHint": "Hinweis: Bearbeiten Sie die Produktauswahl für alle Schwachstellen in einer Übersicht über die",
+        "openMatrix": "Produktauswahl",
+        "copySectionTitle": "Von anderer Schwachstelle kopieren",
+        "copyFromLabel": "Auswahl kopieren von",
+        "copyFromPlaceholder": "Schwachstelle auswählen",
+        "copyButton": "Produktauswahl kopieren",
+        "noProductVersions": "Noch keine Produktversionen verfügbar.",
+        "noProductVersionsLinkPrefix": "Bitte fügen Sie diese in der",
         "status": {
           "title": "Produktstatus",
           "first_affected": "Erste betroffene Version",

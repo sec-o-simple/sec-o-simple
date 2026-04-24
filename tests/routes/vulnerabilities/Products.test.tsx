@@ -1,788 +1,515 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
-import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom'
+import { fireEvent, render, screen, within } from '@testing-library/react'
+import type { ReactNode } from 'react'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Products from '../../../src/routes/vulnerabilities/Products'
-import { TVulnerability, getDefaultVulnerability } from '../../../src/routes/vulnerabilities/types/tVulnerability'
-import { TVulnerabilityProduct } from '../../../src/routes/vulnerabilities/types/tVulnerabilityProduct'
+import { TVulnerability } from '../../../src/routes/vulnerabilities/types/tVulnerability'
+import { getMatrixCellStatus } from '../../../src/routes/vulnerabilities/utils/productMatrix'
 
-// Mock functions that will be reassigned in tests
-let mockUseListState: any
-let mockUseFieldValidation: any
-let mockUseVulnerabilityProductGenerator: any
+type StoreState = {
+  vulnerabilities: TVulnerability[]
+}
 
-// Mock react-i18next
+let mockStore: StoreState
+const onChangeMock = vi.fn()
+let mockValidation = {
+  hasErrors: false,
+  errorMessages: [] as { path: string; message: string }[],
+}
+let mockProductVersions = [
+  {
+    id: 'version-1',
+    category: 'product_version',
+    name: '1.0',
+    description: '',
+    subBranches: [],
+  },
+  {
+    id: 'version-2',
+    category: 'product_version',
+    name: '2.0',
+    description: '',
+    subBranches: [],
+  },
+]
+
+vi.mock('react-router', () => ({
+  Link: ({
+    to,
+    children,
+    ...props
+  }: {
+    to: string
+    children: ReactNode
+    [key: string]: unknown
+  }) => (
+    <a href={to} {...(props as Record<string, unknown>)}>
+      {children}
+    </a>
+  ),
+}))
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key,
+    t: (key: string, options?: { index?: number }) => {
+      const map: Record<string, string> = {
+        'vulnerabilities.products.matrixHint':
+          'Tip: edit product selection across all vulnerabilities in one overview via',
+        'vulnerabilities.products.openMatrix': 'Product Matrix',
+        'vulnerabilities.products.copySectionTitle':
+          'Copy from another vulnerability',
+        'vulnerabilities.products.copyFromLabel': 'Copy selection from',
+        'vulnerabilities.products.copyFromPlaceholder': 'Select vulnerability',
+        'vulnerabilities.products.copyButton': 'Copy Product Selection',
+        'vulnerabilities.products.noProductVersions':
+          'No product versions available yet.',
+        'vulnerabilities.products.noProductVersionsLinkPrefix':
+          'Please add them in',
+        'products.manage': 'Product Management',
+        'vulnerabilities.matrix.productVersion': 'Product Version',
+        'vulnerabilities.products.status.known_affected': 'Known Affected',
+        'vulnerabilities.products.status.known_not_affected':
+          'Known Not Affected',
+        'vulnerabilities.products.status.fixed': 'Fixed',
+        'vulnerabilities.products.status.under_investigation':
+          'Under Investigation',
+      }
+
+      if (key === 'vulnerabilities.matrix.vulnerabilityFallback') {
+        return `Vulnerability ${options?.index}`
+      }
+
+      return map[key] || key
+    },
   }),
 }))
 
-// Mock useListState hook
-vi.mock('../../../src/utils/useListState', () => ({
-  useListState: (...args: any[]) => mockUseListState(...args),
+vi.mock('@/utils/useDocumentStore', () => ({
+  default: (selector: (state: StoreState) => unknown) => selector(mockStore),
 }))
 
-// Mock useFieldValidation hook
-vi.mock('../../../src/utils/validation/useFieldValidation', () => ({
-  useFieldValidation: (...args: any[]) => mockUseFieldValidation(...args),
-}))
-
-// Mock useVulnerabilityProductGenerator hook
-vi.mock('../../../src/routes/vulnerabilities/types/tVulnerabilityProduct', () => ({
-  useVulnerabilityProductGenerator: () => ({
-    generateVulnerabilityProduct: mockUseVulnerabilityProductGenerator,
+vi.mock('@/utils/useProductTreeBranch', () => ({
+  useProductTreeBranch: () => ({
+    getPTBsByCategory: () => mockProductVersions,
+    getFullProductName: (id: string) =>
+      id === 'version-1' ? 'Vendor Product 1.0' : 'Vendor Product 2.0',
   }),
-  productStatus: [
-    'first_affected',
-    'known_affected',
-    'known_not_affected',
-    'last_affected',
-    'first_fixed',
-    'fixed',
-    'recommended',
-    'under_investigation',
-  ],
 }))
 
-// Mock form components
-vi.mock('../../../src/components/forms/AddItemButton', () => ({
-  default: ({ onPress, className, ...props }: any) => (
-    <button 
-      data-testid="add-item-button"
-      onClick={onPress}
-      className={className}
-      {...props}
-    >
-      Add Item
-    </button>
-  )
+vi.mock('@/utils/validation/useFieldValidation', () => ({
+  useFieldValidation: () => mockValidation,
 }))
 
-vi.mock('../../../src/components/forms/VSplit', () => ({
-  default: ({ children, className, ...props }: any) => (
-    <div data-testid="vsplit-container" className={className} {...props}>
-      {children}
-    </div>
-  )
-}))
-
-// Mock HeroUI Alert component
 vi.mock('@heroui/react', () => ({
-  Alert: ({ children, color, ...props }: any) => (
-    <div data-testid="alert" data-color={color} {...props}>
+  Button: ({
+    children,
+    onPress,
+    isDisabled,
+    ...props
+  }: {
+    children: ReactNode
+    onPress?: () => void
+    isDisabled?: boolean
+    [key: string]: unknown
+  }) => (
+    <button
+      onClick={onPress}
+      disabled={isDisabled}
+      {...(props as Record<string, unknown>)}
+    >
       {children}
-    </div>
-  )
+    </button>
+  ),
 }))
 
-// Mock VulnerabilityProduct component
-vi.mock('../../../src/routes/vulnerabilities/components/VulnerabilityProduct', () => ({
-  default: ({ vulnerabilityProduct, onChange, onDelete, ...props }: any) => (
-    <div 
-      data-testid="vulnerability-product"
-      data-product-id={vulnerabilityProduct.id}
-      {...props}
-    >
-      <span data-testid="product-id">{vulnerabilityProduct.id}</span>
-      <span data-testid="product-status">{vulnerabilityProduct.status}</span>
-      <button 
-        data-testid="change-product-button"
-        onClick={() => onChange?.({ ...vulnerabilityProduct, status: 'updated' })}
-      >
-        Change Product
-      </button>
-      <button 
-        data-testid="delete-product-button"
-        onClick={() => onDelete?.(vulnerabilityProduct)}
-      >
-        Delete Product
-      </button>
-    </div>
-  )
-}))
+function createVulnerability(
+  id: string,
+  title: string,
+  products: TVulnerability['products'] = [],
+): TVulnerability {
+  return {
+    id,
+    title,
+    notes: [],
+    references: [],
+    products,
+    flags: [],
+    remediations: [],
+    scores: [],
+  }
+}
 
 describe('Products', () => {
-  const mockOnChange = vi.fn()
-  const mockGenerateVulnerabilityProduct = vi.fn()
-  
-  const defaultVulnerability: TVulnerability = {
-    ...getDefaultVulnerability(),
-    products: [],
-  }
-
-  const mockProduct1: TVulnerabilityProduct = {
-    id: 'product-1',
-    productId: 'prod-1',
-    status: 'known_affected',
-  }
-
-  const mockProduct2: TVulnerabilityProduct = {
-    id: 'product-2',  
-    productId: 'prod-2',
-    status: 'fixed',
-  }
-
-  const defaultListState = {
-    data: [],
-    setData: vi.fn(),
-    updateDataEntry: vi.fn(),
-    removeDataEntry: vi.fn(),
-  }
-
-  const defaultValidation = {
-    messages: [],
-    hasErrors: false,
-    hasWarnings: false,
-    hasInfos: false,
-    errorMessages: [],
-    warningMessages: [],
-    infoMessages: [],
-    isTouched: false,
-    markFieldAsTouched: vi.fn(),
-  }
+  let currentVulnerability: TVulnerability
 
   beforeEach(() => {
     vi.clearAllMocks()
-    
-    mockUseListState = vi.fn(() => defaultListState)
-    mockUseFieldValidation = vi.fn(() => defaultValidation)
-    mockUseVulnerabilityProductGenerator = vi.fn(() => ({
-      id: 'new-product-id',
-      productId: '',
-      status: '',
-    }))
-    
-    mockGenerateVulnerabilityProduct.mockReturnValue({
-      id: 'new-product-id',
-      productId: '',
-      status: '',
-    })
+    mockProductVersions = [
+      {
+        id: 'version-1',
+        category: 'product_version',
+        name: '1.0',
+        description: '',
+        subBranches: [],
+      },
+      {
+        id: 'version-2',
+        category: 'product_version',
+        name: '2.0',
+        description: '',
+        subBranches: [],
+      },
+    ]
+
+    mockValidation = {
+      hasErrors: false,
+      errorMessages: [],
+    }
+
+    currentVulnerability = createVulnerability('v-1', 'Current', [
+      { id: 'p-1', productId: 'version-2', status: 'fixed' },
+    ])
+
+    mockStore = {
+      vulnerabilities: [
+        currentVulnerability,
+        createVulnerability('v-2', 'Source', [
+          { id: 'p-2', productId: 'version-1', status: 'known_affected' },
+        ]),
+      ],
+    }
   })
 
-  describe('Component Rendering', () => {
-    it('should render without crashing', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+  it('renders matrix hint and open matrix action', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
 
-      expect(screen.getByTestId('vsplit-container')).toBeInTheDocument()
-      expect(screen.getByTestId('add-item-button')).toBeInTheDocument()
-    })
-
-    it('should initialize with correct props', () => {
-      const vulnerability: TVulnerability = {
-        ...defaultVulnerability,
-        products: [mockProduct1, mockProduct2],
-      }
-
-      render(
-        <Products
-          vulnerability={vulnerability}
-          vulnerabilityIndex={5}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(mockUseListState).toHaveBeenCalledWith({
-        initialData: vulnerability.products,
-        generator: {
-          id: 'new-product-id',
-          productId: '',
-          status: '',
-        },
-      })
-
-      expect(mockUseFieldValidation).toHaveBeenCalledWith(
-        '/vulnerabilities/5/product_status'
-      )
-    })
-
-    it('should render existing vulnerability products', () => {
-      const listStateWithData = {
-        ...defaultListState,
-        data: [mockProduct1, mockProduct2],
-      }
-      mockUseListState.mockReturnValue(listStateWithData)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      const products = screen.getAllByTestId('vulnerability-product')
-      expect(products).toHaveLength(2)
-      
-      expect(screen.getByText('product-1')).toBeInTheDocument()
-      expect(screen.getByText('product-2')).toBeInTheDocument()
-    })
-
-    it('should render empty state when no products exist', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(screen.queryByTestId('vulnerability-product')).not.toBeInTheDocument()
-      expect(screen.getByTestId('add-item-button')).toBeInTheDocument()
-    })
+    expect(
+      screen.getByText((_, element) =>
+        element?.tagName === 'P' &&
+        (element.textContent || '').includes(
+          'Tip: edit product selection across all vulnerabilities in one overview via',
+        ),
+      ),
+    ).toBeInTheDocument()
+    expect(screen.getByText('Product Matrix')).toBeInTheDocument()
   })
 
-  describe('Validation Error Display', () => {
-    it('should not display alert when there are no validation errors', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+  it('renders matrix link in hint below the table', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
 
-      expect(screen.queryByTestId('alert')).not.toBeInTheDocument()
-    })
-
-    it('should display alert when validation has errors', () => {
-      const validationWithErrors = {
-        ...defaultValidation,
-        hasErrors: true,
-        errorMessages: [
-          { path: '/vulnerabilities/0/products', message: 'At least one product is required' },
-          { path: '/vulnerabilities/0/products/0', message: 'Product status is required' },
-        ],
-      }
-      mockUseFieldValidation.mockReturnValue(validationWithErrors)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      const alert = screen.getByTestId('alert')
-      expect(alert).toBeInTheDocument()
-      expect(alert).toHaveAttribute('data-color', 'danger')
-      
-      expect(screen.getByText('At least one product is required')).toBeInTheDocument()
-      expect(screen.getByText('Product status is required')).toBeInTheDocument()
-    })
-
-    it('should render multiple error messages correctly', () => {
-      const validationWithMultipleErrors = {
-        ...defaultValidation,
-        hasErrors: true,
-        errorMessages: [
-          { path: '/vulnerabilities/0/products/0/status', message: 'Status is required' },
-          { path: '/vulnerabilities/0/products/1/productId', message: 'Product ID is required' },
-          { path: '/vulnerabilities/0/products/2/status', message: 'Invalid status value' },
-        ],
-      }
-      mockUseFieldValidation.mockReturnValue(validationWithMultipleErrors)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(screen.getByText('Status is required')).toBeInTheDocument()
-      expect(screen.getByText('Product ID is required')).toBeInTheDocument()
-      expect(screen.getByText('Invalid status value')).toBeInTheDocument()
-    })
+    const matrixLink = screen.getByRole('link', { name: 'Product Matrix' })
+    expect(matrixLink).toHaveAttribute('href', '/vulnerabilities/matrix')
   })
 
-  describe('Product Management', () => {
-    it('should handle product updates through onChange', () => {
-      const updateDataEntry = vi.fn()
-      const listStateWithData = {
-        ...defaultListState,
-        data: [mockProduct1],
-        updateDataEntry,
-      }
-      mockUseListState.mockReturnValue(listStateWithData)
+  it('renders all product versions with four status radios each', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
 
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+    expect(screen.getByText('Vendor Product 1.0')).toBeInTheDocument()
+    expect(screen.getByText('Vendor Product 2.0')).toBeInTheDocument()
 
-      const changeButton = screen.getByTestId('change-product-button')
-      fireEvent.click(changeButton)
-
-      expect(updateDataEntry).toHaveBeenCalledWith({
-        ...mockProduct1,
-        status: 'updated',
-      })
-    })
-
-    it('should handle product deletion through onDelete', () => {
-      const removeDataEntry = vi.fn()
-      const listStateWithData = {
-        ...defaultListState,
-        data: [mockProduct1],
-        removeDataEntry,
-      }
-      mockUseListState.mockReturnValue(listStateWithData)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      const deleteButton = screen.getByTestId('delete-product-button')
-      fireEvent.click(deleteButton)
-
-      expect(removeDataEntry).toHaveBeenCalledWith(mockProduct1)
-    })
-
-    it('should add new product when add button is clicked', async () => {
-      const user = userEvent.setup()
-      const setData = vi.fn()
-      const listStateWithData = {
-        ...defaultListState,
-        data: [mockProduct1],
-        setData,
-      }
-      mockUseListState.mockReturnValue(listStateWithData)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      const addButton = screen.getByTestId('add-item-button')
-      await user.click(addButton)
-
-      expect(setData).toHaveBeenCalledWith(expect.any(Function))
-      
-      // Verify the function passed to setData works correctly
-      const setDataCallback = setData.mock.calls[0][0]
-      const newData = setDataCallback([mockProduct1])
-      
-      expect(newData).toEqual([
-        mockProduct1,
-        {
-          id: 'new-product-id',
-          productId: 'prod-1', // Should copy productId from last item
-          status: '',
-        },
-      ])
-    })
-
-    it('should add new product with empty productId when no existing products', async () => {
-      const user = userEvent.setup()
-      const setData = vi.fn()
-      const listStateEmpty = {
-        ...defaultListState,
-        data: [],
-        setData,
-      }
-      mockUseListState.mockReturnValue(listStateEmpty)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      const addButton = screen.getByTestId('add-item-button')
-      await user.click(addButton)
-
-      expect(setData).toHaveBeenCalledWith(expect.any(Function))
-      
-      // Verify the function passed to setData works correctly
-      const setDataCallback = setData.mock.calls[0][0]
-      const newData = setDataCallback([])
-      
-      expect(newData).toEqual([
-        {
-          id: 'new-product-id',
-          productId: undefined, // Should be undefined when no existing products
-          status: '',
-        },
-      ])
-    })
-
-    it('should copy productId from last product when adding new product', async () => {
-      const user = userEvent.setup()
-      const setData = vi.fn()
-      const listStateWithMultipleProducts = {
-        ...defaultListState,
-        data: [mockProduct1, mockProduct2],
-        setData,
-      }
-      mockUseListState.mockReturnValue(listStateWithMultipleProducts)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      const addButton = screen.getByTestId('add-item-button')
-      await user.click(addButton)
-
-      const setDataCallback = setData.mock.calls[0][0]
-      const newData = setDataCallback([mockProduct1, mockProduct2])
-      
-      expect(newData[2]).toEqual({
-        id: 'new-product-id',
-        productId: 'prod-2', // Should copy from mockProduct2 (last item)
-        status: '',
-      })
-    })
+    expect(
+      screen.getByTestId('status-radio-version-1-known_affected'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByTestId('status-radio-version-1-known_not_affected'),
+    ).toBeInTheDocument()
+    expect(screen.getByTestId('status-radio-version-1-fixed')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('status-radio-version-1-under_investigation'),
+    ).toBeInTheDocument()
   })
 
-  describe('State Synchronization', () => {
-    it('should call onChange when productsListState.data changes', () => {
-      const listStateWithData = {
-        ...defaultListState,
-        data: [mockProduct1, mockProduct2],
-      }
-      mockUseListState.mockReturnValue(listStateWithData)
+  it('starts with no selected status for versions without assignments', () => {
+    currentVulnerability = createVulnerability('v-1', 'Current', [])
 
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
 
-      // useEffect should have been triggered with the updated data
-      expect(mockOnChange).toHaveBeenCalledWith({
-        ...defaultVulnerability,
-        products: [mockProduct1, mockProduct2],
-      })
-    })
-
-    it('should update vulnerability with empty products array', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(mockOnChange).toHaveBeenCalledWith({
-        ...defaultVulnerability,
-        products: [],
-      })
-    })
-
-    it('should preserve other vulnerability properties when updating products', () => {
-      const complexVulnerability: TVulnerability = {
-        ...defaultVulnerability,
-        id: 'vuln-123',
-        title: 'Test Vulnerability',
-        cve: 'CVE-2023-1234',
-        products: [],
-      }
-
-      const listStateWithData = {
-        ...defaultListState,
-        data: [mockProduct1],
-      }
-      mockUseListState.mockReturnValue(listStateWithData)
-
-      render(
-        <Products
-          vulnerability={complexVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(mockOnChange).toHaveBeenCalledWith({
-        ...complexVulnerability,
-        products: [mockProduct1],
-      })
-    })
+    expect(
+      screen.getByTestId('status-radio-version-1-known_affected'),
+    ).not.toBeChecked()
+    expect(
+      screen.getByTestId('status-radio-version-1-known_not_affected'),
+    ).not.toBeChecked()
+    expect(
+      screen.getByTestId('status-radio-version-1-fixed'),
+    ).not.toBeChecked()
+    expect(
+      screen.getByTestId('status-radio-version-1-under_investigation'),
+    ).not.toBeChecked()
   })
 
-  describe('Hook Integration', () => {
-    it('should call useVulnerabilityProductGenerator correctly', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+  it('updates vulnerability product status when a radio is selected', () => {
+    currentVulnerability = createVulnerability('v-1', 'Current', [])
 
-      expect(mockUseVulnerabilityProductGenerator).toHaveBeenCalled()
-    })
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
 
-    it('should use generated product in useListState', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+    fireEvent.click(screen.getByTestId('status-radio-version-1-known_affected'))
 
-      const listStateCall = mockUseListState.mock.calls[0][0]
-      expect(listStateCall.initialData).toBe(defaultVulnerability.products)
-      expect(listStateCall.generator).toBeDefined()
-      
-      // The generator should be the product object itself (not a function)
-      expect(listStateCall.generator).toEqual({
-        id: 'new-product-id',
-        productId: '',
-        status: '',
-      })
-    })
-
-    it('should pass correct vulnerability index to validation hook', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={42}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(mockUseFieldValidation).toHaveBeenCalledWith(
-        '/vulnerabilities/42/product_status'
-      )
-    })
+    expect(onChangeMock).toHaveBeenCalledTimes(1)
+    const updated = onChangeMock.mock.calls[0][0] as TVulnerability
+    expect(getMatrixCellStatus(updated, 'version-1')).toBe('known_affected')
   })
 
-  describe('Component Props and Styling', () => {
-    it('should apply correct className to add button', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+  it('keeps one status per version (cannot unselect, can switch)', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
 
-      const addButton = screen.getByTestId('add-item-button')
-      expect(addButton).toHaveClass('w-full')
-    })
+    fireEvent.click(screen.getByTestId('status-radio-version-2-under_investigation'))
 
-    it('should apply correct className to VSplit container', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+    const updated = onChangeMock.mock.calls[0][0] as TVulnerability
+    const version2Entries = updated.products.filter(
+      (item) => item.productId === 'version-2',
+    )
 
-      const container = screen.getByTestId('vsplit-container')
-      expect(container).toHaveClass('gap-2')
-    })
-
-    it('should pass correct props to VulnerabilityProduct components', () => {
-      const listStateWithData = {
-        ...defaultListState,
-        data: [mockProduct1, mockProduct2],
-        updateDataEntry: vi.fn(),
-        removeDataEntry: vi.fn(),
-      }
-      mockUseListState.mockReturnValue(listStateWithData)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      const products = screen.getAllByTestId('vulnerability-product')
-      expect(products[0]).toHaveAttribute('data-product-id', 'product-1')
-      expect(products[1]).toHaveAttribute('data-product-id', 'product-2')
-    })
+    expect(version2Entries).toHaveLength(1)
+    expect(version2Entries[0].status).toBe('under_investigation')
   })
 
-  describe('Edge Cases', () => {
-    it('should handle undefined onChange by throwing error (expected behavior)', () => {
-      // This test verifies that the component does throw when onChange is undefined
-      // since onChange is a required prop and the useEffect will try to call it
-      const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-      
-      expect(() => {
-        render(
+  it('disables copy button until source vulnerability is selected', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('toggle-copy-selection'))
+    expect(screen.getByTestId('copy-selection-button')).toBeDisabled()
+  })
+
+  it('copies product selection from another vulnerability', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('toggle-copy-selection'))
+    fireEvent.change(screen.getByTestId('copy-source-select'), {
+      target: { value: 'v-2' },
+    })
+    fireEvent.click(screen.getByTestId('copy-selection-button'))
+
+    const updated = onChangeMock.mock.calls[0][0] as TVulnerability
+
+    expect(getMatrixCellStatus(updated, 'version-1')).toBe('known_affected')
+    expect(getMatrixCellStatus(updated, 'version-2')).toBe('')
+    expect(screen.queryByTestId('copy-source-select')).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('toggle-copy-selection'),
+    ).toBeInTheDocument()
+  })
+
+  it('updates radio selection immediately after copying', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('toggle-copy-selection'))
+    fireEvent.change(screen.getByTestId('copy-source-select'), {
+      target: { value: 'v-2' },
+    })
+    fireEvent.click(screen.getByTestId('copy-selection-button'))
+
+    expect(
+      screen.getByTestId('status-radio-version-1-known_affected'),
+    ).toBeChecked()
+    expect(screen.getByTestId('status-radio-version-2-fixed')).not.toBeChecked()
+  })
+
+  it('keeps radio groups independent across multiple open vulnerabilities', () => {
+    const vulnerabilityA = createVulnerability('v-a', 'A', [])
+    const vulnerabilityB = createVulnerability('v-b', 'B', [])
+
+    render(
+      <>
+        <div data-testid="products-a">
           <Products
-            vulnerability={defaultVulnerability}
+            vulnerability={vulnerabilityA}
             vulnerabilityIndex={0}
-            onChange={undefined as any}
+            onChange={onChangeMock}
           />
-        )
-      }).toThrow('onChange is not a function')
-      
-      consoleErrorSpy.mockRestore()
-    })
-
-    it('should handle very large vulnerability index', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={999999}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(mockUseFieldValidation).toHaveBeenCalledWith(
-        '/vulnerabilities/999999/product_status'
-      )
-    })
-
-    it('should handle negative vulnerability index', () => {
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={-1}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(mockUseFieldValidation).toHaveBeenCalledWith(
-        '/vulnerabilities/-1/product_status'
-      )
-    })
-
-    it('should handle malformed vulnerability object', () => {
-      const malformedVulnerability = {
-        ...defaultVulnerability,
-        products: null as any,
-      }
-
-      expect(() => {
-        render(
+        </div>
+        <div data-testid="products-b">
           <Products
-            vulnerability={malformedVulnerability}
-            vulnerabilityIndex={0}
-            onChange={mockOnChange}
+            vulnerability={vulnerabilityB}
+            vulnerabilityIndex={1}
+            onChange={onChangeMock}
           />
-        )
-      }).not.toThrow()
+        </div>
+      </>,
+    )
 
-      expect(mockUseListState).toHaveBeenCalledWith({
-        initialData: null,
-        generator: {
-          id: 'new-product-id',
-          productId: '',
-          status: '',
-        },
-      })
-    })
+    const productA = within(screen.getByTestId('products-a'))
+    const productB = within(screen.getByTestId('products-b'))
+
+    fireEvent.click(productA.getByTestId('status-radio-version-1-known_affected'))
+    fireEvent.click(productB.getByTestId('status-radio-version-1-fixed'))
+
+    expect(
+      productA.getByTestId('status-radio-version-1-known_affected'),
+    ).toBeChecked()
+    expect(productB.getByTestId('status-radio-version-1-fixed')).toBeChecked()
   })
 
-  describe('Re-rendering and Performance', () => {
-    it('should re-render when vulnerability changes', () => {
-      const { rerender } = render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+  it('hides copy controls by default and toggles them on demand', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
 
-      const updatedVulnerability = {
-        ...defaultVulnerability,
-        products: [mockProduct1],
-      }
+    expect(screen.queryByTestId('copy-source-select')).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('copy-selection-button'),
+    ).not.toBeInTheDocument()
+    expect(screen.getByTestId('toggle-copy-selection')).toBeInTheDocument()
 
-      rerender(
-        <Products
-          vulnerability={updatedVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
+    fireEvent.click(screen.getByTestId('toggle-copy-selection'))
 
-      expect(mockUseListState).toHaveBeenCalledTimes(2)
-      expect(mockUseListState).toHaveBeenLastCalledWith({
-        initialData: [mockProduct1],
-        generator: {
-          id: 'new-product-id',
-          productId: '',
-          status: '',
+    expect(screen.getByTestId('copy-source-select')).toBeInTheDocument()
+    expect(screen.getByTestId('copy-selection-button')).toBeInTheDocument()
+    expect(
+      screen.queryByTestId('toggle-copy-selection'),
+    ).not.toBeInTheDocument()
+  })
+
+  it('copies legacy product status values into supported radio statuses', () => {
+    mockStore = {
+      vulnerabilities: [
+        currentVulnerability,
+        createVulnerability('v-2', 'Source', [
+          { id: 'p-2', productId: 'version-1', status: 'first_affected' },
+          { id: 'p-3', productId: 'version-2', status: 'first_fixed' },
+        ]),
+      ],
+    }
+
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('toggle-copy-selection'))
+    fireEvent.change(screen.getByTestId('copy-source-select'), {
+      target: { value: 'v-2' },
+    })
+    fireEvent.click(screen.getByTestId('copy-selection-button'))
+
+    const updated = onChangeMock.mock.calls[0][0] as TVulnerability
+    expect(getMatrixCellStatus(updated, 'version-1')).toBe('known_affected')
+    expect(getMatrixCellStatus(updated, 'version-2')).toBe('fixed')
+  })
+
+  it('can close copy controls without copying', () => {
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('toggle-copy-selection'))
+    fireEvent.click(screen.getByTestId('close-copy-selection'))
+
+    expect(screen.queryByTestId('copy-source-select')).not.toBeInTheDocument()
+    expect(screen.getByTestId('toggle-copy-selection')).toBeInTheDocument()
+  })
+
+  it('shows validation error messages when product status has errors', () => {
+    mockValidation = {
+      hasErrors: true,
+      errorMessages: [
+        {
+          path: '/vulnerabilities/0/product_status',
+          message: 'At least one product status is required',
         },
-      })
+      ],
+    }
+
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
+
+    expect(
+      screen.getByText('At least one product status is required'),
+    ).toBeInTheDocument()
+  })
+
+  it('shows empty warning with Product Management link and hides copy button when no product versions exist', () => {
+    mockProductVersions = []
+
+    render(
+      <Products
+        vulnerability={currentVulnerability}
+        vulnerabilityIndex={0}
+        onChange={onChangeMock}
+      />,
+    )
+
+    const productManagementLink = screen.getByRole('link', {
+      name: 'Product Management',
     })
 
-    it('should re-render when vulnerabilityIndex changes', () => {
-      const { rerender } = render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      rerender(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={1}
-          onChange={mockOnChange}
-        />
-      )
-
-      expect(mockUseFieldValidation).toHaveBeenCalledTimes(2)
-      expect(mockUseFieldValidation).toHaveBeenLastCalledWith(
-        '/vulnerabilities/1/product_status'
-      )
-    })
-
-    it('should handle rapid state changes', async () => {
-      const user = userEvent.setup()
-      const setData = vi.fn()
-      const listStateWithData = {
-        ...defaultListState,
-        data: [],
-        setData,
-      }
-      mockUseListState.mockReturnValue(listStateWithData)
-
-      render(
-        <Products
-          vulnerability={defaultVulnerability}
-          vulnerabilityIndex={0}
-          onChange={mockOnChange}
-        />
-      )
-
-      const addButton = screen.getByTestId('add-item-button')
-      
-      // Simulate rapid clicks
-      await user.click(addButton)
-      await user.click(addButton)
-      await user.click(addButton)
-
-      expect(setData).toHaveBeenCalledTimes(3)
-    })
+    expect(productManagementLink.closest('div')).toHaveTextContent(
+      'No product versions available yet.',
+    )
+    expect(productManagementLink).toHaveAttribute(
+      'href',
+      '/products/management',
+    )
+    expect(screen.queryByTestId('toggle-copy-selection')).not.toBeInTheDocument()
   })
 })

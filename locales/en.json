@@ -190,6 +190,14 @@
       "references": "References",
       "products": {
         "title": "Products",
+        "matrixHint": "Hint: edit product selection across all vulnerabilities in one overview via",
+        "openMatrix": "Product Selection",
+        "copySectionTitle": "Copy from another vulnerability",
+        "copyFromLabel": "Copy selection from",
+        "copyFromPlaceholder": "Select vulnerability",
+        "copyButton": "Copy Product Selection",
+        "noProductVersions": "No product versions available yet.",
+        "noProductVersionsLinkPrefix": "Please add them in",
         "status": {
           "title": "Product Status",
           "first_affected": "First Affected",
