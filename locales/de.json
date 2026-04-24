@@ -197,7 +197,7 @@
         "copyFromLabel": "Auswahl kopieren von",
         "copyFromPlaceholder": "Schwachstelle auswählen",
         "copyButton": "Produktauswahl kopieren",
-        "noProductVersions": "Noch keine Produktversionen verfügbar.",
+        "noProductVersions": "Noch keine Produkte verfügbar.",
         "noProductVersionsLinkPrefix": "Bitte fügen Sie diese in der",
         "status": {
           "title": "Produktstatus",
@@ -249,7 +249,7 @@
         "title": "Produktauswahl",
         "description": "Setzen Sie den Schwachstellenstatus pro Produktversion.",
         "empty": "Fügen Sie mindestens eine Produktversion und eine Schwachstelle hinzu, um die Matrix zu verwenden.",
-        "productVersion": "Produktversion",
+        "productVersion": "Produkt",
         "vulnerabilityFallback": "Schwachstelle {{index}}",
         "required": "Pflicht",
         "notSet": "Nicht gesetzt",

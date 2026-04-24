@@ -90,9 +90,17 @@ vi.mock('@/utils/useDocumentStore', () => ({
 
 vi.mock('@/utils/useProductTreeBranch', () => ({
   useProductTreeBranch: () => ({
-    getPTBsByCategory: () => mockProductVersions,
-    getFullProductName: (id: string) =>
-      id === 'version-1' ? 'Vendor Product 1.0' : 'Vendor Product 2.0',
+    getSelectableRefs: () =>
+      mockProductVersions.map((version) => ({
+        category: version.category,
+        full_product_name: {
+          product_id: version.id,
+          name:
+            version.id === 'version-1'
+              ? 'Vendor Product 1.0'
+              : 'Vendor Product 2.0',
+        },
+      })),
   }),
 }))
 

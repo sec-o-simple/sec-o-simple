@@ -13,7 +13,9 @@ type StoreState = {
 let mockStore: StoreState
 let mockProductVersions: { id: string; name: string }[]
 const updateVulnerabilitiesMock = vi.fn()
-const useDocumentValidationMock = vi.fn()
+const { useDocumentValidationMock } = vi.hoisted(() => ({
+  useDocumentValidationMock: vi.fn(),
+}))
 
 vi.mock('@/components/WizardStep', () => ({
   default: ({ title, children }: { title: string; children: ReactNode }) => (
@@ -49,6 +51,7 @@ vi.mock('react-i18next', () => ({
         'vulnerabilities.products.status.known_not_affected': 'Known Not Affected',
         'vulnerabilities.products.status.fixed': 'Fixed',
         'vulnerabilities.products.status.under_investigation': 'Under Investigation',
+        'products.relationship.categories.product_version': 'Versions',
       }
 
       if (key === 'vulnerabilities.matrix.vulnerabilityFallback') {
@@ -66,18 +69,14 @@ vi.mock('@/utils/useDocumentStore', () => ({
 
 vi.mock('@/utils/useProductTreeBranch', () => ({
   useProductTreeBranch: () => ({
-    getPTBsByCategory: (category: string) =>
-      category === 'product_version'
-        ? mockProductVersions.map((version) => ({
-            id: version.id,
-            category: 'product_version',
-            name: version.name,
-            description: '',
-            subBranches: [],
-          }))
-        : [],
-    getFullProductName: (id: string) =>
-      mockProductVersions.find((version) => version.id === id)?.name || id,
+    getSelectableRefs: () =>
+      mockProductVersions.map((version) => ({
+        category: 'product_version',
+        full_product_name: {
+          product_id: version.id,
+          name: version.name,
+        },
+      })),
   }),
 }))
 

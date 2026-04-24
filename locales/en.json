@@ -196,7 +196,7 @@
         "copyFromLabel": "Copy selection from",
         "copyFromPlaceholder": "Select vulnerability",
         "copyButton": "Copy Product Selection",
-        "noProductVersions": "No product versions available yet.",
+        "noProductVersions": "No products available yet.",
         "noProductVersionsLinkPrefix": "Please add them in",
         "status": {
           "title": "Product Status",
@@ -248,7 +248,7 @@
         "title": "Product Selection",
         "description": "Set the vulnerability status per product version.",
         "empty": "Add at least one product version and one vulnerability to use the matrix.",
-        "productVersion": "Product Version",
+        "productVersion": "Product",
         "vulnerabilityFallback": "Vulnerability {{index}}",
         "required": "Required",
         "notSet": "Not set",

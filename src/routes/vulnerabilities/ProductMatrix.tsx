@@ -25,18 +25,29 @@ export default function ProductMatrix() {
   const updateVulnerabilities = useDocumentStore(
     (state) => state.updateVulnerabilities,
   )
-  const { getPTBsByCategory, getFullProductName } = useProductTreeBranch()
+  const { getSelectableRefs } = useProductTreeBranch()
 
   const productVersions = useMemo(
     () =>
-      getPTBsByCategory('product_version')
-        .map((version) => ({
-          id: version.id,
-          name: getFullProductName(version.id),
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    [getFullProductName, getPTBsByCategory],
+      getSelectableRefs().map((ref) => ({
+        id: ref.full_product_name.product_id,
+        name: ref.full_product_name.name,
+        category: ref.category,
+      })),
+    [getSelectableRefs],
   )
+
+  const groupedProductVersions = useMemo(() => {
+    const groups = new Map<string, typeof productVersions>()
+    if (productVersions.some((p) => p.category === 'product_version')) {
+      groups.set('product_version', [])
+    }
+    for (const item of productVersions) {
+      if (!groups.has(item.category)) groups.set(item.category, [])
+      groups.get(item.category)!.push(item)
+    }
+    return groups
+  }, [productVersions])
 
   const setCellStatus = (
     productId: string,
@@ -73,9 +84,7 @@ export default function ProductMatrix() {
     }
 
     const cellStatus = getMatrixCellStatus(vulnerability, productId)
-    const productIds = productVersions.map(
-      (productVersion) => productVersion.id,
-    )
+    const productIds = productVersions.map((p) => p.id)
 
     updateVulnerabilities(
       vulnerabilities.map((currentVulnerability, index) =>
@@ -113,7 +122,7 @@ export default function ProductMatrix() {
           <table className="w-full min-w-max border-collapse text-sm">
             <thead>
               <tr className="bg-content2">
-                <th className="border-default-200 border p-3 text-left">
+                <th className="border-default-200 w-72 max-w-sm border p-3 text-left">
                   {t('vulnerabilities.matrix.productVersion')}
                 </th>
                 {vulnerabilities.map((vulnerability, vulnerabilityIndex) => (
@@ -156,63 +165,82 @@ export default function ProductMatrix() {
             </thead>
 
             <tbody>
-              {productVersions.map((productVersion, rowIndex) => (
-                <tr key={productVersion.id}>
-                  <th className="border-default-200 bg-content1 border p-3 text-left align-top font-medium">
-                    <div className="flex items-start justify-between gap-2">
-                      <span>{productVersion.name}</span>
-                      <button
-                        type="button"
-                        className="border-default-300 bg-content2 hover:bg-content3 text-default-700 flex h-7 shrink-0 items-center gap-1 rounded border px-2 text-[10px] font-medium"
-                        aria-label={t('vulnerabilities.matrix.applyRow')}
-                        title={t('vulnerabilities.matrix.applyRow')}
-                        data-testid={`matrix-apply-row-header-${rowIndex}`}
-                        onClick={() => applyCellToRow(productVersion.id, 0)}
-                      >
-                        <span>{t('vulnerabilities.matrix.applyFirst')}</span>
-                        <FontAwesomeIcon icon={faArrowRight} />
-                      </button>
-                    </div>
-                  </th>
-
-                  {vulnerabilities.map((vulnerability, vulnerabilityIndex) => {
-                    const cellStatus = getMatrixCellStatus(
-                      vulnerability,
-                      productVersion.id,
-                    )
-
-                    return (
-                      <td
-                        key={vulnerability.id}
-                        className="border-default-200 border p-2 align-top"
-                      >
-                        <div className="w-full">
-                          <select
-                            aria-label={`matrix-cell-${rowIndex}-${vulnerabilityIndex}`}
-                            data-testid={`matrix-cell-${rowIndex}-${vulnerabilityIndex}`}
-                            className="border-default-300 bg-content1 w-full rounded-md border px-2 py-2"
-                            value={cellStatus}
-                            onChange={(event) =>
-                              setCellStatus(
-                                productVersion.id,
-                                vulnerabilityIndex,
-                                event.target.value as TMatrixProductStatusValue,
-                              )
-                            }
+              {Array.from(groupedProductVersions.entries()).flatMap(
+                ([category, items]) => [
+                  <tr key={`group-${category}`} className="bg-content2">
+                    <th
+                      colSpan={vulnerabilities.length + 1}
+                      className="border-default-200 text-default-500 border px-3 py-1.5 text-left text-xs font-semibold tracking-wide uppercase"
+                    >
+                      {t(`products.relationship.categories.${category}`)}
+                    </th>
+                  </tr>,
+                  ...items.map((productVersion, rowIndex) => (
+                    <tr key={productVersion.id}>
+                      <th className="border-default-200 bg-content1 w-72 max-w-sm border p-3 text-left align-top font-medium">
+                        <div className="flex items-start justify-between gap-2">
+                          <span>{productVersion.name}</span>
+                          <button
+                            type="button"
+                            className="border-default-300 bg-content2 hover:bg-content3 text-default-700 flex h-7 shrink-0 items-center gap-1 rounded border px-2 text-[10px] font-medium"
+                            aria-label={t('vulnerabilities.matrix.applyRow')}
+                            title={t('vulnerabilities.matrix.applyRow')}
+                            data-testid={`matrix-apply-row-header-${rowIndex}`}
+                            onClick={() => applyCellToRow(productVersion.id, 0)}
                           >
-                            <option value="" />
-                            {matrixProductStatuses.map((status) => (
-                              <option key={status} value={status}>
-                                {t(`vulnerabilities.products.status.${status}`)}
-                              </option>
-                            ))}
-                          </select>
+                            <span>
+                              {t('vulnerabilities.matrix.applyFirst')}
+                            </span>
+                            <FontAwesomeIcon icon={faArrowRight} />
+                          </button>
                         </div>
-                      </td>
-                    )
-                  })}
-                </tr>
-              ))}
+                      </th>
+
+                      {vulnerabilities.map(
+                        (vulnerability, vulnerabilityIndex) => {
+                          const cellStatus = getMatrixCellStatus(
+                            vulnerability,
+                            productVersion.id,
+                          )
+
+                          return (
+                            <td
+                              key={vulnerability.id}
+                              className="border-default-200 border p-2 align-top"
+                            >
+                              <div className="w-full">
+                                <select
+                                  aria-label={`matrix-cell-${rowIndex}-${vulnerabilityIndex}`}
+                                  data-testid={`matrix-cell-${rowIndex}-${vulnerabilityIndex}`}
+                                  className="border-default-300 bg-content1 w-full rounded-md border px-2 py-2"
+                                  value={cellStatus}
+                                  onChange={(event) =>
+                                    setCellStatus(
+                                      productVersion.id,
+                                      vulnerabilityIndex,
+                                      event.target
+                                        .value as TMatrixProductStatusValue,
+                                    )
+                                  }
+                                >
+                                  <option value="" />
+                                  {matrixProductStatuses.map((status) => (
+                                    <option key={status} value={status}>
+                                      {t(
+                                        `vulnerabilities.products.status.${status}`,
+                                      )}
+                                    </option>
+                                  ))}
+                                </select>
+                              </div>
+                            </td>
+                          )
+                        },
+                      )}
+                    </tr>
+                  )),
+                ],
+              )}
             </tbody>
           </table>
         </div>

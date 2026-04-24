@@ -36,7 +36,7 @@ export default function Products({
 }) {
   const { t } = useTranslation()
   const vulnerabilities = useDocumentStore((state) => state.vulnerabilities)
-  const { getPTBsByCategory, getFullProductName } = useProductTreeBranch()
+  const { getSelectableRefs } = useProductTreeBranch()
   const [copySourceVulnerabilityId, setCopySourceVulnerabilityId] = useState('')
   const [showCopySelection, setShowCopySelection] = useState(false)
   const [localVulnerability, setLocalVulnerability] = useState(vulnerability)
@@ -47,14 +47,30 @@ export default function Products({
 
   const productVersions = useMemo(
     () =>
-      getPTBsByCategory('product_version')
-        .map((version) => ({
-          id: version.id,
-          name: getFullProductName(version.id),
-        }))
-        .sort((a, b) => a.name.localeCompare(b.name)),
-    [getPTBsByCategory, getFullProductName],
+      getSelectableRefs().map((ref) => ({
+        id: ref.full_product_name.product_id,
+        name: ref.full_product_name.name,
+        category: ref.category,
+      })),
+    [getSelectableRefs],
   )
+
+  const groupedProductVersions = useMemo(() => {
+    const groups = new Map<string, typeof productVersions>()
+    // product_version first
+    for (const item of productVersions) {
+      if (!groups.has(item.category)) groups.set(item.category, [])
+      groups.get(item.category)!.push(item)
+    }
+    // ensure product_version is first if present
+    const sorted = new Map<string, typeof productVersions>()
+    if (groups.has('product_version'))
+      sorted.set('product_version', groups.get('product_version')!)
+    for (const [key, value] of groups) {
+      if (key !== 'product_version') sorted.set(key, value)
+    }
+    return sorted
+  }, [productVersions])
 
   const copySources = useMemo(
     () =>
@@ -99,7 +115,9 @@ export default function Products({
       return
     }
 
-    const getStatusFromSource = (productId: string): TMatrixProductStatusValue => {
+    const getStatusFromSource = (
+      productId: string,
+    ): TMatrixProductStatusValue => {
       for (let i = source.products.length - 1; i >= 0; i--) {
         const sourceProduct = source.products[i]
         if (sourceProduct.productId === productId) {
@@ -225,31 +243,52 @@ export default function Products({
               </tr>
             </thead>
             <tbody>
-              {productVersions.map((version) => {
-                const selectedStatus = getMatrixCellStatus(
-                  localVulnerability,
-                  version.id,
-                )
-
-                return (
-                  <tr key={version.id}>
-                    <td className="border-default-200 border p-2">{version.name}</td>
-                    {matrixProductStatuses.map((status) => (
-                      <td key={`${version.id}-${status}`} className="border-default-200 border p-2">
-                        <label className="flex items-center justify-center">
-                          <input
-                            type="radio"
-                            data-testid={`status-radio-${version.id}-${status}`}
-                            name={`product-status-${localVulnerability.id || vulnerabilityIndex}-${version.id}`}
-                            checked={selectedStatus === status}
-                            onChange={() => updateVersionStatus(version.id, status)}
-                          />
-                        </label>
+              {Array.from(groupedProductVersions.entries()).map(
+                ([category, items]) => (
+                  <>
+                    <tr key={`group-${category}`} className="bg-content2">
+                      <td
+                        colSpan={matrixProductStatuses.length + 1}
+                        className="border-default-200 text-default-500 border px-2 py-1 text-xs font-semibold tracking-wide uppercase"
+                      >
+                        {t(`products.relationship.categories.${category}`)}
                       </td>
-                    ))}
-                  </tr>
-                )
-              })}
+                    </tr>
+                    {items.map((version) => {
+                      const selectedStatus = getMatrixCellStatus(
+                        localVulnerability,
+                        version.id,
+                      )
+
+                      return (
+                        <tr key={version.id}>
+                          <td className="border-default-200 border p-2">
+                            {version.name}
+                          </td>
+                          {matrixProductStatuses.map((status) => (
+                            <td
+                              key={`${version.id}-${status}`}
+                              className="border-default-200 border p-2"
+                            >
+                              <label className="flex items-center justify-center">
+                                <input
+                                  type="radio"
+                                  data-testid={`status-radio-${version.id}-${status}`}
+                                  name={`product-status-${localVulnerability.id || vulnerabilityIndex}-${version.id}`}
+                                  checked={selectedStatus === status}
+                                  onChange={() =>
+                                    updateVersionStatus(version.id, status)
+                                  }
+                                />
+                              </label>
+                            </td>
+                          ))}
+                        </tr>
+                      )
+                    })}
+                  </>
+                ),
+              )}
             </tbody>
           </table>
         </div>
