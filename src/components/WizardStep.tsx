@@ -15,6 +15,7 @@ export type WizardStepProps = PropsWithChildren<{
   onContinue?: string | (() => void)
   continueLabel?: string
   noContentWrapper?: boolean
+  style?: React.CSSProperties
 }>
 
 export default function WizardStep({
@@ -27,12 +28,13 @@ export default function WizardStep({
   continueLabel,
   children,
   noContentWrapper,
+  style,
 }: WizardStepProps) {
   const navigate = useNavigate()
   const { t } = useTranslation()
 
   return (
-    <div className="flex max-w-5xl flex-col gap-4 p-8">
+    <div className="flex max-w-5xl flex-col gap-4 p-8" style={style}>
       <ProgressBar
         sections={[
           t('nav.document'),

@@ -108,6 +108,7 @@ export default function ProductMatrix() {
       progress={3}
       onBack="/vulnerabilities/list"
       onContinue="/tracking"
+      style={{ maxWidth: 'calc(100svw - 240px)' }}
     >
       <p className="text-default-500 text-sm">
         {t('vulnerabilities.matrix.description')}
