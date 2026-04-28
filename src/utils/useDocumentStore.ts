@@ -77,6 +77,7 @@ const useDocumentStore = create<TDocumentStore>((set) => ({
   reset: () =>
     set({
       documentInformation: getDefaultDocumentInformation(),
+      importedCSAFDocument: {},
       products: [],
       families: [],
       relationships: [],

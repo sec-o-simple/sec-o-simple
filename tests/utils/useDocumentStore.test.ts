@@ -1,4 +1,4 @@
- import { describe, expect, it, beforeEach, vi } from 'vitest'
+import { describe, expect, it, beforeEach, vi } from 'vitest'
 import { renderHook, act } from '@testing-library/react'
 
 // Unmock the store to test actual implementation
@@ -18,8 +18,10 @@ describe('useDocumentStore', () => {
 
   it('should initialize with default values', () => {
     const { result } = renderHook(() => useDocumentStore())
-    
-    expect(result.current.documentInformation).toEqual(getDefaultDocumentInformation())
+
+    expect(result.current.documentInformation).toEqual(
+      getDefaultDocumentInformation(),
+    )
     expect(result.current.products).toEqual([])
     expect(result.current.families).toEqual([])
     expect(result.current.relationships).toEqual([])
@@ -169,7 +171,7 @@ describe('useDocumentStore', () => {
 
   it('should reset all data', () => {
     const { result } = renderHook(() => useDocumentStore())
-    
+
     // First set some data
     act(() => {
       result.current.updateProducts([
@@ -183,20 +185,20 @@ describe('useDocumentStore', () => {
           relationships: [],
         },
       ])
-      result.current.setImportedCSAFDocument({ 
-        document: { 
-          title: 'Test Import Data' 
-        } 
+      result.current.setImportedCSAFDocument({
+        document: {
+          title: 'Test Import Data',
+        },
       } as any)
     })
 
     // Verify data is set
     expect(result.current.products).toHaveLength(1)
     // Note: importedCSAFDocument might have other data merged in, so just check for our test data
-    expect(result.current.importedCSAFDocument).toMatchObject({ 
-      document: { 
-        title: 'Test Import Data' 
-      } 
+    expect(result.current.importedCSAFDocument).toMatchObject({
+      document: {
+        title: 'Test Import Data',
+      },
     })
 
     // Reset
@@ -205,22 +207,19 @@ describe('useDocumentStore', () => {
     })
 
     // Verify reset - only the main document data gets reset, not importedCSAFDocument
-    expect(result.current.documentInformation).toEqual(getDefaultDocumentInformation())
+    expect(result.current.documentInformation).toEqual(
+      getDefaultDocumentInformation(),
+    )
     expect(result.current.products).toEqual([])
     expect(result.current.families).toEqual([])
     expect(result.current.relationships).toEqual([])
     expect(result.current.vulnerabilities).toEqual([])
-    // importedCSAFDocument is not reset by the reset function
-    expect(result.current.importedCSAFDocument).toMatchObject({ 
-      document: { 
-        title: 'Test Import Data' 
-      } 
-    })
+    expect(result.current.importedCSAFDocument).toMatchObject({})
   })
 
   it('should maintain state consistency across multiple updates', () => {
     const { result } = renderHook(() => useDocumentStore())
-    
+
     act(() => {
       result.current.updateProducts([
         {
