@@ -8,7 +8,7 @@ export default function ProgressBar({
   progress: number
 }) {
   return (
-    <div className="relative mb-5 flex justify-stretch px-8 pb-1">
+    <div className="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1">
       {sections.map((section, i) => (
         <Fragment key={i}>
           <ProgressBarItem
