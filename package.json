@@ -1,6 +1,6 @@
 {
   "name": "sec-o-simple",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -70,7 +70,7 @@
     "@vitejs/plugin-react-swc": "4.0.1",
     "@vitest/coverage-v8": "^3.2.4",
     "autoprefixer": "10.4.21",
-    "cypress": "^15.0.0",
+    "cypress": "^15.14.1",
     "eslint": "9.34.0",
     "eslint-config-prettier": "10.1.8",
     "eslint-plugin-import": "2.32.0",
@@ -80,11 +80,11 @@
     "eslint-plugin-react-refresh": "0.4.20",
     "eslint-plugin-tailwindcss": "^v4.0.0-beta.0",
     "jsdom": "^26.1.0",
-    "postcss": "8.5.6",
+    "postcss": "^8.5.12",
     "prettier": "^3.6.2",
     "tailwindcss": "4.1.12",
     "typescript": "5.9.2",
-    "vite": "7.3.1",
+    "vite": "^7.3.2",
     "vite-plugin-version-mark": "^0.2.2",
     "vite-tsconfig-paths": "^5.1.4",
     "vitest": "^3.2.4"
