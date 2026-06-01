@@ -68,7 +68,7 @@
     "@typescript-eslint/eslint-plugin": "8.41.0",
     "@typescript-eslint/parser": "8.41.0",
     "@vitejs/plugin-react-swc": "4.0.1",
-    "@vitest/coverage-v8": "^3.2.4",
+    "@vitest/coverage-v8": "^4.1.8",
     "autoprefixer": "10.4.21",
     "cypress": "^15.14.1",
     "eslint": "9.34.0",
@@ -87,7 +87,7 @@
     "vite": "^7.3.2",
     "vite-plugin-version-mark": "^0.2.2",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.8"
   },
   "optionalDependencies": {
     "@rollup/rollup-linux-x64-gnu": "*"
