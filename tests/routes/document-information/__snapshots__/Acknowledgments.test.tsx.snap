@@ -18,7 +18,7 @@ exports[`Acknowledgments > Component Rendering > should render with empty acknow
   >
     <a
       data-testid="back-link"
-      href="/document-information/references"
+      href="/document-information/aliases"
     >
       Back
     </a>

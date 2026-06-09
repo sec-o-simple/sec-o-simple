@@ -11,9 +11,9 @@ import {
 import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
-import { Alert, Chip } from '@heroui/react'
+import { Alert, Checkbox, Chip } from '@heroui/react'
 import { calculateBaseScore, calculateQualScore, parseVersion } from 'cvss4'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ProductsTagList from './components/ProductsTagList'
 import { TVulnerability } from './types/tVulnerability'
@@ -37,6 +37,15 @@ export default function Scores({
   const { t } = useTranslation()
   const { getSelectableRefs } = useProductTreeBranch()
   const refs = getSelectableRefs()
+
+  const knownAffectedOrInvestigationProducts = useMemo(
+    () =>
+      vulnerability.products.filter(
+        (p) =>
+          p.status === 'known_affected' || p.status === 'under_investigation',
+      ),
+    [vulnerability.products],
+  )
   // The scores are sorted by CVSS version, so we can use the index to find the correct score
   const scoresListState = useListState<TVulnerabilityScore>({
     initialData: vulnerability.scores?.sort((a, b) =>
@@ -54,10 +63,6 @@ export default function Scores({
   const listValidation = useListValidation(
     `/vulnerabilities/${vulnerabilityIndex}/scores`,
     scoresListState.data,
-  )
-
-  const knownAffectedOrInvestigationProducts = vulnerability.products.filter(
-    (p) => p.status === 'known_affected' || p.status === 'under_investigation',
   )
 
   const getV3Index = (score: TVulnerabilityScore) => {
@@ -164,6 +169,11 @@ function ScoreForm({
   }
 
   const fieldValidation = useFieldValidation(`${csafPath}/products`)
+  const productError = fieldValidation.hasErrors
+    ? fieldValidation.errorMessages[0].message
+    : ''
+  const applyAllKnownAffectedProducts =
+    score.applyAllKnownAffectedProducts ?? score.productIds.length === 0
 
   const handleChange = (newValue: string) => {
     try {
@@ -234,17 +244,44 @@ function ScoreForm({
         isReadOnly={true}
       />
       {score.cvssVersion !== '4.0' && (
+        <Checkbox
+          isSelected={applyAllKnownAffectedProducts}
+          onChange={(event) => {
+            const isChecked = event.target.checked
+            onChange({
+              ...score,
+              applyAllKnownAffectedProducts: isChecked,
+              productIds: isChecked ? [] : score.productIds,
+            })
+          }}
+        >
+          {t('vulnerabilities.score.applyAllKnownAffectedProducts')}
+        </Checkbox>
+      )}
+      {score.cvssVersion !== '4.0' &&
+        applyAllKnownAffectedProducts &&
+        productError && (
+          <p
+            className="text-danger-500 text-sm"
+            data-testid="products-hidden-error"
+          >
+            {productError}
+          </p>
+        )}
+      {score.cvssVersion !== '4.0' && !applyAllKnownAffectedProducts && (
         <ProductsTagList
           isRequired
-          error={
-            fieldValidation.hasErrors
-              ? fieldValidation.errorMessages[0].message
-              : ''
-          }
+          error={productError}
           description={t('vulnerabilities.score.productsDescription')}
           selected={score.productIds}
           products={ptbs}
-          onChange={(productIds) => onChange({ ...score, productIds })}
+          onChange={(productIds) =>
+            onChange({
+              ...score,
+              productIds,
+              applyAllKnownAffectedProducts: false,
+            })
+          }
         />
       )}
     </VSplit>

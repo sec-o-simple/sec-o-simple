@@ -2,8 +2,6 @@ import '@testing-library/jest-dom'
 import { render, screen } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.unmock('../../../src/routes/products/Product')
-
 import ProductList from '../../../src/routes/products/ProductList'
 import type { TProductTreeBranch } from '../../../src/routes/products/types/tProductTreeBranch'
 

@@ -14,11 +14,7 @@
       "properties": {
         "productDescription": {
           "type": "object",
-          "properties": {
-            "de": { "type": "string" },
-            "en": { "type": "string" }
-          },
-          "required": ["de", "en"]
+          "additionalProperties": { "type": "string" }
         }
       }
     },
@@ -26,6 +22,13 @@
     "template": {
       "type": "object",
       "properties": {
+        "required": {
+          "type": "array",
+          "description": "Additional required fields as CSAF JSON pointer paths. Use '*' to target all existing entries in an array/object level.",
+          "items": {
+            "type": "string"
+          }
+        },
         "document-information.title": { "type": "string" },
         "document-information.title.readonly": { "type": "boolean" },
         "document-information.id.placeholder": { "type": "string" },
@@ -36,6 +39,12 @@
         "document-information.language": {
           "type": "string",
           "enum": ["en", "de"]
+        },
+        "document-information.aliases": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         },
 
         "document-information.tlp.label": {
@@ -218,6 +227,18 @@
           }
         },
 
+        "vulnerabilities.references.default": {
+          "type": "object",
+          "properties": {
+            "summary": { "type": "string" },
+            "url": { "type": "string", "format": "uri" },
+            "category": {
+              "type": "string",
+              "enum": ["self", "external"]
+            }
+          }
+        },
+
         "vulnerabilities.products.default": {
           "type": "object",
           "properties": {
@@ -295,6 +316,23 @@
                     "category": { "type": "string" },
                     "title": { "type": "string" },
                     "content": { "type": "string" }
+                  },
+                  "required": ["id"]
+                }
+              },
+              "references": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "readonly": { "type": "boolean" },
+                    "id": { "type": "string" },
+                    "summary": { "type": "string" },
+                    "url": { "type": "string", "format": "uri" },
+                    "category": {
+                      "type": "string",
+                      "enum": ["self", "external"]
+                    }
                   },
                   "required": ["id"]
                 }

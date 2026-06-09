@@ -4,10 +4,12 @@ import WizardStep from '@/components/WizardStep'
 import useDocumentStore from '@/utils/useDocumentStore'
 import { useProductTreeBranch } from '@/utils/useProductTreeBranch'
 import { useRelationships } from '@/utils/useRelationships'
+import { faCircleInfo } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Accordion, AccordionItem } from '@heroui/accordion'
 import { Chip } from '@heroui/chip'
 import { Modal, useDisclosure } from '@heroui/modal'
-import { BreadcrumbItem } from '@heroui/react'
+import { BreadcrumbItem, Tooltip } from '@heroui/react'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
@@ -62,9 +64,7 @@ export default function Version() {
             ? productVersion.parent?.parent?.name
             : t('untitled.vendor')}
         </BreadcrumbItem>
-        <BreadcrumbItem
-          href={`/#/products/management/product/${productVersion.parent?.id}`}
-        >
+        <BreadcrumbItem href="/#/products/management">
           {productVersion.parent?.name !== ''
             ? productVersion.parent?.name
             : t('untitled.product_name')}
@@ -82,11 +82,7 @@ export default function Version() {
             ? `${t('products.product.version.label')} ${name}`
             : t('untitled.product_version')
         }
-        backLink={
-          productVersion.parent?.id
-            ? `/products/management/product/${productVersion.parent?.id}`
-            : '/products/management'
-        }
+        backLink={'/products/management'}
         actionTitle={
           sosDocumentType !== 'Software'
             ? t('common.add', {
@@ -150,7 +146,6 @@ export default function Version() {
                   <InfoCard
                     key={rel.id}
                     variant="boxed"
-                    linkTo={`/products/management/product/${product.id}`}
                     title={
                       product.name !== '' && product.name
                         ? product.name
@@ -181,16 +176,42 @@ export default function Version() {
                           `/products/management/version/${x}`
                         }
                         labelGenerator={(x) => {
-                          const findProductTreeBranch =
+                          const versionBranch =
                             findProductTreeBranchWithParents(x)
 
-                          if (!findProductTreeBranch) {
+                          if (!versionBranch) {
                             return t('untitled.product_version')
                           }
 
+                          const { name, isReadonly, readonlyReason } =
+                            getPTBName(versionBranch)
+
+                          const displayName =
+                            name ?? t('untitled.product_version')
+                          const readonlyReasonText =
+                            isReadonly && readonlyReason
+                              ? t(
+                                  `product_version.readonly_reason.${readonlyReason}`,
+                                )
+                              : undefined
+
                           return (
-                            getPTBName(findProductTreeBranch).name ??
-                            t('untitled.product_version')
+                            <span className="flex items-center gap-1">
+                              <span>{displayName}</span>
+                              {readonlyReasonText && (
+                                <Tooltip showArrow content={readonlyReasonText}>
+                                  <span
+                                    className="inline-flex text-zinc-500"
+                                    aria-label={readonlyReasonText}
+                                  >
+                                    <FontAwesomeIcon
+                                      icon={faCircleInfo}
+                                      size="sm"
+                                    />
+                                  </span>
+                                </Tooltip>
+                              )}
+                            </span>
                           )
                         }}
                       />

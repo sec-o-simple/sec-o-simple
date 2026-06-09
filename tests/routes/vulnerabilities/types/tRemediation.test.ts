@@ -72,11 +72,13 @@ describe('tRemediation', () => {
         id: 'test-id',
         category: 'mitigation',
         productIds: ['prod1', 'prod2'],
+        applyAllKnownAffectedProducts: false,
       }
 
       expect(remediation.id).toBe('test-id')
       expect(remediation.category).toBe('mitigation')
       expect(remediation.productIds).toEqual(['prod1', 'prod2'])
+      expect(remediation.applyAllKnownAffectedProducts).toBe(false)
     })
 
     it('should support all optional fields', () => {
@@ -87,6 +89,7 @@ describe('tRemediation', () => {
         date: '2025-09-15',
         url: 'https://example.com/fix',
         productIds: ['prod1'],
+        applyAllKnownAffectedProducts: true,
       }
 
       expect(remediation.details).toBe('Detailed remediation information')
@@ -99,6 +102,7 @@ describe('tRemediation', () => {
         id: 'test-id',
         category: 'none_available',
         productIds: [],
+        applyAllKnownAffectedProducts: true,
       }
 
       expect(remediation.productIds).toEqual([])
@@ -110,6 +114,7 @@ describe('tRemediation', () => {
           id: `test-${category}`,
           category,
           productIds: [],
+          applyAllKnownAffectedProducts: true,
         }
         
         expect(remediation.category).toBe(category)
@@ -142,6 +147,7 @@ describe('tRemediation', () => {
         id: 'generated-unique-id',
         category: 'mitigation',
         productIds: [],
+        applyAllKnownAffectedProducts: true,
       })
     })
 
@@ -156,6 +162,7 @@ describe('tRemediation', () => {
         id: 'generated-unique-id',
         category: 'vendor_fix',
         productIds: [],
+        applyAllKnownAffectedProducts: true,
       })
     })
 
@@ -173,6 +180,7 @@ describe('tRemediation', () => {
         id: 'generated-unique-id',
         category: 'workaround',
         productIds: [],
+        applyAllKnownAffectedProducts: true,
         // Note: The function only uses category from template, not other fields
       })
     })
@@ -204,6 +212,7 @@ describe('tRemediation', () => {
         expect(result.category).toBe(category)
         expect(result.id).toBe(`id-for-${category}`)
         expect(result.productIds).toEqual([])
+        expect(result.applyAllKnownAffectedProducts).toBe(true)
       })
     })
 

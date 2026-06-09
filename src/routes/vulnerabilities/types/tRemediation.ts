@@ -18,6 +18,7 @@ export type TRemediation = {
   date?: string
   url?: string
   productIds: string[]
+  applyAllKnownAffectedProducts?: boolean
 }
 
 export function useRemediationGenerator(): TRemediation {
@@ -30,5 +31,6 @@ export function useRemediationGenerator(): TRemediation {
     id: uid(),
     category: defaultRemediation.category || 'mitigation',
     productIds: [],
+    applyAllKnownAffectedProducts: true,
   }
 }

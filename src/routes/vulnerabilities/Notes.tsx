@@ -40,7 +40,7 @@ export default function Notes({
   )
 
   return (
-    <VSplit>
+    <VSplit className="rounded-lg border border-gray-200 p-4">
       {(isTouched || listValidation.isTouched) && listValidation.hasErrors && (
         <Alert color="danger">
           {listValidation.errorMessages.map((m) => (

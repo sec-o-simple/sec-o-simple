@@ -36,6 +36,10 @@ vi.mock('react-i18next', () => ({
         'products.relationship.categories.installed_with': 'Installed With',
         'products.relationship.categories.optional_component_of':
           'Optional Component Of',
+        'product_version.readonly_reason.imported_with_identification_helper':
+          'Version name is managed by imported identification helper.',
+        'product_version.readonly_reason.full_product_name_mismatch':
+          'Version name is locked because full product name does not match.',
       }
       return translations[key] || key
     }),
@@ -59,6 +63,7 @@ const mockGetPTBName = vi.fn((product: any) => {
   return {
     name: product.name || fallbackName,
     isReadonly: false,
+    readonlyReason: undefined,
   }
 })
 const mockGetRelationshipsBySourceVersion = vi.fn()
@@ -168,6 +173,11 @@ vi.mock('@heroui/chip', () => ({
 vi.mock('@heroui/react', () => ({
   BreadcrumbItem: ({ children, href }: any) => (
     <div data-testid="breadcrumb-item" data-href={href}>
+      {children}
+    </div>
+  ),
+  Tooltip: ({ children, content }: any) => (
+    <div data-testid="tooltip" data-content={content}>
       {children}
     </div>
   ),
@@ -380,7 +390,7 @@ describe('Version', () => {
       // Product breadcrumb
       expect(breadcrumbItems[1]).toHaveAttribute(
         'data-href',
-        '/#/products/management/product/product-1',
+        '/#/products/management',
       )
       expect(breadcrumbItems[1]).toHaveTextContent('Test Product')
 
@@ -422,10 +432,7 @@ describe('Version', () => {
       expect(title).toHaveTextContent('Version Version 1.0')
 
       const backLink = screen.getByTestId('back-link')
-      expect(backLink).toHaveAttribute(
-        'data-href',
-        '/products/management/product/product-1',
-      )
+      expect(backLink).toHaveAttribute('data-href', '/products/management')
     })
 
     it('should render action button for non-Software document types', () => {
@@ -538,6 +545,37 @@ describe('Version', () => {
       expect(tagItems[0]).toHaveAttribute(
         'data-link',
         '/products/management/version/version-2',
+      )
+    })
+
+    it('should show readonly info tooltip in version chip when version name is not editable', () => {
+      mockFindProductTreeBranchWithParents.mockImplementation((id?: string) => {
+        if (id === 'version-2') {
+          return {
+            ...mockProductVersion,
+            id: 'version-2',
+            name: 'Version 2.0',
+          }
+        }
+
+        return mockProductVersion
+      })
+
+      mockGetPTBName.mockImplementation((product: any) => ({
+        name: product.name || 'Untitled Version',
+        isReadonly: product.id === 'version-2',
+        readonlyReason:
+          product.id === 'version-2'
+            ? 'imported_with_identification_helper'
+            : undefined,
+      }))
+
+      render(<Version />)
+
+      const tooltip = screen.getByTestId('tooltip')
+      expect(tooltip).toHaveAttribute(
+        'data-content',
+        'Version name is managed by imported identification helper.',
       )
     })
 

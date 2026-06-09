@@ -3,7 +3,13 @@ import {
   DatePicker as HeroUIDatePicker,
   DatePickerProps as HeroUIDatePickerProps,
 } from '@heroui/date-picker'
-import { getLocalTimeZone, parseAbsolute } from '@internationalized/date'
+import {
+  DateValue,
+  getLocalTimeZone,
+  parseAbsolute,
+} from '@internationalized/date'
+
+type HeroUIDatePickerValue = HeroUIDatePickerProps['value']
 
 export type DatePickerProps = Omit<
   HeroUIDatePickerProps,
@@ -26,6 +32,12 @@ export default function DatePicker({
   ...pickerProps
 }: DatePickerProps) {
   const validation = useFieldValidation(csafPath)
+  const parsedValue: HeroUIDatePickerValue = value
+    ? (parseAbsolute(
+        value,
+        getLocalTimeZone(),
+      ) as unknown as HeroUIDatePickerValue)
+    : undefined
 
   return (
     <HeroUIDatePicker
@@ -39,14 +51,14 @@ export default function DatePicker({
         validation.hasErrors &&
         (isTouched || validation.isTouched || !!value?.length)
       }
-      value={value ? parseAbsolute(value, getLocalTimeZone()) : undefined}
+      value={parsedValue}
       onBlur={(e) => {
         if (csafPath) {
           validation.markFieldAsTouched(csafPath)
         }
         onBlur?.(e)
       }}
-      onChange={(dateValue) =>
+      onChange={(dateValue: DateValue | null) =>
         onChange?.(dateValue?.toDate(getLocalTimeZone()).toISOString() ?? '')
       }
       {...pickerProps}

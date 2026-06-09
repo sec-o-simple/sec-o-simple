@@ -308,4 +308,59 @@ describe('NotesTemplates', () => {
 
     expect(mockSetData).toHaveBeenCalledWith(expect.any(Function))
   })
+
+  it('should append a readonly template note when setData updater is executed', () => {
+    mockUseDisclosure.mockReturnValue({
+      isOpen: true,
+      onOpen: vi.fn(),
+      onClose: vi.fn(),
+      onOpenChange: vi.fn(),
+      isControlled: false,
+      getButtonProps: vi.fn(),
+      getDisclosureProps: vi.fn(),
+    })
+
+    mockUseConfigStore.mockReturnValue({
+      template1: {
+        title: 'Template A',
+        content: 'Template content',
+        category: 'general',
+      },
+    })
+
+    render(
+      <NotesTemplates
+        notesListState={mockNotesListState}
+        templatePath="test.path"
+      />,
+    )
+
+    fireEvent.click(screen.getByTestId('listbox-item'))
+
+    expect(mockSetData).toHaveBeenCalledWith(expect.any(Function))
+    const updater = mockSetData.mock.calls[0][0] as (prev: TNote[]) => TNote[]
+    const previous: TNote[] = [
+      {
+        id: 'existing',
+        title: 'Existing',
+        category: 'general',
+        content: 'existing content',
+        readonly: false,
+        deletable: true,
+      },
+    ]
+
+    const next = updater(previous)
+
+    expect(next).toHaveLength(2)
+    expect(next[0]).toEqual(previous[0])
+    expect(next[1]).toMatchObject({
+      id: 'test-id',
+      readonly: true,
+      deletable: true,
+      title: 'Template A',
+      category: 'general',
+      content: 'Template content',
+    })
+  })
 })

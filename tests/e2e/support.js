@@ -1,4 +1,7 @@
-Cypress.on('window:before:load', window => {
+Cypress.on('window:before:load', (window) => {
+  // Ensure deterministic locale for all e2e tests.
+  window.localStorage.setItem('i18nextLng', 'en')
+
   window.document.head.insertAdjacentHTML(
     'beforeend',
     `
@@ -8,6 +11,6 @@ Cypress.on('window:before:load', window => {
       /* Disable CSS animations. */
       *, *::before, *::after { -webkit-animation: none !important; -moz-animation: none !important; -o-animation: none !important; animation: none !important; }
     </style>
-  `
+  `,
   )
 })

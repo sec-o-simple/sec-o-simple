@@ -6,15 +6,17 @@ import General from './routes/document-information/General'
 import Notes from './routes/document-information/Notes'
 import Publisher from './routes/document-information/Publisher'
 import References from './routes/document-information/References'
+import Aliases from './routes/document-information/Aliases'
 import Tracking from './routes/document-information/Tracking'
 import DocumentSelection from './routes/document-selection/DocumentSelection'
-import Product from './routes/products/Product'
 import ProductFamily from './routes/products/ProductFamily'
 import ProductManagement from './routes/products/ProductManagement'
 import Version from './routes/products/Version'
 import Vulnerabilities from './routes/vulnerabilities/Vulnerabilities'
+import ProductMatrix from '@/routes/vulnerabilities/ProductMatrix'
 import { useTemplateInitializer } from './utils/template'
 import { useConfigInitializer } from './utils/useConfigStore'
+import Preview from './routes/preview/Preview'
 
 export default function App() {
   useConfigInitializer()
@@ -32,18 +34,23 @@ export default function App() {
               <Route path="notes" element={<Notes />} />
               <Route path="publisher" element={<Publisher />} />
               <Route path="references" element={<References />} />
+              <Route path="aliases" element={<Aliases />} />
               <Route path="acknowledgments" element={<Acknowledgments />} />
             </Route>
             <Route path="products">
               <Route path="families" element={<ProductFamily />} />
               <Route path="management">
                 <Route index element={<ProductManagement />} />
-                <Route path="product/:productId" element={<Product />} />
                 <Route path="version/:productVersionId" element={<Version />} />
               </Route>
             </Route>
-            <Route path="vulnerabilities" element={<Vulnerabilities />} />
+            <Route path="vulnerabilities">
+              <Route index element={<Navigate to="list" replace />} />
+              <Route path="list" element={<Vulnerabilities />} />
+              <Route path="matrix" element={<ProductMatrix />} />
+            </Route>
             <Route path="tracking" element={<Tracking />} />
+            <Route path="preview" element={<Preview />} />
           </Route>
         </Route>
       </Routes>

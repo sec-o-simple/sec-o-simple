@@ -35,6 +35,7 @@ export default defineConfig({
       '@': path.resolve('./src'),
     },
   },
+  assetsInclude: ['src/routes/preview/HTMLTemplate/Template.html'],
   test: {
     environment: 'jsdom',
     globals: true,

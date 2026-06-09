@@ -4,6 +4,12 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ProductCard from '../../../../src/routes/products/components/ProductCard'
 import { TProductTreeBranch } from '../../../../src/routes/products/types/tProductTreeBranch'
 
+vi.mock('@fortawesome/react-fontawesome', () => ({
+  FontAwesomeIcon: ({ icon, size, ...props }: any) => (
+    <i data-testid="font-awesome-icon" data-icon={icon} data-size={size} {...props} />
+  ),
+}))
+
 // Mock all external dependencies
 vi.mock('../../../../src/components/forms/IconButton', () => ({
   default: ({ icon, tooltip, onPress, ...props }: any) => (
@@ -54,6 +60,15 @@ vi.mock('../../../../src/utils/useProductTreeBranch', () => ({
 
 vi.mock('@fortawesome/free-solid-svg-icons', () => ({
   faCodeFork: 'faCodeFork',
+  faCircleInfo: 'faCircleInfo',
+}))
+
+vi.mock('@heroui/react', () => ({
+  Tooltip: ({ children, content }: any) => (
+    <div data-testid="tooltip" data-content={content}>
+      {children}
+    </div>
+  ),
 }))
 
 vi.mock('@heroui/chip', () => ({
@@ -532,6 +547,35 @@ describe('ProductCard', () => {
 
       const infoCard = screen.getByTestId('info-card')
       expect(infoCard).toHaveAttribute('data-link-to', 'product/different-id')
+    })
+  })
+
+  describe('Readonly version chip info', () => {
+    it('should show info tooltip when version chip label is readonly', () => {
+      mockGetPTBName.mockImplementation((branch: any) => {
+        if (branch.id === 'sub-2') {
+          return {
+            name: 'Vendor Product 2.0',
+            isReadonly: true,
+            readonlyReason: 'imported_with_identification_helper',
+          }
+        }
+
+        return {
+          name: branch.name || 'Untitled Version',
+          isReadonly: false,
+          readonlyReason: undefined,
+        }
+      })
+
+      renderWithRouter(<ProductCard product={mockProductWithSubBranches} />)
+
+      const tooltips = screen.getAllByTestId('tooltip')
+      expect(tooltips).toHaveLength(1)
+      expect(tooltips[0]).toHaveAttribute(
+        'data-content',
+        'product_version.readonly_reason.imported_with_identification_helper',
+      )
     })
   })
 })

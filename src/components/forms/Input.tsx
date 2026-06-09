@@ -33,6 +33,10 @@ export function Input(
     handleChange,
   } = useDebounceInput({
     onChange: (e) => {
+      if (!e || typeof e !== 'object' || !('target' in e)) {
+        return
+      }
+
       onValueChange?.(e.target.value)
       onChange?.(e)
     },
@@ -94,6 +98,10 @@ export function Textarea(
     handleChange,
   } = useDebounceInput({
     onChange: (e) => {
+      if (!e || typeof e !== 'object' || !('target' in e)) {
+        return
+      }
+
       onValueChange?.(e.target.value)
       onChange?.(e)
     },

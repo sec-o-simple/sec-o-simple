@@ -3,8 +3,6 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 
-vi.unmock('../../../src/routes/products/Product')
-
 import VendorList from '../../../src/routes/products/VendorList'
 import { TProductTreeBranch } from '../../../src/routes/products/types/tProductTreeBranch'
 

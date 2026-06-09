@@ -15,6 +15,27 @@ import parseScores from './parseScores'
 
 export type TCSAFDocument = ReturnType<typeof createCSAFDocument>
 
+/**
+ * Builds the CSAF export file name from /document/tracking/id.
+ * Rules:
+ * - Convert the tracking ID to lowercase first.
+ * - Replace each sequence of characters outside [+\-a-z0-9] with a single underscore.
+ * - Collapse consecutive underscores to avoid duplicate separators.
+ * - Append "_invalid" when the document is invalid, then append ".json".
+ */
+export function createCSAFExportFilename(
+  trackingId: string | undefined,
+  isValid: boolean,
+): string {
+  const normalizedTrackingId = (trackingId || 'csaf_document')
+    .toLowerCase()
+    .replace(/[^+\-a-z0-9]+/g, '_')
+    .replace(/\++/g, '_')
+    .replace(/_+/g, '_')
+  const suffix = !isValid ? '_invalid' : ''
+  return `${normalizedTrackingId}${suffix}.json`
+}
+
 export function createCSAFDocument(
   documentStore: TDocumentStore,
   getFullProductName: (id: string) => string,
@@ -91,6 +112,9 @@ export function createCSAFDocument(
           number: entry.number,
           summary: entry.summary,
         })),
+        aliases: documentInformation.aliases?.length
+          ? documentInformation.aliases
+          : undefined,
         status: documentStore.documentInformation.status,
         version: documentStore.documentInformation.revisionHistory.length
           ? retrieveLatestVersion(
@@ -156,6 +180,15 @@ export function createCSAFDocument(
     },
     vulnerabilities: Object.values(documentStore.vulnerabilities).map(
       (vulnerability) => {
+        const knownAffectedProductIds = [
+          ...new Set(
+            vulnerability.products
+              .filter((product) => product.status === 'known_affected')
+              .map((product) => product.productId)
+              .filter((id): id is string => Boolean(id)),
+          ),
+        ]
+
         const productStatus = () => {
           const products = vulnerability.products
 
@@ -182,9 +215,13 @@ export function createCSAFDocument(
         const remediations = vulnerability.remediations?.map((remediation) => ({
           category: remediation.category,
           date: remediation.date || undefined,
-          details: remediation.details,
+          details: remediation.details || '',
           url: remediation.url || undefined,
-          product_ids: remediation.productIds,
+          product_ids:
+            (remediation.applyAllKnownAffectedProducts ??
+            remediation.productIds.length === 0)
+              ? knownAffectedProductIds
+              : remediation.productIds,
         }))
         const flags =
           vulnerability.flags?.map((flag) => ({
@@ -199,11 +236,30 @@ export function createCSAFDocument(
               summary: `CVSS v4.0 Score`,
               category: 'external',
             })) || []
+        const userReferences =
+          vulnerability.references?.map((reference) => ({
+            summary: reference.summary,
+            url: reference.url,
+            category: reference.category,
+          })) || []
+        const combinedReferences = [
+          ...userReferences,
+          ...cvss4References,
+        ].filter(
+          (reference, index, references) =>
+            references.findIndex(
+              (candidate) =>
+                candidate.url === reference.url &&
+                candidate.summary === reference.summary &&
+                candidate.category === reference.category,
+            ) === index,
+        )
 
         return {
           cve: vulnerability.cve || undefined,
           title: vulnerability.title,
-          references: cvss4References.length > 0 ? cvss4References : undefined,
+          references:
+            combinedReferences.length > 0 ? combinedReferences : undefined,
           cwe: vulnerability.cwe
             ? {
                 id: vulnerability.cwe.id,
@@ -214,7 +270,7 @@ export function createCSAFDocument(
           product_status: productStatus(),
           flags: flags.length > 0 ? flags : undefined,
           remediations: remediations?.length > 0 ? remediations : undefined,
-          scores: parseScores(vulnerability.scores),
+          scores: parseScores(vulnerability.scores, knownAffectedProductIds),
         }
       },
     ),
@@ -242,9 +298,10 @@ export function useCSAFExport() {
     // Our created CSAF document has priority, and is handled as the base
     csafDocument = _.merge({}, documentStore.importedCSAFDocument, csafDocument)
 
-    const suffix = !isValid ? '_invalid' : ''
-    const id = documentStore.documentInformation.id || 'csaf_document'
-    const filename = id + suffix + '.json'
+    const filename = createCSAFExportFilename(
+      documentStore.documentInformation.id,
+      isValid,
+    )
 
     download(filename, JSON.stringify(csafDocument, null, 2))
   }

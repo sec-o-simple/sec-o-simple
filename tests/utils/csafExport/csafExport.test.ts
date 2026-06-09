@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
-import { createCSAFDocument } from '../../../src/utils/csafExport/csafExport'
+import {
+  createCSAFDocument,
+  createCSAFExportFilename,
+} from '../../../src/utils/csafExport/csafExport'
 import type { TDocumentStore } from '../../../src/utils/useDocumentStore'
 
 // Mock the current date to ensure consistent snapshots
@@ -118,8 +121,8 @@ describe('csafExport', () => {
           name: 'Test Application v1.0.0 on Linux',
         },
       ],
-      vulnerabilities: {
-        'vuln-1': {
+      vulnerabilities: [
+        {
           id: 'vuln-1',
           cve: 'CVE-2023-12345',
           title: 'Cross-site Scripting Vulnerability',
@@ -174,7 +177,7 @@ describe('csafExport', () => {
             },
           ],
         },
-      },
+      ],
       families: [],
       importedCSAFDocument: {},
       setImportedCSAFDocument: vi.fn(),
@@ -258,7 +261,7 @@ describe('csafExport', () => {
     }
     minimalStore.products = {} as any
     minimalStore.relationships = []
-    minimalStore.vulnerabilities = {} as any
+    minimalStore.vulnerabilities = []
 
     const result = createCSAFDocument(
       minimalStore,
@@ -276,8 +279,8 @@ describe('csafExport', () => {
   it('should handle vulnerabilities without optional fields', () => {
     const storeWithBasicVuln = createMockDocumentStore()
 
-    storeWithBasicVuln.vulnerabilities = {
-      'basic-vuln': {
+    storeWithBasicVuln.vulnerabilities = [
+      {
         id: 'basic-vuln',
         cve: undefined,
         title: 'Basic Vulnerability',
@@ -288,7 +291,7 @@ describe('csafExport', () => {
         remediations: undefined,
         scores: [],
       },
-    } as any
+    ]
 
     const result = createCSAFDocument(
       storeWithBasicVuln,
@@ -301,5 +304,139 @@ describe('csafExport', () => {
     )
 
     expect(result).toMatchSnapshot()
+  })
+
+  it('should export user vulnerability references and CVSS v4 references', () => {
+    const mockStore = createMockDocumentStore()
+    mockStore.vulnerabilities[0].references = [
+      {
+        id: 'vuln-ref-1',
+        summary: 'Vendor Security Advisory',
+        url: 'https://example.com/vuln-advisory',
+        category: 'self',
+      },
+    ]
+
+    const result = createCSAFDocument(
+      mockStore,
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      {
+        template: {},
+        productDatabase: { enabled: false },
+      },
+    )
+
+    expect(result.vulnerabilities[0].references).toEqual(
+      expect.arrayContaining([
+        {
+          summary: 'Vendor Security Advisory',
+          url: 'https://example.com/vuln-advisory',
+          category: 'self',
+        },
+        {
+          summary: 'CVSS v4.0 Score',
+          url: 'https://www.first.org/cvss/calculator/4-0#CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N',
+          category: 'external',
+        },
+      ]),
+    )
+  })
+
+  it('should deduplicate vulnerability references when they match generated CVSS v4 references', () => {
+    const mockStore = createMockDocumentStore()
+    mockStore.vulnerabilities[0].references = [
+      {
+        id: 'vuln-ref-1',
+        summary: 'CVSS v4.0 Score',
+        url: 'https://www.first.org/cvss/calculator/4-0#CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:R/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N',
+        category: 'external',
+      },
+    ]
+
+    const result = createCSAFDocument(
+      mockStore,
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      {
+        template: {},
+        productDatabase: { enabled: false },
+      },
+    )
+
+    expect(result.vulnerabilities[0].references).toHaveLength(1)
+  })
+
+  it('applies known affected products to remediations and scores when enabled', () => {
+    const mockStore = createMockDocumentStore()
+    mockStore.vulnerabilities[0].products = [
+      {
+        id: 'vuln-product-1',
+        productId: 'version-1',
+        status: 'known_affected',
+      },
+      {
+        id: 'vuln-product-2',
+        productId: 'version-2',
+        status: 'fixed',
+      },
+    ] as any
+
+    mockStore.vulnerabilities[0].remediations = [
+      {
+        category: 'mitigation',
+        details: 'Update to latest version',
+        productIds: [],
+        applyAllKnownAffectedProducts: true,
+      },
+    ] as any
+
+    mockStore.vulnerabilities[0].scores = [
+      {
+        id: 'score-1',
+        cvssVersion: '3.1',
+        vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N',
+        productIds: [],
+        applyAllKnownAffectedProducts: true,
+      },
+    ] as any
+
+    const result = createCSAFDocument(
+      mockStore,
+      mockGetFullProductName,
+      mockGetRelationshipFullProductName,
+      {
+        template: {},
+        productDatabase: { enabled: false },
+      },
+    )
+
+    expect(result.vulnerabilities[0].remediations?.[0].product_ids).toEqual([
+      'version-1',
+    ])
+    expect(result.vulnerabilities[0].scores?.[0].products).toEqual([
+      'version-1',
+    ])
+  })
+
+  describe('createCSAFExportFilename', () => {
+    it('converts tracking id to lowercase and keeps valid characters', () => {
+      expect(createCSAFExportFilename('ESA-2023-B-001', true)).toBe(
+        'esa-2023-b-001.json',
+      )
+    })
+
+    it('replaces invalid character sequences with single underscores', () => {
+      expect(createCSAFExportFilename('2022_#01-A', true)).toBe('2022_01-a.json')
+      expect(createCSAFExportFilename('ESA##+2023-A*', true)).toBe(
+        'esa_2023-a_.json',
+      )
+    })
+
+    it('appends invalid suffix when document is invalid', () => {
+      expect(createCSAFExportFilename('ESA-2023-B-001', false)).toBe(
+        'esa-2023-b-001_invalid.json',
+      )
+    })
   })
 })

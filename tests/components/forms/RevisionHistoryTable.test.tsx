@@ -99,6 +99,14 @@ vi.mock('react-i18next', () => ({
 }))
 
 // Mock the custom hooks and utilities
+let capturedGenerator: (() => any) | undefined
+
+const { mockRetrieveLatestVersion, mockSemverValid, mockSemverInc } = vi.hoisted(() => ({
+  mockRetrieveLatestVersion: vi.fn(() => '1.0.0'),
+  mockSemverValid: vi.fn(),
+  mockSemverInc: vi.fn(),
+}))
+
 const mockListState = {
   data: [] as any[],
   setData: vi.fn(),
@@ -108,7 +116,10 @@ const mockListState = {
 }
 
 vi.mock('../../../src/utils/useListState', () => ({
-  useListState: vi.fn(() => mockListState)
+  useListState: vi.fn((opts: any) => {
+    capturedGenerator = opts?.generator
+    return mockListState
+  })
 }))
 
 vi.mock('../../../src/utils/useDocumentStoreUpdater', () => ({
@@ -132,12 +143,13 @@ vi.mock('../../../src/routes/document-information/types/tRevisionHistoryEntry', 
 }))
 
 vi.mock('../../../src/utils/csafExport/latestVersion', () => ({
-  retrieveLatestVersion: vi.fn(() => '1.0.0')
+  retrieveLatestVersion: mockRetrieveLatestVersion
 }))
 
 vi.mock('semver', () => ({
-  valid: vi.fn(),
-  inc: vi.fn()
+  default: { valid: mockSemverValid, inc: mockSemverInc },
+  valid: mockSemverValid,
+  inc: mockSemverInc
 }))
 
 describe('RevisionHistoryTable', () => {
@@ -333,5 +345,44 @@ describe('RevisionHistoryTable', () => {
     
     expect(inputs[0]).toHaveAttribute('placeholder', 'Enter Version')
     expect(inputs[1]).toHaveAttribute('placeholder', 'Enter Description')
+  })
+})
+
+describe('RevisionHistoryTable – version number generator', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mockListState.data = []
+    capturedGenerator = undefined
+  })
+
+  it('generates "0" as first version when there are no entries', () => {
+    render(<RevisionHistoryTable />)
+    expect(capturedGenerator).toBeDefined()
+    const entry = capturedGenerator!()
+    // No existing data → latestRevision = '0'; '0' is not semver → parseInt('0')=0 → nextVersion = '1'
+    expect(entry).toBeDefined()
+  })
+
+  it('increments integer version when latest revision is a plain integer', () => {
+    mockRetrieveLatestVersion.mockReturnValue('3')
+    mockSemverValid.mockReturnValue(null) // not semver
+    mockListState.data = [{ id: '1', number: '3', date: '', summary: '' }]
+
+    render(<RevisionHistoryTable />)
+    expect(capturedGenerator).toBeDefined()
+    const entry = capturedGenerator!()
+    expect(entry.number).toBe('4')
+  })
+
+  it('increments semver patch version when latest revision is semver', () => {
+    mockRetrieveLatestVersion.mockReturnValue('1.2.3')
+    mockSemverValid.mockReturnValue('1.2.3')
+    mockSemverInc.mockReturnValue('1.2.4')
+    mockListState.data = [{ id: '1', number: '1.2.3', date: '', summary: '' }]
+
+    render(<RevisionHistoryTable />)
+    expect(capturedGenerator).toBeDefined()
+    const entry = capturedGenerator!()
+    expect(entry.number).toBe('1.2.4')
   })
 })

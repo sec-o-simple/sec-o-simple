@@ -18,12 +18,14 @@ export type TConfig = {
   }
   exportTexts?: {
     productDescription?: {
-      en: string
-      de: string
+      [key: string]: string
     }
   }
   cveApiUrl?: string
-  template: { [key: string]: unknown }
+  template: {
+    required?: string[]
+    [key: string]: unknown
+  }
 }
 
 export type TConfigStore = {

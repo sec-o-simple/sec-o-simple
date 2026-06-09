@@ -159,7 +159,17 @@ vi.mock('@heroui/react', () => ({
     <div data-testid="alert" data-color={color} className={className}>
       {children}
     </div>
-  )
+  ),
+  Checkbox: ({ children, isSelected, onChange }: any) => (
+    <label data-testid="apply-known-affected-checkbox">
+      <input
+        type="checkbox"
+        checked={!!isSelected}
+        onChange={(e) => onChange?.(e)}
+      />
+      {children}
+    </label>
+  ),
 }))
 
 vi.mock('@heroui/select', () => ({
@@ -242,10 +252,10 @@ describe('Remediations', () => {
       {
         id: 'prod-1',
         productId: 'product1',
-        versions: ['product1'],
         status: 'known_affected'
       }
     ],
+    flags: [],
     remediations: [mockRemediation],
     scores: []
   }
@@ -297,11 +307,14 @@ describe('Remediations', () => {
 
     mockUseProductTreeBranch.mockReturnValue({
       rootBranch: mockPTBs,
+      families: [],
       findProductTreeBranch: vi.fn(),
       findProductTreeBranchWithParents: vi.fn(),
+      getFullProductName: vi.fn((id: string) => id),
+      getRelationshipFullProductName: vi.fn(() => ''),
       getFilteredPTBs: vi.fn(),
       getPTBsByCategory: vi.fn(),
-      getSelectablePTBs: () => mockPTBs,
+      getPTBName: vi.fn(() => ({ name: 'Product', isReadonly: false })),
       getSelectableRefs: vi.fn(() => [
         {
           category: 'product_version',
@@ -318,9 +331,13 @@ describe('Remediations', () => {
           }
         }
       ]),
+      getGroupedSelectableRefs: vi.fn(() => ({})),
       addPTB: vi.fn(),
+      addProductFamily: vi.fn(),
       updatePTB: vi.fn(),
-      deletePTB: vi.fn()
+      updateFamily: vi.fn(),
+      deletePTB: vi.fn(),
+      deleteFamily: vi.fn(),
     })
 
     mockUsePrefixValidation.mockReturnValue({
@@ -664,6 +681,46 @@ describe('Remediations', () => {
       expect(screen.getByTestId('products-error')).toHaveTextContent('At least one product is required')
     })
 
+    it('shows product validation error when apply-all hides product selector', () => {
+      mockUseFieldValidation.mockReturnValue({
+        messages: [{ path: '/productIds', message: 'At least one product is required' }],
+        hasErrors: true,
+        hasWarnings: false,
+        hasInfos: false,
+        errorMessages: [{ path: '/productIds', message: 'At least one product is required' }],
+        warningMessages: [],
+        infoMessages: [],
+        isTouched: true,
+        markFieldAsTouched: vi.fn()
+      })
+
+      const applyAllRemediation: TRemediation = {
+        ...mockRemediation,
+        productIds: [],
+        applyAllKnownAffectedProducts: true
+      }
+
+      mockUseListState.mockReturnValue({
+        data: [applyAllRemediation],
+        setData: mockSetData,
+        updateDataEntry: mockUpdateDataEntry,
+        addDataEntry: vi.fn(),
+        removeDataEntry: vi.fn(),
+        getId: vi.fn((entry) => entry.id)
+      })
+
+      render(
+        <Remediations
+          vulnerability={{ ...mockVulnerability, remediations: [applyAllRemediation] }}
+          vulnerabilityIndex={0}
+          onChange={mockOnChange}
+        />
+      )
+
+      expect(screen.queryByTestId('products-tag-list')).not.toBeInTheDocument()
+      expect(screen.getByTestId('products-hidden-error')).toHaveTextContent('At least one product is required')
+    })
+
     it('does not show validation errors when field is valid', () => {
       render(
         <Remediations
@@ -754,7 +811,6 @@ describe('Remediations', () => {
           {
             id: 'prod-1',
             productId: 'product1',
-            versions: ['product1'],
             status: 'known_not_affected' as const
           }
         ] as TVulnerabilityProduct[]

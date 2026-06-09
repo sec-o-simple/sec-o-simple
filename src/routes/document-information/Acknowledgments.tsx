@@ -49,7 +49,7 @@ export default function Acknowledgments() {
     <WizardStep
       title={t('nav.documentInformation.acknowledgments')}
       progress={1.8}
-      onBack={'/document-information/references'}
+      onBack={'/document-information/aliases'}
       onContinue="/products/families"
     >
       {listValidation.isTouched && listValidation.hasErrors && (

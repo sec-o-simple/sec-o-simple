@@ -2,8 +2,8 @@ name: Sec-o-simple Website
 
 on:
   push:
-    branches:
-      - 'main'
+    tags:
+      - 'v*'
 
 permissions:
   contents: write
@@ -20,6 +20,8 @@ jobs:
           node-version: '20'
       - run: npm ci
       - run: npm run build
+        env:
+          BUILD_VERSION: ${{ github.ref_name }}
       - name: Deploy to GitHub Pages
         if: success()
         uses: crazy-max/ghaction-github-pages@v4

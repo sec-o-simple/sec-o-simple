@@ -15,9 +15,9 @@ import { useFieldValidation } from '@/utils/validation/useFieldValidation'
 import { useListValidation } from '@/utils/validation/useListValidation'
 import { usePrefixValidation } from '@/utils/validation/usePrefixValidation'
 import { Chip } from '@heroui/chip'
-import { Alert } from '@heroui/react'
+import { Alert, Checkbox } from '@heroui/react'
 import { SelectItem } from '@heroui/select'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import ProductsTagList from './components/ProductsTagList'
 import {
@@ -47,7 +47,19 @@ export default function Remediations({
     generator: remediationGenerator,
   })
   const { getSelectableRefs } = useProductTreeBranch()
-  let refs = getSelectableRefs()
+  const refs = getSelectableRefs()
+
+  const knownAffectedProductIds = useMemo(
+    () => [
+      ...new Set(
+        vulnerability.products
+          .filter((p) => p.status === 'known_affected')
+          .map((p) => p.productId)
+          .filter((id): id is string => Boolean(id)),
+      ),
+    ],
+    [vulnerability.products],
+  )
 
   useEffect(
     () =>
@@ -62,9 +74,7 @@ export default function Remediations({
   )
 
   const csafPath = `/vulnerabilities/${vulnerabilityIndex}/remediations`
-  const knownAffectedProducts = vulnerability.products.filter(
-    (p) => p.status === 'known_affected',
-  )
+  const knownAffectedProductIdSet = new Set(knownAffectedProductIds)
 
   return (
     <>
@@ -92,10 +102,7 @@ export default function Remediations({
             csafPath={`${csafPath}/${index}`}
             isTouched={isTouched}
             products={refs?.filter((p) =>
-              knownAffectedProducts.some(
-                (product) =>
-                  product.productId === p.full_product_name.product_id,
-              ),
+              knownAffectedProductIdSet.has(p.full_product_name.product_id),
             )}
             onChange={remediationsListState.updateDataEntry}
           />
@@ -140,6 +147,12 @@ function RemediationForm({
 }) {
   const { t } = useTranslation()
   const fieldValidation = useFieldValidation(`${csafPath}/product_ids`)
+  const productError = fieldValidation.hasErrors
+    ? fieldValidation.errorMessages[0].message
+    : ''
+  const applyAllKnownAffectedProducts =
+    remediation.applyAllKnownAffectedProducts ??
+    remediation.productIds.length === 0
 
   return (
     <VSplit>
@@ -198,18 +211,43 @@ function RemediationForm({
         isDisabled={checkReadOnly(remediation, 'url')}
         placeholder={getPlaceholder(remediation, 'url')}
       />
-      <ProductsTagList
-        error={
-          fieldValidation.hasErrors
-            ? fieldValidation.errorMessages[0].message
-            : ''
-        }
-        description={t('vulnerabilities.remediation.productsDescription')}
-        selected={remediation.productIds}
-        products={ptbs}
-        onChange={(productIds) => onChange({ ...remediation, productIds })}
-        isRequired
-      />
+      <Checkbox
+        isSelected={applyAllKnownAffectedProducts}
+        onChange={(event) => {
+          const isChecked = event.target.checked
+          onChange({
+            ...remediation,
+            applyAllKnownAffectedProducts: isChecked,
+            productIds: isChecked ? [] : remediation.productIds,
+          })
+        }}
+      >
+        {t('vulnerabilities.remediation.applyAllKnownAffectedProducts')}
+      </Checkbox>
+      {applyAllKnownAffectedProducts && productError && (
+        <p
+          className="text-danger-500 text-sm"
+          data-testid="products-hidden-error"
+        >
+          {productError}
+        </p>
+      )}
+      {!applyAllKnownAffectedProducts && (
+        <ProductsTagList
+          error={productError}
+          description={t('vulnerabilities.remediation.productsDescription')}
+          selected={remediation.productIds}
+          products={ptbs}
+          onChange={(productIds) =>
+            onChange({
+              ...remediation,
+              productIds,
+              applyAllKnownAffectedProducts: false,
+            })
+          }
+          isRequired
+        />
+      )}
     </VSplit>
   )
 }

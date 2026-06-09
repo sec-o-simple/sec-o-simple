@@ -1,54 +1,154 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { describe, expect, it, vi, beforeEach, afterEach } from 'vitest'
+import { download } from '../../src/utils/download'
+
+vi.unmock('../../src/utils/download')
+vi.unmock('@/utils/download')
 
 describe('download', () => {
-  // Import dynamically to ensure proper setup
-  let download: (filename: string, text: string) => void
+  let mockElement: any
 
-  beforeEach(async () => {
-    const module = await import('../../src/utils/download')
-    download = module.download
+  beforeEach(() => {
+    // Mock DOM element with all required methods
+    mockElement = {
+      setAttribute: vi.fn(),
+      click: vi.fn(),
+      style: {},
+    }
+
+    vi.spyOn(document, 'createElement').mockReturnValue(mockElement as any)
+    vi.spyOn(document.body, 'appendChild').mockImplementation(() => mockElement)
+    vi.spyOn(document.body, 'removeChild').mockImplementation(() => mockElement)
   })
 
-  it('should execute without throwing errors', () => {
-    expect(() => download('test.txt', 'content')).not.toThrow()
+  afterEach(() => {
+    vi.restoreAllMocks()
   })
 
-  it('should handle various filename formats', () => {
-    const filenames = [
-      'simple.txt',
-      'file-with-dashes.json',
-      'file_with_underscores.csv',
-      'file.with.dots.xml',
-      'file with spaces.txt',
-    ]
+  it('should create anchor element with correct attributes', () => {
+    download('test.txt', 'Hello World')
 
-    filenames.forEach((filename) => {
-      expect(() => download(filename, 'test content')).not.toThrow()
-    })
+    expect(document.createElement).toHaveBeenCalledWith('a')
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent('Hello World'),
+    )
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'download',
+      'test.txt',
+    )
+  })
+
+  it('should set element display style to none', () => {
+    download('test.txt', 'content')
+
+    expect(mockElement.style.display).toBe('none')
+  })
+
+  it('should append element to document body', () => {
+    download('test.txt', 'content')
+
+    expect(document.body.appendChild).toHaveBeenCalledWith(mockElement)
+  })
+
+  it('should click the element to trigger download', () => {
+    download('test.txt', 'content')
+
+    expect(mockElement.click).toHaveBeenCalled()
+  })
+
+  it('should remove element from document body after clicking', () => {
+    download('test.txt', 'content')
+
+    expect(document.body.removeChild).toHaveBeenCalledWith(mockElement)
+  })
+
+  it('should handle empty filename', () => {
+    download('', 'content')
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith('download', '')
+    expect(() => download('', 'content')).not.toThrow()
+  })
+
+  it('should handle empty content', () => {
+    download('test.txt', '')
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(''),
+    )
+    expect(() => download('test.txt', '')).not.toThrow()
+  })
+
+  it('should handle special characters in filename', () => {
+    const filename = 'test file (1).txt'
+    download(filename, 'content')
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith('download', filename)
+    expect(() => download(filename, 'content')).not.toThrow()
   })
 
   it('should handle special characters in content', () => {
-    const specialContent =
-      'Content with special chars: !@#$%^&*()_+{}[]|\\:";\'<>?,./'
-    expect(() => download('special.txt', specialContent)).not.toThrow()
-  })
+    const content = 'Special chars: & < > " \' \n \t 🚀 émoji'
+    download('test.txt', content)
 
-  it('should handle empty filename and content', () => {
-    expect(() => download('', '')).not.toThrow()
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(content),
+    )
+    expect(() => download('test.txt', content)).not.toThrow()
   })
 
   it('should handle JSON content', () => {
-    const jsonContent = JSON.stringify({ test: 'data', number: 42 })
+    const jsonContent = JSON.stringify({ key: 'value', number: 123 })
+    download('data.json', jsonContent)
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(jsonContent),
+    )
     expect(() => download('data.json', jsonContent)).not.toThrow()
   })
 
-  it('should handle large content', () => {
+  it('should handle large content efficiently', () => {
     const largeContent = 'x'.repeat(10000)
+    download('large.txt', largeContent)
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(largeContent),
+    )
     expect(() => download('large.txt', largeContent)).not.toThrow()
   })
 
-  it('should handle unicode content', () => {
-    const unicodeContent = 'Hello 🌍 Unicode ñáéíóú'
-    expect(() => download('unicode.txt', unicodeContent)).not.toThrow()
+  it('should properly encode URI components', () => {
+    const content = 'Hello%20World&test=123'
+    download('encoded.txt', content)
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(content),
+    )
+  })
+
+  it('should handle Unicode characters in content', () => {
+    const content = '🌍 Hello 世界 नमस्ते мир'
+    download('unicode.txt', content)
+
+    expect(mockElement.setAttribute).toHaveBeenCalledWith(
+      'href',
+      'data:text/plain;charset=utf-8,' + encodeURIComponent(content),
+    )
+  })
+
+  it('should complete full download workflow', () => {
+    download('workflow.txt', 'test workflow')
+
+    // Verify all steps were executed in order
+    expect(document.createElement).toHaveBeenCalledWith('a')
+    expect(mockElement.setAttribute).toHaveBeenCalledTimes(2)
+    expect(mockElement.style.display).toBe('none')
+    expect(document.body.appendChild).toHaveBeenCalledWith(mockElement)
+    expect(mockElement.click).toHaveBeenCalled()
+    expect(document.body.removeChild).toHaveBeenCalledWith(mockElement)
   })
 })

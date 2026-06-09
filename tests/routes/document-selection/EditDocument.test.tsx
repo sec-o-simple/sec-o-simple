@@ -773,9 +773,11 @@ describe('EditDocument', () => {
     await waitFor(() => {
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
     })
-    
-    // Test that the jsonObject was set and useEffect dependencies work correctly
-    expect(mockIsSOSDraft).toHaveBeenCalledWith({ valid: 'sos-document' })
-    expect(mockIsCSAFDocument).toHaveBeenCalledWith({ valid: 'sos-document' })
+
+    // Wait for useEffect validators to run
+    await waitFor(() => {
+      expect(mockIsSOSDraft).toHaveBeenCalledWith({ valid: 'sos-document' })
+      expect(mockIsCSAFDocument).toHaveBeenCalledWith({ valid: 'sos-document' })
+    })
   })
 })

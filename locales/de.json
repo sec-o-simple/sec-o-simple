@@ -13,21 +13,31 @@
       "search": "Suchen",
       "save": "Speichern",
       "close": "Schließen",
-      "back": "Zurück",
-      "next": "Weiter",
+      "back": "Vorheriger Schritt",
+      "next": "Nächster Schritt",
       "ok": "OK",
       "untitled": "Unbenannt",
       "add": "{{label}} hinzufügen",
       "placeholder": "{{label}} eingeben",
-      "actions": "Aktionen"
+      "actions": "Aktionen",
+      "from": "Von",
+      "to": "bis",
+      "for": "für",
+      "see": "siehe"
     },
-    "preview": "Vorschau",
+    "preview": {
+      "html": "Vorschau",
+      "raw": "HTML",
+      "for_products": "Für Produkte",
+      "for_tlp_version_see": "Für die TLP-Version siehe:"
+    },
     "newDocument": "Neues Dokument",
     "confirm.newDocument.title": "Neues Dokument erstellen",
     "confirm.newDocument.body": "Sind Sie sicher, dass Sie ein neues Dokument erstellen möchten? Dadurch wird das aktuelle Dokument zurückgesetzt.",
     "export": {
       "draft": "Export",
       "csaf": "CSAF Export",
+      "productDescriptionPrefix": "Produktbeschreibung für",
       "error": "{{ errorCount }} Fehler im Dokument. Bitte beheben Sie diese vor dem Export",
       "invalidExport": "Ungültiges CSAF-Dokument",
       "invalidExportConfirm": "Sind Sie sicher, dass Sie ein ungültiges CSAF-Dokument exportieren möchten?"
@@ -45,14 +55,20 @@
       "document": "Dokument",
       "documentInfo": "Dokument Informationen",
       "vulnerabilities": "Schwachstellen",
+      "vulnerabilitiesNavigation": {
+        "vulnerabilities": "Schwachstellen",
+        "productMatrix": "Produktauswahl"
+      },
       "documentInformation": {
         "general": "Allgemein",
         "notes": "Notizen",
         "publisher": "Herausgeber",
         "references": "Referenzen",
+        "aliases": "Aliase",
         "acknowledgments": "Danksagungen"
       },
-      "tracking": "Historie"
+      "tracking": "Historie",
+      "preview": "Vorschau"
     },
     "hiddenFields": {
       "title": "Versteckte Felder",
@@ -76,6 +92,10 @@
       "sbom": "SBOM"
     },
     "document": {
+      "engine": "Werkzeug",
+      "buildDate": "Erstellungsdatum",
+      "initialReleaseDate": "Erstveröffentlichungsdatum",
+      "currentReleaseDate": "Aktuelles Veröffentlichungsdatum",
       "general": {
         "title": "Dokumenttitel",
         "id": "Dokument-ID",
@@ -84,13 +104,17 @@
           "title": "Traffic Light Protocol (TLP)",
           "label": "TLP-Level",
           "label.placeholder": "TLP-Label auswählen",
-          "url": "TLP-URL"
+          "url": "TLP-URL",
+          "version.url": "Für die TLP-Version siehe",
+          "sharingRules": "Sharing Rules"
         },
+        "alias": "Alias",
         "language": "Sprache",
         "languages": {
           "de": "Deutsch",
           "en": "Englisch"
         },
+        "originalLanguage": "Originalsprache",
         "status": {
           "draft": "Entwurf",
           "final": "Final",
@@ -127,6 +151,7 @@
 
       "acknowledgments": {
         "title": "Danksagungen",
+        "fromPublisher": "dankt den folgenden Parteien für ihre Bemühungen",
         "acknowledgment": "Danksagung",
         "acknowledgments": "Danksagungen",
         "summary": "Zusammenfassung",
@@ -134,12 +159,14 @@
         "names": "Namen",
         "organization": "Organisation",
         "url": "URL",
-        "empty": "Keine Danksagungen hinzugefügt"
+        "empty": "Keine Danksagungen hinzugefügt",
+        "involvement": "Einbindung"
       }
     },
     "vulnerabilities": {
       "vulnerability": "Schwachstelle",
       "vulnerabilities": "Schwachstellen",
+      "threats": "Bedrohungen",
       "general": {
         "": "Allgemein",
         "title": "Title",
@@ -147,7 +174,7 @@
         "fetchCVEData": "Lädt die CVE-Daten von der hinterlegten API",
         "cveFetchError": "Fehler beim Laden der CVE-Daten",
         "cveFetchErrorDescription": "Die CVE-Daten konnten nicht geladen werden. Bitte überprüfen Sie die API-URL und die eingegebene CVE-ID.",
-        "description": "Beschreibung",
+        "cveDescription": "CVE Beschreibung",
         "cveNotesFetched": "CVE Notizen geladen",
         "cveNotesFetchedDescription_one": "{{count}} Notiz erfolgreich geladen und hinzugefügt",
         "cveNotesFetchedDescription": "{{count}} Notizen erfolgreich geladen und hinzugefügt",
@@ -156,12 +183,24 @@
         "dataOverrideWarning": "Datenüberschreibung Warnung",
         "dataOverrideWarningDescription": "Das Laden der CVE-Daten wird bestehende {{fields}} überschreiben. Möchten Sie fortfahren?",
         "dataAddedWarning": "Daten hinzugefügt Warnung",
-        "dataAddedWarningDescription": "{{count}} neue {{type}} wurden zu den bestehenden Daten hinzugefügt"
+        "dataAddedWarningDescription": "{{count}} neue {{type}} wurden zu den bestehenden Daten hinzugefügt",
+        "discoveryDate": "Entdeckungsdatum",
+        "releaseDate": "Veröffentlichungsdatum"
       },
       "notes": "Notizen",
+      "references": "Referenzen",
       "products": {
         "title": "Produkte",
+        "matrixHint": "Hinweis: Bearbeiten Sie die Produktauswahl für alle Schwachstellen in einer Übersicht über die",
+        "openMatrix": "Produktauswahl",
+        "copySectionTitle": "Von anderer Schwachstelle kopieren",
+        "copyFromLabel": "Auswahl kopieren von",
+        "copyFromPlaceholder": "Schwachstelle auswählen",
+        "copyButton": "Produktauswahl kopieren",
+        "noProductVersions": "Noch keine Produkte verfügbar.",
+        "noProductVersionsLinkPrefix": "Bitte fügen Sie diese in der",
         "status": {
+          "title": "Produktstatus",
           "first_affected": "Erste betroffene Version",
           "known_affected": "Bekannte betroffene Version",
           "known_not_affected": "Bekannte nicht betroffene Version",
@@ -183,6 +222,7 @@
         "baseScoreDescription": "Basis Bewertung wird aus dem Vektorstring berechnet",
         "baseSeverity": "Basis Schweregrad",
         "baseSeverityDescription": "Basis Schweregrad wird aus dem Vektorstring berechnet",
+        "applyAllKnownAffectedProducts": "Alle bekannten betroffenen Produkte anwenden",
         "productsDescription": "Wählen Sie die betroffenen Produkte oder diejenigen aus, die derzeit untersucht werden"
       },
       "remediations": "Behebungen",
@@ -200,11 +240,31 @@
         "details": "Details",
         "url": "URL",
         "products.empty": "Keine Produkte hinzugefügt",
-        "productsDescription": "Wählen Sie die betroffenen Produkte aus"
+        "applyAllKnownAffectedProducts": "Alle bekannten betroffenen Produkte anwenden",
+        "productsDescription": "Wählen Sie die betroffenen Produkte aus",
+        "restartRequired": "Neustart erforderlich"
       },
       "flags": "Kennzeichnungen",
+      "matrix": {
+        "title": "Produktauswahl",
+        "description": "Setzen Sie den Schwachstellenstatus pro Produktversion.",
+        "empty": "Fügen Sie mindestens eine Produktversion und eine Schwachstelle hinzu, um die Matrix zu verwenden.",
+        "productVersion": "Produkt",
+        "vulnerabilityFallback": "Schwachstelle {{index}}",
+        "required": "Pflicht",
+        "notSet": "Nicht gesetzt",
+        "applyFirst": "Erste anwenden",
+        "applyRow": "Auf Zeile anwenden",
+        "applyColumn": "Auf Spalte anwenden",
+        "applyRowShort": "Zeile",
+        "applyColumnShort": "Spalte"
+      },
       "flag": {
         "title": "Kennzeichnung"
+      },
+      "navigation": {
+        "backTo": "Zurück zu {{tabName}}",
+        "continueTo": "Weiter zu {{tabName}}"
       }
     },
     "notes": {
@@ -261,7 +321,11 @@
     "product_version": {
       "label": "Version",
       "name": "Versionname",
-      "description": "Versionbeschreibung"
+      "description": "Versionbeschreibung",
+      "readonly_reason": {
+        "imported_with_identification_helper": "Dieser Versionsname ist gesperrt, weil das importierte Produkt einen oder mehrere Identifikationshelfer hat.",
+        "full_product_name_mismatch": "Dieser Versionsname ist gesperrt, weil der festgelegte vollständige Produktname nicht mit dem automatisch generierten übereinstimmt."
+      }
     },
     "product_family": {
       "label": "Produktfamilie",
@@ -292,6 +356,7 @@
       },
       "vendors": "Hersteller",
       "products": "Produkte",
+      "productGroups": "Produktgruppen",
       "manage": "Produktverwaltung",
       "empty": "Sie haben noch kein {{ type }}-Produkt erstellt.\nSie können eines hinzufügen, indem Sie einen Hersteller erstellen und ihm ein Produkt hinzufügen.",
       "software": "Software",
@@ -310,6 +375,7 @@
         "type": "Produktart",
         "version": {
           "label": "Version",
+          "label_plural": "Versionen",
           "empty": "Keine Versionen vorhanden",
           "edit": "Produktversion bearbeiten",
           "edit_plural": "Produktversionen bearbeiten",
@@ -345,6 +411,7 @@
     "validation": {
       "error": "Fehler",
       "error_plural": "Fehler",
+      "requiredByTemplate": "Dieses Feld ist erforderlich",
       "errors": {
         "title": "Validierungsfehler",
         "column": {

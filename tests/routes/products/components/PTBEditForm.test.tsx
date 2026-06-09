@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react'
+import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 
 // Mock @heroui/react to include Autocomplete
@@ -6,8 +6,14 @@ vi.mock('@heroui/react', async (importOriginal) => {
   const actual = (await importOriginal()) as any
   return {
     ...actual,
-    Autocomplete: ({ children, ...props }: any) => (
+    Autocomplete: ({ children, onSelectionChange, ...props }: any) => (
       <div data-testid="autocomplete" {...props}>
+        <button
+          data-testid="autocomplete-clear"
+          onClick={() => onSelectionChange?.(null)}
+        >
+          clear
+        </button>
         {children}
       </div>
     ),
@@ -50,7 +56,18 @@ vi.mock('../../../../src/utils/useProductTreeBranch', () => ({
   useProductTreeBranch: vi.fn(() => ({
     getPTBName: vi.fn((branch) => ({
       name: branch.name,
-      isReadonly: false,
+      isReadonly:
+        !!branch.identificationHelper ||
+        (branch.category === 'product_version' &&
+          branch.productName !== undefined &&
+          branch.productName !== 'Mock Full Product Name'),
+      readonlyReason: branch.identificationHelper
+        ? 'imported_with_identification_helper'
+        : branch.category === 'product_version' &&
+            branch.productName !== undefined &&
+            branch.productName !== 'Mock Full Product Name'
+          ? 'full_product_name_mismatch'
+          : undefined,
     })),
     families: [
       { id: 'family1', name: 'Test Family 1' },
@@ -61,7 +78,6 @@ vi.mock('../../../../src/utils/useProductTreeBranch', () => ({
   })),
 }))
 
-// Mock HeroUI components
 vi.mock('@heroui/modal', () => ({
   ModalContent: ({ children }: { children: any }) => (
     <div data-testid="modal-content">
@@ -80,8 +96,8 @@ vi.mock('@heroui/modal', () => ({
 }))
 
 vi.mock('@heroui/button', () => ({
-  Button: ({ children, ...props }: any) => (
-    <button {...props} data-testid="button">
+  Button: ({ children, onPress, ...props }: any) => (
+    <button {...props} onClick={onPress} data-testid="button">
       {children}
     </button>
   ),
@@ -153,5 +169,104 @@ describe('PTBCreateEditForm', () => {
     )
 
     expect(container).toMatchSnapshot()
+  })
+
+  it('should show read-only reason when imported version has identification helper', () => {
+    const versionPTB: TProductTreeBranch = {
+      id: 'test-version-1',
+      category: 'product_version',
+      name: '1.0.0',
+      description: '',
+      subBranches: [],
+      identificationHelper: {
+        cpe: 'cpe:2.3:a:test:product:1.0.0:*:*:*:*:*:*:*',
+      },
+    }
+
+    render(
+      <PTBCreateEditForm
+        ptb={versionPTB}
+        category="product_version"
+        onSave={vi.fn()}
+      />,
+    )
+
+    expect(
+      screen.getByText(
+        'product_version.readonly_reason.imported_with_identification_helper',
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('should show read-only reason when full product name does not match', () => {
+    const versionPTB: TProductTreeBranch = {
+      id: 'test-version-2',
+      category: 'product_version',
+      name: '1.0.1',
+      description: '',
+      subBranches: [],
+      productName: 'Stored Name That Does Not Match',
+    }
+
+    render(
+      <PTBCreateEditForm
+        ptb={versionPTB}
+        category="product_version"
+        onSave={vi.fn()}
+      />,
+    )
+
+    expect(
+      screen.getByText(
+        'product_version.readonly_reason.full_product_name_mismatch',
+      ),
+    ).toBeInTheDocument()
+  })
+
+  it('should call onSave when save button is pressed', () => {
+    const onSave = vi.fn()
+
+    render(<PTBCreateEditForm category="product_name" onSave={onSave} />)
+
+    const saveButton = screen.getByText('common.save')
+    fireEvent.click(saveButton)
+
+    expect(onSave).toHaveBeenCalledTimes(1)
+    expect(onSave).toHaveBeenCalledWith(
+      expect.objectContaining({
+        name: '',
+        description: '',
+        type: 'Software',
+        familyId: null,
+      }),
+    )
+  })
+
+  it('should not update type when Select onChange fires with empty value', () => {
+    const onSave = vi.fn()
+    render(<PTBCreateEditForm category="product_name" onSave={onSave} />)
+
+    const select = screen.getByTestId('select')
+    // Fire change with empty value – should not update type (guard: if (!e.target.value) return)
+    fireEvent.change(select, { target: { value: '' } })
+
+    // Type should still be the initial 'Software' value
+    const saveButton = screen.getByText('common.save')
+    fireEvent.click(saveButton)
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ type: 'Software' }))
+  })
+
+  it('should set family to null when autocomplete selection is cleared (key === null)', () => {
+    const onSave = vi.fn()
+    render(<PTBCreateEditForm category="product_name" onSave={onSave} />)
+
+    const autocomplete = screen.getByTestId('autocomplete-clear')
+    // Trigger onSelectionChange with null to test the null guard branch
+    fireEvent.click(autocomplete)
+
+    // Call onSave and verify familyId is null
+    const saveButton = screen.getByText('common.save')
+    fireEvent.click(saveButton)
+    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ familyId: null }))
   })
 })

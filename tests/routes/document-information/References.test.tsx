@@ -385,7 +385,7 @@ describe('References', () => {
       )
       expect(screen.getByTestId('continue-link')).toHaveAttribute(
         'href',
-        '/document-information/acknowledgments',
+        '/document-information/aliases',
       )
     })
 

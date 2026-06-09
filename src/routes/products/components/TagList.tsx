@@ -3,11 +3,12 @@ import { faX } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Chip } from '@heroui/chip'
 import { cn } from '@heroui/react'
+import { ReactNode } from 'react'
 import { useNavigate } from 'react-router'
 
 export type TagListProps<T> = {
   items: T[]
-  labelGenerator?: (item: T) => string
+  labelGenerator?: (item: T) => ReactNode
   linkGenerator?: (item: T) => string
   onRemove?: (item: T) => void
 }

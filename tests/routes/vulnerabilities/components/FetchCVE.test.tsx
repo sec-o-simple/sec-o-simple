@@ -141,7 +141,7 @@ vi.mock('react-i18next', () => ({
         'vulnerabilities.general.noCveNotesFound': 'No CVE notes found',
         'vulnerabilities.general.noCveNotesFoundDescription':
           'No CVE notes found description',
-        'vulnerabilities.general.description': 'Description',
+        'vulnerabilities.general.cveDescription': 'CVE Description',
         'vulnerabilities.general.cveNotesFetched': 'CVE notes fetched',
         'vulnerabilities.general.cveNotesFetchedDescription': `Fetched ${
           options?.count || 0

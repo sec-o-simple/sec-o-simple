@@ -38,6 +38,7 @@ These texts are used as a prefix to export product descriptions
 |-------------|----------------------------------------|
 | `de` | `Produktbeschreibung für`     |
 | `en` | `Product description for`     |
+| '...' | `...`     |
 
 ---
 
@@ -53,6 +54,22 @@ The following suffixes can be appended to most fields to enhance configurability
 |----------------------|-------------------------------------|
 | `.placeholder`       | UI placeholder text for the field   |
 | `.readonly`          | Marks the field as read-only        |
+
+### Additional Required Fields
+
+**Path:** `template.required[]`
+
+Adds required validation on top of `csaf-validator-lib` (additive logic). Each item must be a CSAF JSON pointer path.
+
+| Key | Description | Values |
+|-----|-------------|--------|
+| `required[]` | List of additional required field paths | JSON pointer strings like `/document/title` |
+
+Notes:
+- Use `*` as a wildcard segment to apply a rule to all existing entries at that level (for example `/document/references/*/url`).
+- To enforce at least one list entry, target index `0` (for example `/document/references/0/url`). This fails when the list is empty and also requires the first entry to contain a value.
+- Empty strings, missing values, empty arrays and empty objects are treated as missing.
+- Existing validator errors are kept; this only adds template-driven required errors.
 
 ### Document Information
 
@@ -112,6 +129,27 @@ The following suffixes can be appended to most fields to enhance configurability
 | `summary` | Summary of reference    | `string`                     |
 | `url`     | Link to reference       | `string`                     |
 | `category`  | Source of reference     | `self`, `external`           |
+
+---
+
+### Aliases
+
+**Path:** `document-information.aliases[]`
+
+A list of alternative identifiers for the document.
+
+**Example Structure:**
+```json
+{
+  "document-information": {
+    "aliases": [
+      "legacy-doc-id-2023",
+      "VULN-2024-001",
+      "SA-2024-002"
+    ]
+  }
+}
+```
 
 ---
 
@@ -238,6 +276,16 @@ Products can reference families using the `familyId` field to establish hierarch
 |----------|----------------------------|-------------------------------------------|
 | `status` | Default product status     | `known_affected`, `known_not_affected`, `fixed`, `under_investigation` |
 
+#### References
+
+**Path:** `vulnerabilities.references.default`
+
+| Key        | Description                  | Values                |
+|------------|------------------------------|-----------------------|
+| `summary`  | Default reference summary    | `string`              |
+| `url`      | Default reference URL        | `string`              |
+| `category` | Default reference source     | `self`, `external`    |
+
 #### Flags
 
 **Path:** `vulnerabilities.flags.default`
@@ -268,6 +316,7 @@ Products can reference families using the `familyId` field to establish hierarch
 | `cwe`      | CWE object                   | `object`               |
 | `title`    | Vulnerability title          | `string`               |
 | `notes`    | Notes (array)                | `object[]`             |
+| `references` | References (array)         | `object[]`             |
 | `products` | Products (array)             | `object[]`             |
 
 **Path:** `vulernabilities[].cwe`
@@ -297,6 +346,18 @@ Each key refers to an array of product IDs:
 - `vulnerabilities[].products[].known_not_affected[]`
 - `vulnerabilities[].products[].fixed[]`
 - `vulnerabilities[].products[].under_investigation[]`
+
+#### References (within vulnerability)
+
+**Path:** `vulnerabilities[].references[]`
+
+| Key        | Description             | Values                  |
+|------------|-------------------------|--------------------------|
+| `id`       | Reference ID            | `string`                 |
+| `summary`  | Summary                 | `string`                 |
+| `url`      | URL                     | `string`                 |
+| `category` | Reference source        | `self`, `external`       |
+| `readonly` | Read-only flag          | `boolean`                |
 
 ---
 

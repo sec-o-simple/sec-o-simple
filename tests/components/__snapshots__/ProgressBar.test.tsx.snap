@@ -2,13 +2,13 @@
 
 exports[`ProgressBar > should handle empty sections array 1`] = `
 <div
-  class="relative mb-5 flex justify-stretch px-8 pb-1"
+  class="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1"
 />
 `;
 
 exports[`ProgressBar > should handle negative progress 1`] = `
 <div
-  class="relative mb-5 flex justify-stretch px-8 pb-1"
+  class="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1"
 >
   <div
     class="flex flex-col items-center justify-center gap-2"
@@ -95,7 +95,7 @@ exports[`ProgressBar > should handle negative progress 1`] = `
 
 exports[`ProgressBar > should handle progress greater than sections length 1`] = `
 <div
-  class="relative mb-5 flex justify-stretch px-8 pb-1"
+  class="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1"
 >
   <div
     class="flex flex-col items-center justify-center gap-2"
@@ -182,7 +182,7 @@ exports[`ProgressBar > should handle progress greater than sections length 1`] =
 
 exports[`ProgressBar > should render progress bar with all sections 1`] = `
 <div
-  class="relative mb-5 flex justify-stretch px-8 pb-1"
+  class="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1"
 >
   <div
     class="flex flex-col items-center justify-center gap-2"
@@ -269,7 +269,7 @@ exports[`ProgressBar > should render progress bar with all sections 1`] = `
 
 exports[`ProgressBar > should render with full progress 1`] = `
 <div
-  class="relative mb-5 flex justify-stretch px-8 pb-1"
+  class="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1"
 >
   <div
     class="flex flex-col items-center justify-center gap-2"
@@ -356,7 +356,7 @@ exports[`ProgressBar > should render with full progress 1`] = `
 
 exports[`ProgressBar > should render with no progress 1`] = `
 <div
-  class="relative mb-5 flex justify-stretch px-8 pb-1"
+  class="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1"
 >
   <div
     class="flex flex-col items-center justify-center gap-2"
@@ -443,7 +443,7 @@ exports[`ProgressBar > should render with no progress 1`] = `
 
 exports[`ProgressBar > should render with partial progress 1`] = `
 <div
-  class="relative mb-5 flex justify-stretch px-8 pb-1"
+  class="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1"
 >
   <div
     class="flex flex-col items-center justify-center gap-2"
@@ -530,7 +530,7 @@ exports[`ProgressBar > should render with partial progress 1`] = `
 
 exports[`ProgressBar > should render with single section 1`] = `
 <div
-  class="relative mb-5 flex justify-stretch px-8 pb-1"
+  class="relative mb-5 flex max-w-5xl justify-stretch px-8 pb-1"
 >
   <div
     class="flex flex-col items-center justify-center gap-2"

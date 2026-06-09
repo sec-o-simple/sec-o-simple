@@ -22,6 +22,14 @@ global.IntersectionObserver = class IntersectionObserver {
   }
 } as any
 
+// Mock ResizeObserver
+global.ResizeObserver = class ResizeObserver {
+  constructor() {}
+  disconnect() {}
+  observe() {}
+  unobserve() {}
+} as any
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -96,15 +104,36 @@ vi.mock('@/utils/useConfigStore', () => ({
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
   useTranslation: vi.fn(() => ({
-    t: vi.fn((key) => key),
+    t: (key: string) => key,
     i18n: {
       language: 'en',
       changeLanguage: vi.fn(),
+      store: {
+        data: {
+          en: {},
+          de: {},
+        },
+      },
     },
   })),
   initReactI18next: {
     type: '3rdParty',
     init: vi.fn(),
+  },
+}))
+
+vi.mock('i18next', () => ({
+  default: {
+    t: (key: string, options?: any) => {
+      if (key === 'export.productDescriptionPrefix') {
+        return options?.lng === 'de' ? 'Produktbeschreibung für' : 'Product description for'
+      }
+      return key
+    },
+    language: 'en',
+    changeLanguage: vi.fn(),
+    init: vi.fn(),
+    use: vi.fn().mockReturnThis(),
   },
 }))
 

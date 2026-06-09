@@ -22,6 +22,18 @@ const IdentificationHelper = {
   skus: ['string'],
 }
 
+const ProductTreeBranchSchema: JSONObject = {
+  category: 'string',
+  name: 'string',
+  product: {
+    name: 'string',
+    product_id: 'string',
+    product_identification_helper: IdentificationHelper,
+  },
+}
+
+ProductTreeBranchSchema.branches = [ProductTreeBranchSchema]
+
 export default {
   document: {
     lang: 'string',
@@ -44,6 +56,7 @@ export default {
       version: 'string',
       current_release_date: 'string',
       initial_release_date: 'string',
+      aliases: ['string'],
       generator: {
         date: 'string',
         engine: {
@@ -91,41 +104,7 @@ export default {
   },
 
   product_tree: {
-    branches: [
-      // Vendors
-      {
-        category: 'string',
-        name: 'string',
-
-        product: {
-          product_identification_helper: IdentificationHelper,
-        },
-        branches: [
-          // Product Names
-          {
-            category: 'string',
-            name: 'string',
-            product: {
-              name: 'string',
-              product_id: 'string',
-              product_identification_helper: IdentificationHelper,
-            },
-            branches: [
-              // Product Versions
-              {
-                category: 'string',
-                name: 'string',
-                product: {
-                  name: 'string',
-                  product_id: 'string',
-                  product_identification_helper: IdentificationHelper,
-                },
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    branches: [ProductTreeBranchSchema],
     relationships: [
       {
         category: 'string',
@@ -152,6 +131,13 @@ export default {
           category: 'string',
           text: 'string',
           title: 'string',
+        },
+      ],
+      references: [
+        {
+          summary: 'string',
+          url: 'string',
+          category: 'string',
         },
       ],
       // Not all statuses are used in the UI, but they are defined here for completeness

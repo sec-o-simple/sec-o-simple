@@ -22,6 +22,11 @@ const validationSections: Record<string, HasErrorFunction> = {
   '/document-information/publisher': (errorPaths) => {
     return errorPaths.some((path) => path.startsWith('/document/publisher'))
   },
+  '/document-information/aliases': (errorPaths) => {
+    return errorPaths.some((path) =>
+      path.startsWith('/document/tracking/aliases'),
+    )
+  },
   '/document-information/acknowledgments': (errorPaths) => {
     return errorPaths.some((path) =>
       path.startsWith('/document/acknowledgments'),
@@ -35,6 +40,14 @@ const validationSections: Record<string, HasErrorFunction> = {
   },
   '/vulnerabilities': (errorPaths) => {
     return errorPaths.some((path) => path.startsWith('/vulnerabilities'))
+  },
+  '/vulnerabilities/list': (errorPaths) => {
+    return errorPaths.some((path) => path.startsWith('/vulnerabilities'))
+  },
+  '/vulnerabilities/matrix': (errorPaths) => {
+    return errorPaths.some((path) =>
+      /^\/vulnerabilities\/\d+\/product_status$/.test(path),
+    )
   },
 }
 
