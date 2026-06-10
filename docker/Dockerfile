@@ -1,4 +1,4 @@
-FROM node:22-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /app
 
 ARG BUILD_VERSION
@@ -11,7 +11,8 @@ RUN npm ci
 
 COPY . .
 
-RUN npm run build
+RUN apk add --no-cache git && \
+    npm run build
 
 FROM nginx:1.27-alpine
 
