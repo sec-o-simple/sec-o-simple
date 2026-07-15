@@ -66,22 +66,38 @@ vi.mock('@heroui/button', () => ({
   )
 }))
 
+let disclosureState = {
+  isOpen: false,
+  onOpenChange: () => {
+    disclosureState.isOpen = !disclosureState.isOpen
+    mockOnOpenChange()
+  }
+}
+
 vi.mock('@heroui/modal', () => ({
   Modal: ({ children, isOpen }: any) => 
     isOpen ? <div data-testid="modal">{children}</div> : null,
-  ModalContent: ({ children }: any) => <div data-testid="modal-content">{children}</div>,
+  ModalContent: ({ children }: any) => (
+    <div data-testid="modal-content">
+      {typeof children === 'function' ? children() : children}
+    </div>
+  ),
   ModalHeader: ({ children }: any) => <div data-testid="modal-header">{children}</div>,
   ModalBody: ({ children }: any) => <div data-testid="modal-body">{children}</div>,
   ModalFooter: ({ children }: any) => <div data-testid="modal-footer">{children}</div>,
   useDisclosure: () => ({
-    isOpen: false,
-    onOpenChange: mockOnOpenChange
+    isOpen: disclosureState.isOpen,
+    onOpenChange: disclosureState.onOpenChange
   })
 }))
 
 vi.mock('@heroui/table', () => ({
   Table: ({ children }: any) => <table data-testid="table">{children}</table>,
-  TableHeader: ({ children }: any) => <thead data-testid="table-header">{children}</thead>,
+  TableHeader: ({ children }: any) => (
+    <thead data-testid="table-header">
+      <tr>{children}</tr>
+    </thead>
+  ),
   TableBody: ({ children }: any) => <tbody data-testid="table-body">{children}</tbody>,
   TableColumn: ({ children }: any) => <th data-testid="table-column">{children}</th>,
   TableRow: ({ children }: any) => <tr data-testid="table-row">{children}</tr>,
@@ -115,6 +131,7 @@ vi.mock('../../../src/utils/csafImport/csafImport', () => ({
 describe('EditDocument', () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    disclosureState.isOpen = false
     mockNavigate = vi.fn()
     mockIsSOSDraft = vi.fn()
     mockImportSOSDocument = vi.fn()
@@ -156,7 +173,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -187,7 +204,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [invalidJsonFile],
@@ -225,7 +242,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -260,7 +277,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -294,7 +311,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader } )
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -329,7 +346,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -363,7 +380,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -403,7 +420,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -449,7 +466,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -472,7 +489,17 @@ describe('EditDocument', () => {
     expect(mockImportCSAFDocument).toHaveBeenCalledWith({ document: { category: 'csaf_base' } })
     expect(mockSetImportedCSAFDocument).toHaveBeenCalledWith({ document: { category: 'csaf_base' } })
     expect(mockOnOpenChange).toHaveBeenCalled()
-    expect(mockNavigate).not.toHaveBeenCalled() // Should not navigate yet
+
+    await waitFor(() => {
+      expect(screen.getByText('/test/field1')).toBeInTheDocument()
+      expect(screen.getByText('"value1"')).toBeInTheDocument()
+    })
+
+    fireEvent.click(screen.getByText('Confirm'))
+    expect(mockNavigate).toHaveBeenCalledWith('/document-information/')
+
+    fireEvent.click(screen.getByText('Cancel'))
+    expect(mockOnOpenChange).toHaveBeenCalledTimes(2)
   })
 
   it('renders modal with hidden fields table when modal is open', () => {
@@ -579,7 +606,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -632,7 +659,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -671,7 +698,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader1 as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader1 })
     
     Object.defineProperty(fileInput, 'files', {
       value: [invalidFile],
@@ -705,7 +732,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader2 as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader2 })
     
     Object.defineProperty(fileInput2, 'files', {
       value: [validFile],
@@ -756,7 +783,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.stubGlobal('FileReader', function() { return mockFileReader })
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
