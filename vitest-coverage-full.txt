@@ -1,0 +1,1530 @@
+
+> sec-o-simple@1.2.0 test:coverage
+> vitest run --coverage
+
+(node:978326) [DEP0205] DeprecationWarning: `module.register()` is deprecated. Use `module.registerHooks()` instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+
+[1m[30m[46m RUN [49m[39m[22m [36mv4.1.8 [39m[90m/home/jens/git/csaf-projekte/sec-o-simple[39m
+      [2mCoverage enabled with [22m[33mv8[39m
+
+[90mstderr[2m | tests/routes/document-information/General.test.tsx[2m > [22m[2mGeneral[2m > [22m[2mComponent Rendering[2m > [22m[2mshould render the wizard step with correct props
+[22m[39mIn HTML, <div> cannot be a child of <option>.
+This will cause a hydration error.
+
+  <General>
+    <default title="General In..." progress={1} onContinue="/document-...">
+      <div data-testid="wizard-step">
+        <h1>
+        <div>
+        <div>
+        <div data-testid="wizard-con...">
+          <default>
+          <default>
+          <div className="mt-4">
+            <div>
+            <default>
+              <div data-testid="vsplit">
+                <default selectedKeys={[...]} label="TLP Level" onSelectionChange={function onSelectionChange} ...>
+                  <div data-testid="select-wra..." className={undefined}>
+                    <label>
+                    <select id="select-/do..." data-testid="select-/do..." data-csaf-path="/document/..." ...>
+                      <option>
+                      <SelectItem>
+>                       <option value={<TLPColor>}>
+                          <TLPColor color="GREEN">
+>                           <div className="flex items-center gap-2">
+                      ...
+
+<option> cannot contain a nested <div>.
+See this log for the ancestor stack trace.
+
+[90mstderr[2m | tests/routes/products/components/PFEditForm.test.tsx[2m > [22m[2mPFCreateEditForm[2m > [22m[2mCreate Mode Tests[2m > [22m[2mshould render create modal header
+[22m[39mReact does not recognize the `labelPlacement` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `labelplacement` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `inputProps` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `inputprops` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mScoreForm[2m > [22m[2mhandles vector string parsing errors
+[22m[39mInvalid CVSS vector string: Error: Invalid vector string
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:606:15
+    at parseVersion [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/spy[24m/dist/index.js:332:34[90m)[39m
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:180:23[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+ [32m✓[39m tests/routes/vulnerabilities/Remediations.test.tsx [2m([22m[2m28 tests[22m[2m)[22m[33m 1940[2mms[22m[39m
+       [33m[2m✓[22m[39m calls onChange when category is changed [33m 323[2mms[22m[39m
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+[90mstderr[2m | tests/routes/vulnerabilities/Scores.test.tsx[2m > [22m[2mScores Component[2m > [22m[2mEdge cases[2m > [22m[2mhandles parseVersion returning unsupported version
+[22m[39mInvalid CVSS vector string: Error: Invalid CVSS vector string
+    at onValueChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/Scores.tsx:182:15[90m)[39m
+    at onChange [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/Scores.test.tsx:63:26[90m)[39m
+    at executeDispatch [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16368:9[90m)[39m
+    at runWithFiberInDEV [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:1522:13[90m)[39m
+    at processDispatchQueue [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16418:19[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:17016:9
+    at batchedUpdates$1 [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:3262:40[90m)[39m
+    at dispatchEventForPluginEventSystem [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:16572:7[90m)[39m
+    at dispatchEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20658:11[90m)[39m
+    at dispatchDiscreteEvent [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4mreact-dom[24m/cjs/react-dom-client.development.js:20626:11[90m)[39m
+
+ [32m✓[39m tests/routes/vulnerabilities/Scores.test.tsx [2m([22m[2m28 tests[22m[2m)[22m[33m 2451[2mms[22m[39m
+       [33m[2m✓[22m[39m updates score when vector string changes [33m 731[2mms[22m[39m
+       [33m[2m✓[22m[39m handles parseVersion returning unsupported version [33m 516[2mms[22m[39m
+ [32m✓[39m tests/routes/document-information/Publisher.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[33m 2954[2mms[22m[39m
+       [33m[2m✓[22m[39m should render all publisher category options [33m 592[2mms[22m[39m
+       [33m[2m✓[22m[39m should update contact details when user types [33m 451[2mms[22m[39m
+       [33m[2m✓[22m[39m should update issuing authority when user types [33m 425[2mms[22m[39m
+ [32m✓[39m tests/routes/document-information/General.test.tsx [2m([22m[2m22 tests[22m[2m)[22m[33m 3397[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle title input changes [33m 524[2mms[22m[39m
+       [33m[2m✓[22m[39m should maintain independent state for all fields [33m 407[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle rapid state changes [33m 507[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle special characters in form inputs [33m 1016[2mms[22m[39m
+ [32m✓[39m tests/routes/products/components/PFEditForm.test.tsx [2m([22m[2m44 tests[22m[2m)[22m[33m 3439[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle name input changes [33m 451[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle complete create workflow [33m 428[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle complete edit workflow [33m 454[2mms[22m[39m
+ [32m✓[39m tests/routes/products/VendorList.test.tsx [2m([22m[2m78 tests[22m[2m)[22m[33m 3074[2mms[22m[39m
+[90mstderr[2m | tests/routes/products/components/ProductDatabaseSelector.test.tsx[2m > [22m[2mProductDatabaseSelector[2m > [22m[2mCSAF Import and Parsing Functionality[2m > [22m[2mshould successfully fetch and parse CSAF document with families
+[22m[39mFailed to add products: TypeError: newRelationships is not iterable
+    at handleAddProducts [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/products/components/ProductDatabaseSelector.tsx:180:14[90m)[39m
+
+Warning: A vi.hoisted() call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/components/forms/AcknowledgmentNamesTable.test.tsx" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+[90mstderr[2m | tests/components/forms/AcknowledgmentNamesTable.test.tsx[2m > [22m[2mAcknowledgmentNamesTable[2m > [22m[2mComponent Rendering[2m > [22m[2mshould render with empty names list
+[22m[39mIn HTML, <th> cannot be a child of <thead>.
+This will cause a hydration error.
+
+  <AcknowledgmentNamesTable acknowledgment={{id:"test-a...", ...}} acknowledgmentIndex={0} onChange={function Mock}>
+    <div className="mt-4">
+      <div>
+      <Table>
+        <table data-testid="table">
+          <TableHeader>
+>           <thead data-testid="table-header">
+              <TableColumn width="20%">
+>               <th data-testid="table-column" data-width="20%">
+              ...
+          ...
+
+<thead> cannot contain a nested <th>.
+See this log for the ancestor stack trace.
+
+ [32m✓[39m tests/routes/products/components/ProductDatabaseSelector.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 5505[2mms[22m[39m
+       [33m[2m✓[22m[39m should filter vendors by name when searching [33m 395[2mms[22m[39m
+       [33m[2m✓[22m[39m should filter vendors by product name when searching [33m 319[2mms[22m[39m
+       [33m[2m✓[22m[39m should map software type to Software and hardware type to Hardware [33m 398[2mms[22m[39m
+       [33m[2m✓[22m[39m should reset state after successful product addition [33m 453[2mms[22m[39m
+       [33m[2m✓[22m[39m should handle empty search results [33m 429[2mms[22m[39m
+[90mstderr[2m | tests/routes/products/components/RelationshipEditForm.test.tsx[2m > [22m[2mRelationshipEditForm[2m > [22m[2mRendering[2m > [22m[2mshould render the form with default values when no relationship is provided
+[22m[39mUse the `defaultValue` or `value` props on <select> instead of setting `selected` on <option>.
+React does not recognize the `isDisabled` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `isdisabled` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | tests/routes/vulnerabilities/General.test.tsx[2m > [22m[2mGeneral[2m > [22m[2mComponent Rendering[2m > [22m[2mshould render without crashing
+[22m[39mReact does not recognize the `selectedKey` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `selectedkey` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | tests/routes/vulnerabilities/Products.test.tsx[2m > [22m[2mProducts[2m > [22m[2mrenders matrix hint and open matrix action
+[22m[39mEach child in a list should have a unique "key" prop.
+
+Check the render method of `Products`. See https://react.dev/link/warning-keys for more information.
+
+ [32m✓[39m tests/routes/products/ProductManagement.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 1552[2mms[22m[39m
+ [32m✓[39m tests/components/forms/AcknowledgmentNamesTable.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 1635[2mms[22m[39m
+ [32m✓[39m tests/routes/products/components/RelationshipEditForm.test.tsx [2m([22m[2m42 tests[22m[2m)[22m[33m 1814[2mms[22m[39m
+ [32m✓[39m tests/routes/document-selection/DocumentSelection.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 1711[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/Products.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 1589[2mms[22m[39m
+     [33m[2m✓[22m[39m renders matrix link in hint below the table [33m 326[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/General.test.tsx [2m([22m[2m29 tests[22m[2m)[22m[33m 1779[2mms[22m[39m
+       [33m[2m✓[22m[39m should call onChange when title changes [33m 327[2mms[22m[39m
+[90mstderr[2m | tests/routes/document-information/Tracking.test.tsx[2m > [22m[2mTracking[2m > [22m[2mComponent Rendering[2m > [22m[2mshould render the wizard step with correct props
+[22m[39mSelectItem: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)
+
+Warning: A vi.hoisted() call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/routes/document-information/Acknowledgments.test.tsx" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+Warning: A vi.hoisted() call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/routes/document-information/Acknowledgments.test.tsx" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+Warning: A vi.hoisted() call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/routes/document-information/Acknowledgments.test.tsx" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+Warning: A vi.hoisted() call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/routes/document-information/Acknowledgments.test.tsx" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+[90mstderr[2m | tests/routes/vulnerabilities/components/VulnerabilityFlag.test.tsx[2m > [22m[2mVulnerabilityFlag[2m > [22m[2mComponent Rendering[2m > [22m[2mshould render without crashing
+[22m[39mSelectItem: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)
+React does not recognize the `classNames` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `classnames` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | tests/routes/products/Version.test.tsx[2m > [22m[2mVersion[2m > [22m[2mComponent Rendering[2m > [22m[2mshould render the wizard step with correct props
+[22m[39mAccordionItem: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)
+
+ [32m✓[39m tests/routes/document-information/Tracking.test.tsx [2m([22m[2m21 tests[22m[2m)[22m[33m 1472[2mms[22m[39m
+[90mstderr[2m | tests/routes/vulnerabilities/components/FetchCVE.test.tsx[2m > [22m[2mFetchCVE[2m > [22m[2mshould handle fetch error correctly
+[22m[39mError fetching CVE description: Error: Network error
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/routes/vulnerabilities/components/FetchCVE.test.tsx:341:37
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2955:64
+
+ [32m✓[39m tests/routes/vulnerabilities/components/VulnerabilityFlag.test.tsx [2m([22m[2m35 tests[22m[2m)[22m[33m 1403[2mms[22m[39m
+[90mstderr[2m | tests/routes/vulnerabilities/components/FetchCVE.test.tsx[2m > [22m[2mFetchCVE[2m > [22m[2mshould handle HTTP error responses
+[22m[39mError fetching CVE description: Error: HTTP error! status: 404
+    at fetchCVEData [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/routes/vulnerabilities/components/FetchCVE.tsx:86:15[90m)[39m
+
+ [32m✓[39m tests/components/forms/Input.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 989[2mms[22m[39m
+ [32m✓[39m tests/routes/products/Version.test.tsx [2m([22m[2m28 tests[22m[2m)[22m[33m 1123[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/components/FetchCVE.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[33m 862[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/Flags.test.tsx [2m([22m[2m33 tests[22m[2m)[22m[33m 892[2mms[22m[39m
+ [32m✓[39m tests/routes/document-information/Aliases.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[33m 725[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/components/ProductsTagList.test.tsx [2m([22m[2m28 tests[22m[2m)[22m[33m 661[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/ProductMatrix.test.tsx [2m([22m[2m12 tests[22m[2m)[22m[33m 688[2mms[22m[39m
+ [32m✓[39m tests/routes/products/ProductFamily.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 601[2mms[22m[39m
+[90mstderr[2m | tests/routes/products/components/InfoCard.test.tsx[2m > [22m[2mInfoCard[2m > [22m[2mVariant Handling[2m > [22m[2mshould pass props to inner InfoCard in boxed variant
+[22m[39mReact does not recognize the `isDisabled` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `isdisabled` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | tests/components/forms/ComponentList.test.tsx[2m > [22m[2mComponentList[2m > [22m[2mshould render component list with items
+[22m[39mUnknown event handler property `onPress`. It will be ignored.
+
+ [32m✓[39m tests/routes/vulnerabilities/components/VulnerabilityProduct.test.tsx [2m([22m[2m37 tests[22m[2m)[22m[33m 812[2mms[22m[39m
+ [32m✓[39m tests/components/forms/ComponentList.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 578[2mms[22m[39m
+ [32m✓[39m tests/routes/shared/NotesList.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 728[2mms[22m[39m
+ [32m✓[39m tests/routes/products/components/InfoCard.test.tsx [2m([22m[2m36 tests[22m[2m)[22m[33m 671[2mms[22m[39m
+[90mstderr[2m | tests/routes/preview/Preview.test.tsx
+[22m[39mUnknown event handler property `onPress`. It will be ignored.
+React does not recognize the `startContent` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `startcontent` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32m✓[39m tests/routes/document-information/References.test.tsx [2m([22m[2m39 tests[22m[2m)[22m[33m 1177[2mms[22m[39m
+ [32m✓[39m tests/routes/preview/Preview.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[33m 517[2mms[22m[39m
+[90mstderr[2m | tests/components/layout/NavigationLayout.test.tsx[2m > [22m[2mNavigationLayout[2m > [22m[2mshould render without crashing
+[22m[39mInvalid value for prop `className` on <a> tag. Either remove it from the element, or pass a string or number value to keep it in the DOM. For details, see https://react.dev/link/attribute-behavior 
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mhandles file selection and JSON parsing
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mshows error for non-SOS and non-CSAF documents
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mshows error for unsupported CSAF version
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2menables button for valid SOS document
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2menables button for valid CSAF document
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mimports SOS document and navigates
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ [32m✓[39m tests/routes/document-information/Acknowledgments.test.tsx [2m([22m[2m31 tests[22m[2m)[22m[33m 1056[2mms[22m[39m
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mimports CSAF document without hidden fields and navigates
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mimports CSAF document with hidden fields and shows modal
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ [32m✓[39m tests/components/forms/AddItemButton.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 428[2mms[22m[39m
+     [33m[2m✓[22m[39m should render with default props [33m 323[2mms[22m[39m
+ [32m✓[39m tests/components/layout/NavigationLayout.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 381[2mms[22m[39m
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mrenders modal with hidden fields table when modal is open
+[22m[39mIn HTML, <th> cannot be a child of <thead>.
+This will cause a hydration error.
+
+  <TestModalComponent>
+    <TestModalMock isOpen={true}>
+      <div data-testid="modal">
+        <div data-testid="modal-content">
+          <div>
+          <div data-testid="modal-body">
+            <table data-testid="table">
+>             <thead data-testid="table-header">
+>               <th data-testid="table-column">
+                ...
+              ...
+          ...
+
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mdoes not import when there is an error message
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mclears error message when valid document is loaded
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mclears error message when valid document is loaded
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ [32m✓[39m tests/routes/products/components/ProductCard.test.tsx [2m([22m[2m34 tests[22m[2m)[22m[33m 468[2mms[22m[39m
+[90mstderr[2m | tests/routes/document-selection/EditDocument.test.tsx[2m > [22m[2mEditDocument[2m > [22m[2mtests useEffect with jsonObject state changes
+[22m[39mAn update to EditDocument inside a test was not wrapped in act(...).
+
+When testing, code that causes React state updates should be wrapped into act(...):
+
+act(() => {
+  /* fire events that update state */
+});
+/* assert on the output */
+
+This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+ [32m✓[39m tests/routes/document-selection/EditDocument.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 633[2mms[22m[39m
+ [32m✓[39m tests/components/ProgressBar.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 665[2mms[22m[39m
+(node:979173) ExperimentalWarning: localStorage is not available because --localstorage-file was not provided.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[90mstderr[2m | tests/routes/vulnerabilities/Vulnerabilities.test.tsx[2m > [22m[2mVulnerabilities[2m > [22m[2mrenders vulnerability list when data is present
+[22m[39mTab: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://react.dev/link/special-props)
+Unknown event handler property `onPress`. It will be ignored.
+
+[90mstderr[2m | tests/components/forms/ConfirmButton.test.tsx[2m > [22m[2mConfirmButton[2m > [22m[2mshould render with required props
+[22m[39mReact does not recognize the `fullWidth` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `fullwidth` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32m✓[39m tests/main.test.tsx [2m([22m[2m19 tests[22m[2m)[22m[33m 326[2mms[22m[39m
+ [32m✓[39m tests/components/forms/ConfirmButton.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 431[2mms[22m[39m
+ [32m✓[39m tests/components/forms/DatePicker.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 469[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/Vulnerabilities.test.tsx [2m([22m[2m16 tests[22m[2m)[22m[33m 428[2mms[22m[39m
+ [32m✓[39m tests/components/forms/IconButton.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 355[2mms[22m[39m
+ [32m✓[39m tests/routes/document-selection/CreateDocument.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 300[2mms[22m[39m
+Warning: A vi.unmock('@/utils/validation/usePathValidation') call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/utils/validation/usePathValidation.test.ts" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+[90mstderr[2m | tests/components/forms/PTBSelect.test.tsx[2m > [22m[2mPTBSelect[2m > [22m[2mBasic Functionality[2m > [22m[2mshould render with minimal props for single selection
+[22m[39mReact does not recognize the `selectedId` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `selectedid` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32m✓[39m tests/utils/validation/usePathValidation.test.ts [2m([22m[2m40 tests[22m[2m)[22m[32m 295[2mms[22m[39m
+[90mstderr[2m | tests/components/forms/PTBSelect.test.tsx[2m > [22m[2mPTBSelect[2m > [22m[2mMultiple Selection Mode[2m > [22m[2mshould render with multiple selection mode
+[22m[39mReact does not recognize the `selectedIds` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `selectedids` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | tests/components/forms/RevisionHistoryTable.test.tsx[2m > [22m[2mRevisionHistoryTable[2m > [22m[2mshould render correctly with empty state
+[22m[39mIn HTML, <th> cannot be a child of <thead>.
+This will cause a hydration error.
+
+  <RevisionHistoryTable>
+    <div className="mt-4">
+      <div>
+      <Table>
+        <table data-testid="table">
+          <TableHeader>
+>           <thead data-testid="table-header">
+              <TableColumn width="20%">
+>               <th data-width="20%" data-testid="table-column">
+              ...
+          ...
+
+<thead> cannot contain a nested <th>.
+See this log for the ancestor stack trace.
+
+ [32m✓[39m tests/components/forms/PTBSelect.test.tsx [2m([22m[2m32 tests[22m[2m)[22m[33m 658[2mms[22m[39m
+ [32m✓[39m tests/components/forms/RevisionHistoryTable.test.tsx [2m([22m[2m15 tests[22m[2m)[22m[33m 574[2mms[22m[39m
+ [32m✓[39m tests/routes/products/VendorList.behavior.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 249[2mms[22m[39m
+ [32m✓[39m tests/routes/products/components/SubMenuHeader.test.tsx [2m([22m[2m28 tests[22m[2m)[22m[33m 320[2mms[22m[39m
+Warning: A vi.unmock('@/utils/useProductTreeBranch') call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/utils/useProductTreeBranch.test.ts" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+ [32m✓[39m tests/utils/useProductTreeBranch.test.ts [2m([22m[2m72 tests[22m[2m)[22m[33m 396[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/types/tVulnerabilityFlag.test.ts [2m([22m[2m43 tests[22m[2m)[22m[32m 204[2mms[22m[39m
+ [32m✓[39m tests/routes/products/components/TagList.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[33m 325[2mms[22m[39m
+ [32m✓[39m tests/routes/products/VendorList.simple.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 246[2mms[22m[39m
+ [32m✓[39m tests/utils/validation/useValidationStore.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 279[2mms[22m[39m
+[90mstderr[2m | tests/components/forms/Select.test.tsx[2m > [22m[2mSelect[2m > [22m[2mshould render with default props
+[22m[39mReact does not recognize the `labelPlacement` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `labelplacement` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32m✓[39m tests/components/forms/ProductSelect.test.tsx [2m([22m[2m26 tests[22m[2m)[22m[32m 263[2mms[22m[39m
+ [32m✓[39m tests/components/forms/Select.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 180[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/utils/useProducts.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m tests/components/WizardStep.test.tsx [2m([22m[2m11 tests[22m[2m)[22m[32m 191[2mms[22m[39m
+ [32m✓[39m tests/routes/products/ProductList.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 437[2mms[22m[39m
+[90mstderr[2m | tests/components/layout/TopBarLayout.test.tsx[2m > [22m[2mTopBarLayout[2m > [22m[2mshould render without crashing
+[22m[39mUnknown event handler property `onPress`. It will be ignored.
+React does not recognize the `startContent` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `startcontent` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32m✓[39m tests/components/layout/TopBarLayout.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 233[2mms[22m[39m
+ [32m✓[39m tests/routes/shared/NotesTemplates.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[32m 230[2mms[22m[39m
+ [32m✓[39m tests/routes/document-selection/CategorySelection.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 247[2mms[22m[39m
+ [32m✓[39m tests/utils/validation/useListValidation.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 165[2mms[22m[39m
+[90mstderr[2m | tests/utils/useConfigStore2.test.ts[2m > [22m[2museConfigStore[2m > [22m[2museConfigInitializer[2m > [22m[2mshould handle fetch errors gracefully
+[22m[39mFailed to parse sec-o-simple configuration. Falling back to default configuration Error: Network error
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/utils/useConfigStore2.test.ts:124:39
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | tests/utils/useConfigStore2.test.ts[2m > [22m[2museConfigStore[2m > [22m[2museConfigInitializer[2m > [22m[2mshould handle invalid JSON response
+[22m[39mFailed to parse sec-o-simple configuration. Falling back to default configuration Error: Invalid JSON
+    at Object.json [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/utils/useConfigStore2.test.ts:149:35[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/utils/useConfigStore.ts:55:20
+    at loadConfig [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/utils/useConfigStore.ts:47:5[90m)[39m
+
+[90mstderr[2m | tests/utils/useConfigStore2.test.ts[2m > [22m[2museConfigStore[2m > [22m[2museConfigInitializer[2m > [22m[2mshould handle HTTP error responses
+[22m[39mFailed to parse sec-o-simple configuration. Falling back to default configuration Error: Failed to fetch config: 404 Not Found
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/utils/useConfigStore.ts:50:17
+    at loadConfig [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/utils/useConfigStore.ts:47:5[90m)[39m
+
+ [32m✓[39m tests/utils/useConfigStore2.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 132[2mms[22m[39m
+ [32m✓[39m tests/utils/useRelationships.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 177[2mms[22m[39m
+ [32m✓[39m tests/components/forms/LanguageSwitcher.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 169[2mms[22m[39m
+ [32m✓[39m tests/utils/validation/usePageVisit.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 225[2mms[22m[39m
+ [32m✓[39m tests/routes/products/ProductFamilyUtils.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+[90mstderr[2m | tests/routes/products/components/PTBEditForm.test.tsx[2m > [22m[2mPTBCreateEditForm[2m > [22m[2mshould render create form and match snapshot
+[22m[39mUnknown event handler property `onValueChange`. It will be ignored.
+React does not recognize the `isDisabled` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `isdisabled` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+React does not recognize the `selectedKeys` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `selectedkeys` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `textValue` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `textvalue` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `labelPlacement` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `labelplacement` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `inputProps` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `inputprops` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `errorMessage` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `errormessage` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `isInvalid` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `isinvalid` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `selectedKey` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `selectedkey` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+[90mstderr[2m | tests/routes/products/components/PTBEditForm.test.tsx[2m > [22m[2mPTBCreateEditForm[2m > [22m[2mshould render edit form with existing PTB and match snapshot
+[22m[39mYou provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+
+[90mstderr[2m | tests/routes/products/components/PTBEditForm.test.tsx[2m > [22m[2mPTBCreateEditForm[2m > [22m[2mshould render vendor form (without description and type fields) and match snapshot
+[22m[39mYou provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+
+[90mstderr[2m | tests/routes/products/components/PTBEditForm.test.tsx[2m > [22m[2mPTBCreateEditForm[2m > [22m[2mshould show read-only reason when imported version has identification helper
+[22m[39mYou provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+
+[90mstderr[2m | tests/routes/products/components/PTBEditForm.test.tsx[2m > [22m[2mPTBCreateEditForm[2m > [22m[2mshould show read-only reason when full product name does not match
+[22m[39mYou provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+
+[90mstderr[2m | tests/routes/products/components/PTBEditForm.test.tsx[2m > [22m[2mPTBCreateEditForm[2m > [22m[2mshould call onSave when save button is pressed
+[22m[39mYou provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+
+ [32m✓[39m tests/components/forms/Autocomplete.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 161[2mms[22m[39m
+[90mstderr[2m | tests/routes/products/components/PTBEditForm.test.tsx[2m > [22m[2mPTBCreateEditForm[2m > [22m[2mshould not update type when Select onChange fires with empty value
+[22m[39mYou provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+
+[90mstderr[2m | tests/routes/products/components/PTBEditForm.test.tsx[2m > [22m[2mPTBCreateEditForm[2m > [22m[2mshould set family to null when autocomplete selection is cleared (key === null)
+[22m[39mYou provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. If the field should be mutable use `defaultValue`. Otherwise, set either `onChange` or `readOnly`.
+
+ [32m✓[39m tests/routes/products/components/PTBEditForm.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 276[2mms[22m[39m
+ [32m✓[39m tests/utils/useDatabaseClient.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 173[2mms[22m[39m
+ [32m✓[39m tests/utils/validation/usePrefixValidation.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 213[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/types/tVulnerabilityProduct.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 160[2mms[22m[39m
+ [32m✓[39m tests/utils/useDocumentStore.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 138[2mms[22m[39m
+ [32m✓[39m tests/utils/useDocumentType.test.tsx [2m([22m[2m23 tests[22m[2m)[22m[33m 314[2mms[22m[39m
+ [32m✓[39m tests/utils/useDebounceInput.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 140[2mms[22m[39m
+ [32m✓[39m tests/utils/useListState.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m tests/utils/useStateInitializer.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m tests/utils/useProductDatabase.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/Notes.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 136[2mms[22m[39m
+ [32m✓[39m tests/utils/sosDraft.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m tests/components/forms/SecOSimpleVersion.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 132[2mms[22m[39m
+ [32m✓[39m tests/utils/useDocumentStoreUpdater.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 202[2mms[22m[39m
+Warning: A vi.unmock('@/utils/template') call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/utils/template.test.ts" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+ [32m✓[39m tests/components/forms/Breadcrumbs.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 180[2mms[22m[39m
+ [32m✓[39m tests/utils/template.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+ [32m✓[39m tests/routes/products/components/ProductFamilyChip.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+[90mstderr[2m | tests/utils/useConfigStore.test.ts[2m > [22m[2museConfigStore[2m > [22m[2museConfigInitializer[2m > [22m[2mshould handle fetch errors gracefully
+[22m[39mFailed to parse sec-o-simple configuration. Falling back to default configuration Error: Network error
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/utils/useConfigStore.test.ts:124:39
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:302:11
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:1903:26
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2326:20
+    at new Promise (<anonymous>)
+    at runWithCancel [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2323:10[90m)[39m
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2305:20
+    at new Promise (<anonymous>)
+    at runWithTimeout [90m(file:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2272:10[90m)[39m
+    at [90mfile:///home/jens/git/csaf-projekte/sec-o-simple/[39mnode_modules/[4m@vitest/runner[24m/dist/chunk-artifact.js:2955:64
+
+[90mstderr[2m | tests/utils/useConfigStore.test.ts[2m > [22m[2museConfigStore[2m > [22m[2museConfigInitializer[2m > [22m[2mshould handle invalid JSON response
+[22m[39mFailed to parse sec-o-simple configuration. Falling back to default configuration Error: Invalid JSON
+    at Object.json [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39mtests/utils/useConfigStore.test.ts:149:35[90m)[39m
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/utils/useConfigStore.ts:55:20
+    at loadConfig [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/utils/useConfigStore.ts:47:5[90m)[39m
+
+[90mstderr[2m | tests/utils/useConfigStore.test.ts[2m > [22m[2museConfigStore[2m > [22m[2museConfigInitializer[2m > [22m[2mshould handle HTTP error responses
+[22m[39mFailed to parse sec-o-simple configuration. Falling back to default configuration Error: Failed to fetch config: 404 Not Found
+    at [90m/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/utils/useConfigStore.ts:50:17
+    at loadConfig [90m(/home/jens/git/csaf-projekte/sec-o-simple/[39msrc/utils/useConfigStore.ts:47:5[90m)[39m
+
+ [32m✓[39m tests/routes/products/ProductList.behavior.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 139[2mms[22m[39m
+ [32m✓[39m tests/utils/useConfigStore.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 157[2mms[22m[39m
+ [32m✓[39m tests/components/StatusIndicator.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m tests/routes/document-information/Notes.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/References.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m tests/components/forms/Split.test.tsx [2m([22m[2m10 tests[22m[2m)[22m[32m 156[2mms[22m[39m
+ [32m✓[39m tests/utils/download.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/types/tVulnerabilityScore.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m tests/routes/document-information/types/tDocumentAcknowledgments.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/parseVulnerabilityProducts.test.ts [2m([22m[2m34 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/routes/preview/markdownParser.simple.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 64[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/parseRelationships.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 67[2mms[22m[39m
+ [32m✓[39m tests/utils/csafExport/pidGenerator.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/csafImport.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 63[2mms[22m[39m
+Warning: A vi.unmock('@/utils/useProductTreeBranch') call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/utils/useProductTreeBranch.working.test.ts" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+ [32m✓[39m tests/utils/useProductTreeBranch.working.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/types/tRemediation.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m tests/routes/preview/htmlTemplateTranslations.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/parseVulnerabilities.test.ts [2m([22m[2m33 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/parseProductTree.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m tests/utils/csafExport/parseProductTreeBranches.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m tests/routes/document-information/types/tRevisionHistoryEntry.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m tests/hero.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 60[2mms[22m[39m
+ [32m✓[39m tests/routes/preview/HTMLTemplate.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m tests/routes/document-information/types/tDocumentInformation.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 45[2mms[22m[39m
+ [32m✓[39m tests/routes/preview/HTMLTemplate.simple.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m tests/utils/validation/useFieldValidation.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+[90mstderr[2m | tests/App.test.tsx[2m > [22m[2mApp[2m > [22m[2mshould render without crashing
+[22m[39mUnknown event handler property `onPress`. It will be ignored.
+React does not recognize the `fullWidth` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `fullwidth` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+React does not recognize the `startContent` prop on a DOM element. If you intentionally want it to appear in the DOM as a custom attribute, spell it as lowercase `startcontent` instead. If you accidentally passed it from a parent component, remove it from the DOM element.
+
+ [32m✓[39m tests/App.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 137[2mms[22m[39m
+ [32m✓[39m tests/routes/products/types/tProductTreeBranch.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m tests/utils/csafExport/parseScores.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m tests/utils/csafExport/parseNote.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/idGenerator.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m tests/routes/document-selection/categorySelection.motions.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/parseNote.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/parseProductTree-families.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/utils/deepPartial.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m tests/utils/csafExport/latestVersion.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 47[2mms[22m[39m
+Warning: A vi.unmock('@/utils/csafExport/csafExport') call in "/home/jens/git/csaf-projekte/sec-o-simple/tests/utils/csafExport/csafExport.test.ts" is not at the top level of the module. Although it appears nested, it will be hoisted and executed before any tests run. Move it to the top level to reflect its actual execution order. This will become an error in a future version.
+See: https://vitest.dev/guide/mocking/modules#how-it-works
+ [32m✓[39m tests/utils/version.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/utils/csafExport/parseNotes.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m tests/utils/csafImport/utils.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m tests/utils/csafExport/helpers.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+ [32m✓[39m tests/routes/vulnerabilities/utils/productMatrix.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m tests/utils/dynamicObjectValue.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m tests/utils/useProductTreeBranch.basic.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m tests/utils/simple.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m tests/routes/products/SimpleTest.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m tests/utils/validation/documentValidator.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m tests/utils/csafExport/csafExport.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m130 passed[39m[22m[90m (130)[39m
+[2m      Tests [22m [1m[32m2324 passed[39m[22m[90m (2324)[39m
+[2m   Start at [22m 15:24:52
+[2m   Duration [22m 58.24s[2m (transform 11.66s, setup 25.61s, import 97.92s, tests 64.73s, environment 123.32s)[22m
+
+[34m % [39m[2mCoverage report from [22m[33mv8[39m
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   91.53 |    85.01 |   88.08 |   92.82 |                   
+ sec-o-simple      |       0 |        0 |       0 |       0 |                   
+  hero.ts          |       0 |        0 |       0 |       0 |                   
+  package.json     |       0 |        0 |       0 |       0 |                   
+ sec-o-simple/src  |     100 |      100 |     100 |     100 |                   
+  App.tsx          |     100 |      100 |     100 |     100 |                   
+  main.tsx         |     100 |      100 |     100 |     100 |                   
+ ...src/components |     100 |    96.96 |     100 |     100 |                   
+  ProgressBar.tsx  |     100 |      100 |     100 |     100 |                   
+  ...Indicator.tsx |     100 |      100 |     100 |     100 |                   
+  WizardStep.tsx   |     100 |    95.23 |     100 |     100 | 51                
+ ...mponents/forms |   89.61 |    84.39 |   89.04 |   89.47 |                   
+  ...amesTable.tsx |     100 |      100 |     100 |     100 |                   
+  ...temButton.tsx |     100 |      100 |     100 |     100 |                   
+  Autocomplete.tsx |   88.88 |    92.85 |     100 |   88.88 | 34                
+  Breadcrumbs.tsx  |     100 |      100 |     100 |     100 |                   
+  ...onentList.tsx |   46.66 |    68.18 |   57.14 |   46.66 | 111-153           
+  ...irmButton.tsx |     100 |    85.71 |     100 |     100 | 39                
+  DatePicker.tsx   |     100 |    85.71 |     100 |     100 | 56-62             
+  HSplit.tsx       |     100 |      100 |     100 |     100 |                   
+  IconButton.tsx   |     100 |      100 |     100 |     100 |                   
+  Input.tsx        |   83.33 |    78.94 |      75 |   83.33 | 37,57,102,121     
+  ...eSwitcher.tsx |     100 |      100 |     100 |     100 |                   
+  PTBSelect.tsx    |     100 |      100 |     100 |     100 |                   
+  ...uctSelect.tsx |     100 |      100 |     100 |     100 |                   
+  ...toryTable.tsx |   88.46 |       70 |   76.92 |   88.46 | 55-60,94          
+  ...leVersion.tsx |     100 |      100 |     100 |     100 |                   
+  Select.tsx       |     100 |      100 |     100 |     100 |                   
+  VSplit.tsx       |     100 |      100 |     100 |     100 |                   
+ ...ponents/layout |   71.42 |    84.61 |   54.54 |   71.42 |                   
+  ...ionLayout.tsx |      90 |    77.77 |      80 |      90 | 148               
+  TopBarLayout.tsx |   61.11 |      100 |   33.33 |   61.11 | 60-76,130-145     
+ ...nt-information |   83.01 |    67.74 |   70.68 |   84.15 |                   
+  ...ledgments.tsx |     100 |      100 |     100 |     100 |                   
+  Aliases.tsx      |   71.42 |    28.57 |   53.84 |      70 | 33-41,59,101      
+  General.tsx      |   78.94 |    66.66 |   66.66 |   83.33 | 38,80,118         
+  Notes.tsx        |      70 |       50 |      25 |      70 | 23-29,48          
+  Publisher.tsx    |   81.25 |       50 |   77.77 |   86.66 | 26-30             
+  References.tsx   |   77.77 |      100 |      50 |   77.77 | 26-32             
+  Tracking.tsx     |     100 |      100 |     100 |     100 |                   
+ ...ormation/types |     100 |      100 |     100 |     100 |                   
+  ...wledgments.ts |     100 |      100 |     100 |     100 |                   
+  ...nformation.ts |     100 |      100 |     100 |     100 |                   
+  ...tPublisher.ts |     100 |      100 |     100 |     100 |                   
+  ...tReference.ts |     100 |      100 |     100 |     100 |                   
+  ...nformation.ts |     100 |      100 |     100 |     100 |                   
+  ...storyEntry.ts |     100 |      100 |     100 |     100 |                   
+ ...ment-selection |   85.89 |    93.75 |    62.5 |   87.01 |                   
+  ...Selection.tsx |     100 |      100 |     100 |     100 |                   
+  ...eDocument.tsx |    62.5 |       50 |   44.44 |   66.66 | 29,33-34,108,125  
+  ...Selection.tsx |     100 |      100 |     100 |     100 |                   
+  EditDocument.tsx |   89.36 |    96.15 |   55.55 |   89.36 | 79,102-130        
+  ...on.motions.ts |     100 |      100 |     100 |     100 |                   
+ ...routes/preview |   94.25 |       78 |   91.83 |   98.12 |                   
+  HTMLTemplate.ts  |   95.27 |    82.43 |   97.22 |   99.13 | 343               
+  Preview.tsx      |      84 |     37.5 |   57.14 |    91.3 | 35,64             
+  ...anslations.ts |     100 |      100 |     100 |     100 |                   
+  ...downParser.ts |     100 |    77.77 |     100 |     100 | 46-56,78          
+ ...w/HTMLTemplate |       0 |        0 |       0 |       0 |                   
+  Template.html    |       0 |        0 |       0 |       0 |                   
+ ...outes/products |   84.88 |    76.69 |   80.76 |   87.55 |                   
+  ...uctFamily.tsx |   91.89 |       75 |   81.25 |   91.66 | 62-63,74          
+  ProductList.tsx  |      88 |    70.83 |    87.5 |    90.9 | 97-99,112         
+  ...anagement.tsx |   91.66 |      100 |      80 |     100 |                   
+  VendorList.tsx   |   75.82 |    60.71 |   73.33 |   78.57 | ...57,285-287,295 
+  Version.tsx      |   94.28 |    86.48 |    90.9 |   97.05 | 183               
+ ...cts/components |   87.89 |     82.5 |      81 |   89.09 |                   
+  InfoCard.tsx     |     100 |      100 |     100 |     100 |                   
+  PFEditForm.tsx   |     100 |    83.33 |     100 |     100 | 53,77             
+  PTBEditForm.tsx  |   83.33 |    85.71 |   85.71 |   86.95 | 108,138-139       
+  ProductCard.tsx  |      70 |    59.09 |   45.45 |   73.68 | 133-170           
+  ...eSelector.tsx |   85.05 |    77.41 |   76.47 |   86.58 | ...73-175,188-189 
+  ...amilyChip.tsx |     100 |      100 |     100 |     100 |                   
+  ...pEditForm.tsx |   91.66 |     91.8 |   85.71 |   91.48 | 158-160,209-211   
+  ...enuHeader.tsx |     100 |      100 |     100 |     100 |                   
+  TagList.tsx      |     100 |      100 |     100 |     100 |                   
+ ...products/types |    90.9 |      100 |      75 |    90.9 |                   
+  ...TreeBranch.ts |   88.88 |      100 |   66.66 |   88.88 | 79                
+  tRelationship.ts |     100 |      100 |     100 |     100 |                   
+ .../routes/shared |   92.98 |       70 |   90.32 |   96.07 |                   
+  NotesList.tsx    |   89.28 |       60 |   86.66 |      96 | 136               
+  ...Templates.tsx |   91.66 |    83.33 |   83.33 |    90.9 | 29                
+  ...encesList.tsx |     100 |      100 |     100 |     100 |                   
+ ...ulnerabilities |   91.78 |    83.42 |   91.05 |   93.06 |                   
+  Flags.tsx        |     100 |      100 |     100 |     100 |                   
+  General.tsx      |     100 |      100 |     100 |     100 |                   
+  Notes.tsx        |   85.71 |       80 |   66.66 |   85.71 | 46                
+  ...uctMatrix.tsx |   94.23 |    84.61 |     100 |   95.74 | 70,83             
+  Products.tsx     |   96.96 |    82.75 |     100 |   98.36 | 115               
+  References.tsx   |     100 |      100 |     100 |     100 |                   
+  Remediations.tsx |    92.1 |    83.33 |   94.73 |   94.59 | 217-218           
+  Scores.tsx       |      94 |    89.58 |   94.44 |      94 | 187,250-251       
+  ...abilities.tsx |   77.77 |    73.17 |   63.63 |   79.59 | ...43-244,252-262 
+ ...ies/components |   83.46 |    69.87 |   86.36 |   85.71 |                   
+  FetchCVE.tsx     |    75.3 |    65.57 |    62.5 |    78.2 | ...04-207,276-301 
+  ...tsTagList.tsx |   94.73 |    85.71 |     100 |     100 | 39,66             
+  ...ilityFlag.tsx |     100 |       75 |     100 |     100 | 60                
+  ...tyProduct.tsx |     100 |       75 |     100 |     100 | 51                
+ ...bilities/types |     100 |      100 |     100 |     100 |                   
+  tRemediation.ts  |     100 |      100 |     100 |     100 |                   
+  ...nerability.ts |     100 |      100 |     100 |     100 |                   
+  ...bilityFlag.ts |     100 |      100 |     100 |     100 |                   
+  ...ityProduct.ts |     100 |      100 |     100 |     100 |                   
+  ...ilityScore.ts |     100 |      100 |     100 |     100 |                   
+ ...bilities/utils |    97.5 |      100 |   94.44 |     100 |                   
+  productMatrix.ts |     100 |      100 |     100 |     100 |                   
+  useProducts.ts   |      95 |      100 |    87.5 |     100 |                   
+ ...mple/src/utils |   97.91 |    94.15 |   97.45 |    98.5 |                   
+  download.ts      |     100 |      100 |     100 |     100 |                   
+  ...bjectValue.ts |     100 |      100 |     100 |     100 |                   
+  sosDraft.ts      |   97.82 |    96.29 |     100 |   97.72 | 80                
+  template.ts      |     100 |     87.5 |     100 |     100 | 50,66,194         
+  ...onfigStore.ts |     100 |      100 |     100 |     100 |                   
+  ...baseClient.ts |    91.3 |      100 |   85.71 |    91.3 | 77-83             
+  ...ounceInput.ts |   91.66 |       75 |     100 |   94.28 | 61-62             
+  ...umentStore.ts |   91.66 |      100 |      90 |      90 | 51                
+  ...oreUpdater.ts |   93.93 |      100 |   85.71 |     100 |                   
+  ...umentType.tsx |     100 |      100 |     100 |     100 |                   
+  useListState.ts  |     100 |      100 |     100 |     100 |                   
+  ...tDatabase.tsx |     100 |      100 |     100 |     100 |                   
+  ...TreeBranch.ts |     100 |    96.07 |     100 |     100 | 83,280            
+  ...ationships.ts |     100 |      100 |     100 |     100 |                   
+  ...nitializer.ts |     100 |      100 |     100 |     100 |                   
+  version.ts       |     100 |      100 |     100 |     100 |                   
+ ...ils/csafExport |   89.92 |    85.71 |   91.83 |   90.67 |                   
+  csafExport.ts    |   79.36 |       80 |   85.71 |      80 | 169,283-309       
+  helpers.ts       |     100 |      100 |     100 |     100 |                   
+  latestVersion.ts |     100 |      100 |     100 |     100 |                   
+  parseNote.ts     |     100 |      100 |     100 |     100 |                   
+  parseNotes.ts    |     100 |      100 |     100 |     100 |                   
+  ...eeBranches.ts |     100 |       95 |     100 |     100 | 74                
+  parseScores.ts   |     100 |      100 |     100 |     100 |                   
+  pidGenerator.ts  |     100 |      100 |     100 |     100 |                   
+ ...ils/csafImport |   98.87 |    91.84 |   97.87 |   98.85 |                   
+  csafImport.ts    |   98.24 |    89.53 |     100 |   98.24 | 273               
+  idGenerator.ts   |     100 |      100 |     100 |     100 |                   
+  parseNote.ts     |     100 |      100 |     100 |     100 |                   
+  ...roductTree.ts |     100 |    86.11 |     100 |     100 | 23,32,89-90,125   
+  ...ationships.ts |     100 |      100 |     100 |     100 |                   
+  ...rabilities.ts |   92.85 |      100 |    87.5 |   91.66 | 55                
+  ...tyProducts.ts |     100 |    83.33 |     100 |     100 | 61                
+  scheme.ts        |     100 |      100 |     100 |     100 |                   
+  utils.ts         |     100 |      100 |     100 |     100 |                   
+ ...ils/validation |   93.44 |    91.66 |   89.88 |   95.03 |                   
+  ...tValidator.ts |   96.73 |       90 |     100 |   96.73 | 89,96,105         
+  ...Validation.ts |     100 |      100 |     100 |     100 |                   
+  ...Validation.ts |     100 |      100 |     100 |     100 |                   
+  usePageVisit.ts  |     100 |      100 |     100 |     100 |                   
+  ...Validation.ts |   81.25 |      100 |   76.92 |      80 | 26-27,45-49       
+  ...Validation.ts |     100 |      100 |     100 |     100 |                   
+  ...ationStore.ts |   84.21 |      100 |   83.33 |     100 |                   
+-------------------|---------|----------|---------|---------|-------------------
+close timed out after 10000ms
+Tests closed successfully but something prevents Vite server from exiting
+You can try to identify the cause by enabling "hanging-process" reporter. See https://vitest.dev/guide/reporters.html#hanging-process-reporter
