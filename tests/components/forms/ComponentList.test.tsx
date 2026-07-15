@@ -85,7 +85,7 @@ vi.mock('@heroui/react', () => ({
   )
 }))
 
-vi.mock('./AddItemButton', () => ({
+vi.mock('../../../src/components/forms/AddItemButton', () => ({
   default: ({ label, onPress }: { label: string; onPress: () => void }) => (
     <button 
       data-testid="hero-button" 
@@ -102,7 +102,7 @@ vi.mock('./AddItemButton', () => ({
   )
 }))
 
-vi.mock('./IconButton', () => ({
+vi.mock('../../../src/components/forms/IconButton', () => ({
   default: ({ 
     icon, 
     tooltip, 
@@ -245,9 +245,8 @@ describe('ComponentList', () => {
     )
     
     expect(addButton).toBeTruthy()
-    // Note: Click events don't work with the current mocking setup
-    // but the component renders correctly with the onPress handler
-    expect(addButton?.textContent).toContain('Add Test Item')
+    fireEvent.click(addButton!)    
+    expect(mockAddDataEntry).toHaveBeenCalledTimes(1)
   })
 
   it('should call removeDataEntry when delete button is clicked', () => {
@@ -259,11 +258,9 @@ describe('ComponentList', () => {
     )
     
     expect(deleteButton).toBeTruthy()
-    // Note: Click events don't work with the current mocking setup
-    // but the component renders correctly with the onPress handler
-    expect(screen.getAllByTestId('fa-icon').filter(icon => 
-      icon.getAttribute('data-icon') === 'trash'
-    )).toHaveLength(2)
+    fireEvent.click(deleteButton!)
+    expect(mockRemoveDataEntry).toHaveBeenCalledTimes(1)
+    expect(mockRemoveDataEntry).toHaveBeenCalledWith(mockItem1)
   })
 
   it('should use custom onDelete when provided', () => {
@@ -276,11 +273,9 @@ describe('ComponentList', () => {
     )
     
     expect(deleteButton).toBeTruthy()
-    // Note: Click events don't work with the current mocking setup
-    // but the component renders correctly with the custom onDelete prop
-    expect(screen.getAllByTestId('fa-icon').filter(icon => 
-      icon.getAttribute('data-icon') === 'trash'
-    )).toHaveLength(2)
+    fireEvent.click(deleteButton!)
+    expect(mockOnDelete).toHaveBeenCalledTimes(1)
+    expect(mockOnDelete).toHaveBeenCalledWith(mockItem1)
   })
 
   it('should render custom actions', () => {
@@ -304,6 +299,14 @@ describe('ComponentList', () => {
       icon.getAttribute('data-icon') === 'edit'
     )
     expect(editIcons).toHaveLength(2)
+
+    const editButton = allButtons.find(button => 
+      button.querySelector('[data-icon="edit"]')
+    )
+    expect(editButton).toBeTruthy()
+    fireEvent.click(editButton!)
+    expect(mockCustomAction).toHaveBeenCalledTimes(1)
+    expect(mockCustomAction).toHaveBeenCalledWith(mockItem1)
   })
 
   it('should render start content when provided', () => {
@@ -355,9 +358,8 @@ describe('ComponentList', () => {
     )
     
     expect(addButton).toBeTruthy()
-    // Note: Click events don't work with the current mocking setup
-    // but the component renders correctly with the custom addEntry prop
-    expect(addButton?.textContent).toContain('Add Test Item')
+    fireEvent.click(addButton!)
+    expect(mockAddEntry).toHaveBeenCalledTimes(1)
   })
 
   it('should show untitled label when item has no title', () => {
