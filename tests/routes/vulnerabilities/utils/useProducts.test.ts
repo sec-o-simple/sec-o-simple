@@ -15,10 +15,6 @@ describe('useProducts', () => {
   // Mock store function
   const mockUseDocumentStore = vi.mocked(useDocumentStore)
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('useProducts hook', () => {
     it('should initialize with empty products when no product tree exists', () => {
       mockUseDocumentStore.mockReturnValue([])

@@ -82,10 +82,6 @@ const mockMixedProducts: TProductTreeBranch[] = [
 ]
 
 describe('ProductList', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('Basic rendering', () => {
     it('should render container with correct classes', () => {
       mockGetPTBsByCategory.mockReturnValue([])
@@ -472,8 +468,6 @@ describe('ProductList', () => {
       render(<ProductList productType="Software" />)
 
       expect(mockT).toHaveBeenCalledWith('products.empty', { type: 'Software' })
-
-      vi.clearAllMocks()
 
       render(<ProductList productType="Hardware" />)
 

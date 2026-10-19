@@ -341,8 +341,6 @@ describe('References', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     const defaultReference = getDefaultDocumentReference()
     mockListState.data = [defaultReference]
 

@@ -255,8 +255,7 @@ describe('Scores Component', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
-    
+   
     mockUseListState.mockReturnValue(mockListState)
     
     mockUseProductTreeBranch.mockReturnValue({

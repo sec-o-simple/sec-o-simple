@@ -61,10 +61,6 @@ const baseProduct: TProductTreeBranch = {
 }
 
 describe('ProductFamilyChip', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   it('returns null when product has no familyId', () => {
     const { container } = render(<ProductFamilyChip product={baseProduct} />)
     expect(container.firstChild).toBeNull()

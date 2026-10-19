@@ -241,7 +241,6 @@ const mockRootBranch = mockVendorData
 
 describe('VendorList', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockGetPTBsByCategory.mockReturnValue(mockVendorData)
     mockAddDataEntry.mockReturnValue({
       id: 'new-vendor-entry',

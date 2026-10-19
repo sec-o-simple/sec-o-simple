@@ -18,10 +18,6 @@ vi.mock('../../../src/utils/useDebounceInput', () => ({
 }))
 
 describe('Input', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   it('should render with default props', () => {
     const { container } = render(<Input />)
 
@@ -143,10 +139,6 @@ describe('Input', () => {
 })
 
 describe('Textarea', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   it('should render with default props', () => {
     const { container } = render(<Textarea />)
 

@@ -96,10 +96,6 @@ describe('CreateDocument', () => {
     )
   }
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   it('should render correctly with both document types', () => {
     const { container } = renderComponent()
     expect(container).toMatchSnapshot()

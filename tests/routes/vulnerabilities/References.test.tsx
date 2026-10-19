@@ -69,8 +69,6 @@ describe('Vulnerabilities References', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     mockUseListState.mockReturnValue({
       data: mockVulnerability.references,
       setData: vi.fn(),

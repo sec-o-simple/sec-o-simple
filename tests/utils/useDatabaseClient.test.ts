@@ -42,7 +42,6 @@ describe('useDatabaseClient', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
     mockClient.defaults.baseURL = '' // Reset baseURL
     
     // Mock useProductDatabase to return our mock config

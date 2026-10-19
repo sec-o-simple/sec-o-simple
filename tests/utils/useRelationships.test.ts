@@ -34,8 +34,6 @@ describe('useRelationships', () => {
   })
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     mockGlobalRelationships = []
     mockUpdateRelationships = vi.fn()
 

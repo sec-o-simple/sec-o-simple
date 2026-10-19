@@ -123,8 +123,6 @@ describe('Flags', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     // Default mock implementations
     mockUseTranslation = vi.fn(() => ({
       t: (key: string, options?: any) => {

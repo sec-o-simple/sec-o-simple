@@ -131,7 +131,6 @@ vi.mock('../../../../src/routes/products/components/TagList', () => ({
 
 describe('ProductsTagList', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockGetSelectableRefs = vi.fn().mockReturnValue(mockSelectableRefs)
   })
 

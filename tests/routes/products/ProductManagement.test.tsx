@@ -159,8 +159,6 @@ const mockUsePageVisit = vi.mocked(usePageVisit)
 
 describe('ProductManagement', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-
     // Default mock implementations
     mockUsePageVisit.mockReturnValue(false)
     mockUseDocumentType.mockReturnValue({

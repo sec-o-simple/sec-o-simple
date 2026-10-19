@@ -54,10 +54,6 @@ vi.mock('../../src/utils/useDocumentStore', () => ({
 }))
 
 describe('sosDraft utils', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('useSOSExport', () => {
     it('should export SOS document with correct filename and content', () => {
       const { result } = renderHook(() => useSOSExport())

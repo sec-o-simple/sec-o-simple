@@ -208,7 +208,6 @@ describe('ProductCard', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
     mockDeletePTB.mockClear()
     mockGetPTBName.mockClear()
     mockFindProductTreeBranch.mockClear()

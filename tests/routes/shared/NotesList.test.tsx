@@ -241,10 +241,6 @@ describe('NotesList', () => {
     getId: mockGetId
   }
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   it('should render notes list correctly', () => {
     render(
       <NotesList

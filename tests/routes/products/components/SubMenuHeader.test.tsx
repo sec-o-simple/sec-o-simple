@@ -62,10 +62,6 @@ vi.mock('tailwind-merge', () => ({
 }))
 
 describe('SubMenuHeader', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('Basic rendering', () => {
     it('should render with required props', () => {
       render(
@@ -131,9 +127,7 @@ describe('SubMenuHeader', () => {
       
       fireEvent.click(screen.getByTestId('icon-button'))
       expect(mockNavigate).toHaveBeenCalledWith('/vendors')
-      
-      vi.clearAllMocks()
-      
+            
       rerender(
         <SubMenuHeader 
           title="Test Title" 

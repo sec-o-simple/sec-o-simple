@@ -83,10 +83,6 @@ const mockProducts: TSelectableFullProductName[] = [
 ]
 
 describe('ProductSelect', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('Basic rendering', () => {
     it('should render with default props', () => {
       render(<ProductSelect />)

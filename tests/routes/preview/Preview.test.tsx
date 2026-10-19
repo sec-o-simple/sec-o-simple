@@ -5,7 +5,6 @@ import { HashRouter } from 'react-router'
 
 describe('Preview iframe focus/blur logic', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
       configurable: true,
       get() {
@@ -52,7 +51,6 @@ describe('Preview iframe focus/blur logic', () => {
 describe('Preview error handling', () => {
   beforeEach(() => {
     vi.resetModules()
-    vi.clearAllMocks()
     Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
       configurable: true,
       get() {
@@ -112,7 +110,6 @@ describe('Preview error handling', () => {
 describe('Preview edge cases', () => {
   beforeEach(() => {
     vi.resetModules()
-    vi.clearAllMocks()
     // Mock iframe functionality
     Object.defineProperty(HTMLIFrameElement.prototype, 'contentDocument', {
       configurable: true,

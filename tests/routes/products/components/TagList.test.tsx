@@ -61,10 +61,6 @@ const objectItems: TestItem[] = [
 ]
 
 describe('TagList', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('Basic rendering', () => {
     it('should render empty list when no items provided', () => {
       const { container } = render(<TagList items={[]} />)

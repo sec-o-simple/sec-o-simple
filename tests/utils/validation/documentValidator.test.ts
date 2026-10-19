@@ -26,8 +26,6 @@ describe('documentValidator', () => {
   let mockConfig: TConfig
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     // Setup mock document store
     mockDocumentStore = {
       sosDocumentType: 'Software',

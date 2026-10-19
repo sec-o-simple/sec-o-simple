@@ -8,12 +8,11 @@ import type { TDocumentStore } from '../../../src/utils/useDocumentStore'
 // Mock the current date to ensure consistent snapshots
 vi.setSystemTime(new Date('2023-07-31T12:00:00.000Z'))
 
+// The global setup.ts mocks the csafExport module but doesn't include createCSAFDocument
+// We need to unmock it to access the real function
+vi.unmock('@/utils/csafExport/csafExport')
+
 describe('csafExport', () => {
-  beforeEach(() => {
-    // The global setup.ts mocks the csafExport module but doesn't include createCSAFDocument
-    // We need to unmock it to access the real function
-    vi.unmock('@/utils/csafExport/csafExport')
-  })
   const createMockDocumentStore = (): TDocumentStore =>
     ({
       sosDocumentType: 'Software',
@@ -427,7 +426,9 @@ describe('csafExport', () => {
     })
 
     it('replaces invalid character sequences with single underscores', () => {
-      expect(createCSAFExportFilename('2022_#01-A', true)).toBe('2022_01-a.json')
+      expect(createCSAFExportFilename('2022_#01-A', true)).toBe(
+        '2022_01-a.json',
+      )
       expect(createCSAFExportFilename('ESA##+2023-A*', true)).toBe(
         'esa_2023-a_.json',
       )

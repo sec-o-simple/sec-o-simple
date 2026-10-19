@@ -157,10 +157,6 @@ describe('General', () => {
     { id: 'CWE-352', name: 'Cross-Site Request Forgery (CSRF)' }
   ]
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('Component Rendering', () => {
     it('should render without crashing', () => {
       render(

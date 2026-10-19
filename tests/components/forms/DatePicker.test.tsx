@@ -61,7 +61,6 @@ const mockGetLocalTimeZone = vi.mocked(getLocalTimeZone)
 
 describe('DatePicker', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockUseFieldValidation.mockReturnValue({
       messages: [],
       errorMessages: [],

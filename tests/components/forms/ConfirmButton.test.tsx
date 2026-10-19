@@ -66,7 +66,6 @@ describe('ConfirmButton', () => {
   let mockOnOpenChange: any
 
   beforeEach(() => {
-    vi.clearAllMocks()
     mockOnOpen = vi.fn()
     mockOnClose = vi.fn()
     mockOnOpenChange = vi.fn()

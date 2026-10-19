@@ -20,10 +20,6 @@ vi.mock('i18next', () => ({
 vi.unmock('@/routes/document-information/types/tDocumentInformation')
 
 describe('tDocumentInformation', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('getDefaultDocumentInformation', () => {
     it('should return a document information object with required properties', () => {
       const result = getDefaultDocumentInformation()

@@ -199,10 +199,6 @@ vi.mock('react-i18next', () => ({
 describe('Publisher', () => {
   const user = userEvent.setup()
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('Component Rendering', () => {
     it('should render the wizard step with correct props', () => {
       render(<Publisher />)

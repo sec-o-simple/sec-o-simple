@@ -54,9 +54,6 @@ vi.mock('../../src/components/ProgressBar', () => ({
 }))
 
 describe('WizardStep', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
   it('should render with progress bar and content', () => {
     const { container } = render(
       <WizardStep title="Test Step">

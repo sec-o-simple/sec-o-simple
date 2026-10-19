@@ -86,15 +86,11 @@ vi.mock(
   }),
 )
 
+// The global setup.ts mocks the template module but with limited functionality
+// We need to unmock it to access all the real functions
+vi.unmock('@/utils/template')
+
 describe('template utility functions', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-
-    // The global setup.ts mocks the template module but with limited functionality
-    // We need to unmock it to access all the real functions
-    vi.unmock('@/utils/template')
-  })
-
   describe('checkReadOnly', () => {
     it('should return true when object has readonly property set to true', () => {
       const obj = { readonly: true, field1: 'value' }

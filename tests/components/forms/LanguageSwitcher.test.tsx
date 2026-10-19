@@ -75,7 +75,6 @@ Object.defineProperty(window, 'localStorage', {
 
 describe('LanguageSwitcher', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockI18n.language = 'en'
   })
 

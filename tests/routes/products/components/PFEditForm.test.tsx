@@ -172,7 +172,6 @@ describe('PFCreateEditForm', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
     vi.mocked(checkReadOnly).mockReturnValue(false)
     vi.mocked(getPlaceholder).mockReturnValue('Test placeholder')
   })

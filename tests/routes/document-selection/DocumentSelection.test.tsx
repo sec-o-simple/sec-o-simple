@@ -59,10 +59,6 @@ vi.mock('../../../src/components/forms/LanguageSwitcher', () => ({
 describe('DocumentSelection', () => {
   const user = userEvent.setup()
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('Component Rendering', () => {
     it('should render the document selection with initial state', () => {
       render(<DocumentSelection />)

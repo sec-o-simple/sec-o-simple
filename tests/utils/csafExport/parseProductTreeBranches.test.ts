@@ -18,7 +18,6 @@ describe('parseProductTreeBranches', () => {
   const mockGetFullProductName = vi.fn()
 
   beforeEach(() => {
-    vi.clearAllMocks()
     mockGetFullProductName.mockReturnValue('Full Product Name')
   })
 

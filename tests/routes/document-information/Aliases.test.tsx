@@ -170,10 +170,6 @@ vi.mock('react-i18next', () => ({
 }))
 
 describe('Aliases', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   it('renders correctly', () => {
     render(<Aliases />)
     expect(screen.getByTestId('wizard-title')).toHaveTextContent('nav.documentInformation.aliases')

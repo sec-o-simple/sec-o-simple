@@ -338,8 +338,6 @@ describe('Version', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     // Setup default mock returns
     mockUseParams.mockReturnValue({ productVersionId: 'version-1' })
     mockFindProductTreeBranchWithParents.mockReturnValue(mockProductVersion)

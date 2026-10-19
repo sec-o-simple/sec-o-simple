@@ -18,10 +18,6 @@ function mockProductDatabase(productDatabase: any) {
 }
 
 describe('useProductDatabase', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('enabled state with complete configuration', () => {
     it('should return enabled=true when all required fields are present and truthy', () => {
       mockProductDatabase({

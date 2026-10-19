@@ -18,7 +18,6 @@ describe('usePageVisit', () => {
   let mockUseLocation: Mock
 
   beforeEach(() => {
-    vi.clearAllMocks()
     vi.clearAllTimers()
 
     // Setup mocks

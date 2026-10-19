@@ -43,8 +43,6 @@ describe('useDocumentStoreUpdater', () => {
   const mockDocumentStore = { documents: [], products: [] }
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     // Setup mock implementations
     vi.mocked(useConfigStore).mockReturnValue(mockConfig)
     vi.mocked(useDocumentStore).mockImplementation((selector: any) => {

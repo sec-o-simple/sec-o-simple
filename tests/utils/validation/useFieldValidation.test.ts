@@ -18,8 +18,7 @@ describe('useFieldValidation', () => {
   let mockStore: any
 
   beforeEach(() => {
-    vi.clearAllMocks()
-    
+   
     mockGetMessagesForPath = vi.fn()
     mockMarkFieldAsTouched = vi.fn()
     

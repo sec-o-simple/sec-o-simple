@@ -36,13 +36,7 @@ vi.mock('@/components/forms/Input', () => ({
 }))
 
 vi.mock('@/components/forms/IconButton', () => ({
-  default: ({
-    icon,
-    onPress,
-  }: {
-    icon: any
-    onPress: () => void
-  }) => (
+  default: ({ icon, onPress }: { icon: any; onPress: () => void }) => (
     <button data-testid="icon-button" onClick={onPress}>
       Delete
     </button>
@@ -121,15 +115,8 @@ vi.mock('@heroui/table', () => ({
       {children}
     </th>
   ),
-  TableRow: ({
-    children,
-  }: {
-    children: React.ReactNode
-    key?: string
-  }) => (
-    <tr data-testid="table-row">
-      {children}
-    </tr>
+  TableRow: ({ children }: { children: React.ReactNode; key?: string }) => (
+    <tr data-testid="table-row">{children}</tr>
   ),
   TableCell: ({ children }: { children: React.ReactNode }) => (
     <td data-testid="table-cell">{children}</td>
@@ -147,22 +134,23 @@ vi.mock('@fortawesome/free-solid-svg-icons', () => ({
   faTrash: { iconName: 'trash' },
 }))
 
-describe('AcknowledgmentNamesTable', () => {
-  const mockUseListState = vi.hoisted(() => ({
-    data: [] as TAcknowledgmentName[],
-    setData: vi.fn(),
-    addDataEntry: vi.fn(),
-    updateDataEntry: vi.fn(),
-    removeDataEntry: vi.fn(),
-    getId: vi.fn((entry: any) => entry.id),
-  }))
+const mockUseListState = vi.hoisted(() => ({
+  data: [] as TAcknowledgmentName[],
+  setData: vi.fn(),
+  addDataEntry: vi.fn(),
+  updateDataEntry: vi.fn(),
+  removeDataEntry: vi.fn(),
+  getId: vi.fn((entry: any) => entry.id),
+}))
 
+describe('AcknowledgmentNamesTable', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     vi.mocked(useListState).mockReturnValue(mockUseListState)
   })
 
-  const createMockAcknowledgment = (names: TAcknowledgmentName[] = []): TAcknowledgment => ({
+  const createMockAcknowledgment = (
+    names: TAcknowledgmentName[] = [],
+  ): TAcknowledgment => ({
     id: 'test-acknowledgment-id',
     summary: 'Test summary',
     organization: 'Test Organization',
@@ -184,8 +172,10 @@ describe('AcknowledgmentNamesTable', () => {
   describe('Component Rendering', () => {
     it('should render with empty names list', () => {
       mockUseListState.data = []
-      
-      const { container } = render(<AcknowledgmentNamesTable {...defaultProps} />)
+
+      const { container } = render(
+        <AcknowledgmentNamesTable {...defaultProps} />,
+      )
 
       expect(screen.getByText('Names')).toBeInTheDocument()
       expect(screen.getByTestId('add-button')).toBeInTheDocument()
@@ -196,7 +186,7 @@ describe('AcknowledgmentNamesTable', () => {
 
     it('should render table headers correctly', () => {
       mockUseListState.data = []
-      
+
       render(<AcknowledgmentNamesTable {...defaultProps} />)
 
       const columns = screen.getAllByTestId('table-column')
@@ -209,11 +199,14 @@ describe('AcknowledgmentNamesTable', () => {
 
     it('should render empty content when no names exist', () => {
       mockUseListState.data = []
-      
+
       render(<AcknowledgmentNamesTable {...defaultProps} />)
 
       const tableBody = screen.getByTestId('table-body')
-      expect(tableBody).toHaveAttribute('data-empty-content', 'No names added yet')
+      expect(tableBody).toHaveAttribute(
+        'data-empty-content',
+        'No names added yet',
+      )
     })
 
     it('should render names when they exist', () => {
@@ -264,7 +257,7 @@ describe('AcknowledgmentNamesTable', () => {
         expect.objectContaining({
           id: '1',
           name: expect.any(String),
-        })
+        }),
       )
     })
 
@@ -278,7 +271,9 @@ describe('AcknowledgmentNamesTable', () => {
       const deleteButton = screen.getByTestId('icon-button')
       await user.click(deleteButton)
 
-      expect(mockUseListState.removeDataEntry).toHaveBeenCalledWith(testNames[0])
+      expect(mockUseListState.removeDataEntry).toHaveBeenCalledWith(
+        testNames[0],
+      )
     })
 
     it('should handle multiple name entries correctly', async () => {
@@ -305,12 +300,14 @@ describe('AcknowledgmentNamesTable', () => {
         expect.objectContaining({
           id: '2',
           name: expect.any(String),
-        })
+        }),
       )
 
       // Test deleting third name
       await user.click(deleteButtons[2])
-      expect(mockUseListState.removeDataEntry).toHaveBeenCalledWith(testNames[2])
+      expect(mockUseListState.removeDataEntry).toHaveBeenCalledWith(
+        testNames[2],
+      )
     })
   })
 
@@ -325,7 +322,7 @@ describe('AcknowledgmentNamesTable', () => {
           {...defaultProps}
           acknowledgment={acknowledgment}
           acknowledgmentIndex={5}
-        />
+        />,
       )
 
       expect(useListState).toHaveBeenCalledWith({
@@ -339,16 +336,13 @@ describe('AcknowledgmentNamesTable', () => {
       mockUseListState.data = testNames
 
       render(
-        <AcknowledgmentNamesTable
-          {...defaultProps}
-          acknowledgmentIndex={3}
-        />
+        <AcknowledgmentNamesTable {...defaultProps} acknowledgmentIndex={3} />,
       )
 
       const input = screen.getByRole('textbox')
       expect(input).toHaveAttribute(
         'data-csaf-path',
-        '/document/acknowledgments/3/names/0'
+        '/document/acknowledgments/3/names/0',
       )
     })
 
@@ -360,20 +354,17 @@ describe('AcknowledgmentNamesTable', () => {
       mockUseListState.data = testNames
 
       render(
-        <AcknowledgmentNamesTable
-          {...defaultProps}
-          acknowledgmentIndex={7}
-        />
+        <AcknowledgmentNamesTable {...defaultProps} acknowledgmentIndex={7} />,
       )
 
       const inputs = screen.getAllByRole('textbox')
       expect(inputs[0]).toHaveAttribute(
         'data-csaf-path',
-        '/document/acknowledgments/7/names/0'
+        '/document/acknowledgments/7/names/0',
       )
       expect(inputs[1]).toHaveAttribute(
         'data-csaf-path',
-        '/document/acknowledgments/7/names/1'
+        '/document/acknowledgments/7/names/1',
       )
     })
 
@@ -395,36 +386,34 @@ describe('AcknowledgmentNamesTable', () => {
       const acknowledgment = createMockAcknowledgment(initialNames)
 
       // Mock useEffect by directly calling onChange when data changes
-      vi.mocked(useListState).mockImplementation(
-        (options: any) => {
-          const { initialData } = options || {}
-          const mockState = {
-            data: initialData || [],
-            setData: vi.fn(),
-            addDataEntry: vi.fn(),
-            updateDataEntry: vi.fn(),
-            removeDataEntry: vi.fn(),
-            getId: vi.fn((entry: any) => entry.id),
-          }
-          
-          // Mock the effect by calling onChange immediately
-          setTimeout(() => {
-            onChangeMock({
-              ...acknowledgment,
-              names: mockState.data,
-            })
-          }, 0)
-          
-          return mockState
+      vi.mocked(useListState).mockImplementation((options: any) => {
+        const { initialData } = options || {}
+        const mockState = {
+          data: initialData || [],
+          setData: vi.fn(),
+          addDataEntry: vi.fn(),
+          updateDataEntry: vi.fn(),
+          removeDataEntry: vi.fn(),
+          getId: vi.fn((entry: any) => entry.id),
         }
-      )
+
+        // Mock the effect by calling onChange immediately
+        setTimeout(() => {
+          onChangeMock({
+            ...acknowledgment,
+            names: mockState.data,
+          })
+        }, 0)
+
+        return mockState
+      })
 
       render(
         <AcknowledgmentNamesTable
           acknowledgment={acknowledgment}
           acknowledgmentIndex={0}
           onChange={onChangeMock}
-        />
+        />,
       )
 
       await waitFor(() => {
@@ -450,14 +439,14 @@ describe('AcknowledgmentNamesTable', () => {
           removeDataEntry: vi.fn(),
           getId: vi.fn((entry: any) => entry.id),
         }
-        
+
         setTimeout(() => {
           onChangeMock({
             ...acknowledgment,
             names: updatedNames,
           })
         }, 0)
-        
+
         return mockState
       })
 
@@ -466,7 +455,7 @@ describe('AcknowledgmentNamesTable', () => {
           acknowledgment={acknowledgment}
           acknowledgmentIndex={0}
           onChange={onChangeMock}
-        />
+        />,
       )
 
       await waitFor(() => {
@@ -487,12 +476,12 @@ describe('AcknowledgmentNamesTable', () => {
         <AcknowledgmentNamesTable
           {...defaultProps}
           acknowledgment={acknowledgment}
-        />
+        />,
       )
 
       expect(screen.getByTestId('table-body')).toHaveAttribute(
         'data-empty-content',
-        'No names added yet'
+        'No names added yet',
       )
       expect(screen.queryByTestId('table-row')).not.toBeInTheDocument()
     })
@@ -508,7 +497,7 @@ describe('AcknowledgmentNamesTable', () => {
         <AcknowledgmentNamesTable
           {...defaultProps}
           acknowledgment={acknowledgment}
-        />
+        />,
       )
 
       expect(useListState).toHaveBeenCalledWith({
@@ -525,7 +514,7 @@ describe('AcknowledgmentNamesTable', () => {
       render(<AcknowledgmentNamesTable {...defaultProps} />)
 
       const input = screen.getByRole('textbox')
-      
+
       // Rapid typing
       await user.clear(input)
       await user.type(input, 'A')
@@ -550,7 +539,7 @@ describe('AcknowledgmentNamesTable', () => {
         expect.objectContaining({
           id: '1',
           name: expect.any(String),
-        })
+        }),
       )
     })
 
@@ -578,7 +567,7 @@ describe('AcknowledgmentNamesTable', () => {
       render(<AcknowledgmentNamesTable {...defaultProps} />)
 
       const input = screen.getByRole('textbox')
-      
+
       // Clear and type new content
       await user.clear(input)
       await user.type(input, 'New')
@@ -592,7 +581,7 @@ describe('AcknowledgmentNamesTable', () => {
         expect.objectContaining({
           id: '1',
           name: expect.any(String),
-        })
+        }),
       )
     })
   })

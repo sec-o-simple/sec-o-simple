@@ -192,7 +192,6 @@ describe('ComponentList', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
     mockAddDataEntry.mockReturnValue(mockItem1)
   })
 

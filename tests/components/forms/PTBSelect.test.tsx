@@ -92,7 +92,6 @@ describe('PTBSelect', () => {
   ]
 
   beforeEach(() => {
-    vi.clearAllMocks()
     mockGetPTBsByCategory.mockReturnValue(mockPTBs)
   })
 

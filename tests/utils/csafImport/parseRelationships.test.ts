@@ -37,7 +37,6 @@ describe('parseRelationships', () => {
   const mockSosPTBs: TProductTreeBranch[] = [mockPTB1, mockPTB2]
 
   beforeEach(() => {
-    vi.clearAllMocks()
     consoleErrorSpy.mockClear()
   })
 

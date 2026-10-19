@@ -22,13 +22,15 @@ vi.mock('../../src/utils/useRelationships', () => ({
   }),
 }))
 
+vi.unmock('@/utils/useProductTreeBranch')
+
 describe('useProductTreeBranch - minimal test', () => {
   beforeEach(() => {
     vi.clearAllMocks()
 
     // The global setup.ts mocks useProductTreeBranch but provides different structure
     // We need to unmock it to access the real function
-    vi.unmock('@/utils/useProductTreeBranch')
+    vi.doUnmock('@/utils/useProductTreeBranch')
 
     // Minimal mock setup
     mockUseDocumentStore.mockImplementation((selector) => {
@@ -55,6 +57,7 @@ describe('useProductTreeBranch - minimal test', () => {
   })
 
   it('should provide expected function structure', () => {
+    vi.doUnmock('@/utils/useProductTreeBranch')
     const { result } = renderHook(() => useProductTreeBranch())
 
     expect(typeof result.current.findProductTreeBranch).toBe('function')

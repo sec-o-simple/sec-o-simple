@@ -268,47 +268,45 @@ import { useListValidation } from '../../../src/utils/validation/useListValidati
 import usePageVisit from '../../../src/utils/validation/usePageVisit'
 import useValidationStore from '../../../src/utils/validation/useValidationStore'
 
+const mockListState = vi.hoisted(() => ({
+  data: [] as TAcknowledgment[],
+  setData: vi.fn(),
+  addDataEntry: vi.fn(),
+  updateDataEntry: vi.fn(),
+  removeDataEntry: vi.fn(),
+  getId: vi.fn((entry: any) => entry.id),
+}))
+
+const mockListValidation = vi.hoisted(() => ({
+  messages: [],
+  hasErrors: false,
+  hasWarnings: false,
+  hasInfos: false,
+  errorMessages: [] as Array<{ path: string; message: string }>,
+  warningMessages: [],
+  infoMessages: [],
+  isTouched: false,
+  markFieldAsTouched: vi.fn(),
+}))
+
+const mockFieldValidation = vi.hoisted(() => ({
+  messages: [],
+  hasErrors: false,
+  hasWarnings: false,
+  hasInfos: false,
+  errorMessages: [],
+  warningMessages: [],
+  infoMessages: [],
+  isTouched: false,
+  markFieldAsTouched: vi.fn(),
+}))
+
+const mockValidationStore = vi.hoisted(() => ({
+  messages: [] as Array<{ path: string; message: string; severity: string }>,
+}))
+
 describe('Acknowledgments', () => {
-  const mockListState = vi.hoisted(() => ({
-    data: [] as TAcknowledgment[],
-    setData: vi.fn(),
-    addDataEntry: vi.fn(),
-    updateDataEntry: vi.fn(),
-    removeDataEntry: vi.fn(),
-    getId: vi.fn((entry: any) => entry.id),
-  }))
-
-  const mockListValidation = vi.hoisted(() => ({
-    messages: [],
-    hasErrors: false,
-    hasWarnings: false,
-    hasInfos: false,
-    errorMessages: [] as Array<{ path: string; message: string }>,
-    warningMessages: [],
-    infoMessages: [],
-    isTouched: false,
-    markFieldAsTouched: vi.fn(),
-  }))
-
-  const mockFieldValidation = vi.hoisted(() => ({
-    messages: [],
-    hasErrors: false,
-    hasWarnings: false,
-    hasInfos: false,
-    errorMessages: [],
-    warningMessages: [],
-    infoMessages: [],
-    isTouched: false,
-    markFieldAsTouched: vi.fn(),
-  }))
-
-  const mockValidationStore = vi.hoisted(() => ({
-    messages: [] as Array<{ path: string; message: string; severity: string }>,
-  }))
-
   beforeEach(() => {
-    vi.clearAllMocks()
-
     vi.mocked(useListState).mockReturnValue(mockListState)
     vi.mocked(useDocumentStoreUpdater).mockImplementation(() => {})
     vi.mocked(useFieldValidation).mockReturnValue(mockFieldValidation)

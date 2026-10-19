@@ -115,10 +115,6 @@ vi.mock('../../../src/routes/shared/NotesTemplates', () => ({
 }))
 
 describe('Document Information Notes', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   it('should render WizardStep with correct props', () => {
     render(<Notes />)
 

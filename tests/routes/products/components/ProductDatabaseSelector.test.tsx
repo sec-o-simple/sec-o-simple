@@ -254,8 +254,6 @@ describe('ProductDatabaseSelector', () => {
   const mockParseRelationships = vi.mocked(parseRelationships)
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     mockUseDatabaseClient.mockReturnValue({
       url: 'http://localhost:3000/ui',
       fetchVendors: mockFetchVendors,

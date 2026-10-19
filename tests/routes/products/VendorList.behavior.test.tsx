@@ -237,7 +237,6 @@ const vendor: TProductTreeBranch = {
 
 describe('VendorList behavior', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockGetPTBsByCategory.mockReturnValue([vendor])
     mockAddDataEntry.mockReturnValue({
       id: 'new-vendor-entry',

@@ -64,8 +64,6 @@ const mockUseDebounceInput = vi.mocked(useDebounceInput)
 
 describe('Autocomplete', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-
     mockUseFieldValidation.mockReturnValue({
       messages: [],
       errorMessages: [],

@@ -183,8 +183,6 @@ describe('FetchCVE', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     // Default mock for successful fetch
     mockFetch.mockResolvedValue({
       ok: true,

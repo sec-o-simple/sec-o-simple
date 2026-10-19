@@ -130,7 +130,6 @@ describe('NotesTemplates', () => {
   }
 
   beforeEach(() => {
-    vi.clearAllMocks()
     // Reset the useDisclosure mock to default state
     mockUseDisclosure.mockReturnValue({
       isOpen: false,

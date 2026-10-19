@@ -154,7 +154,6 @@ vi.mock('semver', () => ({
 
 describe('RevisionHistoryTable', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockListState.data = []
   })
 
@@ -350,7 +349,6 @@ describe('RevisionHistoryTable', () => {
 
 describe('RevisionHistoryTable – version number generator', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockListState.data = []
     capturedGenerator = undefined
   })

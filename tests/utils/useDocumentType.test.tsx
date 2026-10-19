@@ -12,8 +12,6 @@ describe('useDocumentType', () => {
   let mockSOSDocumentType: TSOSDocumentType
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     // Default document type
     mockSOSDocumentType = 'Software'
 

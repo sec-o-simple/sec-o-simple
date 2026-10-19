@@ -16,9 +16,7 @@ describe('useListValidation', () => {
   let mockMarkFieldAsTouched: Mock
   let mockFieldValidationResult: any
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-    
+  beforeEach(() => {   
     mockMarkFieldAsTouched = vi.fn()
     
     // Mock the field validation result

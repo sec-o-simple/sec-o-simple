@@ -114,7 +114,6 @@ vi.mock('../../../src/utils/csafImport/csafImport', () => ({
 
 describe('EditDocument', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockNavigate = vi.fn()
     mockIsSOSDraft = vi.fn()
     mockImportSOSDocument = vi.fn()
@@ -156,7 +155,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -187,7 +186,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [invalidJsonFile],
@@ -225,7 +224,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -260,7 +259,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -294,7 +293,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -329,7 +328,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -363,7 +362,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -403,7 +402,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -449,7 +448,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -579,7 +578,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -632,7 +631,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
@@ -671,7 +670,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader1 as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader1 as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [invalidFile],
@@ -705,7 +704,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader2 as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader2 as any})
     
     Object.defineProperty(fileInput2, 'files', {
       value: [validFile],
@@ -756,7 +755,7 @@ describe('EditDocument', () => {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.spyOn(window, 'FileReader').mockImplementation(() => mockFileReader as any)
+    vi.spyOn(window, 'FileReader').mockImplementation(function () { return mockFileReader as any})
     
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],

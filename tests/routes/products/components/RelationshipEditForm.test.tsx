@@ -303,10 +303,6 @@ const mockRelationship: TRelationship = {
 describe('RelationshipEditForm', () => {
   const mockOnSave = vi.fn()
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   const renderComponent = (props: Partial<RelationshipEditFormProps> = {}) => {
     const defaultProps: RelationshipEditFormProps = {
       onSave: mockOnSave,

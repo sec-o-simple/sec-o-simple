@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import type { TCSAFDocument } from '../../../src/utils/csafExport/csafExport'
 import {
   parseCSAFDocument,
@@ -107,10 +107,6 @@ vi.mock('../../../src/utils/csafImport/parseNote', () => ({
 }))
 
 describe('csafImport', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('parseCSAFDocument', () => {
     const createMockVulnProductGenerator = () => ({
       generateVulnerabilityProduct: vi.fn(() => ({ id: 'mock-vuln-product' })),

@@ -74,9 +74,6 @@ describe('main.tsx', () => {
   let mockGetElementById: any
 
   beforeEach(() => {
-    // Reset all mocks
-    vi.clearAllMocks()
-    
     // Mock DOM
     const mockElement = document.createElement('div')
     mockElement.id = 'root'

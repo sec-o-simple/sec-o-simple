@@ -1,18 +1,17 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { ValidationMessage } from '../../../src/utils/validation/useValidationStore'
 
+// The global setup.ts mocks usePathValidation directly, so we need to unmock it first
+vi.unmock('@/utils/validation/usePathValidation')
+
 describe('usePathValidation', () => {
   let mockMessages: ValidationMessage[]
   let usePathValidation: any
 
   beforeEach(async () => {
-    vi.clearAllMocks()
     vi.resetModules()
 
     mockMessages = []
-
-    // The global setup.ts mocks usePathValidation directly, so we need to unmock it first
-    vi.unmock('@/utils/validation/usePathValidation')
 
     // Mock the store that the real function will use
     vi.doMock('@/utils/validation/useValidationStore', () => {
@@ -57,9 +56,8 @@ describe('usePathValidation', () => {
     })
 
     // Import the function after mocking
-    const module = await import(
-      '../../../src/utils/validation/usePathValidation'
-    )
+    const module =
+      await import('../../../src/utils/validation/usePathValidation')
     usePathValidation = module.usePathValidation
   })
 

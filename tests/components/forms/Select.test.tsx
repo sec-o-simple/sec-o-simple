@@ -33,7 +33,6 @@ const mockUseFieldValidation = vi.mocked(useFieldValidation)
 
 describe('Select', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockUseFieldValidation.mockReturnValue({
       messages: [],
       errorMessages: [],

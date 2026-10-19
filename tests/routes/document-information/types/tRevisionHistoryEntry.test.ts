@@ -5,10 +5,6 @@ import {
 } from '../../../../src/routes/document-information/types/tRevisionHistoryEntry'
 
 describe('tRevisionHistoryEntry', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('getDefaultRevisionHistoryEntry', () => {
     it('should return a revision history entry object with all required properties', () => {
       const result = getDefaultRevisionHistoryEntry()

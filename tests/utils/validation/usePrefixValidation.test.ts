@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, Mock } from 'vitest'
+import { describe, it, expect, vi, Mock } from 'vitest'
 import { renderHook } from '@testing-library/react'
 import { usePrefixValidation } from '../../../src/utils/validation/usePrefixValidation'
 import { ValidationMessage } from '../../../src/utils/validation/useValidationStore'
@@ -12,10 +12,6 @@ import useValidationStore from '../../../src/utils/validation/useValidationStore
 
 describe('usePrefixValidation', () => {
   const mockUseValidationStore = useValidationStore as unknown as Mock
-
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
 
   describe('basic functionality', () => {
     it('should return hasErrors as false when there are no messages', () => {

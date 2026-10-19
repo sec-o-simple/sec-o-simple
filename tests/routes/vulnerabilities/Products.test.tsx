@@ -151,7 +151,6 @@ describe('Products', () => {
   let currentVulnerability: TVulnerability
 
   beforeEach(() => {
-    vi.clearAllMocks()
     mockProductVersions = [
       {
         id: 'version-1',

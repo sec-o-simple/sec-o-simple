@@ -282,8 +282,6 @@ describe('Remediations', () => {
   const mockSetData = vi.fn()
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
     mockUseListState.mockReturnValue({
       data: [mockRemediation],
       setData: mockSetData,

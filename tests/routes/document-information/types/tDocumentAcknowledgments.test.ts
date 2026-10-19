@@ -16,7 +16,6 @@ describe('tDocumentAcknowledgments', () => {
   let mockUid: any
 
   beforeEach(async () => {
-    vi.clearAllMocks()
     // Get the mocked uid function
     const uidModule = await import('uid')
     mockUid = vi.mocked(uidModule.uid)

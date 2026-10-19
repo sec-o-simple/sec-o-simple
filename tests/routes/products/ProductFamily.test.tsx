@@ -235,7 +235,6 @@ describe('ProductFamilyChains Component', () => {
 
 describe('ProductFamily Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockDisclosure.isOpen = false
   })
 

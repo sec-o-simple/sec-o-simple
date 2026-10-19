@@ -99,8 +99,6 @@ function vulnerability(id: string, title: string, products: any[] = []): TVulner
 
 describe('ProductMatrix', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
-
     mockProductVersions = [
       { id: 'version-1', name: 'Vendor Product 1.0' },
       { id: 'version-2', name: 'Vendor Product 2.0' },

@@ -71,9 +71,7 @@ describe('parseVulnerabilities', () => {
     status: 'known_affected'
   }
 
-  beforeEach(() => {
-    vi.clearAllMocks()
-    
+  beforeEach(() => {   
     mockGetDefaultVulnerability.mockReturnValue({ ...mockDefaultVulnerability })
     mockGetDefaultVulnerabilityScore.mockReturnValue({ ...mockDefaultScore })
     mockUseRemediationGenerator.mockReturnValue({ ...mockDefaultRemediation })

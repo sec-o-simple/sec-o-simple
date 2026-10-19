@@ -151,7 +151,6 @@ const softwareB: TProductTreeBranch = {
 
 describe('ProductList behavior', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockGetPTBsByCategory.mockReturnValue([softwareA, softwareB])
     mockUpdatePTB.mockImplementation(() => [
       {

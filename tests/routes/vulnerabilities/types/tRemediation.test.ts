@@ -17,10 +17,6 @@ const mockUseTemplate = vi.mocked(useTemplate)
 const mockUid = vi.mocked(uid)
 
 describe('tRemediation', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
   describe('remediationCategories', () => {
     it('should contain all expected remediation categories', () => {
       expect(remediationCategories).toEqual([

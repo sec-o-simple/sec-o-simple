@@ -27,6 +27,10 @@ vi.mock('../../src/utils/useRelationships', () => ({
   }),
 }))
 
+// The global setup.ts mocks useProductTreeBranch but provides different structure
+// We need to unmock it to access the real function
+vi.unmock('@/utils/useProductTreeBranch')
+
 // Mock console.warn to avoid noise in tests
 const mockConsoleWarn = vi.spyOn(console, 'warn').mockImplementation(() => {})
 
@@ -80,12 +84,6 @@ describe('useProductTreeBranch', () => {
   }[]
 
   beforeEach(() => {
-    vi.clearAllMocks()
-
-    // The global setup.ts mocks useProductTreeBranch but provides different structure
-    // We need to unmock it to access the real function
-    vi.unmock('@/utils/useProductTreeBranch')
-
     // Create test data structure
     const version1 = createMockVersion('version-1', 'Version 1.0')
     const version2 = createMockVersion('version-2', 'Version 2.0')
@@ -1129,9 +1127,7 @@ describe('useProductTreeBranch', () => {
       const ptbName = result.current.getPTBName(importedVersion)
 
       expect(ptbName.isReadonly).toBe(true)
-      expect(ptbName.readonlyReason).toBe(
-        'imported_with_identification_helper',
-      )
+      expect(ptbName.readonlyReason).toBe('imported_with_identification_helper')
       expect(ptbName.name).toBe('Vendor A Product A Version 1.0')
     })
 
