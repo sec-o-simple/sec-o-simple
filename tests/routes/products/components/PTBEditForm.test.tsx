@@ -253,7 +253,9 @@ describe('PTBCreateEditForm', () => {
     // Type should still be the initial 'Software' value
     const saveButton = screen.getByText('common.save')
     fireEvent.click(saveButton)
-    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ type: 'Software' }))
+    expect(onSave).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'Software' }),
+    )
   })
 
   it('should set family to null when autocomplete selection is cleared (key === null)', () => {
@@ -267,6 +269,8 @@ describe('PTBCreateEditForm', () => {
     // Call onSave and verify familyId is null
     const saveButton = screen.getByText('common.save')
     fireEvent.click(saveButton)
-    expect(onSave).toHaveBeenCalledWith(expect.objectContaining({ familyId: null }))
+    expect(onSave).toHaveBeenCalledWith(
+      expect.objectContaining({ familyId: null }),
+    )
   })
 })

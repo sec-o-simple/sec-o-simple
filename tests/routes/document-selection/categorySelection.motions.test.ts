@@ -4,7 +4,7 @@ import {
   MButtonLeftFinal,
   MButtonRightFinal,
   MButtonIconInitial,
-  MButtonIconFinal
+  MButtonIconFinal,
 } from '../../../src/routes/document-selection/categorySelection.motions'
 
 describe('categorySelection.motions', () => {
@@ -99,7 +99,9 @@ describe('categorySelection.motions', () => {
     })
 
     it('should be smaller than initial state', () => {
-      const initialSize = parseFloat(MButtonIconInitial.fontSize.replace('rem', ''))
+      const initialSize = parseFloat(
+        MButtonIconInitial.fontSize.replace('rem', ''),
+      )
       const finalSize = parseFloat(MButtonIconFinal.fontSize.replace('rem', ''))
       expect(finalSize).toBeLessThan(initialSize)
     })

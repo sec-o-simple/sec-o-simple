@@ -467,7 +467,9 @@ describe('csafImport', () => {
       )
 
       expect(result?.documentInformation.references).toHaveLength(1)
-      expect(result?.documentInformation.references[0].category).toBe('external')
+      expect(result?.documentInformation.references[0].category).toBe(
+        'external',
+      )
     })
   })
 
@@ -476,10 +478,7 @@ describe('csafImport', () => {
       const { importCSAFDocument } = useCSAFImport()
 
       const testDocument = {
-        document: [
-          { arbitrary: 'one' },
-          { arbitrary: 'two' },
-        ],
+        document: [{ arbitrary: 'one' }, { arbitrary: 'two' }],
       } as any
 
       const hiddenFields = importCSAFDocument(testDocument)

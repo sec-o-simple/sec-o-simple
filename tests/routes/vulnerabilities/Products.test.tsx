@@ -198,11 +198,12 @@ describe('Products', () => {
     )
 
     expect(
-      screen.getByText((_, element) =>
-        element?.tagName === 'P' &&
-        (element.textContent || '').includes(
-          'Tip: edit product selection across all vulnerabilities in one overview via',
-        ),
+      screen.getByText(
+        (_, element) =>
+          element?.tagName === 'P' &&
+          (element.textContent || '').includes(
+            'Tip: edit product selection across all vulnerabilities in one overview via',
+          ),
       ),
     ).toBeInTheDocument()
     expect(screen.getByText('Product Matrix')).toBeInTheDocument()
@@ -239,7 +240,9 @@ describe('Products', () => {
     expect(
       screen.getByTestId('status-radio-version-1-known_not_affected'),
     ).toBeInTheDocument()
-    expect(screen.getByTestId('status-radio-version-1-fixed')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('status-radio-version-1-fixed'),
+    ).toBeInTheDocument()
     expect(
       screen.getByTestId('status-radio-version-1-under_investigation'),
     ).toBeInTheDocument()
@@ -262,9 +265,7 @@ describe('Products', () => {
     expect(
       screen.getByTestId('status-radio-version-1-known_not_affected'),
     ).not.toBeChecked()
-    expect(
-      screen.getByTestId('status-radio-version-1-fixed'),
-    ).not.toBeChecked()
+    expect(screen.getByTestId('status-radio-version-1-fixed')).not.toBeChecked()
     expect(
       screen.getByTestId('status-radio-version-1-under_investigation'),
     ).not.toBeChecked()
@@ -297,7 +298,9 @@ describe('Products', () => {
       />,
     )
 
-    fireEvent.click(screen.getByTestId('status-radio-version-2-under_investigation'))
+    fireEvent.click(
+      screen.getByTestId('status-radio-version-2-under_investigation'),
+    )
 
     const updated = onChangeMock.mock.calls[0][0] as TVulnerability
     const version2Entries = updated.products.filter(
@@ -341,9 +344,7 @@ describe('Products', () => {
     expect(getMatrixCellStatus(updated, 'version-1')).toBe('known_affected')
     expect(getMatrixCellStatus(updated, 'version-2')).toBe('')
     expect(screen.queryByTestId('copy-source-select')).not.toBeInTheDocument()
-    expect(
-      screen.queryByTestId('toggle-copy-selection'),
-    ).toBeInTheDocument()
+    expect(screen.queryByTestId('toggle-copy-selection')).toBeInTheDocument()
   })
 
   it('updates radio selection immediately after copying', () => {
@@ -393,7 +394,9 @@ describe('Products', () => {
     const productA = within(screen.getByTestId('products-a'))
     const productB = within(screen.getByTestId('products-b'))
 
-    fireEvent.click(productA.getByTestId('status-radio-version-1-known_affected'))
+    fireEvent.click(
+      productA.getByTestId('status-radio-version-1-known_affected'),
+    )
     fireEvent.click(productB.getByTestId('status-radio-version-1-fixed'))
 
     expect(
@@ -518,6 +521,8 @@ describe('Products', () => {
       'href',
       '/products/management',
     )
-    expect(screen.queryByTestId('toggle-copy-selection')).not.toBeInTheDocument()
+    expect(
+      screen.queryByTestId('toggle-copy-selection'),
+    ).not.toBeInTheDocument()
   })
 })

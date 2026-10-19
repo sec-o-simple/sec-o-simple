@@ -30,11 +30,11 @@ describe('DeepPartial', () => {
     const partial: DeepPartial<TestObject> = {
       name: 'John',
       address: {
-        city: 'New York'
+        city: 'New York',
         // street and coordinates are optional
-      }
+      },
     }
-    
+
     expect(partial.name).toBe('John')
     expect(partial.address?.city).toBe('New York')
     expect(partial.address?.street).toBeUndefined()
@@ -44,32 +44,32 @@ describe('DeepPartial', () => {
     const partial: DeepPartial<TestObject> = {
       address: {
         coordinates: {
-          lat: 40.7128
+          lat: 40.7128,
           // lng is optional
-        }
-      }
+        },
+      },
     }
-    
+
     expect(partial.address?.coordinates?.lat).toBe(40.7128)
     expect(partial.address?.coordinates?.lng).toBeUndefined()
   })
 
   it('should work with arrays', () => {
     const partial: DeepPartial<TestObject> = {
-      hobbies: ['reading']
+      hobbies: ['reading'],
     }
-    
+
     expect(partial.hobbies).toEqual(['reading'])
   })
 
   it('should work with optional properties', () => {
     const partial: DeepPartial<TestObject> = {
       metadata: {
-        tags: ['important']
+        tags: ['important'],
         // created is optional
-      }
+      },
     }
-    
+
     expect(partial.metadata?.tags).toEqual(['important'])
     expect(partial.metadata?.created).toBeUndefined()
   })
@@ -78,11 +78,11 @@ describe('DeepPartial', () => {
     type PrimitivePartial = DeepPartial<string>
     type NumberPartial = DeepPartial<number>
     type BooleanPartial = DeepPartial<boolean>
-    
+
     const stringPartial: PrimitivePartial = 'test'
     const numberPartial: NumberPartial = 42
     const booleanPartial: BooleanPartial = true
-    
+
     expect(stringPartial).toBe('test')
     expect(numberPartial).toBe(42)
     expect(booleanPartial).toBe(true)
@@ -90,7 +90,7 @@ describe('DeepPartial', () => {
 
   it('should allow completely empty object', () => {
     const empty: DeepPartial<TestObject> = {}
-    
+
     expect(Object.keys(empty)).toHaveLength(0)
   })
 
@@ -99,12 +99,12 @@ describe('DeepPartial', () => {
       name: 'Alice',
       age: 30,
       address: {
-        street: '123 Main St'
+        street: '123 Main St',
         // city and coordinates omitted
-      }
+      },
       // hobbies and metadata omitted
     }
-    
+
     expect(mixed.name).toBe('Alice')
     expect(mixed.age).toBe(30)
     expect(mixed.address?.street).toBe('123 Main St')

@@ -28,7 +28,9 @@ export function compareCSAFExport(downloadPath, expectedPath) {
           if (!idMapping.has(sanitized.product_reference)) {
             idMapping.set(sanitized.product_reference, `product_${idCounter++}`)
           }
-          sanitized.product_reference = idMapping.get(sanitized.product_reference)
+          sanitized.product_reference = idMapping.get(
+            sanitized.product_reference,
+          )
         }
 
         // Handle relates_to_product_reference fields

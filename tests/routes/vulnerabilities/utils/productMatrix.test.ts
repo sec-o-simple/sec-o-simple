@@ -8,7 +8,9 @@ import {
   updateVulnerabilityProductStatus,
 } from '../../../../src/routes/vulnerabilities/utils/productMatrix'
 
-function createVulnerability(overrides: Partial<TVulnerability> = {}): TVulnerability {
+function createVulnerability(
+  overrides: Partial<TVulnerability> = {},
+): TVulnerability {
   return {
     id: 'v-1',
     title: 'Vuln 1',
@@ -74,7 +76,11 @@ describe('productMatrix utils', () => {
       ],
     })
 
-    const updated = updateVulnerabilityProductStatus(vulnerability, 'product-a', '')
+    const updated = updateVulnerabilityProductStatus(
+      vulnerability,
+      'product-a',
+      '',
+    )
 
     expect(updated.products).toEqual([
       { id: 'p-2', productId: 'product-b', status: 'fixed' },
@@ -89,7 +95,9 @@ describe('productMatrix utils', () => {
       }),
       createVulnerability({
         id: 'v-2',
-        products: [{ id: 'p-2', productId: 'product-a', status: 'known_affected' }],
+        products: [
+          { id: 'p-2', productId: 'product-a', status: 'known_affected' },
+        ],
       }),
     ]
 

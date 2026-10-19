@@ -34,7 +34,7 @@ vi.mock('@heroui/react', () => ({
     <div data-testid="button-group">{children}</div>
   )),
   Button: vi.fn(({ children, onPress, color, size }: any) => (
-    <button 
+    <button
       onClick={onPress}
       data-testid="language-button"
       data-color={color}
@@ -46,22 +46,26 @@ vi.mock('@heroui/react', () => ({
 }))
 
 vi.mock('@heroui/select', () => ({
-  Select: vi.fn(({ children, onChange, selectedKeys, 'aria-label': ariaLabel }: any) => (
-    <div
-      data-testid="language-select"
-      aria-label={ariaLabel}
-      data-selected={selectedKeys?.[0] ?? ''}
-    >
-      <button
-        data-testid="select-change-trigger"
-        onClick={() => onChange({ target: { value: 'fr' } })}
+  Select: vi.fn(
+    ({ children, onChange, selectedKeys, 'aria-label': ariaLabel }: any) => (
+      <div
+        data-testid="language-select"
+        aria-label={ariaLabel}
+        data-selected={selectedKeys?.[0] ?? ''}
       >
-        change-to-fr
-      </button>
-      {children}
-    </div>
+        <button
+          data-testid="select-change-trigger"
+          onClick={() => onChange({ target: { value: 'fr' } })}
+        >
+          change-to-fr
+        </button>
+        {children}
+      </div>
+    ),
+  ),
+  SelectItem: vi.fn(({ children }: any) => (
+    <span data-testid="select-item">{children}</span>
   )),
-  SelectItem: vi.fn(({ children }: any) => <span data-testid="select-item">{children}</span>),
 }))
 
 // Mock localStorage
@@ -81,13 +85,13 @@ describe('LanguageSwitcher', () => {
 
   it('should render without crashing', () => {
     render(<LanguageSwitcher />)
-    
+
     expect(screen.getByTestId('button-group')).toBeInTheDocument()
   })
 
   it('should render both language buttons', () => {
     render(<LanguageSwitcher />)
-    
+
     expect(screen.getByText('EN')).toBeInTheDocument()
     expect(screen.getByText('DE')).toBeInTheDocument()
   })
@@ -95,11 +99,11 @@ describe('LanguageSwitcher', () => {
   it('should highlight current language button', () => {
     mockI18n.language = 'en'
     render(<LanguageSwitcher />)
-    
+
     const buttons = screen.getAllByTestId('language-button')
-    const enButton = buttons.find(button => button.textContent === 'EN')
-    const deButton = buttons.find(button => button.textContent === 'DE')
-    
+    const enButton = buttons.find((button) => button.textContent === 'EN')
+    const deButton = buttons.find((button) => button.textContent === 'DE')
+
     expect(enButton).toHaveAttribute('data-color', 'primary')
     expect(deButton).toHaveAttribute('data-color', 'secondary')
   })
@@ -107,40 +111,40 @@ describe('LanguageSwitcher', () => {
   it('should highlight German when German is selected', () => {
     mockI18n.language = 'de'
     render(<LanguageSwitcher />)
-    
+
     const buttons = screen.getAllByTestId('language-button')
-    const enButton = buttons.find(button => button.textContent === 'EN')
-    const deButton = buttons.find(button => button.textContent === 'DE')
-    
+    const enButton = buttons.find((button) => button.textContent === 'EN')
+    const deButton = buttons.find((button) => button.textContent === 'DE')
+
     expect(enButton).toHaveAttribute('data-color', 'secondary')
     expect(deButton).toHaveAttribute('data-color', 'primary')
   })
 
   it('should call changeLanguage when English button is clicked', () => {
     render(<LanguageSwitcher />)
-    
+
     const enButton = screen.getByText('EN')
     fireEvent.click(enButton)
-    
+
     expect(mockChangeLanguage).toHaveBeenCalledWith('en')
     expect(mockSetItem).toHaveBeenCalledWith('i18nextLng', 'en')
   })
 
   it('should call changeLanguage when German button is clicked', () => {
     render(<LanguageSwitcher />)
-    
+
     const deButton = screen.getByText('DE')
     fireEvent.click(deButton)
-    
+
     expect(mockChangeLanguage).toHaveBeenCalledWith('de')
     expect(mockSetItem).toHaveBeenCalledWith('i18nextLng', 'de')
   })
 
   it('should have correct button size', () => {
     render(<LanguageSwitcher />)
-    
+
     const buttons = screen.getAllByTestId('language-button')
-    buttons.forEach(button => {
+    buttons.forEach((button) => {
       expect(button).toHaveAttribute('data-size', 'sm')
     })
   })

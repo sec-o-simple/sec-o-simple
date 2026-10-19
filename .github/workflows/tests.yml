@@ -18,23 +18,23 @@ jobs:
       - uses: actions/checkout@v6
         with:
           submodules: 'recursive'
-      
+
       - uses: actions/setup-node@v6
         with:
           node-version: '24'
           cache: 'npm'
-      
+
       - name: Install dependencies
         run: npm ci
-      
+
       - name: Run tests
         if: github.event_name == 'push'
         run: npm test
-      
+
       - name: Run tests with coverage
         if: github.event_name == 'pull_request'
         run: npm run test:coverage
-      
+
       - name: Coverage report
         uses: davelosert/vitest-coverage-report-action@v2
         if: github.event_name == 'pull_request'
@@ -42,7 +42,7 @@ jobs:
           json-summary-path: './coverage/coverage-summary.json'
           json-final-path: './coverage/coverage-final.json'
           vite-config-path: './vite.config.ts'
-      
+
       - name: Upload coverage artifacts
         uses: actions/upload-artifact@v7
         if: github.event_name == 'pull_request'

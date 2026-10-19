@@ -16,17 +16,23 @@ vi.mock('../../../src/utils/validation/useFieldValidation', () => ({
 
 // Mock HeroUI Select component
 vi.mock('@heroui/select', () => ({
-  Select: vi.fn(({ children, errorMessage, isInvalid, classNames, ...props }: any) => (
-    <select 
-      {...props} 
-      data-testid="hero-select"
-      data-error-message={errorMessage || ''}
-      data-is-invalid={isInvalid?.toString() || 'false'}
-      data-classnames={typeof classNames === 'object' ? JSON.stringify(classNames) : classNames}
-    >
-      {children}
-    </select>
-  )),
+  Select: vi.fn(
+    ({ children, errorMessage, isInvalid, classNames, ...props }: any) => (
+      <select
+        {...props}
+        data-testid="hero-select"
+        data-error-message={errorMessage || ''}
+        data-is-invalid={isInvalid?.toString() || 'false'}
+        data-classnames={
+          typeof classNames === 'object'
+            ? JSON.stringify(classNames)
+            : classNames
+        }
+      >
+        {children}
+      </select>
+    ),
+  ),
 }))
 
 const mockUseFieldValidation = vi.mocked(useFieldValidation)
@@ -48,8 +54,12 @@ describe('Select', () => {
   })
 
   it('should render with default props', () => {
-    const { container } = render(<Select><option>Test</option></Select>)
-    
+    const { container } = render(
+      <Select>
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
     expect(select).toBeInTheDocument()
     expect(select).toHaveAttribute('variant', 'bordered')
@@ -67,9 +77,9 @@ describe('Select', () => {
         labelPlacement="inside"
       >
         <option>Test</option>
-      </Select>
+      </Select>,
     )
-    
+
     const select = screen.getByTestId('hero-select')
     expect(select).toHaveAttribute('label', 'Custom Label')
     expect(select).toHaveAttribute('placeholder', 'Custom placeholder')
@@ -78,23 +88,34 @@ describe('Select', () => {
   })
 
   it('should apply custom classNames for trigger', () => {
-    render(<Select><option>Test</option></Select>)
-    
+    render(
+      <Select>
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
-    expect(select).toHaveAttribute('data-classnames', JSON.stringify({
-      trigger: 'border-1 shadow-none',
-    }))
+    expect(select).toHaveAttribute(
+      'data-classnames',
+      JSON.stringify({
+        trigger: 'border-1 shadow-none',
+      }),
+    )
   })
 
   it('should handle onChange events', async () => {
     const user = userEvent.setup()
     const onChange = vi.fn()
-    
-    render(<Select onChange={onChange}><option>Test</option></Select>)
-    
+
+    render(
+      <Select onChange={onChange}>
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
     fireEvent.change(select, { target: { value: 'option1' } })
-    
+
     expect(onChange).toHaveBeenCalled()
   })
 
@@ -111,14 +132,18 @@ describe('Select', () => {
       isTouched: false,
       markFieldAsTouched: mockMarkFieldAsTouched,
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
-    render(<Select csafPath="test.field"><option>Test</option></Select>)
-    
+
+    render(
+      <Select csafPath="test.field">
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
     fireEvent.change(select, { target: { value: 'option1' } })
-    
+
     expect(mockMarkFieldAsTouched).toHaveBeenCalledWith('test.field')
   })
 
@@ -134,11 +159,15 @@ describe('Select', () => {
       isTouched: true,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
-    render(<Select csafPath="test.field"><option>Test</option></Select>)
-    
+
+    render(
+      <Select csafPath="test.field">
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
     expect(select).toHaveAttribute('data-error-message', 'Field is required')
     expect(select).toHaveAttribute('data-is-invalid', 'true')
@@ -156,11 +185,15 @@ describe('Select', () => {
       isTouched: false,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
-    render(<Select csafPath="test.field" isTouched><option>Test</option></Select>)
-    
+
+    render(
+      <Select csafPath="test.field" isTouched>
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
     expect(select).toHaveAttribute('data-error-message', 'Invalid selection')
     expect(select).toHaveAttribute('data-is-invalid', 'true')
@@ -178,11 +211,15 @@ describe('Select', () => {
       isTouched: false,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
-    render(<Select csafPath="test.field"><option>Test</option></Select>)
-    
+
+    render(
+      <Select csafPath="test.field">
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
     expect(select).toHaveAttribute('data-error-message', 'Field is required')
     expect(select).toHaveAttribute('data-is-invalid', 'false')
@@ -192,11 +229,11 @@ describe('Select', () => {
     const mockValidation = {
       messages: [
         { message: 'Field is required', severity: 'error' },
-        { message: 'Invalid format', severity: 'error' }
+        { message: 'Invalid format', severity: 'error' },
       ],
       errorMessages: [
         { message: 'Field is required' },
-        { message: 'Invalid format' }
+        { message: 'Invalid format' },
       ],
       warningMessages: [],
       infoMessages: [],
@@ -206,23 +243,34 @@ describe('Select', () => {
       isTouched: true,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
-    render(<Select csafPath="test.field"><option>Test</option></Select>)
-    
+
+    render(
+      <Select csafPath="test.field">
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
-    expect(select).toHaveAttribute('data-error-message', 'Field is required, Invalid format')
+    expect(select).toHaveAttribute(
+      'data-error-message',
+      'Field is required, Invalid format',
+    )
   })
 
   it('should work without csafPath (no validation)', () => {
     const onChange = vi.fn()
-    
-    render(<Select onChange={onChange}><option>Test</option></Select>)
-    
+
+    render(
+      <Select onChange={onChange}>
+        <option>Test</option>
+      </Select>,
+    )
+
     const select = screen.getByTestId('hero-select')
     fireEvent.change(select, { target: { value: 'option1' } })
-    
+
     expect(onChange).toHaveBeenCalled()
     expect(select).toHaveAttribute('data-error-message', '')
     expect(select).toHaveAttribute('data-is-invalid', 'false')
@@ -230,16 +278,11 @@ describe('Select', () => {
 
   it('should pass through other props to HeroUI Select', () => {
     render(
-      <Select
-        disabled
-        required
-        name="test-select"
-        data-testid="custom-select"
-      >
+      <Select disabled required name="test-select" data-testid="custom-select">
         <option>Test</option>
-      </Select>
+      </Select>,
     )
-    
+
     const select = screen.getByTestId('hero-select')
     expect(select).toHaveAttribute('disabled', '')
     expect(select).toHaveAttribute('required', '')
@@ -248,7 +291,11 @@ describe('Select', () => {
 
   describe('Snapshots', () => {
     it('should render default state', () => {
-      const { container } = render(<Select><option>Test</option></Select>)
+      const { container } = render(
+        <Select>
+          <option>Test</option>
+        </Select>,
+      )
       expect(container.firstChild).toMatchSnapshot()
     })
 
@@ -264,15 +311,23 @@ describe('Select', () => {
         isTouched: true,
         markFieldAsTouched: vi.fn(),
       }
-      
+
       mockUseFieldValidation.mockReturnValue(mockValidation)
-      
-      const { container } = render(<Select csafPath="test.field"><option>Test</option></Select>)
+
+      const { container } = render(
+        <Select csafPath="test.field">
+          <option>Test</option>
+        </Select>,
+      )
       expect(container.firstChild).toMatchSnapshot()
     })
 
     it('should render with custom variant', () => {
-      const { container } = render(<Select variant="flat"><option>Test</option></Select>)
+      const { container } = render(
+        <Select variant="flat">
+          <option>Test</option>
+        </Select>,
+      )
       expect(container.firstChild).toMatchSnapshot()
     })
   })

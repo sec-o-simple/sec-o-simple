@@ -9,7 +9,9 @@ import { TProductTreeBranch } from '@/routes/products/types/tProductTreeBranch'
 
 // Import the hook to test
 vi.unmock('@/routes/vulnerabilities/utils/useProducts')
-import useProducts, { TProductDetails } from '@/routes/vulnerabilities/utils/useProducts'
+import useProducts, {
+  TProductDetails,
+} from '@/routes/vulnerabilities/utils/useProducts'
 
 describe('useProducts', () => {
   // Mock store function
@@ -318,7 +320,9 @@ describe('useProducts', () => {
 
       const { result } = renderHook(() => useProducts())
 
-      expect(result.current.getProductVersions('non-existent-product')).toBeUndefined()
+      expect(
+        result.current.getProductVersions('non-existent-product'),
+      ).toBeUndefined()
     })
 
     it('should return product versions when product is found at top level', () => {
@@ -548,7 +552,9 @@ describe('useProducts', () => {
       const { result } = renderHook(() => useProducts())
 
       // Should return the first match
-      expect(result.current.getProductVersions('product-1')).toEqual(firstVersions)
+      expect(result.current.getProductVersions('product-1')).toEqual(
+        firstVersions,
+      )
     })
   })
 
@@ -661,12 +667,12 @@ describe('useProducts', () => {
       const { result } = renderHook(() => useProducts())
 
       const details = result.current.productDetails[0]
-      
+
       // Type checking
       expect(typeof details.vendorName).toBe('string')
       expect(typeof details.productName).toBe('string')
       expect(typeof details.productId).toBe('string')
-      
+
       // Value checking
       expect(details.vendorName).toBe('Acme Corp')
       expect(details.productName).toBe('Super App')
@@ -705,15 +711,15 @@ describe('useProducts', () => {
       const { result, rerender } = renderHook(() => useProducts())
 
       const firstInterface = result.current
-      
+
       rerender()
-      
+
       const secondInterface = result.current
 
       // Same function references should be maintained
       expect(typeof firstInterface.getProductVersions).toBe('function')
       expect(typeof secondInterface.getProductVersions).toBe('function')
-      
+
       // Product details should be consistent (empty in this case)
       expect(firstInterface.productDetails).toEqual([])
       expect(secondInterface.productDetails).toEqual([])

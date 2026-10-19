@@ -110,24 +110,20 @@ vi.mock('@heroui/tabs', () => ({
     <div {...props}>
       {React.Children.map(children, (child, index) => {
         if (React.isValidElement(child)) {
-          const isSelected = selectedKey ? child.props.key === selectedKey : index === 0
-          return React.cloneElement(child, { 
-            ...child.props, 
+          const isSelected = selectedKey
+            ? child.props.key === selectedKey
+            : index === 0
+          return React.cloneElement(child, {
+            ...child.props,
             isSelected,
-            onSelect: () => onSelectionChange?.(child.props.key)
+            onSelect: () => onSelectionChange?.(child.props.key),
           })
         }
         return child
       })}
     </div>
   ),
-  Tab: ({
-    children,
-    title,
-    key,
-    isSelected = false,
-    onSelect,
-  }: any) => (
+  Tab: ({ children, title, key, isSelected = false, onSelect }: any) => (
     <div key={key}>
       <div onClick={onSelect}>{title}</div>
       {isSelected && <div>{children}</div>}

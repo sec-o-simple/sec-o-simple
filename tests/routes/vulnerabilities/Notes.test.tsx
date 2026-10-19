@@ -7,7 +7,7 @@ import { TVulnerability } from '../../../src/routes/vulnerabilities/types/tVulne
 vi.mock('@/components/forms/VSplit', () => ({
   default: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="vsplit">{children}</div>
-  )
+  ),
 }))
 
 vi.mock('@/utils/useListState', () => ({
@@ -15,33 +15,45 @@ vi.mock('@/utils/useListState', () => ({
     data: [],
     setData: vi.fn(),
     // Add other methods as needed
-  }))
+  })),
 }))
 
 vi.mock('@/utils/validation/useListValidation', () => ({
   useListValidation: vi.fn(() => ({
     hasErrors: false,
     isTouched: false,
-    errorMessages: []
-  }))
+    errorMessages: [],
+  })),
 }))
 
 vi.mock('@heroui/react', () => ({
-  Alert: ({ children, color }: { children: React.ReactNode; color: string }) => (
+  Alert: ({
+    children,
+    color,
+  }: {
+    children: React.ReactNode
+    color: string
+  }) => (
     <div data-testid="alert" data-color={color}>
       {children}
     </div>
-  )
+  ),
 }))
 
 vi.mock('../../../src/routes/shared/NotesList', () => ({
-  NotesList: ({ isTouched, csafPath }: { isTouched: boolean; csafPath: string }) => (
+  NotesList: ({
+    isTouched,
+    csafPath,
+  }: {
+    isTouched: boolean
+    csafPath: string
+  }) => (
     <div data-testid="notes-list" data-touched={isTouched} data-path={csafPath}>
       Notes List Component
     </div>
   ),
   useVulnerabilityNoteGenerator: vi.fn(() => vi.fn()),
-  TNote: {}
+  TNote: {},
 }))
 
 vi.mock('../../../src/routes/shared/NotesTemplates', () => ({
@@ -49,7 +61,7 @@ vi.mock('../../../src/routes/shared/NotesTemplates', () => ({
     <div data-testid="notes-templates" data-template-path={templatePath}>
       Notes Templates Component
     </div>
-  )
+  ),
 }))
 
 describe('Vulnerabilities Notes', () => {
@@ -60,7 +72,7 @@ describe('Vulnerabilities Notes', () => {
     notes: [],
     products: [],
     remediations: [],
-    scores: []
+    scores: [],
   }
 
   const mockOnChange = vi.fn()
@@ -75,7 +87,7 @@ describe('Vulnerabilities Notes', () => {
         vulnerability={mockVulnerability}
         vulnerabilityIndex={0}
         onChange={mockOnChange}
-      />
+      />,
     )
 
     expect(screen.getByTestId('vsplit')).toBeInTheDocument()
@@ -89,11 +101,14 @@ describe('Vulnerabilities Notes', () => {
         vulnerability={mockVulnerability}
         vulnerabilityIndex={0}
         onChange={mockOnChange}
-      />
+      />,
     )
 
     const notesTemplates = screen.getByTestId('notes-templates')
-    expect(notesTemplates).toHaveAttribute('data-template-path', 'vulnerabilities.notes_templates')
+    expect(notesTemplates).toHaveAttribute(
+      'data-template-path',
+      'vulnerabilities.notes_templates',
+    )
   })
 
   it('should pass correct props to NotesList', () => {
@@ -103,7 +118,7 @@ describe('Vulnerabilities Notes', () => {
         vulnerabilityIndex={0}
         onChange={mockOnChange}
         isTouched={true}
-      />
+      />,
     )
 
     const notesList = screen.getByTestId('notes-list')
@@ -118,7 +133,7 @@ describe('Vulnerabilities Notes', () => {
         vulnerabilityIndex={0}
         onChange={mockOnChange}
         isTouched={false}
-      />
+      />,
     )
 
     const notesList = screen.getByTestId('notes-list')
@@ -131,7 +146,7 @@ describe('Vulnerabilities Notes', () => {
         vulnerability={mockVulnerability}
         vulnerabilityIndex={5}
         onChange={mockOnChange}
-      />
+      />,
     )
 
     const notesList = screen.getByTestId('notes-list')
@@ -144,7 +159,7 @@ describe('Vulnerabilities Notes', () => {
         vulnerability={mockVulnerability}
         vulnerabilityIndex={0}
         onChange={mockOnChange}
-      />
+      />,
     )
 
     expect(screen.queryByTestId('alert')).not.toBeInTheDocument()

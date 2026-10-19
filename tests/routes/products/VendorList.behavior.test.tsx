@@ -108,7 +108,13 @@ vi.mock('../../../src/routes/products/components/ProductFamilyChip', () => ({
 }))
 
 vi.mock('../../../src/routes/products/components/ProductCard', () => ({
-  default: ({ product, onEdit, onEditVersion, onAddVersion, onDeleteVersion }: any) => (
+  default: ({
+    product,
+    onEdit,
+    onEditVersion,
+    onAddVersion,
+    onDeleteVersion,
+  }: any) => (
     <div data-testid={`product-${product.id}`}>
       <button data-testid={`edit-product-${product.id}`} onClick={onEdit}>
         edit product
@@ -127,7 +133,10 @@ vi.mock('../../../src/routes/products/components/ProductCard', () => ({
       >
         edit version
       </button>
-      <button data-testid={`add-version-${product.id}`} onClick={() => onAddVersion?.()}>
+      <button
+        data-testid={`add-version-${product.id}`}
+        onClick={() => onAddVersion?.()}
+      >
         add version
       </button>
       <button
@@ -163,8 +172,13 @@ vi.mock('@heroui/modal', async () => {
   const React = await vi.importActual<typeof import('react')>('react')
 
   return {
-    Modal: ({ isOpen, children }: { isOpen: boolean; children: React.ReactNode }) =>
-      isOpen ? <div data-testid="modal">{children}</div> : null,
+    Modal: ({
+      isOpen,
+      children,
+    }: {
+      isOpen: boolean
+      children: React.ReactNode
+    }) => (isOpen ? <div data-testid="modal">{children}</div> : null),
     useDisclosure: () => {
       const [isOpen, setIsOpen] = React.useState(false)
       return {

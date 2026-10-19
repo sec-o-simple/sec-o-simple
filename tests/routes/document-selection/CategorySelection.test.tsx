@@ -9,25 +9,28 @@ vi.mock('react-i18next', () => ({
     t: (key: string) => {
       const translations: Record<string, string> = {
         'documentSelection.selectType': 'Select Document Type',
-        'documentSelection.selectTypeDescription': 'Choose how you want to proceed',
+        'documentSelection.selectTypeDescription':
+          'Choose how you want to proceed',
         'documentSelection.newDocument': 'New Document',
-        'documentSelection.existingDocument': 'Existing Document'
+        'documentSelection.existingDocument': 'Existing Document',
       }
       return translations[key] || key
-    }
-  })
+    },
+  }),
 }))
 
 // Mock motion/react
 vi.mock('motion/react', () => ({
-  AnimatePresence: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
   motion: {
     div: ({ children, onClick, className, ...props }: any) => (
       <div onClick={onClick} className={className} {...props}>
         {children}
       </div>
-    )
-  }
+    ),
+  },
 }))
 
 // Mock FontAwesome
@@ -36,12 +39,12 @@ vi.mock('@fortawesome/react-fontawesome', () => ({
     <span data-testid="fontawesome-icon" className={className}>
       {icon.iconName || 'icon'}
     </span>
-  )
+  ),
 }))
 
 vi.mock('@fortawesome/free-solid-svg-icons', () => ({
   faPlus: { iconName: 'plus' },
-  faPenToSquare: { iconName: 'pen-to-square' }
+  faPenToSquare: { iconName: 'pen-to-square' },
 }))
 
 describe('CategorySelection', () => {
@@ -53,25 +56,19 @@ describe('CategorySelection', () => {
 
   it('should render with selectNewOrOpen state', () => {
     render(
-      <CategorySelection
-        state="selectNewOrOpen"
-        onSelect={mockOnSelect}
-      />
+      <CategorySelection state="selectNewOrOpen" onSelect={mockOnSelect} />,
     )
 
     expect(screen.getByText('Select Document Type')).toBeInTheDocument()
-    expect(screen.getByText('Choose how you want to proceed')).toBeInTheDocument()
+    expect(
+      screen.getByText('Choose how you want to proceed'),
+    ).toBeInTheDocument()
     expect(screen.getByText('New Document')).toBeInTheDocument()
     expect(screen.getByText('Existing Document')).toBeInTheDocument()
   })
 
   it('should render with createDocument state', () => {
-    render(
-      <CategorySelection
-        state="createDocument"
-        onSelect={mockOnSelect}
-      />
-    )
+    render(<CategorySelection state="createDocument" onSelect={mockOnSelect} />)
 
     expect(screen.getByText('New Document')).toBeInTheDocument()
     expect(screen.getByText('Existing Document')).toBeInTheDocument()
@@ -80,12 +77,7 @@ describe('CategorySelection', () => {
   })
 
   it('should render with editDocument state', () => {
-    render(
-      <CategorySelection
-        state="editDocument"
-        onSelect={mockOnSelect}
-      />
-    )
+    render(<CategorySelection state="editDocument" onSelect={mockOnSelect} />)
 
     expect(screen.getByText('New Document')).toBeInTheDocument()
     expect(screen.getByText('Existing Document')).toBeInTheDocument()
@@ -93,10 +85,7 @@ describe('CategorySelection', () => {
 
   it('should call onSelect when New Document button is clicked', () => {
     render(
-      <CategorySelection
-        state="selectNewOrOpen"
-        onSelect={mockOnSelect}
-      />
+      <CategorySelection state="selectNewOrOpen" onSelect={mockOnSelect} />,
     )
 
     fireEvent.click(screen.getByText('New Document'))
@@ -105,10 +94,7 @@ describe('CategorySelection', () => {
 
   it('should call onSelect when Existing Document button is clicked', () => {
     render(
-      <CategorySelection
-        state="selectNewOrOpen"
-        onSelect={mockOnSelect}
-      />
+      <CategorySelection state="selectNewOrOpen" onSelect={mockOnSelect} />,
     )
 
     fireEvent.click(screen.getByText('Existing Document'))
@@ -116,11 +102,7 @@ describe('CategorySelection', () => {
   })
 
   it('should not call onSelect when onSelect prop is not provided', () => {
-    render(
-      <CategorySelection
-        state="selectNewOrOpen"
-      />
-    )
+    render(<CategorySelection state="selectNewOrOpen" />)
 
     fireEvent.click(screen.getByText('New Document'))
     // Should not throw error
@@ -129,10 +111,7 @@ describe('CategorySelection', () => {
 
   it('should display FontAwesome icons', () => {
     render(
-      <CategorySelection
-        state="selectNewOrOpen"
-        onSelect={mockOnSelect}
-      />
+      <CategorySelection state="selectNewOrOpen" onSelect={mockOnSelect} />,
     )
 
     const icons = screen.getAllByTestId('fontawesome-icon')
@@ -142,12 +121,7 @@ describe('CategorySelection', () => {
   })
 
   it('should apply active styling for createDocument state', () => {
-    render(
-      <CategorySelection
-        state="createDocument"
-        onSelect={mockOnSelect}
-      />
-    )
+    render(<CategorySelection state="createDocument" onSelect={mockOnSelect} />)
 
     // Find the button container that contains "New Document" text
     const newDocumentButton = screen.getByText('New Document')
@@ -156,12 +130,7 @@ describe('CategorySelection', () => {
   })
 
   it('should apply active styling for editDocument state', () => {
-    render(
-      <CategorySelection
-        state="editDocument"
-        onSelect={mockOnSelect}
-      />
-    )
+    render(<CategorySelection state="editDocument" onSelect={mockOnSelect} />)
 
     // Find the button container that contains "Existing Document" text
     const existingDocumentButton = screen.getByText('Existing Document')

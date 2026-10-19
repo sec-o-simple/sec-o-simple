@@ -251,7 +251,7 @@ describe('useDocumentType', () => {
     it('should ensure non-software types return false for hasSoftware', () => {
       const nonSoftwareTypes: TSOSDocumentType[] = [
         // No valid types currently return false for hasSoftware based on implementation
-        // All valid types (Import, VexImport, Software, VexSoftware, HardwareSoftware, VexHardwareSoftware) 
+        // All valid types (Import, VexImport, Software, VexSoftware, HardwareSoftware, VexHardwareSoftware)
         // are included in the hasSoftware array
       ]
 
@@ -263,10 +263,7 @@ describe('useDocumentType', () => {
     })
 
     it('should ensure non-hardware types return false for hasHardware', () => {
-      const nonHardwareTypes: TSOSDocumentType[] = [
-        'Software',
-        'VexSoftware',
-      ]
+      const nonHardwareTypes: TSOSDocumentType[] = ['Software', 'VexSoftware']
 
       nonHardwareTypes.forEach((type) => {
         mockSOSDocumentType = type

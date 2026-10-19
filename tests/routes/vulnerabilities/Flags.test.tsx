@@ -25,7 +25,13 @@ vi.mock('../../../src/utils/useListState', () => ({
 // Mock useVulnerabilityFlagGenerator
 vi.mock('../../../src/routes/vulnerabilities/types/tVulnerabilityFlag', () => ({
   useVulnerabilityFlagGenerator: () => mockUseVulnerabilityFlagGenerator(),
-  flagLabels: ['component_not_present', 'inline_mitigations_already_exist', 'vulnerable_code_cannot_be_controlled_by_adversary', 'vulnerable_code_not_in_execute_path', 'vulnerable_code_not_present'],
+  flagLabels: [
+    'component_not_present',
+    'inline_mitigations_already_exist',
+    'vulnerable_code_cannot_be_controlled_by_adversary',
+    'vulnerable_code_not_in_execute_path',
+    'vulnerable_code_not_present',
+  ],
 }))
 
 // Mock useFieldValidation
@@ -57,31 +63,42 @@ vi.mock('../../../src/components/forms/AddItemButton', () => ({
 }))
 
 // Mock VulnerabilityFlag component
-vi.mock('../../../src/routes/vulnerabilities/components/VulnerabilityFlag', () => ({
-  default: ({ vulnerabilityFlag, csafPath, onChange, onDelete, ...props }: any) => (
-    <div
-      data-testid="vulnerability-flag"
-      data-flag-id={vulnerabilityFlag.id}
-      data-csaf-path={csafPath}
-      data-flag-label={vulnerabilityFlag.label}
-      {...props}
-    >
-      <span>{vulnerabilityFlag.label}</span>
-      <button
-        data-testid={`change-flag-${vulnerabilityFlag.id}`}
-        onClick={() => onChange?.({ ...vulnerabilityFlag, label: 'changed_label' })}
+vi.mock(
+  '../../../src/routes/vulnerabilities/components/VulnerabilityFlag',
+  () => ({
+    default: ({
+      vulnerabilityFlag,
+      csafPath,
+      onChange,
+      onDelete,
+      ...props
+    }: any) => (
+      <div
+        data-testid="vulnerability-flag"
+        data-flag-id={vulnerabilityFlag.id}
+        data-csaf-path={csafPath}
+        data-flag-label={vulnerabilityFlag.label}
+        {...props}
       >
-        Change
-      </button>
-      <button
-        data-testid={`delete-flag-${vulnerabilityFlag.id}`}
-        onClick={() => onDelete?.(vulnerabilityFlag)}
-      >
-        Delete
-      </button>
-    </div>
-  ),
-}))
+        <span>{vulnerabilityFlag.label}</span>
+        <button
+          data-testid={`change-flag-${vulnerabilityFlag.id}`}
+          onClick={() =>
+            onChange?.({ ...vulnerabilityFlag, label: 'changed_label' })
+          }
+        >
+          Change
+        </button>
+        <button
+          data-testid={`delete-flag-${vulnerabilityFlag.id}`}
+          onClick={() => onDelete?.(vulnerabilityFlag)}
+        >
+          Delete
+        </button>
+      </div>
+    ),
+  }),
+)
 
 // Mock HeroUI Alert component
 vi.mock('@heroui/react', () => ({
@@ -178,7 +195,9 @@ describe('Flags', () => {
 
       expect(screen.getAllByTestId('vulnerability-flag')).toHaveLength(2)
       expect(screen.getByText('component_not_present')).toBeInTheDocument()
-      expect(screen.getByText('vulnerable_code_not_present')).toBeInTheDocument()
+      expect(
+        screen.getByText('vulnerable_code_not_present'),
+      ).toBeInTheDocument()
     })
 
     it('should render VulnerabilityFlag components with correct props', () => {
@@ -188,12 +207,24 @@ describe('Flags', () => {
       expect(flagComponents).toHaveLength(2)
 
       expect(flagComponents[0]).toHaveAttribute('data-flag-id', 'flag-1')
-      expect(flagComponents[0]).toHaveAttribute('data-csaf-path', '/vulnerabilities/0/flags/0')
-      expect(flagComponents[0]).toHaveAttribute('data-flag-label', 'component_not_present')
+      expect(flagComponents[0]).toHaveAttribute(
+        'data-csaf-path',
+        '/vulnerabilities/0/flags/0',
+      )
+      expect(flagComponents[0]).toHaveAttribute(
+        'data-flag-label',
+        'component_not_present',
+      )
 
       expect(flagComponents[1]).toHaveAttribute('data-flag-id', 'flag-2')
-      expect(flagComponents[1]).toHaveAttribute('data-csaf-path', '/vulnerabilities/0/flags/1')
-      expect(flagComponents[1]).toHaveAttribute('data-flag-label', 'vulnerable_code_not_present')
+      expect(flagComponents[1]).toHaveAttribute(
+        'data-csaf-path',
+        '/vulnerabilities/0/flags/1',
+      )
+      expect(flagComponents[1]).toHaveAttribute(
+        'data-flag-label',
+        'vulnerable_code_not_present',
+      )
     })
 
     it('should render add item button', () => {
@@ -242,13 +273,17 @@ describe('Flags', () => {
     it('should call useFieldValidation with correct path', () => {
       render(<Flags {...defaultProps} />)
 
-      expect(mockUseFieldValidation).toHaveBeenCalledWith('/vulnerabilities/0/flags')
+      expect(mockUseFieldValidation).toHaveBeenCalledWith(
+        '/vulnerabilities/0/flags',
+      )
     })
 
     it('should call useFieldValidation with different vulnerability index', () => {
       render(<Flags {...defaultProps} vulnerabilityIndex={3} />)
 
-      expect(mockUseFieldValidation).toHaveBeenCalledWith('/vulnerabilities/3/flags')
+      expect(mockUseFieldValidation).toHaveBeenCalledWith(
+        '/vulnerabilities/3/flags',
+      )
     })
 
     it('should call useTranslation', () => {
@@ -274,11 +309,14 @@ describe('Flags', () => {
       const { rerender } = render(<Flags {...defaultProps} />)
 
       // Simulate data change
-      const updatedFlags: TVulnerabilityFlag[] = [...mockVulnerabilityFlags, { 
-        id: 'flag-3', 
-        label: 'component_not_present', 
-        productIds: [] 
-      }]
+      const updatedFlags: TVulnerabilityFlag[] = [
+        ...mockVulnerabilityFlags,
+        {
+          id: 'flag-3',
+          label: 'component_not_present',
+          productIds: [],
+        },
+      ]
       mockListState.data = updatedFlags
 
       rerender(<Flags {...defaultProps} />)
@@ -288,11 +326,13 @@ describe('Flags', () => {
     })
 
     it('should pass correct data to onChange effect', () => {
-      const newFlags: TVulnerabilityFlag[] = [{ 
-        id: 'new-flag', 
-        label: 'vulnerable_code_not_present', 
-        productIds: [] 
-      }]
+      const newFlags: TVulnerabilityFlag[] = [
+        {
+          id: 'new-flag',
+          label: 'vulnerable_code_not_present',
+          productIds: [],
+        },
+      ]
       mockUseListState.mockReturnValue({
         data: newFlags,
         setData: vi.fn(),
@@ -385,7 +425,9 @@ describe('Flags', () => {
       const deleteButton = screen.getByTestId('delete-flag-flag-1')
       await user.click(deleteButton)
 
-      expect(mockRemoveDataEntry).toHaveBeenCalledWith(mockVulnerabilityFlags[0])
+      expect(mockRemoveDataEntry).toHaveBeenCalledWith(
+        mockVulnerabilityFlags[0],
+      )
     })
 
     it('should add new flag with correct structure when add button is clicked', async () => {
@@ -417,11 +459,11 @@ describe('Flags', () => {
 
       // Verify setData was called with a function that adds the new flag
       expect(mockSetData).toHaveBeenCalledWith(expect.any(Function))
-      
+
       // Get the function that was passed to setData and test it
       const setDataFunction = mockSetData.mock.calls[0][0]
       const result = setDataFunction(mockVulnerabilityFlags)
-      
+
       expect(result).toEqual([...mockVulnerabilityFlags, newFlag])
     })
   })
@@ -442,8 +484,14 @@ describe('Flags', () => {
       mockUseFieldValidation.mockReturnValue({
         hasErrors: true,
         errorMessages: [
-          { path: '/vulnerabilities/0/flags/0/label', message: 'Flag label is required' },
-          { path: '/vulnerabilities/0/flags/1/productIds', message: 'At least one product must be selected' },
+          {
+            path: '/vulnerabilities/0/flags/0/label',
+            message: 'Flag label is required',
+          },
+          {
+            path: '/vulnerabilities/0/flags/1/productIds',
+            message: 'At least one product must be selected',
+          },
         ],
       })
 
@@ -458,15 +506,23 @@ describe('Flags', () => {
       mockUseFieldValidation.mockReturnValue({
         hasErrors: true,
         errorMessages: [
-          { path: '/vulnerabilities/0/flags/0/label', message: 'Flag label is required' },
-          { path: '/vulnerabilities/0/flags/1/productIds', message: 'At least one product must be selected' },
+          {
+            path: '/vulnerabilities/0/flags/0/label',
+            message: 'Flag label is required',
+          },
+          {
+            path: '/vulnerabilities/0/flags/1/productIds',
+            message: 'At least one product must be selected',
+          },
         ],
       })
 
       render(<Flags {...defaultProps} />)
 
       expect(screen.getByText('Flag label is required')).toBeInTheDocument()
-      expect(screen.getByText('At least one product must be selected')).toBeInTheDocument()
+      expect(
+        screen.getByText('At least one product must be selected'),
+      ).toBeInTheDocument()
     })
 
     it('should render error messages with correct keys', () => {
@@ -482,7 +538,7 @@ describe('Flags', () => {
 
       const errorElements = screen.getAllByText(/Error \d/)
       expect(errorElements).toHaveLength(2)
-      
+
       // Verify each error element has a unique key (React requirement)
       errorElements.forEach((element, index) => {
         expect(element).toBeInTheDocument()
@@ -534,13 +590,17 @@ describe('Flags', () => {
     it('should handle negative vulnerability index', () => {
       render(<Flags {...defaultProps} vulnerabilityIndex={-1} />)
 
-      expect(mockUseFieldValidation).toHaveBeenCalledWith('/vulnerabilities/-1/flags')
+      expect(mockUseFieldValidation).toHaveBeenCalledWith(
+        '/vulnerabilities/-1/flags',
+      )
     })
 
     it('should handle large vulnerability index', () => {
       render(<Flags {...defaultProps} vulnerabilityIndex={999} />)
 
-      expect(mockUseFieldValidation).toHaveBeenCalledWith('/vulnerabilities/999/flags')
+      expect(mockUseFieldValidation).toHaveBeenCalledWith(
+        '/vulnerabilities/999/flags',
+      )
     })
 
     it('should handle undefined flags array', () => {
@@ -558,7 +618,12 @@ describe('Flags', () => {
         getId: vi.fn(),
       })
 
-      render(<Flags {...defaultProps} vulnerability={vulnerabilityWithUndefinedFlags} />)
+      render(
+        <Flags
+          {...defaultProps}
+          vulnerability={vulnerabilityWithUndefinedFlags}
+        />,
+      )
 
       expect(screen.getByTestId('add-item-button')).toBeInTheDocument()
     })
@@ -570,7 +635,7 @@ describe('Flags', () => {
 
       const container = screen.getByTestId('vsplit')
       expect(container).toBeInTheDocument()
-      
+
       const addButton = screen.getByTestId('add-item-button')
       expect(addButton).toBeInTheDocument()
       expect(addButton.tagName).toBe('BUTTON')
@@ -644,7 +709,9 @@ describe('Flags', () => {
       // Delete a flag
       const deleteButton = screen.getByTestId('delete-flag-flag-1')
       await user.click(deleteButton)
-      expect(mockRemoveDataEntry).toHaveBeenCalledWith(mockVulnerabilityFlags[0])
+      expect(mockRemoveDataEntry).toHaveBeenCalledWith(
+        mockVulnerabilityFlags[0],
+      )
     })
 
     it('should maintain state consistency during multiple operations', async () => {
@@ -675,7 +742,9 @@ describe('Flags', () => {
         ...mockVulnerabilityFlags[0],
         label: 'changed_label',
       })
-      expect(mockRemoveDataEntry).toHaveBeenCalledWith(mockVulnerabilityFlags[1])
+      expect(mockRemoveDataEntry).toHaveBeenCalledWith(
+        mockVulnerabilityFlags[1],
+      )
     })
   })
 })

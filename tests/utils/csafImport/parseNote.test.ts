@@ -22,7 +22,15 @@ describe('csafImport parseNote', () => {
   })
 
   it('should handle different note categories', () => {
-    const categories = ['description', 'details', 'faq', 'general', 'legal_disclaimer', 'other', 'summary'] as const
+    const categories = [
+      'description',
+      'details',
+      'faq',
+      'general',
+      'legal_disclaimer',
+      'other',
+      'summary',
+    ] as const
 
     categories.forEach((category) => {
       const parsedNote: TParsedNote = {

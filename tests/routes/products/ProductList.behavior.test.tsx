@@ -81,7 +81,10 @@ vi.mock('../../../src/routes/products/components/ProductCard', () => ({
       >
         delete version
       </button>
-      <button data-testid={`add-version-${product.id}`} onClick={() => onAddVersion?.()}>
+      <button
+        data-testid={`add-version-${product.id}`}
+        onClick={() => onAddVersion?.()}
+      >
         add version
       </button>
     </div>
@@ -92,8 +95,13 @@ vi.mock('@heroui/modal', async () => {
   const React = await vi.importActual<typeof import('react')>('react')
 
   return {
-    Modal: ({ isOpen, children }: { isOpen: boolean; children: React.ReactNode }) =>
-      isOpen ? <div data-testid="version-modal">{children}</div> : null,
+    Modal: ({
+      isOpen,
+      children,
+    }: {
+      isOpen: boolean
+      children: React.ReactNode
+    }) => (isOpen ? <div data-testid="version-modal">{children}</div> : null),
     useDisclosure: () => {
       const [isOpen, setIsOpen] = React.useState(false)
       return {
@@ -108,7 +116,10 @@ vi.mock('@heroui/modal', async () => {
 vi.mock('../../../src/routes/products/components/PTBEditForm', () => ({
   PTBCreateEditForm: ({ ptb, onSave }: any) => (
     <div>
-      <button data-testid="save-version" onClick={() => onSave({ ...ptb, name: ptb?.name ?? 'New Version' })}>
+      <button
+        data-testid="save-version"
+        onClick={() => onSave({ ...ptb, name: ptb?.name ?? 'New Version' })}
+      >
         save
       </button>
     </div>

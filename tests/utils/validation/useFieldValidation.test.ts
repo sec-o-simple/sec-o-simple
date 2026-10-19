@@ -7,7 +7,7 @@ vi.unmock('@/utils/validation/useFieldValidation')
 
 // Mock the validation store
 vi.mock('../../../src/utils/validation/useValidationStore', () => ({
-  default: vi.fn()
+  default: vi.fn(),
 }))
 
 import useValidationStore from '../../../src/utils/validation/useValidationStore'
@@ -19,10 +19,10 @@ describe('useFieldValidation', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     mockGetMessagesForPath = vi.fn()
     mockMarkFieldAsTouched = vi.fn()
-    
+
     // Create a mock store object
     mockStore = {
       getMessagesForPath: mockGetMessagesForPath,
@@ -42,7 +42,7 @@ describe('useFieldValidation', () => {
       warnings: [],
       infos: [],
     }
-    
+
     // Mock the store - zustand returns the store object directly when called without selector
     ;(useValidationStore as unknown as Mock).mockReturnValue(mockStore)
   })
@@ -60,7 +60,7 @@ describe('useFieldValidation', () => {
       expect(result).toHaveProperty('infoMessages')
       expect(result).toHaveProperty('isTouched')
       expect(result).toHaveProperty('markFieldAsTouched')
-      
+
       // Should return empty arrays when no path provided
       expect(result.messages).toEqual([])
       expect(mockGetMessagesForPath).not.toHaveBeenCalled()
@@ -73,9 +73,9 @@ describe('useFieldValidation', () => {
 
     it('should call getMessagesForPath when path is provided', () => {
       mockGetMessagesForPath.mockReturnValue([])
-      
+
       const result = useFieldValidation('/test/path')
-      
+
       expect(mockGetMessagesForPath).toHaveBeenCalledWith('/test/path')
       expect(mockGetMessagesForPath).toHaveBeenCalledTimes(1)
     })
@@ -99,7 +99,7 @@ describe('useFieldValidation', () => {
         { path: '/test', message: 'Error 2', severity: 'error' },
       ]
       mockGetMessagesForPath.mockReturnValue(errorMessages)
-      
+
       const result = useFieldValidation('/test')
 
       expect(result.messages).toEqual(errorMessages)
@@ -116,7 +116,7 @@ describe('useFieldValidation', () => {
         { path: '/test', message: 'Warning 1', severity: 'warning' },
       ]
       mockGetMessagesForPath.mockReturnValue(warningMessages)
-      
+
       const result = useFieldValidation('/test')
 
       expect(result.warningMessages).toEqual(warningMessages)
@@ -130,7 +130,7 @@ describe('useFieldValidation', () => {
         { path: '/test', message: 'Info 1', severity: 'info' },
       ]
       mockGetMessagesForPath.mockReturnValue(infoMessages)
-      
+
       const result = useFieldValidation('/test')
 
       expect(result.infoMessages).toEqual(infoMessages)
@@ -146,7 +146,7 @@ describe('useFieldValidation', () => {
         { path: '/test', message: 'Info', severity: 'info' },
       ]
       mockGetMessagesForPath.mockReturnValue(mixedMessages)
-      
+
       const result = useFieldValidation('/test')
 
       expect(result.messages).toEqual(mixedMessages)
@@ -194,16 +194,20 @@ describe('useFieldValidation', () => {
         { path: '/test', message: 'Error 2', severity: 'error' },
       ]
       mockGetMessagesForPath.mockReturnValue(messages)
-      
+
       const result = useFieldValidation('/test')
 
       expect(result.errorMessages).toHaveLength(2)
       expect(result.warningMessages).toHaveLength(1)
       expect(result.infoMessages).toHaveLength(1)
-      
-      expect(result.errorMessages.every(m => m.severity === 'error')).toBe(true)
-      expect(result.warningMessages.every(m => m.severity === 'warning')).toBe(true)
-      expect(result.infoMessages.every(m => m.severity === 'info')).toBe(true)
+
+      expect(result.errorMessages.every((m) => m.severity === 'error')).toBe(
+        true,
+      )
+      expect(
+        result.warningMessages.every((m) => m.severity === 'warning'),
+      ).toBe(true)
+      expect(result.infoMessages.every((m) => m.severity === 'info')).toBe(true)
     })
   })
 })

@@ -18,9 +18,9 @@ describe('useListValidation', () => {
 
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     mockMarkFieldAsTouched = vi.fn()
-    
+
     // Mock the field validation result
     mockFieldValidationResult = {
       messages: [],
@@ -33,7 +33,7 @@ describe('useListValidation', () => {
       isTouched: false,
       markFieldAsTouched: mockMarkFieldAsTouched,
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockFieldValidationResult)
     mockUseValidationStore.mockReturnValue(mockMarkFieldAsTouched)
   })
@@ -54,13 +54,11 @@ describe('useListValidation', () => {
 
       renderHook(() => useListValidation(listPath, data))
 
-      expect(mockUseValidationStore).toHaveBeenCalledWith(
-        expect.any(Function)
-      )
-      
+      expect(mockUseValidationStore).toHaveBeenCalledWith(expect.any(Function))
+
       // Test the selector function
       const selectorCall = mockUseValidationStore.mock.calls[0][0]
-      const mockState = { 
+      const mockState = {
         markFieldAsTouched: mockMarkFieldAsTouched,
         messages: [],
         touchedFields: new Set<string>(),
@@ -136,8 +134,9 @@ describe('useListValidation', () => {
       let data: unknown[] = []
 
       const { rerender } = renderHook(
-        ({ path, items }: { path: string; items: unknown[] }) => useListValidation(path, items),
-        { initialProps: { path: listPath, items: data } }
+        ({ path, items }: { path: string; items: unknown[] }) =>
+          useListValidation(path, items),
+        { initialProps: { path: listPath, items: data } },
       )
 
       expect(mockMarkFieldAsTouched).not.toHaveBeenCalled()
@@ -154,8 +153,9 @@ describe('useListValidation', () => {
       const initialData = ['item1']
 
       const { rerender } = renderHook(
-        ({ path, items }: { path: string; items: unknown[] }) => useListValidation(path, items),
-        { initialProps: { path: listPath, items: initialData as unknown[] } }
+        ({ path, items }: { path: string; items: unknown[] }) =>
+          useListValidation(path, items),
+        { initialProps: { path: listPath, items: initialData as unknown[] } },
       )
 
       expect(mockMarkFieldAsTouched).toHaveBeenCalledTimes(1)
@@ -173,8 +173,9 @@ describe('useListValidation', () => {
       const initialData = ['item1', 'item2']
 
       const { rerender } = renderHook(
-        ({ path, items }: { path: string; items: unknown[] }) => useListValidation(path, items),
-        { initialProps: { path: listPath, items: initialData as unknown[] } }
+        ({ path, items }: { path: string; items: unknown[] }) =>
+          useListValidation(path, items),
+        { initialProps: { path: listPath, items: initialData as unknown[] } },
       )
 
       expect(mockMarkFieldAsTouched).toHaveBeenCalledTimes(1)
@@ -192,8 +193,9 @@ describe('useListValidation', () => {
       const data = ['item1']
 
       const { rerender } = renderHook(
-        ({ path, items }: { path: string; items: unknown[] }) => useListValidation(path, items),
-        { initialProps: { path: initialPath, items: data as unknown[] } }
+        ({ path, items }: { path: string; items: unknown[] }) =>
+          useListValidation(path, items),
+        { initialProps: { path: initialPath, items: data as unknown[] } },
       )
 
       expect(mockMarkFieldAsTouched).toHaveBeenCalledWith(initialPath)
@@ -266,7 +268,7 @@ describe('useListValidation', () => {
       const data = [
         { id: 1, name: 'Object 1' },
         { nested: { deep: { value: 'test' } } },
-        { array: [1, 2, 3] }
+        { array: [1, 2, 3] },
       ]
 
       renderHook(() => useListValidation(listPath, data))
@@ -308,10 +310,10 @@ describe('useListValidation', () => {
         'path1',
         'deeply.nested.path',
         'array[0].item',
-        'complex.path.with.numbers.123'
+        'complex.path.with.numbers.123',
       ]
 
-      paths.forEach(path => {
+      paths.forEach((path) => {
         vi.clearAllMocks()
         renderHook(() => useListValidation(path, ['item']))
         expect(mockUseFieldValidation).toHaveBeenCalledWith(path)
@@ -326,7 +328,7 @@ describe('useListValidation', () => {
       const validationWithErrors = {
         ...mockFieldValidationResult,
         hasErrors: true,
-        errorMessages: [{ text: 'Error message', severity: 'error' as const }]
+        errorMessages: [{ text: 'Error message', severity: 'error' as const }],
       }
 
       mockUseFieldValidation.mockReturnValue(validationWithErrors)
@@ -374,7 +376,7 @@ describe('useListValidation', () => {
 
       const { rerender } = renderHook(
         ({ items }: { items: unknown[] }) => useListValidation(listPath, items),
-        { initialProps: { items: initialData as unknown[] } }
+        { initialProps: { items: initialData as unknown[] } },
       )
 
       expect(mockMarkFieldAsTouched).toHaveBeenCalledTimes(1)
@@ -395,7 +397,7 @@ describe('useListValidation', () => {
 
       const { rerender } = renderHook(
         ({ items }: { items: unknown[] }) => useListValidation(listPath, items),
-        { initialProps: { items: data as unknown[] } }
+        { initialProps: { items: data as unknown[] } },
       )
 
       // Simulate rapid changes

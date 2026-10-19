@@ -132,7 +132,10 @@ describe('HTMLTemplate', () => {
       vulnerabilities: [
         {
           product_status: {
-            known_affected: ['rel-1', { product_id: 'p1', name: 'Pre-expanded' }],
+            known_affected: [
+              'rel-1',
+              { product_id: 'p1', name: 'Pre-expanded' },
+            ],
           },
           remediations: [
             {
@@ -187,6 +190,8 @@ describe('HTMLTemplate', () => {
     expect(html).toContain('>javascript:alert(1)</a>')
     expect(html).not.toContain('href="javascript:alert(1)"')
     expect(html).toContain('href="https:&#x2F;&#x2F;example.com"')
-    expect(html).not.toContain('href="data:image&amp;#x2F;png;base64,aGVsbG8&amp;#x3D;"')
+    expect(html).not.toContain(
+      'href="data:image&amp;#x2F;png;base64,aGVsbG8&amp;#x3D;"',
+    )
   })
 })

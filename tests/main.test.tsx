@@ -76,16 +76,18 @@ describe('main.tsx', () => {
   beforeEach(() => {
     // Reset all mocks
     vi.clearAllMocks()
-    
+
     // Mock DOM
     const mockElement = document.createElement('div')
     mockElement.id = 'root'
-    mockGetElementById = vi.spyOn(document, 'getElementById').mockReturnValue(mockElement)
-    
+    mockGetElementById = vi
+      .spyOn(document, 'getElementById')
+      .mockReturnValue(mockElement)
+
     // Store original objects
     originalNavigator = global.navigator
     originalLocalStorage = global.localStorage
-    
+
     // Create fresh localStorage mock for each test
     const localStorageMock = (() => {
       let store: Record<string, string> = {}
@@ -104,7 +106,7 @@ describe('main.tsx', () => {
         key: vi.fn((index: number) => Object.keys(store)[index] || null),
       }
     })()
-    
+
     Object.defineProperty(global, 'localStorage', {
       value: localStorageMock,
       writable: true,
@@ -128,7 +130,7 @@ describe('main.tsx', () => {
 
       // Import and test the module
       await import('../src/main')
-      
+
       // The function should have been called and used 'en'
       expect(mockInit).toHaveBeenCalledWith({
         resources: {
@@ -162,7 +164,7 @@ describe('main.tsx', () => {
       })
 
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith({
         resources: {
           en: {
@@ -195,11 +197,11 @@ describe('main.tsx', () => {
       })
 
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           lng: 'en',
-        })
+        }),
       )
     })
 
@@ -210,11 +212,11 @@ describe('main.tsx', () => {
       })
 
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           lng: 'en',
-        })
+        }),
       )
     })
 
@@ -225,11 +227,11 @@ describe('main.tsx', () => {
       })
 
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           lng: 'de',
-        })
+        }),
       )
     })
   })
@@ -238,38 +240,38 @@ describe('main.tsx', () => {
     it('should use saved language from localStorage when available', async () => {
       const mockLocalStorage = global.localStorage as any
       mockLocalStorage.getItem.mockReturnValue('de')
-      
+
       Object.defineProperty(global.navigator, 'language', {
         value: 'en-US',
         writable: true,
       })
 
       await import('../src/main')
-      
+
       expect(mockLocalStorage.getItem).toHaveBeenCalledWith('i18nextLng')
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           lng: 'de',
-        })
+        }),
       )
     })
 
     it('should fall back to browser language when localStorage is empty', async () => {
       const mockLocalStorage = global.localStorage as any
       mockLocalStorage.getItem.mockReturnValue(null)
-      
+
       Object.defineProperty(global.navigator, 'language', {
         value: 'de-DE',
         writable: true,
       })
 
       await import('../src/main')
-      
+
       expect(mockLocalStorage.getItem).toHaveBeenCalledWith('i18nextLng')
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           lng: 'de',
-        })
+        }),
       )
     })
 
@@ -278,7 +280,7 @@ describe('main.tsx', () => {
       mockLocalStorage.getItem.mockImplementation(() => {
         throw new Error('localStorage error')
       })
-      
+
       Object.defineProperty(global.navigator, 'language', {
         value: 'en-US',
         writable: true,
@@ -293,7 +295,7 @@ describe('main.tsx', () => {
   describe('i18n initialization', () => {
     it('should initialize i18n with correct configuration', async () => {
       await import('../src/main')
-      
+
       expect(mockUse).toHaveBeenCalledWith({}) // initReactI18next mock
       expect(mockInit).toHaveBeenCalledWith({
         resources: {
@@ -322,23 +324,23 @@ describe('main.tsx', () => {
 
     it('should have correct fallback language', async () => {
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           fallbackLng: 'en',
-        })
+        }),
       )
     })
 
     it('should disable XSS escaping for React safety', async () => {
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           interpolation: {
             escapeValue: false,
           },
-        })
+        }),
       )
     })
   })
@@ -350,30 +352,32 @@ describe('main.tsx', () => {
       mockGetElementById.mockReturnValue(mockElement)
 
       await import('../src/main')
-      
+
       expect(mockGetElementById).toHaveBeenCalledWith('root')
       expect(mockCreateRoot).toHaveBeenCalledWith(mockElement)
     })
 
     it('should render app with StrictMode and HeroUIProvider', async () => {
       await import('../src/main')
-      
+
       expect(mockRender).toHaveBeenCalledTimes(1)
       const renderCall = mockRender.mock.calls[0][0]
-      
+
       // Test that the structure includes StrictMode and HeroUIProvider
       const { container } = render(renderCall)
-      expect(container.querySelector('[data-testid="heroui-provider"]')).toBeInTheDocument()
+      expect(
+        container.querySelector('[data-testid="heroui-provider"]'),
+      ).toBeInTheDocument()
       expect(container.querySelector('[data-testid="app"]')).toBeInTheDocument()
     })
 
     it('should handle missing root element gracefully', async () => {
       mockGetElementById.mockReturnValue(null)
-      
+
       // The current implementation casts to HTMLElement, so it doesn't throw
       // but ReactDOM.createRoot will get null which may cause issues
       await expect(import('../src/main')).resolves.toBeDefined()
-      
+
       // Verify that createRoot was called with null
       expect(mockCreateRoot).toHaveBeenCalledWith(null)
     })
@@ -388,7 +392,9 @@ describe('main.tsx', () => {
 
       // The current implementation doesn't handle undefined navigator.language
       // so this test expects an error when trying to split undefined
-      await expect(import('../src/main')).rejects.toThrow("Cannot read properties of undefined (reading 'split')")
+      await expect(import('../src/main')).rejects.toThrow(
+        "Cannot read properties of undefined (reading 'split')",
+      )
     })
 
     it('should handle empty navigator.language', async () => {
@@ -398,11 +404,11 @@ describe('main.tsx', () => {
       })
 
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           lng: 'en',
-        })
+        }),
       )
     })
 
@@ -413,29 +419,29 @@ describe('main.tsx', () => {
       })
 
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           lng: 'en',
-        })
+        }),
       )
     })
 
     it('should prioritize localStorage over browser language', async () => {
       const mockLocalStorage = global.localStorage as any
       mockLocalStorage.getItem.mockReturnValue('en')
-      
+
       Object.defineProperty(global.navigator, 'language', {
         value: 'de-DE',
         writable: true,
       })
 
       await import('../src/main')
-      
+
       expect(mockInit).toHaveBeenCalledWith(
         expect.objectContaining({
           lng: 'en', // Should use localStorage value, not browser language
-        })
+        }),
       )
     })
   })
@@ -444,7 +450,7 @@ describe('main.tsx', () => {
     it('should import all required modules', async () => {
       // This test ensures all imports are resolved correctly
       await expect(import('../src/main')).resolves.toBeDefined()
-      
+
       // Verify key dependencies are called
       expect(mockUse).toHaveBeenCalled()
       expect(mockInit).toHaveBeenCalled()

@@ -126,7 +126,9 @@ vi.mock('i18next', () => ({
   default: {
     t: (key: string, options?: any) => {
       if (key === 'export.productDescriptionPrefix') {
-        return options?.lng === 'de' ? 'Produktbeschreibung für' : 'Product description for'
+        return options?.lng === 'de'
+          ? 'Produktbeschreibung für'
+          : 'Product description for'
       }
       return key
     },

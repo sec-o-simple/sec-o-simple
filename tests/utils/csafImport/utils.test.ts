@@ -8,7 +8,7 @@ describe('utils - csafImport', () => {
     const createBranch = (
       id: string,
       name: string,
-      subBranches: TProductTreeBranch[] = []
+      subBranches: TProductTreeBranch[] = [],
     ): TProductTreeBranch => ({
       id,
       category: 'vendor',
@@ -51,7 +51,9 @@ describe('utils - csafImport', () => {
 
     it('should find parent in nested structure - one level deep', () => {
       const childBranch = createBranch('child', 'Child Branch')
-      const parentBranch = createBranch('parent', 'Parent Branch', [childBranch])
+      const parentBranch = createBranch('parent', 'Parent Branch', [
+        childBranch,
+      ])
       const branches = [parentBranch]
 
       const result = getParentPTB('child', branches)
@@ -60,8 +62,12 @@ describe('utils - csafImport', () => {
 
     it('should find parent in nested structure - multiple levels deep', () => {
       const grandChildBranch = createBranch('grandchild', 'Grand Child Branch')
-      const childBranch = createBranch('child', 'Child Branch', [grandChildBranch])
-      const parentBranch = createBranch('parent', 'Parent Branch', [childBranch])
+      const childBranch = createBranch('child', 'Child Branch', [
+        grandChildBranch,
+      ])
+      const parentBranch = createBranch('parent', 'Parent Branch', [
+        childBranch,
+      ])
       const rootBranch = createBranch('root', 'Root Branch', [parentBranch])
       const branches = [rootBranch]
 
@@ -83,7 +89,9 @@ describe('utils - csafImport', () => {
 
     it('should handle multiple root branches and find target in second branch', () => {
       const targetBranch = createBranch('target', 'Target Branch')
-      const secondRoot = createBranch('second-root', 'Second Root', [targetBranch])
+      const secondRoot = createBranch('second-root', 'Second Root', [
+        targetBranch,
+      ])
       const firstRoot = createBranch('first-root', 'First Root')
       const branches = [firstRoot, secondRoot]
 
@@ -95,11 +103,17 @@ describe('utils - csafImport', () => {
       const target = createBranch('target', 'Target')
       const sibling1 = createBranch('sibling1', 'Sibling 1')
       const sibling2 = createBranch('sibling2', 'Sibling 2')
-      const parent = createBranch('parent', 'Parent', [sibling1, target, sibling2])
-      
+      const parent = createBranch('parent', 'Parent', [
+        sibling1,
+        target,
+        sibling2,
+      ])
+
       const otherChild = createBranch('other-child', 'Other Child')
-      const otherParent = createBranch('other-parent', 'Other Parent', [otherChild])
-      
+      const otherParent = createBranch('other-parent', 'Other Parent', [
+        otherChild,
+      ])
+
       const branches = [otherParent, parent]
 
       const result = getParentPTB('target', branches)
@@ -129,7 +143,11 @@ describe('utils - csafImport', () => {
     it('should handle branches with mixed empty and non-empty subBranches', () => {
       const target = createBranch('target', 'Target')
       const emptyBranch = createBranch('empty', 'Empty Branch', [])
-      const parentWithTarget = createBranch('parent-with-target', 'Parent With Target', [target])
+      const parentWithTarget = createBranch(
+        'parent-with-target',
+        'Parent With Target',
+        [target],
+      )
       const branches = [emptyBranch, parentWithTarget]
 
       const result = getParentPTB('target', branches)
@@ -147,10 +165,10 @@ describe('utils - csafImport', () => {
     it('should work with different TProductTreeBranch categories', () => {
       const target = createBranch('target', 'Target')
       target.category = 'product_name'
-      
+
       const parent = createBranch('parent', 'Parent', [target])
       parent.category = 'vendor'
-      
+
       const branches = [parent]
 
       const result = getParentPTB('target', branches)
@@ -167,8 +185,8 @@ describe('utils - csafImport', () => {
         subBranches: [],
         type: 'Software',
         identificationHelper: {
-          purl: 'pkg:npm/example@1.0.0'
-        }
+          purl: 'pkg:npm/example@1.0.0',
+        },
       }
 
       const parent = createBranch('parent', 'Parent', [target])
@@ -199,10 +217,12 @@ describe('utils - csafImport', () => {
 
     it('should handle asymmetric tree structure', () => {
       const leftDeepChild = createBranch('left-deep', 'Left Deep')
-      const leftChild = createBranch('left-child', 'Left Child', [leftDeepChild])
-      
+      const leftChild = createBranch('left-child', 'Left Child', [
+        leftDeepChild,
+      ])
+
       const rightChild = createBranch('right-child', 'Right Child') // No subBranches
-      
+
       const root = createBranch('root', 'Root', [leftChild, rightChild])
       const branches = [root]
 
@@ -212,8 +232,8 @@ describe('utils - csafImport', () => {
 
     it('should handle wide tree structure with many siblings', () => {
       const target = createBranch('target', 'Target')
-      const siblings = Array.from({ length: 10 }, (_, i) => 
-        createBranch(`sibling-${i}`, `Sibling ${i}`)
+      const siblings = Array.from({ length: 10 }, (_, i) =>
+        createBranch(`sibling-${i}`, `Sibling ${i}`),
       )
       const parent = createBranch('parent', 'Parent', [...siblings, target])
       const branches = [parent]
@@ -263,22 +283,29 @@ describe('utils - csafImport', () => {
 
     it('should work with large tree structures', () => {
       // Create a large tree structure to test performance and correctness
-      const createLargeTree = (depth: number, breadth: number): TProductTreeBranch => {
+      const createLargeTree = (
+        depth: number,
+        breadth: number,
+      ): TProductTreeBranch => {
         if (depth === 0) {
           return createBranch(`leaf-${Math.random()}`, 'Leaf')
         }
-        
+
         const children = Array.from({ length: breadth }, (_, i) =>
-          createLargeTree(depth - 1, breadth)
+          createLargeTree(depth - 1, breadth),
         )
-        
-        return createBranch(`node-${depth}-${Math.random()}`, `Node Depth ${depth}`, children)
+
+        return createBranch(
+          `node-${depth}-${Math.random()}`,
+          `Node Depth ${depth}`,
+          children,
+        )
       }
 
       const target = createBranch('findme', 'Find Me')
       const largeTree = createLargeTree(3, 3)
       largeTree.subBranches.push(target)
-      
+
       const branches = [largeTree]
 
       const result = getParentPTB('findme', branches)

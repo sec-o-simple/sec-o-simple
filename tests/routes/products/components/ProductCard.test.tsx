@@ -6,7 +6,12 @@ import { TProductTreeBranch } from '../../../../src/routes/products/types/tProdu
 
 vi.mock('@fortawesome/react-fontawesome', () => ({
   FontAwesomeIcon: ({ icon, size, ...props }: any) => (
-    <i data-testid="font-awesome-icon" data-icon={icon} data-size={size} {...props} />
+    <i
+      data-testid="font-awesome-icon"
+      data-icon={icon}
+      data-size={size}
+      {...props}
+    />
   ),
 }))
 

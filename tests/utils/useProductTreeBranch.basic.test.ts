@@ -7,9 +7,8 @@ describe('useProductTreeBranch - basic test', () => {
   })
 
   it('should import the hook without errors', async () => {
-    const { useProductTreeBranch } = await import(
-      '../../src/utils/useProductTreeBranch'
-    )
+    const { useProductTreeBranch } =
+      await import('../../src/utils/useProductTreeBranch')
     expect(useProductTreeBranch).toBeDefined()
     expect(typeof useProductTreeBranch).toBe('function')
   })

@@ -10,9 +10,9 @@ describe('Split Components', () => {
         <VSplit>
           <div>Child 1</div>
           <div>Child 2</div>
-        </VSplit>
+        </VSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv).toHaveClass('flex', 'flex-col', 'gap-4')
       expect(splitDiv.children).toHaveLength(2)
@@ -24,9 +24,9 @@ describe('Split Components', () => {
       const { container } = render(
         <VSplit className="custom-class">
           <div>Content</div>
-        </VSplit>
+        </VSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv).toHaveClass('flex', 'flex-col', 'gap-4', 'custom-class')
     })
@@ -35,9 +35,9 @@ describe('Split Components', () => {
       const { container } = render(
         <VSplit className="gap-8">
           <div>Content</div>
-        </VSplit>
+        </VSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv).toHaveClass('flex', 'flex-col', 'gap-8')
       expect(splitDiv).not.toHaveClass('gap-4')
@@ -47,9 +47,9 @@ describe('Split Components', () => {
       const { container } = render(
         <VSplit id="test-id" data-testid="vsplit">
           <div>Content</div>
-        </VSplit>
+        </VSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv).toHaveAttribute('id', 'test-id')
       expect(splitDiv).toHaveAttribute('data-testid', 'vsplit')
@@ -59,9 +59,9 @@ describe('Split Components', () => {
       const { container } = render(
         <VSplit>
           <span>Single child</span>
-        </VSplit>
+        </VSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv.children).toHaveLength(1)
       expect(splitDiv.children[0]).toHaveTextContent('Single child')
@@ -74,9 +74,9 @@ describe('Split Components', () => {
         <HSplit>
           <div>Child 1</div>
           <div>Child 2</div>
-        </HSplit>
+        </HSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv).toHaveClass('flex', 'gap-4')
       expect(splitDiv).not.toHaveClass('flex-col')
@@ -89,9 +89,9 @@ describe('Split Components', () => {
       const { container } = render(
         <HSplit className="justify-center">
           <div>Content</div>
-        </HSplit>
+        </HSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv).toHaveClass('flex', 'gap-4', 'justify-center')
     })
@@ -100,9 +100,9 @@ describe('Split Components', () => {
       const { container } = render(
         <HSplit className="gap-2">
           <div>Content</div>
-        </HSplit>
+        </HSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv).toHaveClass('flex', 'gap-2')
       expect(splitDiv).not.toHaveClass('gap-4')
@@ -112,9 +112,9 @@ describe('Split Components', () => {
       const { container } = render(
         <HSplit role="group" aria-label="Split container">
           <div>Content</div>
-        </HSplit>
+        </HSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv).toHaveAttribute('role', 'group')
       expect(splitDiv).toHaveAttribute('aria-label', 'Split container')
@@ -126,9 +126,9 @@ describe('Split Components', () => {
           <button>Button 1</button>
           <button>Button 2</button>
           <button>Button 3</button>
-        </HSplit>
+        </HSplit>,
       )
-      
+
       const splitDiv = container.firstChild as HTMLElement
       expect(splitDiv.children).toHaveLength(3)
       expect(splitDiv.children[0]).toHaveTextContent('Button 1')

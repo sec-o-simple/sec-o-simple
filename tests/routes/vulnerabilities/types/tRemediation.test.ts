@@ -59,7 +59,7 @@ describe('tRemediation', () => {
         'vendor_fix',
         'workaround',
       ]
-      
+
       categories.forEach((category) => {
         expect(remediationCategories).toContain(category)
       })
@@ -116,7 +116,7 @@ describe('tRemediation', () => {
           productIds: [],
           applyAllKnownAffectedProducts: true,
         }
-        
+
         expect(remediation.category).toBe(category)
       })
     })
@@ -141,7 +141,9 @@ describe('tRemediation', () => {
 
       const result = useRemediationGenerator()
 
-      expect(mockGetTemplateDefaultObject).toHaveBeenCalledWith('vulnerabilities.remediations')
+      expect(mockGetTemplateDefaultObject).toHaveBeenCalledWith(
+        'vulnerabilities.remediations',
+      )
       expect(mockUid).toHaveBeenCalled()
       expect(result).toEqual({
         id: 'generated-unique-id',
@@ -190,7 +192,7 @@ describe('tRemediation', () => {
         .mockReturnValueOnce('id-1')
         .mockReturnValueOnce('id-2')
         .mockReturnValueOnce('id-3')
-      
+
       mockGetTemplateDefaultObject.mockReturnValue({})
 
       const result1 = useRemediationGenerator()
@@ -250,7 +252,7 @@ describe('tRemediation', () => {
         mockUid.mockReturnValue(`test-id-${index}`)
 
         const result = useRemediationGenerator()
-        
+
         expect(result.productIds).toEqual([])
       })
     })

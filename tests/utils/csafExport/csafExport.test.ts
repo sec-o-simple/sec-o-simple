@@ -427,7 +427,9 @@ describe('csafExport', () => {
     })
 
     it('replaces invalid character sequences with single underscores', () => {
-      expect(createCSAFExportFilename('2022_#01-A', true)).toBe('2022_01-a.json')
+      expect(createCSAFExportFilename('2022_#01-A', true)).toBe(
+        '2022_01-a.json',
+      )
       expect(createCSAFExportFilename('ESA##+2023-A*', true)).toBe(
         'esa_2023-a_.json',
       )

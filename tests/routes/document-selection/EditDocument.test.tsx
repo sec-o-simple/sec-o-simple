@@ -21,7 +21,8 @@ vi.mock('i18next', () => ({
       'common.cancel': 'Cancel',
       'common.confirm': 'Confirm',
       'hiddenFields.title': 'Hidden Fields',
-      'hiddenFields.description': 'The following fields are not supported and will be ignored:',
+      'hiddenFields.description':
+        'The following fields are not supported and will be ignored:',
       'hiddenFields.column.path': 'Path',
       'hiddenFields.column.value': 'Value',
     }
@@ -32,14 +33,14 @@ vi.mock('i18next', () => ({
 // Mock react-router
 vi.mock('react-router', () => ({
   useNavigate: () => mockNavigate,
-  HashRouter: ({ children }: any) => <div>{children}</div>
+  HashRouter: ({ children }: any) => <div>{children}</div>,
 }))
 
 // Mock motion/react
 vi.mock('motion/react', () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>
-  }
+    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
+  },
 }))
 
 // Mock FontAwesome
@@ -48,14 +49,14 @@ vi.mock('@fortawesome/react-fontawesome', () => ({
     <span data-testid="fontawesome-icon" className={className}>
       {typeof icon === 'object' ? icon.iconName || 'icon' : icon}
     </span>
-  )
+  ),
 }))
 
 // Mock HeroUI components
 vi.mock('@heroui/button', () => ({
   Button: ({ children, onPress, isDisabled, endContent, ...props }: any) => (
-    <button 
-      onClick={onPress} 
+    <button
+      onClick={onPress}
       disabled={isDisabled}
       data-testid={`button-${children?.replace(/\s+/g, '-').toLowerCase()}`}
       {...props}
@@ -63,7 +64,7 @@ vi.mock('@heroui/button', () => ({
       {children}
       {endContent}
     </button>
-  )
+  ),
 }))
 
 let disclosureState = {
@@ -71,24 +72,30 @@ let disclosureState = {
   onOpenChange: () => {
     disclosureState.isOpen = !disclosureState.isOpen
     mockOnOpenChange()
-  }
+  },
 }
 
 vi.mock('@heroui/modal', () => ({
-  Modal: ({ children, isOpen }: any) => 
+  Modal: ({ children, isOpen }: any) =>
     isOpen ? <div data-testid="modal">{children}</div> : null,
   ModalContent: ({ children }: any) => (
     <div data-testid="modal-content">
       {typeof children === 'function' ? children() : children}
     </div>
   ),
-  ModalHeader: ({ children }: any) => <div data-testid="modal-header">{children}</div>,
-  ModalBody: ({ children }: any) => <div data-testid="modal-body">{children}</div>,
-  ModalFooter: ({ children }: any) => <div data-testid="modal-footer">{children}</div>,
+  ModalHeader: ({ children }: any) => (
+    <div data-testid="modal-header">{children}</div>
+  ),
+  ModalBody: ({ children }: any) => (
+    <div data-testid="modal-body">{children}</div>
+  ),
+  ModalFooter: ({ children }: any) => (
+    <div data-testid="modal-footer">{children}</div>
+  ),
   useDisclosure: () => ({
     isOpen: disclosureState.isOpen,
-    onOpenChange: disclosureState.onOpenChange
-  })
+    onOpenChange: disclosureState.onOpenChange,
+  }),
 }))
 
 vi.mock('@heroui/table', () => ({
@@ -98,24 +105,30 @@ vi.mock('@heroui/table', () => ({
       <tr>{children}</tr>
     </thead>
   ),
-  TableBody: ({ children }: any) => <tbody data-testid="table-body">{children}</tbody>,
-  TableColumn: ({ children }: any) => <th data-testid="table-column">{children}</th>,
+  TableBody: ({ children }: any) => (
+    <tbody data-testid="table-body">{children}</tbody>
+  ),
+  TableColumn: ({ children }: any) => (
+    <th data-testid="table-column">{children}</th>
+  ),
   TableRow: ({ children }: any) => <tr data-testid="table-row">{children}</tr>,
-  TableCell: ({ children }: any) => <td data-testid="table-cell">{children}</td>,
+  TableCell: ({ children }: any) => (
+    <td data-testid="table-cell">{children}</td>
+  ),
 }))
 
 // Mock useDocumentStore
 vi.mock('../../../src/utils/useDocumentStore', () => ({
   default: () => ({
-    setImportedCSAFDocument: mockSetImportedCSAFDocument
-  })
+    setImportedCSAFDocument: mockSetImportedCSAFDocument,
+  }),
 }))
 
 // Mock useSOSImport
 vi.mock('../../../src/utils/sosDraft', () => ({
   useSOSImport: () => ({
     isSOSDraft: mockIsSOSDraft,
-    importSOSDocument: mockImportSOSDocument
+    importSOSDocument: mockImportSOSDocument,
   }),
 }))
 
@@ -124,7 +137,7 @@ vi.mock('../../../src/utils/csafImport/csafImport', () => ({
   useCSAFImport: () => ({
     isCSAFDocument: mockIsCSAFDocument,
     isCSAFVersionSupported: mockIsCSAFVersionSupported,
-    importCSAFDocument: mockImportCSAFDocument
+    importCSAFDocument: mockImportCSAFDocument,
   }),
 }))
 
@@ -146,13 +159,13 @@ describe('EditDocument', () => {
     return render(
       <HashRouter>
         <EditDocument />
-      </HashRouter>
+      </HashRouter>,
     )
   }
 
   it('renders the component with title and file input', () => {
     renderComponent()
-    
+
     expect(screen.getByText('Edit existing document')).toBeInTheDocument()
     expect(screen.getByDisplayValue('')).toBeInTheDocument() // file input
     expect(screen.getByTestId('button-edit-document')).toBeInTheDocument()
@@ -162,31 +175,35 @@ describe('EditDocument', () => {
   it('handles file selection and JSON parsing', async () => {
     mockIsSOSDraft.mockReturnValue(true)
     mockIsCSAFDocument.mockReturnValue(false)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"test": "data"}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(['{"test": "data"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
       mockFileReader.onload({ target: { result: '{"test": "data"}' } } as any)
     }
-    
+
     // Wait for state updates
     await waitFor(() => {
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
@@ -195,69 +212,84 @@ describe('EditDocument', () => {
 
   it('shows error message for invalid JSON', async () => {
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const invalidJsonFile = new File(['invalid json'], 'test.json', { type: 'application/json' })
-    
+    const invalidJsonFile = new File(['invalid json'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [invalidJsonFile],
       writable: false,
     })
-    
+
     // Mock console.error to avoid test output noise
     const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload with invalid JSON
     if (mockFileReader.onload) {
       mockFileReader.onload({ target: { result: 'invalid json' } } as any)
     }
-    
+
     await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith('Error parsing JSON:', expect.any(Error))
+      expect(consoleSpy).toHaveBeenCalledWith(
+        'Error parsing JSON:',
+        expect.any(Error),
+      )
     })
-    
+
     consoleSpy.mockRestore()
   })
 
   it('shows error for non-SOS and non-CSAF documents', async () => {
     mockIsSOSDraft.mockReturnValue(false)
     mockIsCSAFDocument.mockReturnValue(false)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"invalid": "document"}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(['{"invalid": "document"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"invalid": "document"}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"invalid": "document"}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Not a valid Sec-O-Simple or CSAF file')).toBeInTheDocument()
+      expect(
+        screen.getByText('Not a valid Sec-O-Simple or CSAF file'),
+      ).toBeInTheDocument()
       expect(screen.getByTestId('button-edit-document')).toBeDisabled()
     })
   })
@@ -266,31 +298,39 @@ describe('EditDocument', () => {
     mockIsSOSDraft.mockReturnValue(false)
     mockIsCSAFDocument.mockReturnValue(true)
     mockIsCSAFVersionSupported.mockReturnValue(false)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"document": {"category": "csaf_base"}}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(
+      ['{"document": {"category": "csaf_base"}}'],
+      'test.json',
+      { type: 'application/json' },
+    )
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"document": {"category": "csaf_base"}}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"document": {"category": "csaf_base"}}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
       expect(screen.getByText('Unsupported CSAF version')).toBeInTheDocument()
       expect(screen.getByTestId('button-edit-document')).toBeDisabled()
@@ -300,31 +340,37 @@ describe('EditDocument', () => {
   it('enables button for valid SOS document', async () => {
     mockIsSOSDraft.mockReturnValue(true)
     mockIsCSAFDocument.mockReturnValue(false)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"valid": "sos-document"}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(['{"valid": "sos-document"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader } )
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"valid": "sos-document"}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"valid": "sos-document"}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
       expect(screen.queryByText(/error/i)).not.toBeInTheDocument()
@@ -335,31 +381,39 @@ describe('EditDocument', () => {
     mockIsSOSDraft.mockReturnValue(false)
     mockIsCSAFDocument.mockReturnValue(true)
     mockIsCSAFVersionSupported.mockReturnValue(true)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"document": {"category": "csaf_base"}}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(
+      ['{"document": {"category": "csaf_base"}}'],
+      'test.json',
+      { type: 'application/json' },
+    )
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"document": {"category": "csaf_base"}}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"document": {"category": "csaf_base"}}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
       expect(screen.queryByText(/error/i)).not.toBeInTheDocument()
@@ -369,38 +423,46 @@ describe('EditDocument', () => {
   it('imports SOS document and navigates', async () => {
     mockIsSOSDraft.mockReturnValue(true)
     mockIsCSAFDocument.mockReturnValue(false)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"valid": "sos-document"}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(['{"valid": "sos-document"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"valid": "sos-document"}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"valid": "sos-document"}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
     })
-    
+
     fireEvent.click(screen.getByTestId('button-edit-document'))
-    
-    expect(mockImportSOSDocument).toHaveBeenCalledWith({ valid: 'sos-document' })
+
+    expect(mockImportSOSDocument).toHaveBeenCalledWith({
+      valid: 'sos-document',
+    })
     expect(mockNavigate).toHaveBeenCalledWith('/document-information/')
   })
 
@@ -409,85 +471,109 @@ describe('EditDocument', () => {
     mockIsCSAFDocument.mockReturnValue(true)
     mockIsCSAFVersionSupported.mockReturnValue(true)
     mockImportCSAFDocument.mockReturnValue([]) // No hidden fields
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"document": {"category": "csaf_base"}}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(
+      ['{"document": {"category": "csaf_base"}}'],
+      'test.json',
+      { type: 'application/json' },
+    )
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"document": {"category": "csaf_base"}}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"document": {"category": "csaf_base"}}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
     })
-    
+
     fireEvent.click(screen.getByTestId('button-edit-document'))
-    
-    expect(mockImportCSAFDocument).toHaveBeenCalledWith({ document: { category: 'csaf_base' } })
-    expect(mockSetImportedCSAFDocument).toHaveBeenCalledWith({ document: { category: 'csaf_base' } })
+
+    expect(mockImportCSAFDocument).toHaveBeenCalledWith({
+      document: { category: 'csaf_base' },
+    })
+    expect(mockSetImportedCSAFDocument).toHaveBeenCalledWith({
+      document: { category: 'csaf_base' },
+    })
     expect(mockNavigate).toHaveBeenCalledWith('/document-information/')
   })
 
   it('imports CSAF document with hidden fields and shows modal', async () => {
     const hiddenFields = [
       { path: '/test/field1', value: 'value1' },
-      { path: '/test/field2', value: { nested: 'object' } }
+      { path: '/test/field2', value: { nested: 'object' } },
     ]
-    
+
     mockIsSOSDraft.mockReturnValue(false)
     mockIsCSAFDocument.mockReturnValue(true)
     mockIsCSAFVersionSupported.mockReturnValue(true)
     mockImportCSAFDocument.mockReturnValue(hiddenFields)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"document": {"category": "csaf_base"}}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(
+      ['{"document": {"category": "csaf_base"}}'],
+      'test.json',
+      { type: 'application/json' },
+    )
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"document": {"category": "csaf_base"}}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"document": {"category": "csaf_base"}}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
     })
-    
+
     fireEvent.click(screen.getByTestId('button-edit-document'))
-    
-    expect(mockImportCSAFDocument).toHaveBeenCalledWith({ document: { category: 'csaf_base' } })
-    expect(mockSetImportedCSAFDocument).toHaveBeenCalledWith({ document: { category: 'csaf_base' } })
+
+    expect(mockImportCSAFDocument).toHaveBeenCalledWith({
+      document: { category: 'csaf_base' },
+    })
+    expect(mockSetImportedCSAFDocument).toHaveBeenCalledWith({
+      document: { category: 'csaf_base' },
+    })
     expect(mockOnOpenChange).toHaveBeenCalled()
 
     await waitFor(() => {
@@ -504,11 +590,14 @@ describe('EditDocument', () => {
 
   it('renders modal with hidden fields table when modal is open', () => {
     // Create a test-specific mock that returns isOpen: true
-    const TestModalMock = ({ children, isOpen }: any) => 
+    const TestModalMock = ({ children, isOpen }: any) =>
       isOpen ? <div data-testid="modal">{children}</div> : null
-    
+
     const TestModalComponent = () => {
-      const { isOpen, onOpenChange } = { isOpen: true, onOpenChange: mockOnOpenChange }
+      const { isOpen, onOpenChange } = {
+        isOpen: true,
+        onOpenChange: mockOnOpenChange,
+      }
       return (
         <TestModalMock isOpen={isOpen}>
           <div data-testid="modal-content">
@@ -536,12 +625,16 @@ describe('EditDocument', () => {
         </TestModalMock>
       )
     }
-    
+
     render(<TestModalComponent />)
-    
+
     expect(screen.getByTestId('modal')).toBeInTheDocument()
     expect(screen.getByText('Hidden Fields')).toBeInTheDocument()
-    expect(screen.getByText('The following fields are not supported and will be ignored:')).toBeInTheDocument()
+    expect(
+      screen.getByText(
+        'The following fields are not supported and will be ignored:',
+      ),
+    ).toBeInTheDocument()
     expect(screen.getByTestId('table')).toBeInTheDocument()
     expect(screen.getByText('Path')).toBeInTheDocument()
     expect(screen.getByText('Value')).toBeInTheDocument()
@@ -551,7 +644,7 @@ describe('EditDocument', () => {
     // Test the cancel button functionality
     const TestModalComponent = () => (
       <div data-testid="modal">
-        <button 
+        <button
           data-testid="button-cancel"
           onClick={() => {
             // Simulate the cancel button behavior from the component
@@ -562,12 +655,12 @@ describe('EditDocument', () => {
         </button>
       </div>
     )
-    
+
     render(<TestModalComponent />)
-    
+
     const cancelButton = screen.getByTestId('button-cancel')
     fireEvent.click(cancelButton)
-    
+
     expect(mockOnOpenChange).toHaveBeenCalled()
   })
 
@@ -575,7 +668,7 @@ describe('EditDocument', () => {
     // Test the confirm button functionality
     const TestModalComponent = () => (
       <div data-testid="modal">
-        <button 
+        <button
           data-testid="button-confirm"
           onClick={() => mockNavigate('/document-information/')}
         >
@@ -583,53 +676,61 @@ describe('EditDocument', () => {
         </button>
       </div>
     )
-    
+
     render(<TestModalComponent />)
-    
+
     const confirmButton = screen.getByTestId('button-confirm')
     fireEvent.click(confirmButton)
-    
+
     expect(mockNavigate).toHaveBeenCalledWith('/document-information/')
   })
 
   it('does not import when there is an error message', async () => {
     mockIsSOSDraft.mockReturnValue(false)
     mockIsCSAFDocument.mockReturnValue(false)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"invalid": "document"}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(['{"invalid": "document"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"invalid": "document"}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"invalid": "document"}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Not a valid Sec-O-Simple or CSAF file')).toBeInTheDocument()
+      expect(
+        screen.getByText('Not a valid Sec-O-Simple or CSAF file'),
+      ).toBeInTheDocument()
     })
-    
+
     const importButton = screen.getByTestId('button-edit-document')
     expect(importButton).toBeDisabled()
-    
+
     // Try to click the disabled button
     fireEvent.click(importButton)
-    
+
     expect(mockImportSOSDocument).not.toHaveBeenCalled()
     expect(mockImportCSAFDocument).not.toHaveBeenCalled()
     expect(mockNavigate).not.toHaveBeenCalled()
@@ -637,12 +738,12 @@ describe('EditDocument', () => {
 
   it('does not import when no file is selected', () => {
     renderComponent()
-    
+
     const importButton = screen.getByTestId('button-edit-document')
     expect(importButton).toBeDisabled()
-    
+
     fireEvent.click(importButton)
-    
+
     expect(mockImportSOSDocument).not.toHaveBeenCalled()
     expect(mockImportCSAFDocument).not.toHaveBeenCalled()
     expect(mockNavigate).not.toHaveBeenCalled()
@@ -650,29 +751,33 @@ describe('EditDocument', () => {
 
   it('handles FileReader onload when result is null', async () => {
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"test": "data"}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(['{"test": "data"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader to return null result
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate onload callback with null result
     if (mockFileReader.onload) {
       mockFileReader.onload({ target: { result: null } } as any)
     }
-    
+
     // Should not call any import functions
     expect(mockImportSOSDocument).not.toHaveBeenCalled()
     expect(mockImportCSAFDocument).not.toHaveBeenCalled()
@@ -683,88 +788,104 @@ describe('EditDocument', () => {
   it('clears error message when valid document is loaded', async () => {
     // Test that error message can be cleared by loading a valid document
     // We'll test this through separate renders to avoid property redefinition
-    
+
     // First render with invalid document
     mockIsSOSDraft.mockReturnValue(false)
     mockIsCSAFDocument.mockReturnValue(false)
-    
+
     const { unmount } = renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const invalidFile = new File(['{"invalid": "document"}'], 'test.json', { type: 'application/json' })
-    
+    const invalidFile = new File(['{"invalid": "document"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader for invalid file
     const mockFileReader1 = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader1 })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader1
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [invalidFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload for invalid file
     if (mockFileReader1.onload) {
-      mockFileReader1.onload({ target: { result: '{"invalid": "document"}' } } as any)
+      mockFileReader1.onload({
+        target: { result: '{"invalid": "document"}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
-      expect(screen.getByText('Not a valid Sec-O-Simple or CSAF file')).toBeInTheDocument()
+      expect(
+        screen.getByText('Not a valid Sec-O-Simple or CSAF file'),
+      ).toBeInTheDocument()
     })
-    
+
     unmount()
-    
+
     // Now render fresh component with valid document setup
     mockIsSOSDraft.mockReturnValue(true)
     mockIsCSAFDocument.mockReturnValue(false)
-    
+
     renderComponent()
-    
+
     const fileInput2 = screen.getByDisplayValue('')
-    const validFile = new File(['{"valid": "sos-document"}'], 'test.json', { type: 'application/json' })
-    
+    const validFile = new File(['{"valid": "sos-document"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader for valid file
     const mockFileReader2 = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader2 })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader2
+    })
+
     Object.defineProperty(fileInput2, 'files', {
       value: [validFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput2)
-    
+
     // Simulate FileReader onload for valid file
     if (mockFileReader2.onload) {
-      mockFileReader2.onload({ target: { result: '{"valid": "sos-document"}' } } as any)
+      mockFileReader2.onload({
+        target: { result: '{"valid": "sos-document"}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
-      expect(screen.queryByText('Not a valid Sec-O-Simple or CSAF file')).not.toBeInTheDocument()
+      expect(
+        screen.queryByText('Not a valid Sec-O-Simple or CSAF file'),
+      ).not.toBeInTheDocument()
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
     })
   })
 
   it('handles file input without files', () => {
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    
+
     // Simulate onChange event without files
     Object.defineProperty(fileInput, 'files', {
       value: null,
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Should not throw error and button should remain disabled
     expect(screen.getByTestId('button-edit-document')).toBeDisabled()
   })
@@ -772,31 +893,37 @@ describe('EditDocument', () => {
   it('tests useEffect with jsonObject state changes', async () => {
     mockIsSOSDraft.mockReturnValue(true)
     mockIsCSAFDocument.mockReturnValue(false)
-    
+
     renderComponent()
-    
+
     const fileInput = screen.getByDisplayValue('')
-    const testFile = new File(['{"valid": "sos-document"}'], 'test.json', { type: 'application/json' })
-    
+    const testFile = new File(['{"valid": "sos-document"}'], 'test.json', {
+      type: 'application/json',
+    })
+
     // Mock FileReader
     const mockFileReader = {
       readAsText: vi.fn(),
       onload: null as any,
     }
-    vi.stubGlobal('FileReader', function() { return mockFileReader })
-    
+    vi.stubGlobal('FileReader', function () {
+      return mockFileReader
+    })
+
     Object.defineProperty(fileInput, 'files', {
       value: [testFile],
       writable: false,
     })
-    
+
     fireEvent.change(fileInput)
-    
+
     // Simulate FileReader onload
     if (mockFileReader.onload) {
-      mockFileReader.onload({ target: { result: '{"valid": "sos-document"}' } } as any)
+      mockFileReader.onload({
+        target: { result: '{"valid": "sos-document"}' },
+      } as any)
     }
-    
+
     await waitFor(() => {
       expect(screen.getByTestId('button-edit-document')).not.toBeDisabled()
     })
