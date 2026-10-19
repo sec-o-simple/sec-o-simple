@@ -38,7 +38,7 @@
     "axios": "^1.17.0",
     "cvss4": "^1.0.7",
     "framer-motion": "^12.23.12",
-    "i18next": "^25.4.2",
+    "i18next": "^26.5.3",
     "lodash.merge": "^4.6.2",
     "micromark": "^4.0.2",
     "micromark-extension-gfm": "^3.0.0",
