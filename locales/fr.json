@@ -1,0 +1,425 @@
+{
+  "translation": {
+    "common": {
+      "loading": "Chargement...",
+      "error": "Erreur",
+      "success": "Succès",
+      "warning": "Avertissement",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "create": "Créer",
+      "search": "Rechercher",
+      "save": "Enregistrer",
+      "close": "Fermer",
+      "back": "Étape précédente",
+      "next": "Étape suivante",
+      "ok": "OK",
+      "untitled": "Sans titre",
+      "add": "Ajouter {{label}}",
+      "placeholder": "Saisir {{label}}",
+      "actions": "Actions",
+      "from": "de",
+      "to": "à",
+      "for": "pour",
+      "see": "voir"
+    },
+    "preview": {
+      "html": "Aperçu",
+      "raw": "HTML",
+      "for_products": "Pour les produits",
+      "for_tlp_version_see": "Pour la version TLP, voir"
+    },
+    "newDocument": "Nouveau document",
+    "confirm.newDocument.title": "Créer un nouveau document",
+    "confirm.newDocument.body": "Êtes-vous sûr de vouloir créer un nouveau document ? Cela réinitialisera le document actuel.",
+    "export": {
+      "draft": "Exporter",
+      "csaf": "Export CSAF",
+      "productDescriptionPrefix": "Description du produit pour",
+      "error": "{{ errorCount }} erreurs dans le document. Veuillez les corriger avant d'exporter.",
+      "invalidExport": "Document CSAF non valide",
+      "invalidExportConfirm": "Êtes-vous sûr de vouloir exporter un document CSAF non valide ?"
+    },
+    "nav": {
+      "home": "Accueil",
+      "productManagement": {
+        "title": "Gestion des produits",
+        "description": "Gérez vos produits",
+        "products": "Produits",
+        "productFamilies": "Familles de produits",
+        "productFamiliesSubtitle": "Organisez vos produits en familles hiérarchiques optionnelles"
+      },
+      "vendors": "Fournisseurs",
+      "document": "Document",
+      "documentInfo": "Informations sur le document",
+      "vulnerabilities": "Vulnérabilités",
+      "vulnerabilitiesNavigation": {
+        "vulnerabilities": "Vulnérabilités",
+        "productMatrix": "Sélection de produits"
+      },
+      "documentInformation": {
+        "general": "Général",
+        "notes": "Notes",
+        "publisher": "Éditeur",
+        "references": "Références",
+        "acknowledgments": "Remerciements",
+        "aliases": "Alias"
+      },
+      "tracking": "Historique",
+      "preview": "Aperçu"
+    },
+    "hiddenFields": {
+      "title": "Champs masqués",
+      "description": "Les champs suivants sont masqués dans Sec-O-Simple mais sont présents dans le document importé.",
+      "column": {
+        "path": "Chemin",
+        "value": "Valeur"
+      }
+    },
+    "documentSelection": {
+      "create": "Créer un document",
+      "selectType": "Sélectionner le type de document",
+      "selectTypeDescription": "Choisissez si vous souhaitez créer un nouveau document ou modifier un document existant",
+      "newDocument": "Créer un nouveau document",
+      "existingDocument": "Modifier un document existant",
+      "advisory": "Avis de sécurité",
+      "vex": "Document VEX",
+      "software": "Logiciel",
+      "softAndHardware": "Logiciel et matériel",
+      "softAndFirmware": "Logiciel et micrologiciel",
+      "sbom": "SBOM"
+    },
+    "document": {
+      "engine": "Moteur",
+      "buildDate": "Date de génération",
+      "initialReleaseDate": "Date de publication initiale",
+      "currentReleaseDate": "Date de publication actuelle",
+      "general": {
+        "title": "Titre du document",
+        "id": "Identifiant du document",
+        "state": "Statut du document",
+        "tlp": {
+          "title": "Traffic Light Protocol (TLP)",
+          "label": "Niveau TLP",
+          "label.placeholder": "Sélectionner l'étiquette TLP",
+          "url": "URL du TLP",
+          "sharingRules": "Règles de partage"
+        },
+        "alias": "Alias",
+        "language": "Langue",
+        "languages": {
+          "de": "Allemand",
+          "en": "Anglais"
+        },
+        "originalLanguage": "Langue originale",
+        "status": {
+          "draft": "Brouillon",
+          "final": "Définitif",
+          "interim": "Intermédiaire"
+        },
+        "revisionHistory": {
+          "initialRevision": "Révision initiale",
+          "history": "Historique des révisions",
+          "label": "Révision",
+          "version": "Version",
+          "date": "Date",
+          "description": "Description",
+          "empty": "Aucune révision ajoutée pour le moment"
+        }
+      },
+      "publisher": {
+        "name": "Nom de l'éditeur",
+        "category": "Catégorie de l'éditeur",
+        "namespace": "Espace de noms de l'éditeur",
+        "contactDetails": "Coordonnées",
+        "issuingAuthority": "Autorité de délivrance",
+        "categories": {
+          "coordinator": "Coordinateur",
+          "discoverer": "Découvreur",
+          "other": "Autre",
+          "translator": "Traducteur",
+          "user": "Utilisateur",
+          "vendor": "Fournisseur"
+        }
+      },
+      "references": {
+        "url": "URL"
+      },
+      "acknowledgments": {
+        "title": "Remerciements",
+        "fromPublisher": "remercie les parties suivantes pour leurs efforts",
+        "acknowledgment": "Remerciement",
+        "acknowledgments": "Remerciements",
+        "summary": "Résumé",
+        "name": "Nom",
+        "names": "Noms remerciés",
+        "organization": "Organisation",
+        "url": "URL",
+        "empty": "Aucun remerciement ajouté pour le moment",
+        "involvement": "Implication"
+      }
+    },
+    "vulnerabilities": {
+      "vulnerability": "Vulnérabilité",
+      "vulnerabilities": "Vulnérabilités",
+      "threats": "Menaces",
+      "general": {
+        "": "Général",
+        "title": "Titre",
+        "fetchCve": "Récupérer",
+        "fetchCVEData": "Récupère les données CVE depuis l'API fournie",
+        "cveFetchError": "Erreur de récupération CVE",
+        "cveFetchErrorDescription": "Échec de la récupération des données CVE. Veuillez vérifier l'URL de l'API et l'identifiant CVE.",
+        "cveDescription": "Description du CVE",
+        "cveNotesFetched": "Notes CVE récupérées",
+        "cveNotesFetchedDescription_one": "{{count}} note CVE récupérée et ajoutée avec succès",
+        "cveNotesFetchedDescription": "{{count}} notes CVE récupérées et ajoutées avec succès",
+        "noCveNotesFound": "Aucune note CVE trouvée",
+        "noCveNotesFoundDescription": "Aucune note CVE trouvée pour cet identifiant CVE",
+        "dataOverrideWarning": "Avertissement d'écrasement de données",
+        "dataOverrideWarningDescription": "La récupération des données CVE écrasera les champs {{fields}} existants. Voulez-vous continuer ?",
+        "dataAddedWarning": "Avertissement de données ajoutées",
+        "dataAddedWarningDescription": "{{count}} nouveaux {{type}} ont été ajoutés aux données existantes",
+        "discoveryDate": "Date de découverte",
+        "releaseDate": "Date de publication"
+      },
+      "notes": "Notes",
+      "references": "Références",
+      "products": {
+        "title": "Produits",
+        "matrixHint": "Astuce : modifiez la sélection des produits pour toutes les vulnérabilités dans une vue d'ensemble unique via",
+        "openMatrix": "Sélection de produits",
+        "copySectionTitle": "Copier depuis une autre vulnérabilité",
+        "copyFromLabel": "Copier la sélection depuis",
+        "copyFromPlaceholder": "Sélectionner la vulnérabilité",
+        "copyButton": "Copier la sélection de produits",
+        "noProductVersions": "Aucun produit disponible pour le moment.",
+        "noProductVersionsLinkPrefix": "Veuillez les ajouter dans",
+        "status": {
+          "title": "Statut du produit",
+          "first_affected": "Premier affecté",
+          "known_affected": "Connu comme affecté",
+          "known_not_affected": "Connu comme non affecté",
+          "last_affected": "Dernier affecté",
+          "first_fixed": "Premier corrigé",
+          "fixed": "Corrigé",
+          "recommended": "Version recommandée",
+          "under_investigation": "En cours d'investigation"
+        }
+      },
+      "scores": "Scores",
+      "score": {
+        "title": "Score",
+        "cvss": "CVSS",
+        "vectorStringDescription": "Les versions CVSS 3.1 et CVSS 4.0 sont prises en charge",
+        "vectorStringEmptyError": "La chaîne de vecteurs ne peut pas être vide.",
+        "vectorStringInvalidError": "La chaîne de vecteurs fournie n'est pas valide. Veuillez vérifier le format.",
+        "baseScore": "Score de base",
+        "baseScoreDescription": "Le score de base est calculé à partir de la chaîne de vecteurs",
+        "baseSeverity": "Sévérité de base",
+        "baseSeverityDescription": "La sévérité de base est calculée à partir de la chaîne de vecteurs",
+        "applyAllKnownAffectedProducts": "Appliquer à tous les produits connus comme affectés",
+        "productsDescription": "Sélectionnez les produits affectés ou ceux actuellement en cours d'investigation"
+      },
+      "remediations": "Solutions",
+      "remediation": {
+        "title": "Solution",
+        "category": "Catégorie",
+        "categories": {
+          "mitigation": "Atténuation",
+          "no_fix_planned": "Pas de correctif planifié",
+          "none_available": "Aucune disponible",
+          "vendor_fix": "Correctif du fournisseur",
+          "workaround": "Contournement"
+        },
+        "date": "Date",
+        "details": "Détails",
+        "url": "URL",
+        "products.empty": "Aucun produit ajouté",
+        "applyAllKnownAffectedProducts": "Appliquer à tous les produits connus comme affectés",
+        "productsDescription": "Sélectionnez les produits affectés",
+        "restartRequired": "Redémarrage requis"
+      },
+      "flags": "Drapeaux",
+      "matrix": {
+        "title": "Sélection de produits",
+        "description": "Définissez le statut de la vulnérabilité par version de produit.",
+        "empty": "Ajoutez au moins une version de produit et une vulnérabilité pour utiliser la matrice.",
+        "productVersion": "Produit",
+        "vulnerabilityFallback": "Vulnérabilité {{index}}",
+        "required": "Requis",
+        "notSet": "Non défini",
+        "applyFirst": "Appliquer le premier",
+        "applyRow": "Appliquer à la ligne",
+        "applyColumn": "Appliquer à la colonne",
+        "applyRowShort": "Ligne",
+        "applyColumnShort": "Col."
+      },
+      "flag": {
+        "title": "Drapeau",
+        "component_not_present": "Composant non présent",
+        "inline_mitigations_already_exist": "Des atténuations en ligne existent déjà",
+        "vulnerable_code_cannot_be_controlled_by_adversary": "Le code vulnérable ni peut pas être contrôlé par l'adversaire",
+        "vulnerable_code_not_in_execute_path": "Le code vulnérable n'est pas dans le chemin d'exécution",
+        "vulnerable_code_not_present": "Le code vulnérable n'est pas présent"
+      },
+      "navigation": {
+        "backTo": "Retour à {{tabName}}",
+        "continueTo": "Continuer vers {{tabName}}"
+      }
+    },
+    "notes": {
+      "title": "Titre de la note",
+      "note": "Note",
+      "notes": "Notes",
+      "productDescription": "Description du produit pour {{productName}}",
+      "content": "Contenu de la note",
+      "category": "Catégorie de la note",
+      "category_plural": "Catégories",
+      "categories": {
+        "description": "Description",
+        "details": "Détails",
+        "faq": "FAQ",
+        "general": "Général",
+        "legal_disclaimer": "Avis juridique",
+        "other": "Autre",
+        "summary": "Résumé"
+      }
+    },
+    "notesTemplates": {
+      "addTemplateButton": "Ajouter une note prédéfinie",
+      "editTemplateButton": "Modifier la note prédéfinie",
+      "selectTemplateTitle": "Sélectionner une note prédéfinie"
+    },
+    "ref": {
+      "references": "Références",
+      "reference": "Référence",
+      "summary": "Résumé",
+      "url": "URL",
+      "category": "Origine",
+      "categories": {
+        "external": "Externe",
+        "self": "Interne (soi-même)"
+      }
+    },
+    "untitled": {
+      "vendor": "Fournisseur sans titre",
+      "product_name": "Produit sans titre",
+      "product_version": "Version sans titre",
+      "": "Sans titre"
+    },
+    "modal": {
+      "edit": "Modifier {{label}}",
+      "create": "Créer {{label}}"
+    },
+    "vendor": {
+      "label": "Fournisseur",
+      "name": "Nom",
+      "description": "Description"
+    },
+    "product_version": {
+      "label": "Version",
+      "name": "Nom",
+      "description": "Description",
+      "readonly_reason": {
+        "imported_with_identification_helper": "Ce nom de version est verrouillé car le produit importé possède un ou plusieurs assistants d'identification.",
+        "full_product_name_mismatch": "Ce nom de version est verrouillé car le nom complet du produit défini ne correspond pas à celui généré automatiquement."
+      }
+    },
+    "product_family": {
+      "label": "Famille de produits",
+      "name": "Nom",
+      "description": "Description de la famille de produits",
+      "parent": "Famille de produits parente",
+      "helpText": "Les familles de produits sont des unités d'organisation optionnelles qui vous permettent de regrouper des produits connexes de manière hiérarchique. Elles aident à structurer votre catalogue de produits et peuvent être imbriquées pour créer des catégorisations plus profondes."
+    },
+    "product_name": {
+      "label": "Produit",
+      "name": "Nom",
+      "description": "Description",
+      "type": "Type de produit"
+    },
+    "products": {
+      "import": {
+        "title": "Ajouter depuis la base de données",
+        "description": "Choisissez un ou plusieurs produits de votre base de données existante pour les ajouter à votre document.",
+        "database": "base de données",
+        "warning": "Les modifications apportées aux produits ajoutés ne seront pas conservées. Pour modifier, ajouter ou supprimer des produits, veuillez consulter la",
+        "noVendors": "Aucun fournisseur trouvé dans la base de données. Veuillez ajouter des fournisseurs et des produits à la base de données avant d'utiliser cette fonctionnalité.",
+        "searchPlaceholder": "Rechercher des fournisseurs et des produits",
+        "selectedAll": "tous les produits sélectionnés",
+        "selected_one": "1 produit sélectionné",
+        "selected_other": "{{count}} produits sélectionnés",
+        "add_one": "Ajouter 1 produit",
+        "add_other": "Ajouter {{count}} produits"
+      },
+      "vendors": "Fournisseurs",
+      "products": "Produits",
+      "productGroups": "Groupes de produits",
+      "manage": "Gestion des produits",
+      "empty": "Vous n'avez encore créé aucun produit de type {{ type }}.\nVous pouvez en ajouter un en créant un fournisseur et en lui associant un produit.",
+      "software": "Logiciel",
+      "hardware": "Matériel",
+      "unknownType": "Type inconnu",
+      "vendor": {
+        "label": "Fournisseur",
+        "addProduct": "Ajouter un produit",
+        "edit": "Modifier le fournisseur"
+      },
+      "product": {
+        "label": "Produit",
+        "label_plural": "Produits",
+        "name": "Nom du produit",
+        "description": "Description du produit",
+        "type": "Type de produit",
+        "version": {
+          "label": "Version",
+          "label_plural": "Versions",
+          "empty": "Aucune version disponible",
+          "edit": "Modifier la version du produit",
+          "edit_plural": "Modifier les versions du produit",
+          "affected": "Première version affectée",
+          "fixed": "Première version corrigée"
+        }
+      },
+      "relationship": {
+        "label": "Relations",
+        "empty": "Aucune relation sortante disponible",
+        "edit": "Modifier la relation",
+        "edit_plural": "Modifier les relations",
+        "name": "Nom",
+        "namePlaceholder": "Nom de la relation",
+        "sourceProduct": "Source",
+        "targetProduct": "Cible",
+        "version": "Version",
+        "version_plural": "Versions",
+        "category": "Type de relation",
+        "categoryPlaceholder": "Sélectionner le type de relation",
+        "relationshipCount": "{{count}} relation",
+        "relationshipCount_plural": "{{count}} relations",
+        "categories": {
+          "default_component_of": "Composant par défaut de",
+          "external_component_of": "Composant externe de",
+          "installed_on": "Installé sur",
+          "installed_with": "Installé avec",
+          "optional_component_of": "Composant optionnel de",
+          "product_version": "Versions"
+        }
+      }
+    },
+    "validation": {
+      "error": "Erreur",
+      "error_plural": "Erreurs",
+      "requiredByTemplate": "Ce champ est obligatoire",
+      "errors": {
+        "title": "Erreurs de validation",
+        "column": {
+          "path": "Chemin",
+          "message": "Message"
+        }
+      }
+    }
+  }
+}
