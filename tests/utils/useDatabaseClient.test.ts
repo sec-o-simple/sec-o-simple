@@ -24,12 +24,12 @@ vi.mock('../../src/utils/useProductDatabase', () => ({
 
 // Import types and functions after mocking
 import axios from 'axios'
-import { 
-  useDatabaseClient, 
-  type Vendor, 
-  type Product, 
-  type ProductVersion, 
-  type IdentificationHelper 
+import {
+  useDatabaseClient,
+  type Vendor,
+  type Product,
+  type ProductVersion,
+  type IdentificationHelper,
 } from '../../src/utils/useDatabaseClient'
 
 const mockedAxios = vi.mocked(axios)
@@ -44,7 +44,7 @@ describe('useDatabaseClient', () => {
   beforeEach(() => {
     vi.clearAllMocks()
     mockClient.defaults.baseURL = '' // Reset baseURL
-    
+
     // Mock useProductDatabase to return our mock config
     mockUseProductDatabase.mockReturnValue(mockConfig)
   })
@@ -120,7 +120,9 @@ describe('useDatabaseClient', () => {
 
       rerender()
 
-      expect(mockClient.defaults.baseURL).toBe('https://new-api.example.com/api/v1')
+      expect(mockClient.defaults.baseURL).toBe(
+        'https://new-api.example.com/api/v1',
+      )
     })
   })
 
@@ -139,7 +141,7 @@ describe('useDatabaseClient', () => {
       expect(result.current).toHaveProperty('fetchProducts')
       expect(result.current).toHaveProperty('fetchProductVersions')
       expect(result.current).toHaveProperty('fetchIdentificationHelpers')
-      
+
       expect(typeof result.current.fetchVendors).toBe('function')
       expect(typeof result.current.fetchProducts).toBe('function')
       expect(typeof result.current.fetchProductVersions).toBe('function')
@@ -179,7 +181,9 @@ describe('useDatabaseClient', () => {
 
       const { result } = renderHook(() => useDatabaseClient())
 
-      await expect(result.current.fetchVendors()).rejects.toThrow('Network error')
+      await expect(result.current.fetchVendors()).rejects.toThrow(
+        'Network error',
+      )
       expect(mockClient.get).toHaveBeenCalledWith('/vendors')
     })
   })
@@ -255,7 +259,9 @@ describe('useDatabaseClient', () => {
 
       const { result } = renderHook(() => useDatabaseClient())
 
-      await expect(result.current.fetchProductVersions('prod1')).rejects.toThrow('Version fetch error')
+      await expect(
+        result.current.fetchProductVersions('prod1'),
+      ).rejects.toThrow('Version fetch error')
       expect(mockClient.get).toHaveBeenCalledWith('/products/prod1/versions')
     })
 
@@ -264,12 +270,16 @@ describe('useDatabaseClient', () => {
       mockClient.get.mockResolvedValue({ data: mockVersions })
 
       const { result } = renderHook(() => useDatabaseClient())
-      
+
       await result.current.fetchProductVersions('product-123')
-      expect(mockClient.get).toHaveBeenCalledWith('/products/product-123/versions')
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/products/product-123/versions',
+      )
 
       await result.current.fetchProductVersions('another-product')
-      expect(mockClient.get).toHaveBeenCalledWith('/products/another-product/versions')
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/products/another-product/versions',
+      )
     })
   })
 
@@ -293,7 +303,9 @@ describe('useDatabaseClient', () => {
       const { result } = renderHook(() => useDatabaseClient())
       const helpers = await result.current.fetchIdentificationHelpers('v1')
 
-      expect(mockClient.get).toHaveBeenCalledWith('/product-versions/v1/identification-helpers')
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/product-versions/v1/identification-helpers',
+      )
       expect(helpers).toEqual(mockHelpers)
     })
 
@@ -303,8 +315,12 @@ describe('useDatabaseClient', () => {
 
       const { result } = renderHook(() => useDatabaseClient())
 
-      await expect(result.current.fetchIdentificationHelpers('v1')).rejects.toThrow('Helper fetch error')
-      expect(mockClient.get).toHaveBeenCalledWith('/product-versions/v1/identification-helpers')
+      await expect(
+        result.current.fetchIdentificationHelpers('v1'),
+      ).rejects.toThrow('Helper fetch error')
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/product-versions/v1/identification-helpers',
+      )
     })
 
     it('should call fetchIdentificationHelpers with different version IDs', async () => {
@@ -312,19 +328,23 @@ describe('useDatabaseClient', () => {
       mockClient.get.mockResolvedValue({ data: mockHelpers })
 
       const { result } = renderHook(() => useDatabaseClient())
-      
+
       await result.current.fetchIdentificationHelpers('version-abc')
-      expect(mockClient.get).toHaveBeenCalledWith('/product-versions/version-abc/identification-helpers')
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/product-versions/version-abc/identification-helpers',
+      )
 
       await result.current.fetchIdentificationHelpers('version-xyz')
-      expect(mockClient.get).toHaveBeenCalledWith('/product-versions/version-xyz/identification-helpers')
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/product-versions/version-xyz/identification-helpers',
+      )
     })
   })
 
   describe('function memoization', () => {
     it('should return stable function references', () => {
       const { result, rerender } = renderHook(() => useDatabaseClient())
-      
+
       const firstFunctions = {
         fetchVendors: result.current.fetchVendors,
         fetchProducts: result.current.fetchProducts,
@@ -336,8 +356,12 @@ describe('useDatabaseClient', () => {
 
       expect(result.current.fetchVendors).toBe(firstFunctions.fetchVendors)
       expect(result.current.fetchProducts).toBe(firstFunctions.fetchProducts)
-      expect(result.current.fetchProductVersions).toBe(firstFunctions.fetchProductVersions)
-      expect(result.current.fetchIdentificationHelpers).toBe(firstFunctions.fetchIdentificationHelpers)
+      expect(result.current.fetchProductVersions).toBe(
+        firstFunctions.fetchProductVersions,
+      )
+      expect(result.current.fetchIdentificationHelpers).toBe(
+        firstFunctions.fetchIdentificationHelpers,
+      )
     })
   })
 
@@ -346,7 +370,7 @@ describe('useDatabaseClient', () => {
       mockClient.get.mockResolvedValue({ data: [] })
 
       const { result } = renderHook(() => useDatabaseClient())
-      
+
       const vendors = await result.current.fetchVendors()
       const products = await result.current.fetchProducts()
       const versions = await result.current.fetchProductVersions('prod1')
@@ -362,7 +386,7 @@ describe('useDatabaseClient', () => {
       mockClient.get.mockResolvedValue({ data: null })
 
       const { result } = renderHook(() => useDatabaseClient())
-      
+
       const vendors = await result.current.fetchVendors()
       expect(vendors).toBeNull()
     })
@@ -372,12 +396,18 @@ describe('useDatabaseClient', () => {
       mockClient.get.mockResolvedValue({ data: mockVersions })
 
       const { result } = renderHook(() => useDatabaseClient())
-      
-      await result.current.fetchProductVersions('product-with-@special#chars!')
-      expect(mockClient.get).toHaveBeenCalledWith('/products/product-with-@special#chars!/versions')
 
-      await result.current.fetchIdentificationHelpers('version-with-$pecial&chars')
-      expect(mockClient.get).toHaveBeenCalledWith('/product-versions/version-with-$pecial&chars/identification-helpers')
+      await result.current.fetchProductVersions('product-with-@special#chars!')
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/products/product-with-@special#chars!/versions',
+      )
+
+      await result.current.fetchIdentificationHelpers(
+        'version-with-$pecial&chars',
+      )
+      expect(mockClient.get).toHaveBeenCalledWith(
+        '/product-versions/version-with-$pecial&chars/identification-helpers',
+      )
     })
 
     it('should handle undefined config properties gracefully', () => {
@@ -388,7 +418,7 @@ describe('useDatabaseClient', () => {
       })
 
       const { result } = renderHook(() => useDatabaseClient())
-      
+
       expect(result.current.url).toBe('')
     })
 
@@ -400,7 +430,7 @@ describe('useDatabaseClient', () => {
       })
 
       const { result } = renderHook(() => useDatabaseClient())
-      
+
       expect(result.current.url).toBe('')
     })
   })

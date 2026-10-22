@@ -1,8 +1,13 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent, within } from '@testing-library/react'
 import '@testing-library/jest-dom'
-import RelationshipEditForm, { RelationshipEditFormProps } from '../../../../src/routes/products/components/RelationshipEditForm'
-import { TRelationship, relationshipCategories } from '../../../../src/routes/products/types/tRelationship'
+import RelationshipEditForm, {
+  RelationshipEditFormProps,
+} from '../../../../src/routes/products/components/RelationshipEditForm'
+import {
+  TRelationship,
+  relationshipCategories,
+} from '../../../../src/routes/products/types/tRelationship'
 import { TProductTreeBranch } from '../../../../src/routes/products/types/tProductTreeBranch'
 import React from 'react'
 
@@ -82,94 +87,124 @@ let mockPlaceholder = ''
 
 // Mock dependencies
 vi.mock('@/components/forms/Input', () => ({
-  Input: vi.fn(({ label, value, onValueChange, isDisabled, placeholder, ...props }) => {
-    return React.createElement('input', {
-      'data-testid': 'relationship-input',
-      'data-label': label,
-      'data-placeholder': placeholder,
-      'data-disabled': String(isDisabled || false),
-      value: value || '',
-      onChange: (e: any) => onValueChange?.(e.target.value),
-      disabled: isDisabled,
-      placeholder,
-      ...props
-    })
-  }),
+  Input: vi.fn(
+    ({ label, value, onValueChange, isDisabled, placeholder, ...props }) => {
+      return React.createElement('input', {
+        'data-testid': 'relationship-input',
+        'data-label': label,
+        'data-placeholder': placeholder,
+        'data-disabled': String(isDisabled || false),
+        value: value || '',
+        onChange: (e: any) => onValueChange?.(e.target.value),
+        disabled: isDisabled,
+        placeholder,
+        ...props,
+      })
+    },
+  ),
 }))
 
 vi.mock('@/components/forms/PTBSelect', () => ({
-  default: vi.fn(({ 
-    label, 
-    selectedId, 
-    selectedIds, 
-    onSelect, 
-    selectionMode, 
-    selectionCategory, 
-    allowedIds, 
-    isDisabled, 
-    placeholder,
-    ...props 
-  }) => {
-    const isMultiple = selectionMode === 'multiple'
-    const currentSelection = isMultiple ? selectedIds || [] : [selectedId].filter(Boolean)
-    
-    return React.createElement('select', {
-      'data-testid': 'ptb-select',
-      'data-label': label,
-      'data-selection-category': selectionCategory,
-      'data-selection-mode': selectionMode || 'single',
-      'data-disabled': String(isDisabled || false),
-      'data-placeholder': placeholder,
-      'data-allowed-ids': allowedIds ? JSON.stringify(allowedIds) : undefined,
-      multiple: isMultiple,
-      disabled: isDisabled,
-      value: isMultiple ? undefined : currentSelection[0] || '',
-      onChange: (e: any) => {
-        if (isMultiple) {
-          const selectedOptions = Array.from(e.target.selectedOptions || []).map((option: any) => ({ id: option.value }))
-          onSelect?.(selectedOptions)
-        } else {
-          onSelect?.({ id: e.target.value })
-        }
-      },
+  default: vi.fn(
+    ({
+      label,
+      selectedId,
+      selectedIds,
+      onSelect,
+      selectionMode,
+      selectionCategory,
+      allowedIds,
+      isDisabled,
+      placeholder,
       ...props
-    }, [
-      React.createElement('option', { key: 'empty', value: '' }, 'Select an option'),
-      ...mockProductTreeBranches
-        .filter(ptb => ptb.category === selectionCategory)
-        .filter(ptb => !allowedIds || allowedIds.includes(ptb.id))
-        .map(ptb => 
-          React.createElement('option', { 
-            key: ptb.id, 
-            value: ptb.id,
-            selected: isMultiple ? currentSelection.includes(ptb.id) : currentSelection[0] === ptb.id
-          }, ptb.name)
-        )
-    ])
-  }),
+    }) => {
+      const isMultiple = selectionMode === 'multiple'
+      const currentSelection = isMultiple
+        ? selectedIds || []
+        : [selectedId].filter(Boolean)
+
+      return React.createElement(
+        'select',
+        {
+          'data-testid': 'ptb-select',
+          'data-label': label,
+          'data-selection-category': selectionCategory,
+          'data-selection-mode': selectionMode || 'single',
+          'data-disabled': String(isDisabled || false),
+          'data-placeholder': placeholder,
+          'data-allowed-ids': allowedIds
+            ? JSON.stringify(allowedIds)
+            : undefined,
+          multiple: isMultiple,
+          disabled: isDisabled,
+          value: isMultiple ? undefined : currentSelection[0] || '',
+          onChange: (e: any) => {
+            if (isMultiple) {
+              const selectedOptions = Array.from(
+                e.target.selectedOptions || [],
+              ).map((option: any) => ({ id: option.value }))
+              onSelect?.(selectedOptions)
+            } else {
+              onSelect?.({ id: e.target.value })
+            }
+          },
+          ...props,
+        },
+        [
+          React.createElement(
+            'option',
+            { key: 'empty', value: '' },
+            'Select an option',
+          ),
+          ...mockProductTreeBranches
+            .filter((ptb) => ptb.category === selectionCategory)
+            .filter((ptb) => !allowedIds || allowedIds.includes(ptb.id))
+            .map((ptb) =>
+              React.createElement(
+                'option',
+                {
+                  key: ptb.id,
+                  value: ptb.id,
+                  selected: isMultiple
+                    ? currentSelection.includes(ptb.id)
+                    : currentSelection[0] === ptb.id,
+                },
+                ptb.name,
+              ),
+            ),
+        ],
+      )
+    },
+  ),
 }))
 
 vi.mock('@/components/forms/Select', () => ({
-  default: vi.fn(({ 
-    label, 
-    selectedKeys, 
-    onSelectionChange, 
-    isDisabled, 
-    placeholder, 
-    children,
-    ...props 
-  }) => {
-    return React.createElement('select', {
-      'data-testid': 'relationship-select',
-      'data-label': label,
-      'data-disabled': String(isDisabled || false),
-      'data-placeholder': placeholder,
-      value: selectedKeys?.[0] || '',
-      disabled: isDisabled,
-      onChange: (e: any) => onSelectionChange?.(new Set([e.target.value])),
+  default: vi.fn(
+    ({
+      label,
+      selectedKeys,
+      onSelectionChange,
+      isDisabled,
+      placeholder,
+      children,
       ...props
-    }, children)
-  }),
+    }) => {
+      return React.createElement(
+        'select',
+        {
+          'data-testid': 'relationship-select',
+          'data-label': label,
+          'data-disabled': String(isDisabled || false),
+          'data-placeholder': placeholder,
+          value: selectedKeys?.[0] || '',
+          disabled: isDisabled,
+          onChange: (e: any) => onSelectionChange?.(new Set([e.target.value])),
+          ...props,
+        },
+        children,
+      )
+    },
+  ),
 }))
 
 vi.mock('@/utils/template', () => ({
@@ -181,55 +216,75 @@ vi.mock('@/utils/useDocumentStore', () => ({
   default: vi.fn((selector) => {
     const state = { sosDocumentType: mockDocumentType }
     return selector ? selector(state) : state
-  })
+  }),
 }))
 
 vi.mock('@/utils/useProductTreeBranch', () => ({
   useProductTreeBranch: vi.fn(() => ({
-    findProductTreeBranch: vi.fn((id: string) => 
-      mockProductTreeBranches.find(ptb => ptb.id === id)
+    findProductTreeBranch: vi.fn((id: string) =>
+      mockProductTreeBranches.find((ptb) => ptb.id === id),
     ),
-  }))
+  })),
 }))
 
 vi.mock('../../../../src/routes/products/types/tProductTreeBranch', () => ({
-  getPTBName: vi.fn((ptb: TProductTreeBranch) => ptb.name)
+  getPTBName: vi.fn((ptb: TProductTreeBranch) => ptb.name),
 }))
 
 vi.mock('@heroui/button', () => ({
   Button: vi.fn(({ children, onPress, ...props }) => {
-    return React.createElement('button', {
-      'data-testid': 'hero-button',
-      onClick: onPress,
-      ...props
-    }, children)
+    return React.createElement(
+      'button',
+      {
+        'data-testid': 'hero-button',
+        onClick: onPress,
+        ...props,
+      },
+      children,
+    )
   }),
 }))
 
 vi.mock('@heroui/modal', () => ({
   ModalContent: vi.fn(({ children }) => {
     const onClose = vi.fn()
-    return React.createElement('div', { 
-      'data-testid': 'modal-content' 
-    }, typeof children === 'function' ? children(onClose) : children)
+    return React.createElement(
+      'div',
+      {
+        'data-testid': 'modal-content',
+      },
+      typeof children === 'function' ? children(onClose) : children,
+    )
   }),
   ModalHeader: vi.fn(({ children, ...props }) => {
-    return React.createElement('div', { 
-      'data-testid': 'modal-header',
-      ...props 
-    }, children)
+    return React.createElement(
+      'div',
+      {
+        'data-testid': 'modal-header',
+        ...props,
+      },
+      children,
+    )
   }),
   ModalBody: vi.fn(({ children, ...props }) => {
-    return React.createElement('div', { 
-      'data-testid': 'modal-body',
-      ...props 
-    }, children)
+    return React.createElement(
+      'div',
+      {
+        'data-testid': 'modal-body',
+        ...props,
+      },
+      children,
+    )
   }),
   ModalFooter: vi.fn(({ children, ...props }) => {
-    return React.createElement('div', { 
-      'data-testid': 'modal-footer',
-      ...props 
-    }, children)
+    return React.createElement(
+      'div',
+      {
+        'data-testid': 'modal-footer',
+        ...props,
+      },
+      children,
+    )
   }),
 }))
 
@@ -252,16 +307,19 @@ vi.mock('react-i18next', () => ({
         'products.relationship.categoryPlaceholder': 'Select relationship type',
         'products.relationship.name': 'Name',
         'products.relationship.namePlaceholder': 'Relationship Name',
-        'products.relationship.categories.default_component_of': 'Default component of',
-        'products.relationship.categories.external_component_of': 'External component of',
+        'products.relationship.categories.default_component_of':
+          'Default component of',
+        'products.relationship.categories.external_component_of':
+          'External component of',
         'products.relationship.categories.installed_on': 'Installed on',
         'products.relationship.categories.installed_with': 'Installed with',
-        'products.relationship.categories.optional_component_of': 'Optional component of',
+        'products.relationship.categories.optional_component_of':
+          'Optional component of',
         'untitled.product_name': 'Untitled Product',
         'common.cancel': 'Cancel',
-        'common.save': 'Save'
+        'common.save': 'Save',
       }
-      
+
       let result = translations[key] || key
       if (options && options.label) {
         result = result.replace('{{label}}', options.label)
@@ -270,16 +328,16 @@ vi.mock('react-i18next', () => ({
         result = options.count === 1 ? 'Version' : 'Versions'
       }
       return result
-    }
-  })
+    },
+  }),
 }))
 
 vi.mock('@fortawesome/react-fontawesome', () => ({
   FontAwesomeIcon: vi.fn(({ icon, ...props }) => {
-    return React.createElement('span', { 
+    return React.createElement('span', {
       'data-testid': 'fa-icon',
       'data-icon': icon?.iconName || 'unknown',
-      ...props 
+      ...props,
     })
   }),
 }))
@@ -355,13 +413,18 @@ describe('RelationshipEditForm', () => {
       renderComponent()
 
       const categorySelect = screen.getByTestId('relationship-select')
-      
-      relationshipCategories.forEach(category => {
-        const translatedText = category === 'default_component_of' ? 'Default component of' :
-                              category === 'external_component_of' ? 'External component of' :
-                              category === 'installed_on' ? 'Installed on' :
-                              category === 'installed_with' ? 'Installed with' :
-                              'Optional component of'
+
+      relationshipCategories.forEach((category) => {
+        const translatedText =
+          category === 'default_component_of'
+            ? 'Default component of'
+            : category === 'external_component_of'
+              ? 'External component of'
+              : category === 'installed_on'
+                ? 'Installed on'
+                : category === 'installed_with'
+                  ? 'Installed with'
+                  : 'Optional component of'
         const option = within(categorySelect).getByText(translatedText)
         expect(option).toBeInTheDocument()
       })
@@ -391,7 +454,9 @@ describe('RelationshipEditForm', () => {
       renderComponent()
 
       const categorySelect = screen.getByTestId('relationship-select')
-      fireEvent.change(categorySelect, { target: { value: 'external_component_of' } })
+      fireEvent.change(categorySelect, {
+        target: { value: 'external_component_of' },
+      })
 
       // Note: In the mocked Select component, the actual value might not update immediately
       // This test verifies the onChange handler is called
@@ -402,7 +467,9 @@ describe('RelationshipEditForm', () => {
       renderComponent()
 
       const nameInput = screen.getByTestId('relationship-input')
-      fireEvent.change(nameInput, { target: { value: 'New Relationship Name' } })
+      fireEvent.change(nameInput, {
+        target: { value: 'New Relationship Name' },
+      })
 
       expect(nameInput).toHaveValue('New Relationship Name')
     })
@@ -423,27 +490,33 @@ describe('RelationshipEditForm', () => {
     })
 
     it('should handle version selection for source product', () => {
-      renderComponent({ 
-        relationship: { 
-          ...mockRelationship, 
-          productId1: 'product-1' 
-        } 
+      renderComponent({
+        relationship: {
+          ...mockRelationship,
+          productId1: 'product-1',
+        },
       })
 
       const sourceVersionSelect = screen.getAllByTestId('ptb-select')[1]
-      expect(sourceVersionSelect).toHaveAttribute('data-selection-mode', 'multiple')
+      expect(sourceVersionSelect).toHaveAttribute(
+        'data-selection-mode',
+        'multiple',
+      )
     })
 
     it('should handle version selection for target product', () => {
-      renderComponent({ 
-        relationship: { 
-          ...mockRelationship, 
-          productId2: 'product-2' 
-        } 
+      renderComponent({
+        relationship: {
+          ...mockRelationship,
+          productId2: 'product-2',
+        },
       })
 
       const targetVersionSelect = screen.getAllByTestId('ptb-select')[3]
-      expect(targetVersionSelect).toHaveAttribute('data-selection-mode', 'multiple')
+      expect(targetVersionSelect).toHaveAttribute(
+        'data-selection-mode',
+        'multiple',
+      )
     })
   })
 
@@ -462,7 +535,7 @@ describe('RelationshipEditForm', () => {
       expect(mockOnSave).toHaveBeenCalledWith(
         expect.objectContaining({
           name: 'Updated Relationship',
-        })
+        }),
       )
     })
 
@@ -486,7 +559,7 @@ describe('RelationshipEditForm', () => {
             },
           ],
           name: 'Test Relationship',
-        })
+        }),
       )
     })
 
@@ -562,7 +635,7 @@ describe('RelationshipEditForm', () => {
           },
         ],
       }
-      
+
       renderComponent({ relationship: relationshipWithEmptyProduct })
 
       const modalBody = screen.getByTestId('modal-body')
@@ -574,7 +647,7 @@ describe('RelationshipEditForm', () => {
         ...mockRelationship,
         relationships: [],
       }
-      
+
       renderComponent({ relationship: relationshipWithNoVersions })
 
       // Should still render without errors
@@ -592,15 +665,27 @@ describe('RelationshipEditForm', () => {
       expect(ptbSelects[2]).toHaveAttribute('data-label', 'Target Product')
       expect(ptbSelects[3]).toHaveAttribute('data-label', 'Version')
 
-      expect(screen.getByTestId('relationship-select')).toHaveAttribute('data-label', 'Relationship Type')
-      expect(screen.getByTestId('relationship-input')).toHaveAttribute('data-label', 'Name')
+      expect(screen.getByTestId('relationship-select')).toHaveAttribute(
+        'data-label',
+        'Relationship Type',
+      )
+      expect(screen.getByTestId('relationship-input')).toHaveAttribute(
+        'data-label',
+        'Name',
+      )
     })
 
     it('should have proper placeholders', () => {
       renderComponent()
 
-      expect(screen.getByTestId('relationship-select')).toHaveAttribute('data-placeholder', 'Select relationship type')
-      expect(screen.getByTestId('relationship-input')).toHaveAttribute('data-placeholder', 'Relationship Name')
+      expect(screen.getByTestId('relationship-select')).toHaveAttribute(
+        'data-placeholder',
+        'Select relationship type',
+      )
+      expect(screen.getByTestId('relationship-input')).toHaveAttribute(
+        'data-placeholder',
+        'Relationship Name',
+      )
     })
   })
 
@@ -611,12 +696,18 @@ describe('RelationshipEditForm', () => {
       renderComponent({ relationship: mockRelationship })
 
       const ptbSelects = screen.getAllByTestId('ptb-select')
-      ptbSelects.forEach(select => {
+      ptbSelects.forEach((select) => {
         expect(select).toHaveAttribute('data-disabled', 'true')
       })
 
-      expect(screen.getByTestId('relationship-select')).toHaveAttribute('data-disabled', 'true')
-      expect(screen.getByTestId('relationship-input')).toHaveAttribute('data-disabled', 'true')
+      expect(screen.getByTestId('relationship-select')).toHaveAttribute(
+        'data-disabled',
+        'true',
+      )
+      expect(screen.getByTestId('relationship-input')).toHaveAttribute(
+        'data-disabled',
+        'true',
+      )
     })
 
     it('should show placeholders from template when in read-only mode', () => {
@@ -802,7 +893,7 @@ describe('RelationshipEditForm', () => {
 
       const cancelButton = screen.getByText('Cancel')
       expect(cancelButton).toBeInTheDocument()
-      
+
       // Test that clicking cancel doesn't throw errors
       fireEvent.click(cancelButton)
     })
@@ -847,7 +938,9 @@ describe('RelationshipEditForm', () => {
 
       expect(screen.getByTestId('modal-content')).toBeInTheDocument()
       const nameInput = screen.getByTestId('relationship-input')
-      expect(nameInput).toHaveValue('Very Long Relationship Name That Should Not Break The UI Layout And Formatting')
+      expect(nameInput).toHaveValue(
+        'Very Long Relationship Name That Should Not Break The UI Layout And Formatting',
+      )
     })
   })
 

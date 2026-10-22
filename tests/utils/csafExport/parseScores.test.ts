@@ -16,7 +16,9 @@ vi.mock('cvss4', () => ({
   }),
 }))
 
-const makeScore = (overrides: Partial<TVulnerabilityScore> = {}): TVulnerabilityScore => ({
+const makeScore = (
+  overrides: Partial<TVulnerabilityScore> = {},
+): TVulnerabilityScore => ({
   id: 'score-1',
   cvssVersion: '3.1',
   vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
@@ -68,20 +70,29 @@ describe('parseScores', () => {
   })
 
   it('uses productIds when applyAllKnownAffectedProducts is false', () => {
-    const score = makeScore({ productIds: ['prod-3'], applyAllKnownAffectedProducts: false })
+    const score = makeScore({
+      productIds: ['prod-3'],
+      applyAllKnownAffectedProducts: false,
+    })
     const result = parseScores([score], ['prod-1'])
     expect(result![0].products).toEqual(['prod-3'])
   })
 
   it('falls back to applyAll when productIds is empty', () => {
-    const score = makeScore({ productIds: [], applyAllKnownAffectedProducts: undefined })
+    const score = makeScore({
+      productIds: [],
+      applyAllKnownAffectedProducts: undefined,
+    })
     const result = parseScores([score], ['prod-x'])
     // productIds.length === 0 → applyAllKnownAffectedProducts is true → uses knownAffectedProductIds
     expect(result![0].products).toEqual(['prod-x'])
   })
 
   it('deduplicates products', () => {
-    const score = makeScore({ productIds: ['a', 'a', 'b'], applyAllKnownAffectedProducts: false })
+    const score = makeScore({
+      productIds: ['a', 'a', 'b'],
+      applyAllKnownAffectedProducts: false,
+    })
     const result = parseScores([score])
     expect(result![0].products).toEqual(['a', 'b'])
   })

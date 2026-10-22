@@ -1,8 +1,18 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { parseVulnerabilities } from '../../../src/utils/csafImport/parseVulnerabilities'
-import { getDefaultVulnerability, TCwe, TVulnerability } from '../../../src/routes/vulnerabilities/types/tVulnerability'
-import { getDefaultVulnerabilityScore, TVulnerabilityScore } from '../../../src/routes/vulnerabilities/types/tVulnerabilityScore'
-import { TRemediation, useRemediationGenerator } from '../../../src/routes/vulnerabilities/types/tRemediation'
+import {
+  getDefaultVulnerability,
+  TCwe,
+  TVulnerability,
+} from '../../../src/routes/vulnerabilities/types/tVulnerability'
+import {
+  getDefaultVulnerabilityScore,
+  TVulnerabilityScore,
+} from '../../../src/routes/vulnerabilities/types/tVulnerabilityScore'
+import {
+  TRemediation,
+  useRemediationGenerator,
+} from '../../../src/routes/vulnerabilities/types/tRemediation'
 import { TVulnerabilityProduct } from '../../../src/routes/vulnerabilities/types/tVulnerabilityProduct'
 import { TCSAFDocument } from '../../../src/utils/csafExport/csafExport'
 import { TParsedNote } from '../../../src/utils/csafExport/parseNote'
@@ -34,7 +44,7 @@ describe('parseVulnerabilities', () => {
     details: 'default-details',
     date: 'default-date',
     url: 'default-url',
-    productIds: []
+    productIds: [],
   }
 
   const mockDefaultVulnerability: TVulnerability = {
@@ -46,14 +56,14 @@ describe('parseVulnerabilities', () => {
     products: [],
     flags: [],
     remediations: [],
-    scores: []
+    scores: [],
   }
 
   const mockDefaultScore: TVulnerabilityScore = {
     id: 'default-score-id',
     cvssVersion: null,
     vectorString: 'default-vector',
-    productIds: []
+    productIds: [],
   }
 
   const mockDefaultRemediation: TRemediation = {
@@ -62,43 +72,45 @@ describe('parseVulnerabilities', () => {
     details: 'default-details',
     date: 'default-date',
     url: 'default-url',
-    productIds: []
+    productIds: [],
   }
 
   const mockVulnerabilityProduct: TVulnerabilityProduct = {
     id: 'mock-vp-id',
     productId: 'mock-product-id',
-    status: 'known_affected'
+    status: 'known_affected',
   }
 
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     mockGetDefaultVulnerability.mockReturnValue({ ...mockDefaultVulnerability })
     mockGetDefaultVulnerabilityScore.mockReturnValue({ ...mockDefaultScore })
     mockUseRemediationGenerator.mockReturnValue({ ...mockDefaultRemediation })
-    mockVulnerabilityProductGenerator.mockReturnValue({ ...mockVulnerabilityProduct })
-    
+    mockVulnerabilityProductGenerator.mockReturnValue({
+      ...mockVulnerabilityProduct,
+    })
+
     mockParseNote.mockImplementation((note: TParsedNote) => ({
       id: 'parsed-note-id',
       category: note.category,
       title: note.title,
-      content: note.text
+      content: note.text,
     }))
-    
+
     mockParseVulnerabilityProducts.mockReturnValue([mockVulnerabilityProduct])
   })
 
   describe('Basic Functionality', () => {
     it('should return empty array when csafDocument has no vulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
-        vulnerabilities: undefined
+        vulnerabilities: undefined,
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result).toEqual([])
@@ -107,13 +119,13 @@ describe('parseVulnerabilities', () => {
 
     it('should return empty array when vulnerabilities array is empty', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
-        vulnerabilities: []
+        vulnerabilities: [],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result).toEqual([])
@@ -130,15 +142,15 @@ describe('parseVulnerabilities', () => {
             notes: undefined,
             product_status: {},
             remediations: undefined,
-            scores: undefined
-          }
-        ]
+            scores: undefined,
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result).toHaveLength(1)
@@ -151,10 +163,13 @@ describe('parseVulnerabilities', () => {
         products: [mockVulnerabilityProduct],
         flags: [],
         remediations: undefined,
-        scores: undefined
+        scores: undefined,
       })
       expect(mockGetDefaultVulnerability).toHaveBeenCalledTimes(1)
-      expect(mockParseVulnerabilityProducts).toHaveBeenCalledWith({}, mockVulnerabilityProductGenerator)
+      expect(mockParseVulnerabilityProducts).toHaveBeenCalledWith(
+        {},
+        mockVulnerabilityProductGenerator,
+      )
     })
   })
 
@@ -164,15 +179,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             cve: 'CVE-2023-1234',
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].cve).toBe('CVE-2023-1234')
@@ -183,15 +198,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             cve: undefined,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].cve).toBe(mockDefaultVulnerability.cve)
@@ -203,15 +218,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             cwe: mockCwe,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].cwe).toEqual(mockCwe)
@@ -222,15 +237,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             cwe: undefined,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].cwe).toBeUndefined()
@@ -243,15 +258,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             title: 'Custom Vulnerability Title',
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].title).toBe('Custom Vulnerability Title')
@@ -262,15 +277,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             title: undefined,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].title).toBe(mockDefaultVulnerability.title)
@@ -281,22 +296,22 @@ describe('parseVulnerabilities', () => {
     it('should parse notes when provided', () => {
       const mockNotes: TParsedNote[] = [
         { category: 'general', title: 'Note 1', text: 'Content 1' },
-        { category: 'details', title: 'Note 2', text: 'Content 2' }
+        { category: 'details', title: 'Note 2', text: 'Content 2' },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             notes: mockNotes,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(mockParseNote).toHaveBeenCalledTimes(2)
@@ -310,15 +325,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             notes: undefined,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(mockParseNote).not.toHaveBeenCalled()
@@ -330,15 +345,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             notes: [],
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(mockParseNote).not.toHaveBeenCalled()
@@ -413,42 +428,42 @@ describe('parseVulnerabilities', () => {
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            product_status: mockProductStatus
-          }
-        ]
+            product_status: mockProductStatus,
+          },
+        ],
       }
 
       parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(mockParseVulnerabilityProducts).toHaveBeenCalledWith(
         mockProductStatus,
-        mockVulnerabilityProductGenerator
+        mockVulnerabilityProductGenerator,
       )
     })
 
     it('should use result from parseVulnerabilityProducts', () => {
       const mockProducts = [
         { id: 'vp-1', productId: 'product-1', status: 'known_affected' },
-        { id: 'vp-2', productId: 'product-2', status: 'known_not_affected' }
+        { id: 'vp-2', productId: 'product-2', status: 'known_not_affected' },
       ]
       mockParseVulnerabilityProducts.mockReturnValue(mockProducts)
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].products).toEqual(mockProducts)
@@ -463,30 +478,30 @@ describe('parseVulnerabilities', () => {
           details: 'Update to version 1.2.3',
           date: '2023-01-01',
           url: 'https://example.com/fix',
-          product_ids: ['product-1']
+          product_ids: ['product-1'],
         },
         {
           category: 'workaround',
           details: 'Disable feature X',
           date: '2023-01-02',
           url: 'https://example.com/workaround',
-          product_ids: ['product-2']
-        }
+          product_ids: ['product-2'],
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             remediations: mockRemediations,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].remediations).toHaveLength(2)
@@ -517,23 +532,23 @@ describe('parseVulnerabilities', () => {
           details: undefined,
           date: undefined,
           url: undefined,
-          product_ids: ['product-1']
-        }
+          product_ids: ['product-1'],
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             remediations: mockRemediations,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].remediations[0]).toEqual({
@@ -552,15 +567,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             remediations: undefined,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].remediations).toBeUndefined()
@@ -571,15 +586,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             remediations: [],
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].remediations).toEqual([])
@@ -593,24 +608,24 @@ describe('parseVulnerabilities', () => {
           products: ['product-1'],
           cvss_v3: {
             version: '3.1',
-            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
-          }
-        }
+            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+          },
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             scores: mockScores,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].scores).toHaveLength(1)
@@ -619,7 +634,7 @@ describe('parseVulnerabilities', () => {
         productIds: ['product-1'],
         applyAllKnownAffectedProducts: false,
         cvssVersion: '3.1',
-        vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
+        vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
       })
     })
 
@@ -629,24 +644,25 @@ describe('parseVulnerabilities', () => {
           products: ['product-1'],
           cvss_v4: {
             version: '4.0',
-            vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
-          }
-        }
+            vectorString:
+              'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N',
+          },
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             scores: mockScores,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].scores[0]).toEqual({
@@ -654,7 +670,8 @@ describe('parseVulnerabilities', () => {
         productIds: ['product-1'],
         applyAllKnownAffectedProducts: false,
         cvssVersion: '4.0',
-        vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
+        vectorString:
+          'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N',
       })
     })
 
@@ -662,23 +679,23 @@ describe('parseVulnerabilities', () => {
       const mockScores = [
         {
           products: ['product-1'],
-          someOtherField: 'value'
-        }
+          someOtherField: 'value',
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             scores: mockScores,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].scores[0]).toEqual({
@@ -686,7 +703,7 @@ describe('parseVulnerabilities', () => {
         productIds: ['product-1'],
         applyAllKnownAffectedProducts: false,
         cvssVersion: mockDefaultScore.cvssVersion,
-        vectorString: mockDefaultScore.vectorString
+        vectorString: mockDefaultScore.vectorString,
       })
     })
 
@@ -694,23 +711,23 @@ describe('parseVulnerabilities', () => {
       const mockScores = [
         {
           products: ['product-1'],
-          cvss_v3: undefined
-        }
+          cvss_v3: undefined,
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             scores: mockScores,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].scores[0]).toEqual({
@@ -718,7 +735,7 @@ describe('parseVulnerabilities', () => {
         productIds: ['product-1'],
         applyAllKnownAffectedProducts: false,
         cvssVersion: mockDefaultScore.cvssVersion,
-        vectorString: mockDefaultScore.vectorString
+        vectorString: mockDefaultScore.vectorString,
       })
     })
 
@@ -727,15 +744,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             scores: undefined,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].scores).toBeUndefined()
@@ -746,15 +763,15 @@ describe('parseVulnerabilities', () => {
         vulnerabilities: [
           {
             scores: [],
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].scores).toEqual([])
@@ -766,31 +783,32 @@ describe('parseVulnerabilities', () => {
           products: ['product-1'],
           cvss_v3: {
             version: '3.1',
-            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
-          }
+            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+          },
         },
         {
           products: ['product-2'],
           cvss_v4: {
             version: '4.0',
-            vectorString: 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N'
-          }
-        }
+            vectorString:
+              'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N',
+          },
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             scores: mockScores,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].scores).toHaveLength(2)
@@ -803,7 +821,7 @@ describe('parseVulnerabilities', () => {
     it('should parse vulnerability with all fields populated', () => {
       const mockCwe: TCwe = { id: 'CWE-79', name: 'Cross-site Scripting' }
       const mockNotes: TParsedNote[] = [
-        { category: 'general', title: 'Note 1', text: 'Content 1' }
+        { category: 'general', title: 'Note 1', text: 'Content 1' },
       ]
       const mockRemediations = [
         {
@@ -811,17 +829,17 @@ describe('parseVulnerabilities', () => {
           details: 'Update to version 1.2.3',
           date: '2023-01-01',
           url: 'https://example.com/fix',
-          product_ids: ['product-1']
-        }
+          product_ids: ['product-1'],
+        },
       ]
       const mockScores = [
         {
           products: ['product-1'],
           cvss_v3: {
             version: '3.1',
-            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
-          }
-        }
+            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+          },
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
@@ -833,15 +851,15 @@ describe('parseVulnerabilities', () => {
             notes: mockNotes,
             product_status: { known_affected: ['product-1'] },
             remediations: mockRemediations,
-            scores: mockScores
-          }
-        ]
+            scores: mockScores,
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result).toHaveLength(1)
@@ -850,28 +868,34 @@ describe('parseVulnerabilities', () => {
         cve: 'CVE-2023-1234',
         cwe: mockCwe,
         title: 'Sample Vulnerability',
-        notes: [expect.objectContaining({
-          id: 'parsed-note-id',
-          category: 'general',
-          title: 'Note 1',
-          content: 'Content 1'
-        })],
+        notes: [
+          expect.objectContaining({
+            id: 'parsed-note-id',
+            category: 'general',
+            title: 'Note 1',
+            content: 'Content 1',
+          }),
+        ],
         products: [mockVulnerabilityProduct],
         flags: [],
-        remediations: [expect.objectContaining({
-          id: mockRemediationGenerator.id,
-          category: 'vendor_fix',
-          details: 'Update to version 1.2.3',
-          date: '2023-01-01',
-          url: 'https://example.com/fix',
-          productIds: ['product-1']
-        })],
-        scores: [expect.objectContaining({
-          id: mockDefaultScore.id,
-          productIds: ['product-1'],
-          cvssVersion: '3.1',
-          vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
-        })]
+        remediations: [
+          expect.objectContaining({
+            id: mockRemediationGenerator.id,
+            category: 'vendor_fix',
+            details: 'Update to version 1.2.3',
+            date: '2023-01-01',
+            url: 'https://example.com/fix',
+            productIds: ['product-1'],
+          }),
+        ],
+        scores: [
+          expect.objectContaining({
+            id: mockDefaultScore.id,
+            productIds: ['product-1'],
+            cvssVersion: '3.1',
+            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+          }),
+        ],
       })
     })
 
@@ -881,25 +905,25 @@ describe('parseVulnerabilities', () => {
           {
             cve: 'CVE-2023-1111',
             title: 'Vulnerability 1',
-            product_status: {}
+            product_status: {},
           },
           {
             cve: 'CVE-2023-2222',
             title: 'Vulnerability 2',
-            product_status: {}
+            product_status: {},
           },
           {
             cve: 'CVE-2023-3333',
             title: 'Vulnerability 3',
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result).toHaveLength(3)
@@ -918,33 +942,35 @@ describe('parseVulnerabilities', () => {
           products: ['product-1'],
           cvss_v2: {
             version: '2.0',
-            vectorString: 'AV:N/AC:L/Au:N/C:P/I:P/A:P'
+            vectorString: 'AV:N/AC:L/Au:N/C:P/I:P/A:P',
           },
           cvss_v3: {
             version: '3.1',
-            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H'
-          }
-        }
+            vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
+          },
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             scores: mockScores,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       // Should pick the first cvss_ key found (cvss_v2 in this case)
       expect(result[0].scores[0].cvssVersion).toBe('2.0')
-      expect(result[0].scores[0].vectorString).toBe('AV:N/AC:L/Au:N/C:P/I:P/A:P')
+      expect(result[0].scores[0].vectorString).toBe(
+        'AV:N/AC:L/Au:N/C:P/I:P/A:P',
+      )
     })
   })
 
@@ -952,11 +978,13 @@ describe('parseVulnerabilities', () => {
     it('should handle null CSAF document gracefully', () => {
       const csafDocument = null as any
 
-      expect(() => parseVulnerabilities(
-        csafDocument,
-        mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
-      )).toThrow()
+      expect(() =>
+        parseVulnerabilities(
+          csafDocument,
+          mockVulnerabilityProductGenerator,
+          mockRemediationGenerator,
+        ),
+      ).toThrow()
     })
 
     it('should handle vulnerability with null values', () => {
@@ -969,15 +997,15 @@ describe('parseVulnerabilities', () => {
             notes: null,
             product_status: null,
             remediations: null,
-            scores: null
-          } as any
-        ]
+            scores: null,
+          } as any,
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result).toHaveLength(1)
@@ -991,24 +1019,24 @@ describe('parseVulnerabilities', () => {
           products: ['product-1'],
           cvss_v3: {
             version: undefined,
-            vectorString: undefined
-          }
-        }
+            vectorString: undefined,
+          },
+        },
       ]
 
       const csafDocument: DeepPartial<TCSAFDocument> = {
         vulnerabilities: [
           {
             scores: mockScores,
-            product_status: {}
-          }
-        ]
+            product_status: {},
+          },
+        ],
       }
 
       const result = parseVulnerabilities(
         csafDocument as TCSAFDocument,
         mockVulnerabilityProductGenerator,
-        mockRemediationGenerator
+        mockRemediationGenerator,
       )
 
       expect(result[0].scores[0]).toEqual({
@@ -1016,7 +1044,7 @@ describe('parseVulnerabilities', () => {
         productIds: ['product-1'],
         applyAllKnownAffectedProducts: false,
         cvssVersion: mockDefaultScore.cvssVersion,
-        vectorString: mockDefaultScore.vectorString
+        vectorString: mockDefaultScore.vectorString,
       })
     })
   })

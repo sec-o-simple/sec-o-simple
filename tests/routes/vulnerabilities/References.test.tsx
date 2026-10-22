@@ -39,7 +39,13 @@ vi.mock('@/utils/validation/useListValidation', () => ({
 }))
 
 vi.mock('@heroui/react', () => ({
-  Alert: ({ children, color }: { children: React.ReactNode; color: string }) => (
+  Alert: ({
+    children,
+    color,
+  }: {
+    children: React.ReactNode
+    color: string
+  }) => (
     <div data-testid="alert" data-color={color}>
       {children}
     </div>
@@ -121,7 +127,12 @@ describe('Vulnerabilities References', () => {
     mockUseListValidation.mockReturnValue({
       hasErrors: true,
       isTouched: true,
-      errorMessages: [{ path: '/vulnerabilities/0/references', message: 'Invalid references' }],
+      errorMessages: [
+        {
+          path: '/vulnerabilities/0/references',
+          message: 'Invalid references',
+        },
+      ],
     })
 
     render(
@@ -140,7 +151,9 @@ describe('Vulnerabilities References', () => {
     mockUseListValidation.mockReturnValue({
       hasErrors: true,
       isTouched: false,
-      errorMessages: [{ path: '/vulnerabilities/0/references', message: 'Missing summary' }],
+      errorMessages: [
+        { path: '/vulnerabilities/0/references', message: 'Missing summary' },
+      ],
     })
 
     render(

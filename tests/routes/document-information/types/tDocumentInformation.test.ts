@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { 
-  getDefaultDocumentInformation, 
-  getDocumentInformationTemplateKeys 
+import {
+  getDefaultDocumentInformation,
+  getDocumentInformationTemplateKeys,
 } from '@/routes/document-information/types/tDocumentInformation'
 
 // Mock i18next for translation
@@ -9,11 +9,11 @@ vi.mock('i18next', () => ({
   default: {
     t: vi.fn((key: string) => {
       const translations: Record<string, string> = {
-        'document.general.revisionHistory.initialRevision': 'Initial revision'
+        'document.general.revisionHistory.initialRevision': 'Initial revision',
       }
       return translations[key] || key
-    })
-  }
+    }),
+  },
 }))
 
 // Override the global mock from setup.ts specifically for this file
@@ -46,10 +46,10 @@ describe('tDocumentInformation', () => {
 
       expect(Array.isArray(result.acknowledgments)).toBe(true)
       expect(result.acknowledgments).toHaveLength(0)
-      
+
       expect(Array.isArray(result.notes)).toBe(true)
       expect(result.notes).toHaveLength(0)
-      
+
       expect(Array.isArray(result.references)).toBe(true)
       expect(result.references).toHaveLength(0)
     })
@@ -114,7 +114,7 @@ describe('tDocumentInformation', () => {
     it('should have a valid date in initial revision', () => {
       const result = getDefaultDocumentInformation()
       const initialRevision = result.revisionHistory[0]
-      
+
       // Check that the date is a valid ISO string
       expect(() => new Date(initialRevision.date)).not.toThrow()
       const parsedDate = new Date(initialRevision.date)
@@ -138,8 +138,12 @@ describe('tDocumentInformation', () => {
 
       expect(result.notes).toBe('document-information.notes')
       expect(result.references).toBe('document-information.references')
-      expect(result.revisionHistory).toBe('document-information.revision-history')
-      expect(result.acknowledgments).toBe('document-information.acknowledgments')
+      expect(result.revisionHistory).toBe(
+        'document-information.revision-history',
+      )
+      expect(result.acknowledgments).toBe(
+        'document-information.acknowledgments',
+      )
     })
 
     it('should include general document information template keys', () => {

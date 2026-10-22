@@ -6,7 +6,7 @@ import { TNote } from '../../../src/routes/shared/NotesList'
 
 // Mock dependencies
 vi.mock('@/utils/useConfigStore', () => ({
-  useConfigStore: vi.fn()
+  useConfigStore: vi.fn(),
 }))
 
 // Get the mocked function
@@ -19,11 +19,11 @@ vi.mock('react-i18next', () => ({
       const translations: Record<string, string> = {
         'notesTemplates.addTemplateButton': 'Add Template',
         'notesTemplates.selectTemplateTitle': 'Select Template',
-        'common.close': 'Close'
+        'common.close': 'Close',
       }
       return translations[key] || key
-    }
-  })
+    },
+  }),
 }))
 
 vi.mock('@heroui/modal', () => {
@@ -34,15 +34,22 @@ vi.mock('@heroui/modal', () => {
     onOpenChange: vi.fn(),
     isControlled: false,
     getButtonProps: vi.fn(),
-    getDisclosureProps: vi.fn()
+    getDisclosureProps: vi.fn(),
   }))
 
   return {
-    Modal: ({ children, isOpen }: { children: React.ReactNode; isOpen: boolean }) => 
-      isOpen ? <div data-testid="modal">{children}</div> : null,
-    ModalContent: ({ children }: { children: (onClose: () => void) => React.ReactNode }) => (
-      <div data-testid="modal-content">{children(() => {})}</div>
-    ),
+    Modal: ({
+      children,
+      isOpen,
+    }: {
+      children: React.ReactNode
+      isOpen: boolean
+    }) => (isOpen ? <div data-testid="modal">{children}</div> : null),
+    ModalContent: ({
+      children,
+    }: {
+      children: (onClose: () => void) => React.ReactNode
+    }) => <div data-testid="modal-content">{children(() => {})}</div>,
     ModalHeader: ({ children }: { children: React.ReactNode }) => (
       <div data-testid="modal-header">{children}</div>
     ),
@@ -52,7 +59,7 @@ vi.mock('@heroui/modal', () => {
     ModalFooter: ({ children }: { children: React.ReactNode }) => (
       <div data-testid="modal-footer">{children}</div>
     ),
-    useDisclosure: mockUseDisclosure
+    useDisclosure: mockUseDisclosure,
   }
 })
 
@@ -61,12 +68,12 @@ import { useDisclosure } from '@heroui/modal'
 const mockUseDisclosure = vi.mocked(useDisclosure)
 
 vi.mock('@heroui/button', () => ({
-  Button: ({ 
-    children, 
-    onPress, 
+  Button: ({
+    children,
+    onPress,
     startContent,
-    ...props 
-  }: { 
+    ...props
+  }: {
     children: React.ReactNode
     onPress?: () => void
     startContent?: React.ReactNode
@@ -75,47 +82,47 @@ vi.mock('@heroui/button', () => ({
       {startContent}
       {children}
     </button>
-  )
+  ),
 }))
 
 vi.mock('@heroui/react', () => ({
   Listbox: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="listbox">{children}</div>
   ),
-  ListboxItem: ({ 
-    children, 
-    onClick, 
+  ListboxItem: ({
+    children,
+    onClick,
     description,
-    textValue 
-  }: { 
+    textValue,
+  }: {
     children: React.ReactNode
     onClick?: () => void
     description?: React.ReactNode
     textValue?: string
   }) => (
-    <div 
-      data-testid="listbox-item" 
+    <div
+      data-testid="listbox-item"
       onClick={onClick}
       data-text-value={textValue}
     >
       {children}
       {description && <div data-testid="description">{description}</div>}
     </div>
-  )
+  ),
 }))
 
 vi.mock('@fortawesome/react-fontawesome', () => ({
   FontAwesomeIcon: ({ icon }: { icon: any }) => (
     <span data-testid="fontawesome-icon">{icon.iconName || 'icon'}</span>
-  )
+  ),
 }))
 
 vi.mock('@fortawesome/free-solid-svg-icons', () => ({
-  faAdd: { iconName: 'add' }
+  faAdd: { iconName: 'add' },
 }))
 
 vi.mock('uid', () => ({
-  uid: vi.fn(() => 'test-id')
+  uid: vi.fn(() => 'test-id'),
 }))
 
 describe('NotesTemplates', () => {
@@ -126,7 +133,7 @@ describe('NotesTemplates', () => {
     updateDataEntry: vi.fn(),
     removeDataEntry: vi.fn(),
     addDataEntry: vi.fn(),
-    getId: vi.fn()
+    getId: vi.fn(),
   }
 
   beforeEach(() => {
@@ -139,7 +146,7 @@ describe('NotesTemplates', () => {
       onOpenChange: vi.fn(),
       isControlled: false,
       getButtonProps: vi.fn(),
-      getDisclosureProps: vi.fn()
+      getDisclosureProps: vi.fn(),
     })
   })
 
@@ -150,7 +157,7 @@ describe('NotesTemplates', () => {
       <NotesTemplates
         notesListState={mockNotesListState}
         templatePath="test.path"
-      />
+      />,
     )
 
     expect(container.firstChild).toBeNull()
@@ -161,15 +168,15 @@ describe('NotesTemplates', () => {
       template1: {
         title: 'Test Template',
         content: 'Test content',
-        category: 'test'
-      }
+        category: 'test',
+      },
     })
 
     render(
       <NotesTemplates
         notesListState={mockNotesListState}
         templatePath="test.path"
-      />
+      />,
     )
 
     expect(screen.getByText('Add Template')).toBeInTheDocument()
@@ -185,26 +192,28 @@ describe('NotesTemplates', () => {
       onOpenChange: vi.fn(),
       isControlled: false,
       getButtonProps: vi.fn(),
-      getDisclosureProps: vi.fn()
+      getDisclosureProps: vi.fn(),
     })
 
     mockUseConfigStore.mockReturnValue({
-    template1: {
+      template1: {
         title: 'Test Template',
         content: 'Test content',
-        category: 'test'
-      }
+        category: 'test',
+      },
     })
 
     render(
       <NotesTemplates
         notesListState={mockNotesListState}
         templatePath="test.path"
-      />
+      />,
     )
 
     expect(screen.getByTestId('modal')).toBeInTheDocument()
-    expect(screen.getByTestId('modal-header')).toHaveTextContent('Select Template')
+    expect(screen.getByTestId('modal-header')).toHaveTextContent(
+      'Select Template',
+    )
   })
 
   it('should render template items in the modal', () => {
@@ -215,27 +224,27 @@ describe('NotesTemplates', () => {
       onOpenChange: vi.fn(),
       isControlled: false,
       getButtonProps: vi.fn(),
-      getDisclosureProps: vi.fn()
+      getDisclosureProps: vi.fn(),
     })
 
     mockUseConfigStore.mockReturnValue({
       template1: {
         title: 'Test Template 1',
         content: 'Test content 1',
-        category: 'test'
+        category: 'test',
       },
       template2: {
         title: 'Test Template 2',
         content: 'Test content 2',
-        category: 'test'
-      }
+        category: 'test',
+      },
     })
 
     render(
       <NotesTemplates
         notesListState={mockNotesListState}
         templatePath="test.path"
-      />
+      />,
     )
 
     expect(screen.getByTestId('listbox')).toBeInTheDocument()
@@ -253,7 +262,7 @@ describe('NotesTemplates', () => {
       onOpenChange: vi.fn(),
       isControlled: false,
       getButtonProps: vi.fn(),
-      getDisclosureProps: vi.fn()
+      getDisclosureProps: vi.fn(),
     })
 
     const longContent = 'x'.repeat(200)
@@ -261,15 +270,15 @@ describe('NotesTemplates', () => {
       template1: {
         title: 'Test Template',
         content: longContent,
-        category: 'test'
-      }
+        category: 'test',
+      },
     })
 
     render(
       <NotesTemplates
         notesListState={mockNotesListState}
         templatePath="test.path"
-      />
+      />,
     )
 
     const description = screen.getByTestId('description')
@@ -285,22 +294,22 @@ describe('NotesTemplates', () => {
       onOpenChange: vi.fn(),
       isControlled: false,
       getButtonProps: vi.fn(),
-      getDisclosureProps: vi.fn()
+      getDisclosureProps: vi.fn(),
     })
 
     mockUseConfigStore.mockReturnValue({
       template1: {
         title: 'Test Template',
         content: 'Test content',
-        category: 'test'
-      }
+        category: 'test',
+      },
     })
 
     render(
       <NotesTemplates
         notesListState={mockNotesListState}
         templatePath="test.path"
-      />
+      />,
     )
 
     const templateItem = screen.getByTestId('listbox-item')

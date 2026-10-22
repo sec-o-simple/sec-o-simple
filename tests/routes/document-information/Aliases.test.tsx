@@ -145,7 +145,9 @@ vi.mock('@/utils/validation/usePageVisit', () => ({
 }))
 
 vi.mock('@/utils/validation/useValidationStore', () => ({
-  default: vi.fn((selector) => selector({ messages: [], markFieldAsTouched: vi.fn() })),
+  default: vi.fn((selector) =>
+    selector({ messages: [], markFieldAsTouched: vi.fn() }),
+  ),
 }))
 
 vi.mock('@/utils/validation/useFieldValidation', () => ({
@@ -176,10 +178,14 @@ describe('Aliases', () => {
 
   it('renders correctly', () => {
     render(<Aliases />)
-    expect(screen.getByTestId('wizard-title')).toHaveTextContent('nav.documentInformation.aliases')
+    expect(screen.getByTestId('wizard-title')).toHaveTextContent(
+      'nav.documentInformation.aliases',
+    )
     expect(screen.getByTestId('component-list')).toBeInTheDocument()
     expect(screen.getByTestId('list-title')).toHaveTextContent('alias')
-    expect(screen.getByTestId('item-label')).toHaveTextContent('document.general.alias')
+    expect(screen.getByTestId('item-label')).toHaveTextContent(
+      'document.general.alias',
+    )
   })
 
   it('allows adding an alias', async () => {
@@ -212,7 +218,7 @@ describe('Aliases', () => {
 
     const addButton = screen.getByTestId('add-item')
     await user.click(addButton)
-    
+
     expect(screen.getByTestId('list-item-0')).toBeInTheDocument()
 
     const removeButton = screen.getByTestId('remove-item-0')

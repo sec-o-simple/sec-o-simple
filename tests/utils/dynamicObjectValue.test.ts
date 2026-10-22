@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest'
-import { getDynamicObjectValue, type DynamicObjectValueKey } from '../../src/utils/dynamicObjectValue'
+import {
+  getDynamicObjectValue,
+  type DynamicObjectValueKey,
+} from '../../src/utils/dynamicObjectValue'
 
 describe('dynamicObjectValue', () => {
   const testObject = {
@@ -20,7 +23,8 @@ describe('dynamicObjectValue', () => {
     })
 
     it('should return value when key is a function', () => {
-      const keyFunction = (obj: typeof testObject) => `${obj.name} from ${obj.city}`
+      const keyFunction = (obj: typeof testObject) =>
+        `${obj.name} from ${obj.city}`
       const result = getDynamicObjectValue(testObject, keyFunction)
       expect(result).toBe('John from New York')
     })
@@ -40,9 +44,9 @@ describe('dynamicObjectValue', () => {
           },
         },
       }
-      const keyFunction = (obj: typeof nestedObject) => 
+      const keyFunction = (obj: typeof nestedObject) =>
         `${obj.user.profile.firstName} ${obj.user.profile.lastName}`
-      
+
       const result = getDynamicObjectValue(nestedObject, keyFunction)
       expect(result).toBe('Jane Doe')
     })
@@ -62,7 +66,8 @@ describe('dynamicObjectValue', () => {
     })
 
     it('should accept function keys', () => {
-      const key: DynamicObjectValueKey<typeof testObject, number> = (obj) => obj.age
+      const key: DynamicObjectValueKey<typeof testObject, number> = (obj) =>
+        obj.age
       const result = getDynamicObjectValue(testObject, key)
       expect(result).toBe(30)
     })

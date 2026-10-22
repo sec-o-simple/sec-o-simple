@@ -1,6 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { parseRelationships } from '../../../src/utils/csafImport/parseRelationships'
-import { CSAFRelationship, TRelationship, getDefaultRelationship } from '../../../src/routes/products/types/tRelationship'
+import {
+  CSAFRelationship,
+  TRelationship,
+  getDefaultRelationship,
+} from '../../../src/routes/products/types/tRelationship'
 import { TProductTreeBranch } from '../../../src/routes/products/types/tProductTreeBranch'
 
 // Mock the utils module
@@ -66,7 +70,7 @@ describe('parseRelationships', () => {
       expect(result).toEqual([])
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to parse csaf relationship',
-        csafRelationships[0]
+        csafRelationships[0],
       )
     })
 
@@ -400,14 +404,14 @@ describe('parseRelationships', () => {
 
       mockGetParentPTB
         .mockReturnValueOnce(undefined) // parent1 not found
-        .mockReturnValueOnce(mockPTB2)   // parent2 found
+        .mockReturnValueOnce(mockPTB2) // parent2 found
 
       const result = parseRelationships(csafRelationships, mockSosPTBs)
 
       expect(result).toEqual([])
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to parse csaf relationship',
-        csafRelationships[0]
+        csafRelationships[0],
       )
     })
 
@@ -425,15 +429,15 @@ describe('parseRelationships', () => {
       ]
 
       mockGetParentPTB
-        .mockReturnValueOnce(mockPTB1)   // parent1 found
-        .mockReturnValueOnce(undefined)  // parent2 not found
+        .mockReturnValueOnce(mockPTB1) // parent1 found
+        .mockReturnValueOnce(undefined) // parent2 not found
 
       const result = parseRelationships(csafRelationships, mockSosPTBs)
 
       expect(result).toEqual([])
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to parse csaf relationship',
-        csafRelationships[0]
+        csafRelationships[0],
       )
     })
 
@@ -459,7 +463,7 @@ describe('parseRelationships', () => {
       expect(result).toEqual([])
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to parse csaf relationship',
-        csafRelationships[0]
+        csafRelationships[0],
       )
     })
 
@@ -487,9 +491,9 @@ describe('parseRelationships', () => {
 
       mockGetParentPTB
         .mockReturnValueOnce(undefined) // parent1 not found for first relationship
-        .mockReturnValueOnce(mockPTB2)  // parent2 found for first relationship
-        .mockReturnValueOnce(mockPTB1)  // parent1 found for second relationship
-        .mockReturnValueOnce(mockPTB2)  // parent2 found for second relationship
+        .mockReturnValueOnce(mockPTB2) // parent2 found for first relationship
+        .mockReturnValueOnce(mockPTB1) // parent1 found for second relationship
+        .mockReturnValueOnce(mockPTB2) // parent2 found for second relationship
 
       const result = parseRelationships(csafRelationships, mockSosPTBs)
 
@@ -532,12 +536,12 @@ describe('parseRelationships', () => {
       ]
 
       mockGetParentPTB
-        .mockReturnValueOnce(mockPTB1)  // Valid for first relationship
-        .mockReturnValueOnce(mockPTB2)  // Valid for first relationship
+        .mockReturnValueOnce(mockPTB1) // Valid for first relationship
+        .mockReturnValueOnce(mockPTB2) // Valid for first relationship
         .mockReturnValueOnce(undefined) // Invalid for second relationship
-        .mockReturnValueOnce(mockPTB1)  // Doesn't matter, already invalid
-        .mockReturnValueOnce(mockPTB2)  // Valid for third relationship
-        .mockReturnValueOnce(mockPTB1)  // Valid for third relationship
+        .mockReturnValueOnce(mockPTB1) // Doesn't matter, already invalid
+        .mockReturnValueOnce(mockPTB2) // Valid for third relationship
+        .mockReturnValueOnce(mockPTB1) // Valid for third relationship
 
       const result = parseRelationships(csafRelationships, mockSosPTBs)
 
@@ -550,21 +554,23 @@ describe('parseRelationships', () => {
     it('should handle all relationship categories', () => {
       const categories = [
         'default_component_of',
-        'external_component_of', 
+        'external_component_of',
         'installed_on',
         'installed_with',
-        'optional_component_of'
+        'optional_component_of',
       ] as const
 
-      const csafRelationships: CSAFRelationship[] = categories.map((category, index) => ({
-        category,
-        product_reference: `ref${index + 1}`,
-        relates_to_product_reference: `ref${index + 10}`,
-        full_product_name: {
-          name: `Product ${category}`,
-          product_id: `prod-${index + 1}`,
-        },
-      }))
+      const csafRelationships: CSAFRelationship[] = categories.map(
+        (category, index) => ({
+          category,
+          product_reference: `ref${index + 1}`,
+          relates_to_product_reference: `ref${index + 10}`,
+          full_product_name: {
+            name: `Product ${category}`,
+            product_id: `prod-${index + 1}`,
+          },
+        }),
+      )
 
       // Mock all calls to return valid parents
       categories.forEach(() => {
@@ -604,11 +610,13 @@ describe('parseRelationships', () => {
       expect(result).toHaveLength(1)
       // The function should handle gracefully even when relationships array might be undefined
       expect(result[0].relationships).toBeDefined()
-      expect(result[0].relationships).toEqual([{
-        product1VersionId: 'ref1',
-        product2VersionId: 'ref2',
-        relationshipId: 'prod-1',
-      }])
+      expect(result[0].relationships).toEqual([
+        {
+          product1VersionId: 'ref1',
+          product2VersionId: 'ref2',
+          relationshipId: 'prod-1',
+        },
+      ])
     })
 
     it('should handle large number of relationships efficiently', () => {
@@ -623,7 +631,7 @@ describe('parseRelationships', () => {
             name: `Product ${index}`,
             product_id: `prod-${index}`,
           },
-        })
+        }),
       )
 
       // Mock all calls to return valid parents alternating between mockPTB1 and mockPTB2
@@ -638,11 +646,11 @@ describe('parseRelationships', () => {
       // Should create two groups: ptb-1 -> ptb-2 and ptb-2 -> ptb-2
       expect(result.length).toBeGreaterThan(0)
       expect(result.length).toBeLessThanOrEqual(2)
-      
+
       // Verify total relationship entries match input
       const totalRelationshipEntries = result.reduce(
         (sum, rel) => sum + (rel.relationships?.length || 0),
-        0
+        0,
       )
       expect(totalRelationshipEntries).toBe(numRelationships)
     })
@@ -688,15 +696,15 @@ describe('parseRelationships', () => {
       ]
 
       mockGetParentPTB
-        .mockReturnValueOnce(ptbWithoutId)  // PTB without id
-        .mockReturnValueOnce(mockPTB2)      // Valid PTB
+        .mockReturnValueOnce(ptbWithoutId) // PTB without id
+        .mockReturnValueOnce(mockPTB2) // Valid PTB
 
       const result = parseRelationships(csafRelationships, mockSosPTBs)
 
       expect(result).toEqual([])
       expect(consoleErrorSpy).toHaveBeenCalledWith(
         'Failed to parse csaf relationship',
-        csafRelationships[0]
+        csafRelationships[0],
       )
     })
 

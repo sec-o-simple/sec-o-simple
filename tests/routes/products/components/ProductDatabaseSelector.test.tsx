@@ -4,10 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import ProductDatabaseSelector from '../../../../src/routes/products/components/ProductDatabaseSelector'
 import { parseProductTree } from '../../../../src/utils/csafImport/parseProductTree'
 import { parseRelationships } from '../../../../src/utils/csafImport/parseRelationships'
-import type {
-  Product,
-  Vendor,
-} from '../../../../src/utils/useDatabaseClient'
+import type { Product, Vendor } from '../../../../src/utils/useDatabaseClient'
 
 // Mock react-i18next
 vi.mock('react-i18next', () => ({
@@ -594,10 +591,10 @@ describe('ProductDatabaseSelector', () => {
       // Find the checkbox for "Test Product 1" by locating it within its label
       const checkboxLabels = screen.getAllByTestId('checkbox-label')
       const product1Label = checkboxLabels.find(
-        (label) => label.textContent === 'Test Product 1'
+        (label) => label.textContent === 'Test Product 1',
       )
       expect(product1Label).toBeDefined()
-      
+
       const product1Checkbox = product1Label!
         .closest('[data-testid="checkbox"]')
         ?.querySelector('input[data-testid="checkbox-input"]')
@@ -857,8 +854,6 @@ describe('ProductDatabaseSelector', () => {
       expect(link).toHaveAttribute('href', '#')
     })
   })
-
-
 
   describe('State Management and Cleanup', () => {
     it('should reset state after successful product addition', async () => {

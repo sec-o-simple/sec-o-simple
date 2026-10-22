@@ -1129,9 +1129,7 @@ describe('useProductTreeBranch', () => {
       const ptbName = result.current.getPTBName(importedVersion)
 
       expect(ptbName.isReadonly).toBe(true)
-      expect(ptbName.readonlyReason).toBe(
-        'imported_with_identification_helper',
-      )
+      expect(ptbName.readonlyReason).toBe('imported_with_identification_helper')
       expect(ptbName.name).toBe('Vendor A Product A Version 1.0')
     })
 

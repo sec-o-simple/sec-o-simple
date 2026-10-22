@@ -33,9 +33,8 @@ describe('Preview iframe focus/blur logic', () => {
     })
     const { render } = await import('@testing-library/react')
     const { HashRouter } = await import('react-router')
-    const { default: Preview } = await import(
-      '../../../src/routes/preview/Preview'
-    )
+    const { default: Preview } =
+      await import('../../../src/routes/preview/Preview')
     render(
       <HashRouter>
         <Preview />
@@ -72,9 +71,8 @@ describe('Preview error handling', () => {
         throw new Error('parseMarkdown error')
       }),
     }))
-    const { default: Preview } = await import(
-      '../../../src/routes/preview/Preview'
-    )
+    const { default: Preview } =
+      await import('../../../src/routes/preview/Preview')
     const { render, screen } = await import('@testing-library/react')
     const { HashRouter } = await import('react-router')
     expect(() => {
@@ -95,9 +93,8 @@ describe('Preview error handling', () => {
     vi.doMock('../../../src/routes/preview/markdownParser', () => ({
       parseMarkdown: vi.fn(() => ({})),
     }))
-    const { default: Preview } = await import(
-      '../../../src/routes/preview/Preview'
-    )
+    const { default: Preview } =
+      await import('../../../src/routes/preview/Preview')
     const { render, screen } = await import('@testing-library/react')
     const { HashRouter } = await import('react-router')
     expect(() => {
@@ -140,9 +137,8 @@ describe('Preview edge cases', () => {
     vi.doMock('../../../src/routes/preview/HTMLTemplate', () => ({
       default: vi.fn(() => '<html></html>'),
     }))
-    const { default: Preview } = await import(
-      '../../../src/routes/preview/Preview'
-    )
+    const { default: Preview } =
+      await import('../../../src/routes/preview/Preview')
     const { render } = await import('@testing-library/react')
     const { HashRouter } = await import('react-router')
     expect(() => {
@@ -164,9 +160,8 @@ describe('Preview edge cases', () => {
     vi.doMock('../../../src/routes/preview/HTMLTemplate', () => ({
       default: vi.fn(() => '<html></html>'),
     }))
-    const { default: Preview } = await import(
-      '../../../src/routes/preview/Preview'
-    )
+    const { default: Preview } =
+      await import('../../../src/routes/preview/Preview')
     const { render } = await import('@testing-library/react')
     const { HashRouter } = await import('react-router')
     expect(() => {
@@ -188,9 +183,8 @@ describe('Preview edge cases', () => {
     vi.doMock('../../../src/routes/preview/HTMLTemplate', () => ({
       default: vi.fn(() => '<html></html>'),
     }))
-    const { default: Preview } = await import(
-      '../../../src/routes/preview/Preview'
-    )
+    const { default: Preview } =
+      await import('../../../src/routes/preview/Preview')
     const { render, screen } = await import('@testing-library/react')
     const { HashRouter } = await import('react-router')
     render(

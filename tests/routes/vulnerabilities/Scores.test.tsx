@@ -9,13 +9,13 @@ import { TProductTreeBranch } from '../../../src/routes/products/types/tProductT
 
 // Mock dependencies
 vi.mock('@/components/forms/ComponentList', () => ({
-  default: ({ 
-    listState, 
-    title, 
-    itemLabel, 
-    itemBgColor, 
-    startContent, 
-    content 
+  default: ({
+    listState,
+    title,
+    itemLabel,
+    itemBgColor,
+    startContent,
+    content,
   }: any) => (
     <div data-testid="component-list">
       <div data-testid="list-title">{title()}</div>
@@ -24,39 +24,36 @@ vi.mock('@/components/forms/ComponentList', () => ({
           <div data-testid={`start-content-${index}`}>
             {startContent({ index, item })}
           </div>
-          <div data-testid={`content-${index}`}>
-            {content(item)}
-          </div>
+          <div data-testid={`content-${index}`}>{content(item)}</div>
         </div>
       ))}
-      <button 
-        data-testid="add-item" 
-        onClick={() => listState.addDataEntry()}
-      >
+      <button data-testid="add-item" onClick={() => listState.addDataEntry()}>
         Add Item
       </button>
     </div>
-  )
+  ),
 }))
 
 vi.mock('@/components/forms/Input', () => ({
-  Input: ({ 
-    label, 
-    value, 
-    onValueChange, 
-    isRequired, 
-    isTouched, 
-    isInvalid, 
-    errorMessage, 
-    isReadOnly, 
+  Input: ({
+    label,
+    value,
+    onValueChange,
+    isRequired,
+    isTouched,
+    isInvalid,
+    errorMessage,
+    isReadOnly,
     isDisabled,
     autoFocus,
     description,
     placeholder,
-    csafPath
+    csafPath,
   }: any) => (
     <div data-testid="input" data-label={label}>
-      <label>{label} {isRequired && '*'}</label>
+      <label>
+        {label} {isRequired && '*'}
+      </label>
       <input
         data-testid={`input-${label.replace(/\s+/g, '-').toLowerCase()}`}
         value={value || ''}
@@ -72,27 +69,49 @@ vi.mock('@/components/forms/Input', () => ({
       {description && <div data-testid="input-description">{description}</div>}
       {errorMessage && <div data-testid="error-message">{errorMessage}</div>}
     </div>
-  )
+  ),
 }))
 
 vi.mock('@/components/forms/VSplit', () => ({
-  default: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div data-testid="vsplit" className={className}>{children}</div>
-  )
+  default: ({
+    children,
+    className,
+  }: {
+    children: React.ReactNode
+    className?: string
+  }) => (
+    <div data-testid="vsplit" className={className}>
+      {children}
+    </div>
+  ),
 }))
 
 vi.mock('@/components/StatusIndicator', () => ({
-  default: ({ hasErrors, hasVisited }: { hasErrors: boolean; hasVisited: boolean }) => (
-    <div 
-      data-testid="status-indicator" 
+  default: ({
+    hasErrors,
+    hasVisited,
+  }: {
+    hasErrors: boolean
+    hasVisited: boolean
+  }) => (
+    <div
+      data-testid="status-indicator"
       data-has-errors={hasErrors}
       data-has-visited={hasVisited}
     />
-  )
+  ),
 }))
 
 vi.mock('@heroui/react', () => ({
-  Alert: ({ children, color, className }: { children: React.ReactNode; color: string; className?: string }) => (
+  Alert: ({
+    children,
+    color,
+    className,
+  }: {
+    children: React.ReactNode
+    color: string
+    className?: string
+  }) => (
     <div data-testid="alert" data-color={color} className={className}>
       {children}
     </div>
@@ -108,8 +127,8 @@ vi.mock('@heroui/react', () => ({
     </label>
   ),
   Chip: ({ children, color, variant, radius, size }: any) => (
-    <div 
-      data-testid="chip" 
+    <div
+      data-testid="chip"
       data-color={color}
       data-variant={variant}
       data-radius={radius}
@@ -117,66 +136,63 @@ vi.mock('@heroui/react', () => ({
     >
       {children}
     </div>
-  )
+  ),
 }))
 
-vi.mock('../../../src/routes/vulnerabilities/components/ProductsTagList', () => ({
-  default: ({ 
-    isRequired, 
-    error, 
-    selected, 
-    products, 
-    onChange 
-  }: any) => (
-    <div data-testid="products-tag-list">
-      <span>Products {isRequired && '*'}</span>
-      {error && <div data-testid="products-error">{error}</div>}
-      <div data-testid="selected-products">{selected?.join(', ')}</div>
-      <button 
-        data-testid="change-products"
-        onClick={() => onChange?.(['product1', 'product2'])}
-      >
-        Change Products
-      </button>
-    </div>
-  )
-}))
+vi.mock(
+  '../../../src/routes/vulnerabilities/components/ProductsTagList',
+  () => ({
+    default: ({ isRequired, error, selected, products, onChange }: any) => (
+      <div data-testid="products-tag-list">
+        <span>Products {isRequired && '*'}</span>
+        {error && <div data-testid="products-error">{error}</div>}
+        <div data-testid="selected-products">{selected?.join(', ')}</div>
+        <button
+          data-testid="change-products"
+          onClick={() => onChange?.(['product1', 'product2'])}
+        >
+          Change Products
+        </button>
+      </div>
+    ),
+  }),
+)
 
 vi.mock('@/utils/template', () => ({
   checkReadOnly: vi.fn((obj, field) => false),
-  getPlaceholder: vi.fn((obj, field) => `placeholder-${field}`)
+  getPlaceholder: vi.fn((obj, field) => `placeholder-${field}`),
 }))
 
 vi.mock('@/utils/useListState', () => ({
-  useListState: vi.fn()
+  useListState: vi.fn(),
 }))
 
 vi.mock('@/utils/useProductTreeBranch', () => ({
-  useProductTreeBranch: vi.fn()
+  useProductTreeBranch: vi.fn(),
 }))
 
 vi.mock('@/utils/validation/useFieldValidation', () => ({
-  useFieldValidation: vi.fn()
+  useFieldValidation: vi.fn(),
 }))
 
 vi.mock('@/utils/validation/useListValidation', () => ({
-  useListValidation: vi.fn()
+  useListValidation: vi.fn(),
 }))
 
 vi.mock('@/utils/validation/usePrefixValidation', () => ({
-  usePrefixValidation: vi.fn()
+  usePrefixValidation: vi.fn(),
 }))
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
-    t: (key: string) => key
-  })
+    t: (key: string) => key,
+  }),
 }))
 
 vi.mock('cvss4', () => ({
   calculateBaseScore: vi.fn(),
   calculateQualScore: vi.fn(),
-  parseVersion: vi.fn()
+  parseVersion: vi.fn(),
 }))
 
 // Import mocked modules
@@ -208,24 +224,24 @@ describe('Scores Component', () => {
       {
         id: 'prod1',
         productId: 'product1',
-        status: 'known_affected'
+        status: 'known_affected',
       },
       {
         id: 'prod2',
         productId: 'product2',
-        status: 'under_investigation'
-      }
+        status: 'under_investigation',
+      },
     ],
     flags: [],
     remediations: [],
-    scores: []
+    scores: [],
   }
 
   const mockScore: TVulnerabilityScore = {
     id: 'score1',
     cvssVersion: '3.1',
     vectorString: 'CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H',
-    productIds: ['product1']
+    productIds: ['product1'],
   }
 
   const mockProductTreeBranches: TProductTreeBranch[] = [
@@ -234,15 +250,15 @@ describe('Scores Component', () => {
       name: 'Product 1',
       category: 'product_version',
       description: 'Product 1 Description',
-      subBranches: []
+      subBranches: [],
     },
     {
       id: 'product2',
       name: 'Product 2',
       category: 'product_version',
       description: 'Product 2 Description',
-      subBranches: []
-    }
+      subBranches: [],
+    },
   ]
 
   const mockListState = {
@@ -251,14 +267,14 @@ describe('Scores Component', () => {
     addDataEntry: vi.fn(),
     updateDataEntry: vi.fn(),
     removeDataEntry: vi.fn(),
-    getId: vi.fn((entry: any) => entry.id)
+    getId: vi.fn((entry: any) => entry.id),
   }
 
   beforeEach(() => {
     vi.clearAllMocks()
-    
+
     mockUseListState.mockReturnValue(mockListState)
-    
+
     mockUseProductTreeBranch.mockReturnValue({
       rootBranch: mockProductTreeBranches,
       families: [],
@@ -274,16 +290,16 @@ describe('Scores Component', () => {
           category: 'product_version',
           full_product_name: {
             name: 'Product 1',
-            product_id: 'product1'
-          }
+            product_id: 'product1',
+          },
         },
         {
           category: 'product_version',
           full_product_name: {
             name: 'Product 2',
-            product_id: 'product2'
-          }
-        }
+            product_id: 'product2',
+          },
+        },
       ]),
       getGroupedSelectableRefs: vi.fn(() => ({})),
       addPTB: vi.fn(),
@@ -293,7 +309,7 @@ describe('Scores Component', () => {
       deletePTB: vi.fn(),
       deleteFamily: vi.fn(),
     })
-    
+
     mockUseFieldValidation.mockReturnValue({
       hasErrors: false,
       errorMessages: [],
@@ -303,9 +319,9 @@ describe('Scores Component', () => {
       infoMessages: [],
       isTouched: false,
       markFieldAsTouched: vi.fn(),
-      messages: []
+      messages: [],
     })
-    
+
     mockUseListValidation.mockReturnValue({
       messages: [],
       hasErrors: false,
@@ -315,11 +331,11 @@ describe('Scores Component', () => {
       hasInfos: false,
       infoMessages: [],
       isTouched: false,
-      markFieldAsTouched: vi.fn()
+      markFieldAsTouched: vi.fn(),
     })
-    
+
     mockUsePrefixValidation.mockReturnValue({
-      hasErrors: false
+      hasErrors: false,
     })
 
     mockCalculateBaseScore.mockReturnValue(9.8)
@@ -336,9 +352,9 @@ describe('Scores Component', () => {
         vulnerability={mockVulnerability}
         vulnerabilityIndex={0}
         onChange={onChange}
-      />
+      />,
     )
-    
+
     expect(screen.getByTestId('component-list')).toBeInTheDocument()
   })
 
@@ -346,23 +362,23 @@ describe('Scores Component', () => {
     const onChange = vi.fn()
     const updatedListState = {
       ...mockListState,
-      data: [mockScore]
+      data: [mockScore],
     }
-    
+
     mockUseListState.mockReturnValue(updatedListState)
-    
+
     render(
       <Scores
         vulnerability={mockVulnerability}
         vulnerabilityIndex={0}
         onChange={onChange}
-      />
+      />,
     )
-    
+
     await waitFor(() => {
       expect(onChange).toHaveBeenCalledWith({
         ...mockVulnerability,
-        scores: [mockScore]
+        scores: [mockScore],
       })
     })
   })
@@ -371,28 +387,36 @@ describe('Scores Component', () => {
     const onChange = vi.fn()
     mockUseListValidation.mockReturnValue({
       messages: [
-        { path: '/vulnerabilities/0/scores', message: 'Invalid score data', severity: 'error' }
+        {
+          path: '/vulnerabilities/0/scores',
+          message: 'Invalid score data',
+          severity: 'error',
+        },
       ],
       hasErrors: true,
       errorMessages: [
-        { path: '/vulnerabilities/0/scores', message: 'Invalid score data', severity: 'error' }
+        {
+          path: '/vulnerabilities/0/scores',
+          message: 'Invalid score data',
+          severity: 'error',
+        },
       ],
       hasWarnings: false,
       warningMessages: [],
       hasInfos: false,
       infoMessages: [],
       isTouched: false,
-      markFieldAsTouched: vi.fn()
+      markFieldAsTouched: vi.fn(),
     })
-    
+
     render(
       <Scores
         vulnerability={mockVulnerability}
         vulnerabilityIndex={0}
         onChange={onChange}
-      />
+      />,
     )
-    
+
     expect(screen.getByTestId('alert')).toBeInTheDocument()
     expect(screen.getByText('Invalid score data')).toBeInTheDocument()
   })
@@ -402,29 +426,29 @@ describe('Scores Component', () => {
     const unsortedScores = [
       { ...mockScore, id: 'score1', cvssVersion: '4.0' as const },
       { ...mockScore, id: 'score2', cvssVersion: '3.0' as const },
-      { ...mockScore, id: 'score3', cvssVersion: '3.1' as const }
+      { ...mockScore, id: 'score3', cvssVersion: '3.1' as const },
     ]
-    
+
     const vulnerabilityWithScores = {
       ...mockVulnerability,
-      scores: unsortedScores
+      scores: unsortedScores,
     }
-    
+
     render(
       <Scores
         vulnerability={vulnerabilityWithScores}
         vulnerabilityIndex={0}
         onChange={onChange}
-      />
+      />,
     )
-    
+
     expect(mockUseListState).toHaveBeenCalledWith({
       initialData: [
         { ...mockScore, id: 'score2', cvssVersion: '3.0' },
         { ...mockScore, id: 'score3', cvssVersion: '3.1' },
-        { ...mockScore, id: 'score1', cvssVersion: '4.0' }
+        { ...mockScore, id: 'score1', cvssVersion: '4.0' },
       ],
-      generator: expect.any(Function)
+      generator: expect.any(Function),
     })
   })
 
@@ -432,19 +456,19 @@ describe('Scores Component', () => {
     const onChange = vi.fn()
     const listStateWithScore = {
       ...mockListState,
-      data: [mockScore]
+      data: [mockScore],
     }
-    
+
     mockUseListState.mockReturnValue(listStateWithScore)
-    
+
     render(
       <Scores
         vulnerability={mockVulnerability}
         vulnerabilityIndex={0}
         onChange={onChange}
-      />
+      />,
     )
-    
+
     // Check that products are filtered correctly
     const productsTagList = screen.getByTestId('products-tag-list')
     expect(productsTagList).toBeInTheDocument()
@@ -456,19 +480,19 @@ describe('Scores Component', () => {
       const scoreWithoutVersion = { ...mockScore, cvssVersion: null }
       const listStateWithScore = {
         ...mockListState,
-        data: [scoreWithoutVersion]
+        data: [scoreWithoutVersion],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       const statusIndicator = screen.getByTestId('status-indicator')
       expect(statusIndicator).toHaveAttribute('data-has-errors', 'true')
     })
@@ -477,19 +501,19 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       const chip = screen.getByTestId('chip')
       expect(chip).toHaveTextContent('Version: 3.1')
     })
@@ -498,22 +522,22 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
       mockUsePrefixValidation.mockReturnValue({
-        hasErrors: true
+        hasErrors: true,
       })
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       const statusIndicator = screen.getByTestId('status-indicator')
       expect(statusIndicator).toHaveAttribute('data-has-errors', 'true')
     })
@@ -524,19 +548,19 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       expect(screen.getByDisplayValue('9.8')).toBeInTheDocument()
       expect(screen.getByDisplayValue('Critical')).toBeInTheDocument()
     })
@@ -545,22 +569,22 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
       mockCalculateBaseScore.mockImplementation(() => {
         throw new Error('Invalid vector string')
       })
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       // Should render without crashing and show empty base score
       expect(screen.getByTestId('input-cvss-vector-string')).toBeInTheDocument()
     })
@@ -570,26 +594,29 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
       mockParseVersion.mockReturnValue('4.0')
       mockCalculateBaseScore.mockReturnValue(8.5)
       mockCalculateQualScore.mockReturnValue('High')
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       const input = screen.getByTestId('input-cvss-vector-string')
       await user.clear(input)
-      await user.type(input, 'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N')
-      
+      await user.type(
+        input,
+        'CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N',
+      )
+
       expect(mockListState.updateDataEntry).toHaveBeenCalled()
     })
 
@@ -598,33 +625,33 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
       mockParseVersion.mockImplementation(() => {
         throw new Error('Invalid vector string')
       })
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       const input = screen.getByTestId('input-cvss-vector-string')
       await user.clear(input)
       await user.type(input, 'invalid-vector')
-      
+
       // Check that updateDataEntry was called with cvssVersion null (indicating parsing error)
       // Since the input updates character by character, we check that there are calls with cvssVersion: null
       expect(mockListState.updateDataEntry).toHaveBeenCalled()
-      
+
       const calls = mockListState.updateDataEntry.mock.calls
-      const hasNullVersionCall = calls.some(call => 
-        call[0] && call[0].cvssVersion === null
+      const hasNullVersionCall = calls.some(
+        (call) => call[0] && call[0].cvssVersion === null,
       )
       expect(hasNullVersionCall).toBe(true)
     })
@@ -634,46 +661,50 @@ describe('Scores Component', () => {
       const scoreWithEmptyVector = { ...mockScore, vectorString: '' }
       const listStateWithScore = {
         ...mockListState,
-        data: [scoreWithEmptyVector]
+        data: [scoreWithEmptyVector],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
           isTouched={true}
-        />
+        />,
       )
-      
+
       expect(screen.getByTestId('error-message')).toHaveTextContent(
-        'vulnerabilities.score.vectorStringEmptyError'
+        'vulnerabilities.score.vectorStringEmptyError',
       )
     })
 
     it('shows validation error for invalid vector string', () => {
       const onChange = vi.fn()
-      const scoreWithInvalidVector = { ...mockScore, cvssVersion: null, vectorString: 'invalid' }
+      const scoreWithInvalidVector = {
+        ...mockScore,
+        cvssVersion: null,
+        vectorString: 'invalid',
+      }
       const listStateWithScore = {
         ...mockListState,
-        data: [scoreWithInvalidVector]
+        data: [scoreWithInvalidVector],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
           isTouched={true}
-        />
+        />,
       )
-      
+
       expect(screen.getByTestId('error-message')).toHaveTextContent(
-        'vulnerabilities.score.vectorStringInvalidError'
+        'vulnerabilities.score.vectorStringInvalidError',
       )
     })
 
@@ -682,19 +713,19 @@ describe('Scores Component', () => {
       const cvss4Score = { ...mockScore, cvssVersion: '4.0' as const }
       const listStateWithScore = {
         ...mockListState,
-        data: [cvss4Score]
+        data: [cvss4Score],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       expect(screen.queryByTestId('products-tag-list')).not.toBeInTheDocument()
     })
 
@@ -702,19 +733,19 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore] // cvssVersion is 3.1
+        data: [mockScore], // cvssVersion is 3.1
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       expect(screen.getByTestId('products-tag-list')).toBeInTheDocument()
     })
 
@@ -722,14 +753,17 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
       mockUseFieldValidation.mockReturnValue({
         hasErrors: true,
         errorMessages: [
-          { path: '/vulnerabilities/0/scores/0/products', message: 'Products are required' }
+          {
+            path: '/vulnerabilities/0/scores/0/products',
+            message: 'Products are required',
+          },
         ],
         hasWarnings: false,
         warningMessages: [],
@@ -737,84 +771,91 @@ describe('Scores Component', () => {
         infoMessages: [],
         isTouched: false,
         markFieldAsTouched: vi.fn(),
-        messages: []
+        messages: [],
       })
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
-      expect(screen.getByTestId('products-error')).toHaveTextContent('Products are required')
+
+      expect(screen.getByTestId('products-error')).toHaveTextContent(
+        'Products are required',
+      )
     })
 
-          it('shows product validation error when apply-all hides product selector', () => {
-            const onChange = vi.fn()
-            const applyAllScore = {
-              ...mockScore,
-              productIds: [],
-              applyAllKnownAffectedProducts: true,
-            }
-            const listStateWithScore = {
-              ...mockListState,
-              data: [applyAllScore]
-            }
+    it('shows product validation error when apply-all hides product selector', () => {
+      const onChange = vi.fn()
+      const applyAllScore = {
+        ...mockScore,
+        productIds: [],
+        applyAllKnownAffectedProducts: true,
+      }
+      const listStateWithScore = {
+        ...mockListState,
+        data: [applyAllScore],
+      }
 
-            mockUseListState.mockReturnValue(listStateWithScore)
-            mockUseFieldValidation.mockReturnValue({
-              hasErrors: true,
-              errorMessages: [
-                { path: '/vulnerabilities/0/scores/0/products', message: 'Products are required' }
-              ],
-              hasWarnings: false,
-              warningMessages: [],
-              hasInfos: false,
-              infoMessages: [],
-              isTouched: false,
-              markFieldAsTouched: vi.fn(),
-              messages: []
-            })
+      mockUseListState.mockReturnValue(listStateWithScore)
+      mockUseFieldValidation.mockReturnValue({
+        hasErrors: true,
+        errorMessages: [
+          {
+            path: '/vulnerabilities/0/scores/0/products',
+            message: 'Products are required',
+          },
+        ],
+        hasWarnings: false,
+        warningMessages: [],
+        hasInfos: false,
+        infoMessages: [],
+        isTouched: false,
+        markFieldAsTouched: vi.fn(),
+        messages: [],
+      })
 
-            render(
-              <Scores
-                vulnerability={{ ...mockVulnerability, scores: [applyAllScore] }}
-                vulnerabilityIndex={0}
-                onChange={onChange}
-              />
-            )
+      render(
+        <Scores
+          vulnerability={{ ...mockVulnerability, scores: [applyAllScore] }}
+          vulnerabilityIndex={0}
+          onChange={onChange}
+        />,
+      )
 
-            expect(screen.queryByTestId('products-tag-list')).not.toBeInTheDocument()
-            expect(screen.getByTestId('products-hidden-error')).toHaveTextContent('Products are required')
-          })
+      expect(screen.queryByTestId('products-tag-list')).not.toBeInTheDocument()
+      expect(screen.getByTestId('products-hidden-error')).toHaveTextContent(
+        'Products are required',
+      )
+    })
 
     it('updates product IDs when ProductsTagList changes', async () => {
       const user = userEvent.setup()
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       const changeButton = screen.getByTestId('change-products')
       await user.click(changeButton)
-      
+
       expect(mockListState.updateDataEntry).toHaveBeenCalledWith(
         expect.objectContaining({
-          productIds: ['product1', 'product2']
-        })
+          productIds: ['product1', 'product2'],
+        }),
       )
     })
 
@@ -822,20 +863,20 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
       mockCheckReadOnly.mockReturnValue(true)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       const input = screen.getByTestId('input-cvss-vector-string')
       expect(input).toBeDisabled()
     })
@@ -844,71 +885,81 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const cvss30Score = { ...mockScore, cvssVersion: '3.0' as const }
       const cvss40Score = { ...mockScore, cvssVersion: '4.0' as const }
-      
+
       // Test CVSS 3.0
       mockUseListState.mockReturnValue({
         ...mockListState,
-        data: [cvss30Score]
+        data: [cvss30Score],
       })
-      
+
       const { rerender } = render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       let input = screen.getByTestId('input-cvss-vector-string')
-      expect(input).toHaveAttribute('data-csaf-path', '/vulnerabilities/0/scores/0/cvss_v3/vectorString')
-      
+      expect(input).toHaveAttribute(
+        'data-csaf-path',
+        '/vulnerabilities/0/scores/0/cvss_v3/vectorString',
+      )
+
       // Test CVSS 4.0
       mockUseListState.mockReturnValue({
         ...mockListState,
-        data: [cvss40Score]
+        data: [cvss40Score],
       })
-      
+
       rerender(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       input = screen.getByTestId('input-cvss-vector-string')
-      expect(input).toHaveAttribute('data-csaf-path', '/vulnerabilities/0/scores/0/cvss_v4/vectorString')
+      expect(input).toHaveAttribute(
+        'data-csaf-path',
+        '/vulnerabilities/0/scores/0/cvss_v4/vectorString',
+      )
     })
 
     it('passes correct props to inputs', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
           isTouched={true}
-        />
+        />,
       )
-      
+
       // Check vector string input
       const vectorInput = screen.getByTestId('input-cvss-vector-string')
       expect(vectorInput).toHaveAttribute('data-touched', 'true')
       expect(vectorInput).toHaveAttribute('data-autofocus', 'true')
-      
+
       // Check base score input (should be read-only)
-      const baseScoreInput = screen.getByTestId('input-vulnerabilities.score.basescore')
+      const baseScoreInput = screen.getByTestId(
+        'input-vulnerabilities.score.basescore',
+      )
       expect(baseScoreInput).toBeDisabled()
-      
+
       // Check severity input (should be read-only)
-      const severityInput = screen.getByTestId('input-vulnerabilities.score.baseseverity')
+      const severityInput = screen.getByTestId(
+        'input-vulnerabilities.score.baseseverity',
+      )
       expect(severityInput).toBeDisabled()
     })
   })
@@ -920,22 +971,22 @@ describe('Scores Component', () => {
         { ...mockScore, id: 'score1', cvssVersion: '2.0' as any }, // Should be filtered out
         { ...mockScore, id: 'score2', cvssVersion: '3.0' as const },
         { ...mockScore, id: 'score3', cvssVersion: '3.1' as const },
-        { ...mockScore, id: 'score4', cvssVersion: '4.0' as const }
+        { ...mockScore, id: 'score4', cvssVersion: '4.0' as const },
       ]
-      
+
       mockUseListState.mockReturnValue({
         ...mockListState,
-        data: mixedScores
+        data: mixedScores,
       })
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       // The component should render without issues and the CSAF paths should be calculated correctly
       // Each list item has both start-content and content, so we have 2 elements per score
       expect(screen.getAllByTestId(/content-/)).toHaveLength(8) // 4 scores * 2 elements each
@@ -947,17 +998,17 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const vulnerabilityWithoutScores = {
         ...mockVulnerability,
-        scores: []
+        scores: [],
       }
-      
+
       render(
         <Scores
           vulnerability={vulnerabilityWithoutScores}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
     })
 
@@ -965,17 +1016,17 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const vulnerabilityWithoutProducts = {
         ...mockVulnerability,
-        products: []
+        products: [],
       }
-      
+
       render(
         <Scores
           vulnerability={vulnerabilityWithoutProducts}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
     })
 
@@ -983,17 +1034,17 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const vulnerabilityWithUndefinedScores = {
         ...mockVulnerability,
-        scores: undefined as any
+        scores: undefined as any,
       }
-      
+
       render(
         <Scores
           vulnerability={vulnerabilityWithUndefinedScores}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
     })
 
@@ -1002,28 +1053,28 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
       mockParseVersion.mockReturnValue('3.0') // This should trigger the error
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       const input = screen.getByTestId('input-cvss-vector-string')
       await user.clear(input)
       await user.type(input, 'CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H')
-      
+
       expect(mockListState.updateDataEntry).toHaveBeenCalledWith(
         expect.objectContaining({
-          cvssVersion: null
-        })
+          cvssVersion: null,
+        }),
       )
     })
 
@@ -1031,21 +1082,21 @@ describe('Scores Component', () => {
       const onChange = vi.fn()
       const listStateWithScore = {
         ...mockListState,
-        data: [mockScore]
+        data: [mockScore],
       }
-      
+
       mockUseListState.mockReturnValue(listStateWithScore)
       mockCalculateBaseScore.mockReturnValue(0)
       mockCalculateQualScore.mockReturnValue('')
-      
+
       render(
         <Scores
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={onChange}
-        />
+        />,
       )
-      
+
       // Should handle gracefully and not crash
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
     })

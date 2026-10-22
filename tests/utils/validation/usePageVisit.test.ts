@@ -403,8 +403,14 @@ describe('usePageVisit', () => {
       renderHook(() => usePageVisit())
 
       expect(useValidationStore).toHaveBeenCalledTimes(2)
-      expect(useValidationStore).toHaveBeenNthCalledWith(1, expect.any(Function))
-      expect(useValidationStore).toHaveBeenNthCalledWith(2, expect.any(Function))
+      expect(useValidationStore).toHaveBeenNthCalledWith(
+        1,
+        expect.any(Function),
+      )
+      expect(useValidationStore).toHaveBeenNthCalledWith(
+        2,
+        expect.any(Function),
+      )
     })
 
     it('should handle hasVisitedPage returning true', () => {

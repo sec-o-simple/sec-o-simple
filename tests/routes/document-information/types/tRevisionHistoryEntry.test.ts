@@ -51,7 +51,7 @@ describe('tRevisionHistoryEntry', () => {
       const resultTime = resultDate.getTime()
       const beforeTime = new Date(beforeCall).getTime()
       const afterTime = new Date(afterCall).getTime()
-      
+
       expect(resultTime).toBeGreaterThanOrEqual(beforeTime - 1000) // Allow 1 second before due to timing
       expect(resultTime).toBeLessThanOrEqual(afterTime + 1000) // Allow 1 second after due to timing
     })
@@ -86,7 +86,7 @@ describe('tRevisionHistoryEntry', () => {
 
       // Test that the object conforms to the expected type structure
       const expectedProperties = ['id', 'date', 'number', 'summary']
-      expectedProperties.forEach(prop => {
+      expectedProperties.forEach((prop) => {
         expect(result).toHaveProperty(prop)
       })
 
@@ -103,28 +103,33 @@ describe('tRevisionHistoryEntry', () => {
       const revisionHistory: TRevisionHistoryEntry[] = [entry1, entry2, entry3]
 
       expect(revisionHistory).toHaveLength(3)
-      expect(revisionHistory.every(entry => 
-        typeof entry.id === 'string' &&
-        typeof entry.date === 'string' &&
-        typeof entry.number === 'string' &&
-        typeof entry.summary === 'string'
-      )).toBe(true)
+      expect(
+        revisionHistory.every(
+          (entry) =>
+            typeof entry.id === 'string' &&
+            typeof entry.date === 'string' &&
+            typeof entry.number === 'string' &&
+            typeof entry.summary === 'string',
+        ),
+      ).toBe(true)
 
       // Verify all IDs are unique
-      const ids = revisionHistory.map(entry => entry.id)
+      const ids = revisionHistory.map((entry) => entry.id)
       const uniqueIds = new Set(ids)
       expect(uniqueIds.size).toBe(revisionHistory.length)
     })
 
     it('should generate valid dates that can be parsed', () => {
       const result = getDefaultRevisionHistoryEntry()
-      
+
       const parsedDate = new Date(result.date)
       expect(parsedDate).toBeInstanceOf(Date)
       expect(parsedDate.toString()).not.toBe('Invalid Date')
-      
+
       // Should be a valid ISO string format
-      expect(result.date).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/)
+      expect(result.date).toMatch(
+        /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/,
+      )
     })
   })
 

@@ -11,8 +11,8 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "cypress run --spec \"tests/e2e/**/*.cy.js\"",
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint": "prettier --check . && eslint .",
+    "lint:fix": "prettier --write . && eslint --fix ."
   },
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^7.0.0",

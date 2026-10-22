@@ -5,7 +5,7 @@ import RevisionHistoryTable from '../../../src/components/forms/RevisionHistoryT
 // Mock external dependencies
 vi.mock('@heroui/button', () => ({
   Button: ({ children, onPress, variant, color, ...props }: any) => (
-    <button 
+    <button
       onClick={onPress}
       data-variant={variant}
       data-color={color}
@@ -14,30 +14,61 @@ vi.mock('@heroui/button', () => ({
     >
       {children}
     </button>
-  )
+  ),
 }))
 
 vi.mock('@heroui/table', () => ({
-  Table: ({ children, ...props }: any) => <table data-testid="table" {...props}>{children}</table>,
-  TableHeader: ({ children, ...props }: any) => <thead data-testid="table-header" {...props}>{children}</thead>,
+  Table: ({ children, ...props }: any) => (
+    <table data-testid="table" {...props}>
+      {children}
+    </table>
+  ),
+  TableHeader: ({ children, ...props }: any) => (
+    <thead data-testid="table-header" {...props}>
+      {children}
+    </thead>
+  ),
   TableColumn: ({ children, width, ...props }: any) => (
-    <th data-width={width} data-testid="table-column" {...props}>{children}</th>
+    <th data-width={width} data-testid="table-column" {...props}>
+      {children}
+    </th>
   ),
   TableBody: ({ children, emptyContent, ...props }: any) => (
-    <tbody data-testid="table-body" data-empty-content={emptyContent} {...props}>
-      {children || <tr><td>{emptyContent}</td></tr>}
+    <tbody
+      data-testid="table-body"
+      data-empty-content={emptyContent}
+      {...props}
+    >
+      {children || (
+        <tr>
+          <td>{emptyContent}</td>
+        </tr>
+      )}
     </tbody>
   ),
-  TableRow: ({ children, ...props }: any) => <tr data-testid="table-row" {...props}>{children}</tr>,
-  TableCell: ({ children, ...props }: any) => <td data-testid="table-cell" {...props}>{children}</td>
+  TableRow: ({ children, ...props }: any) => (
+    <tr data-testid="table-row" {...props}>
+      {children}
+    </tr>
+  ),
+  TableCell: ({ children, ...props }: any) => (
+    <td data-testid="table-cell" {...props}>
+      {children}
+    </td>
+  ),
 }))
 
 vi.mock('@heroui/react', () => ({
   Alert: ({ children, color, className, ...props }: any) => (
-    <div data-testid="alert" data-color={color} className={className} {...props}>
+    <div
+      data-testid="alert"
+      data-color={color}
+      className={className}
+      {...props}
+    >
       {children}
     </div>
-  )
+  ),
 }))
 
 vi.mock('../../../src/components/forms/Input', () => ({
@@ -50,7 +81,7 @@ vi.mock('../../../src/components/forms/Input', () => ({
       placeholder={placeholder}
       {...props}
     />
-  )
+  ),
 }))
 
 vi.mock('../../../src/components/forms/DatePicker', () => ({
@@ -63,7 +94,7 @@ vi.mock('../../../src/components/forms/DatePicker', () => ({
       onChange={(e) => onChange?.(e.target.value)}
       {...props}
     />
-  )
+  ),
 }))
 
 vi.mock('../../../src/components/forms/IconButton', () => ({
@@ -76,7 +107,7 @@ vi.mock('../../../src/components/forms/IconButton', () => ({
     >
       Delete
     </button>
-  )
+  ),
 }))
 
 vi.mock('react-i18next', () => ({
@@ -91,65 +122,69 @@ vi.mock('react-i18next', () => ({
         'document.general.revisionHistory.empty': 'No revisions available',
         'common.add': `Add ${params?.label || ''}`,
         'common.actions': 'Actions',
-        'common.placeholder': `Enter ${params?.label || ''}`
+        'common.placeholder': `Enter ${params?.label || ''}`,
       }
       return translations[key] || key
-    }
-  })
+    },
+  }),
 }))
 
 // Mock the custom hooks and utilities
 let capturedGenerator: (() => any) | undefined
 
-const { mockRetrieveLatestVersion, mockSemverValid, mockSemverInc } = vi.hoisted(() => ({
-  mockRetrieveLatestVersion: vi.fn(() => '1.0.0'),
-  mockSemverValid: vi.fn(),
-  mockSemverInc: vi.fn(),
-}))
+const { mockRetrieveLatestVersion, mockSemverValid, mockSemverInc } =
+  vi.hoisted(() => ({
+    mockRetrieveLatestVersion: vi.fn(() => '1.0.0'),
+    mockSemverValid: vi.fn(),
+    mockSemverInc: vi.fn(),
+  }))
 
 const mockListState = {
   data: [] as any[],
   setData: vi.fn(),
   addDataEntry: vi.fn(),
   updateDataEntry: vi.fn(),
-  removeDataEntry: vi.fn()
+  removeDataEntry: vi.fn(),
 }
 
 vi.mock('../../../src/utils/useListState', () => ({
   useListState: vi.fn((opts: any) => {
     capturedGenerator = opts?.generator
     return mockListState
-  })
+  }),
 }))
 
 vi.mock('../../../src/utils/useDocumentStoreUpdater', () => ({
-  default: vi.fn()
+  default: vi.fn(),
 }))
 
 vi.mock('../../../src/utils/validation/useListValidation', () => ({
   useListValidation: vi.fn(() => ({
     hasErrors: false,
-    errorMessages: []
-  }))
+    errorMessages: [],
+  })),
 }))
 
-vi.mock('../../../src/routes/document-information/types/tRevisionHistoryEntry', () => ({
-  getDefaultRevisionHistoryEntry: () => ({
-    id: 'test-id',
-    number: '1.0.0',
-    date: '2025-01-01',
-    summary: 'Initial release'
-  })
-}))
+vi.mock(
+  '../../../src/routes/document-information/types/tRevisionHistoryEntry',
+  () => ({
+    getDefaultRevisionHistoryEntry: () => ({
+      id: 'test-id',
+      number: '1.0.0',
+      date: '2025-01-01',
+      summary: 'Initial release',
+    }),
+  }),
+)
 
 vi.mock('../../../src/utils/csafExport/latestVersion', () => ({
-  retrieveLatestVersion: mockRetrieveLatestVersion
+  retrieveLatestVersion: mockRetrieveLatestVersion,
 }))
 
 vi.mock('semver', () => ({
   default: { valid: mockSemverValid, inc: mockSemverInc },
   valid: mockSemverValid,
-  inc: mockSemverInc
+  inc: mockSemverInc,
 }))
 
 describe('RevisionHistoryTable', () => {
@@ -165,14 +200,14 @@ describe('RevisionHistoryTable', () => {
 
   it('should display the component title and add button', () => {
     render(<RevisionHistoryTable />)
-    
+
     expect(screen.getByText('Revision History')).toBeInTheDocument()
     expect(screen.getByText('Add Revision')).toBeInTheDocument()
   })
 
   it('should display table headers', () => {
     render(<RevisionHistoryTable />)
-    
+
     expect(screen.getByText('Version')).toBeInTheDocument()
     expect(screen.getByText('Date')).toBeInTheDocument()
     expect(screen.getByText('Description')).toBeInTheDocument()
@@ -181,9 +216,12 @@ describe('RevisionHistoryTable', () => {
 
   it('should display empty content when no revisions exist', () => {
     render(<RevisionHistoryTable />)
-    
+
     const tableBody = screen.getByTestId('table-body')
-    expect(tableBody).toHaveAttribute('data-empty-content', 'No revisions available')
+    expect(tableBody).toHaveAttribute(
+      'data-empty-content',
+      'No revisions available',
+    )
   })
 
   it('should render revision entries when data exists', () => {
@@ -192,14 +230,14 @@ describe('RevisionHistoryTable', () => {
         id: '1',
         number: '1.0.0',
         date: '2025-01-01',
-        summary: 'Initial release'
+        summary: 'Initial release',
       },
       {
-        id: '2', 
+        id: '2',
         number: '1.0.1',
         date: '2025-01-02',
-        summary: 'Bug fixes'
-      }
+        summary: 'Bug fixes',
+      },
     ]
 
     mockListState.data = mockRevisions
@@ -227,10 +265,10 @@ describe('RevisionHistoryTable', () => {
 
   it('should call addDataEntry when add button is clicked', () => {
     render(<RevisionHistoryTable />)
-    
+
     const addButton = screen.getByTestId('add-button')
     fireEvent.click(addButton)
-    
+
     expect(mockListState.addDataEntry).toHaveBeenCalledTimes(1)
   })
 
@@ -239,7 +277,7 @@ describe('RevisionHistoryTable', () => {
       id: '1',
       number: '1.0.0',
       date: '2025-01-01',
-      summary: 'Initial release'
+      summary: 'Initial release',
     }
 
     mockListState.data = [mockRevision]
@@ -250,7 +288,7 @@ describe('RevisionHistoryTable', () => {
 
     expect(mockListState.updateDataEntry).toHaveBeenCalledWith({
       ...mockRevision,
-      number: '1.0.1'
+      number: '1.0.1',
     })
   })
 
@@ -259,7 +297,7 @@ describe('RevisionHistoryTable', () => {
       id: '1',
       number: '1.0.0',
       date: '2025-01-01',
-      summary: 'Initial release'
+      summary: 'Initial release',
     }
 
     mockListState.data = [mockRevision]
@@ -270,7 +308,7 @@ describe('RevisionHistoryTable', () => {
 
     expect(mockListState.updateDataEntry).toHaveBeenCalledWith({
       ...mockRevision,
-      date: '2025-01-02'
+      date: '2025-01-02',
     })
   })
 
@@ -279,7 +317,7 @@ describe('RevisionHistoryTable', () => {
       id: '1',
       number: '1.0.0',
       date: '2025-01-01',
-      summary: 'Initial release'
+      summary: 'Initial release',
     }
 
     mockListState.data = [mockRevision]
@@ -290,7 +328,7 @@ describe('RevisionHistoryTable', () => {
 
     expect(mockListState.updateDataEntry).toHaveBeenCalledWith({
       ...mockRevision,
-      summary: 'Updated summary'
+      summary: 'Updated summary',
     })
   })
 
@@ -299,7 +337,7 @@ describe('RevisionHistoryTable', () => {
       id: '1',
       number: '1.0.0',
       date: '2025-01-01',
-      summary: 'Initial release'
+      summary: 'Initial release',
     }
 
     mockListState.data = [mockRevision]
@@ -316,7 +354,7 @@ describe('RevisionHistoryTable', () => {
       id: '1',
       number: '1.0.0',
       date: '2025-01-01',
-      summary: 'Initial release'
+      summary: 'Initial release',
     }
 
     mockListState.data = [mockRevision]
@@ -325,9 +363,18 @@ describe('RevisionHistoryTable', () => {
     const inputs = screen.getAllByTestId('input')
     const datePicker = screen.getByTestId('date-picker')
 
-    expect(inputs[0]).toHaveAttribute('data-csaf-path', '/document/tracking/revision_history/0/number')
-    expect(datePicker).toHaveAttribute('data-csaf-path', '/document/tracking/revision_history/0/date')
-    expect(inputs[1]).toHaveAttribute('data-csaf-path', '/document/tracking/revision_history/0/summary')
+    expect(inputs[0]).toHaveAttribute(
+      'data-csaf-path',
+      '/document/tracking/revision_history/0/number',
+    )
+    expect(datePicker).toHaveAttribute(
+      'data-csaf-path',
+      '/document/tracking/revision_history/0/date',
+    )
+    expect(inputs[1]).toHaveAttribute(
+      'data-csaf-path',
+      '/document/tracking/revision_history/0/summary',
+    )
   })
 
   it('should display correct placeholders', () => {
@@ -335,14 +382,14 @@ describe('RevisionHistoryTable', () => {
       id: '1',
       number: '',
       date: '',
-      summary: ''
+      summary: '',
     }
 
     mockListState.data = [mockRevision]
     render(<RevisionHistoryTable />)
 
     const inputs = screen.getAllByTestId('input')
-    
+
     expect(inputs[0]).toHaveAttribute('placeholder', 'Enter Version')
     expect(inputs[1]).toHaveAttribute('placeholder', 'Enter Description')
   })

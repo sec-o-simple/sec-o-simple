@@ -28,9 +28,13 @@ vi.mock('@/components/WizardStep', () => ({
 
 vi.mock('@heroui/react', () => ({
   Alert: ({ children }: { children: ReactNode }) => <div>{children}</div>,
-  Button: ({ children, onPress }: { children: ReactNode; onPress: () => void }) => (
-    <button onClick={onPress}>{children}</button>
-  ),
+  Button: ({
+    children,
+    onPress,
+  }: {
+    children: ReactNode
+    onPress: () => void
+  }) => <button onClick={onPress}>{children}</button>,
 }))
 
 vi.mock('react-i18next', () => ({
@@ -38,7 +42,8 @@ vi.mock('react-i18next', () => ({
     t: (key: string, options?: { index?: number }) => {
       const translations: Record<string, string> = {
         'vulnerabilities.matrix.title': 'Product Selection',
-        'vulnerabilities.matrix.description': 'Set the vulnerability status per product version.',
+        'vulnerabilities.matrix.description':
+          'Set the vulnerability status per product version.',
         'vulnerabilities.matrix.empty': 'No matrix data',
         'vulnerabilities.matrix.productVersion': 'Product Version',
         'vulnerabilities.matrix.required': 'Required',
@@ -48,9 +53,11 @@ vi.mock('react-i18next', () => ({
         'vulnerabilities.matrix.applyRowShort': 'Row',
         'vulnerabilities.matrix.applyColumnShort': 'Col',
         'vulnerabilities.products.status.known_affected': 'Known Affected',
-        'vulnerabilities.products.status.known_not_affected': 'Known Not Affected',
+        'vulnerabilities.products.status.known_not_affected':
+          'Known Not Affected',
         'vulnerabilities.products.status.fixed': 'Fixed',
-        'vulnerabilities.products.status.under_investigation': 'Under Investigation',
+        'vulnerabilities.products.status.under_investigation':
+          'Under Investigation',
         'products.relationship.categories.product_version': 'Versions',
       }
 
@@ -84,7 +91,11 @@ vi.mock('@/utils/useDocumentStoreUpdater', () => ({
   useDocumentValidation: useDocumentValidationMock,
 }))
 
-function vulnerability(id: string, title: string, products: any[] = []): TVulnerability {
+function vulnerability(
+  id: string,
+  title: string,
+  products: any[] = [],
+): TVulnerability {
   return {
     id,
     title,
@@ -161,7 +172,9 @@ describe('ProductMatrix', () => {
 
     render(<ProductMatrix />)
 
-    expect(screen.getByTestId('matrix-vulnerability-missing-1')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('matrix-vulnerability-missing-1'),
+    ).toBeInTheDocument()
     expect(screen.getByText('Required')).toBeInTheDocument()
     expect(screen.getByText('Vulnerability 2')).toBeInTheDocument()
   })
@@ -178,8 +191,12 @@ describe('ProductMatrix', () => {
 
     render(<ProductMatrix />)
 
-    expect(screen.getByTestId('matrix-apply-column-header-0')).toBeInTheDocument()
-    expect(screen.getByTestId('matrix-apply-column-header-1')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('matrix-apply-column-header-0'),
+    ).toBeInTheDocument()
+    expect(
+      screen.getByTestId('matrix-apply-column-header-1'),
+    ).toBeInTheDocument()
   })
 
   it('shows apply-to-row button in each product row header', () => {
@@ -200,7 +217,9 @@ describe('ProductMatrix', () => {
   it('shows header bulk action buttons even when source first-cell is empty', () => {
     render(<ProductMatrix />)
 
-    expect(screen.getByTestId('matrix-apply-column-header-1')).toBeInTheDocument()
+    expect(
+      screen.getByTestId('matrix-apply-column-header-1'),
+    ).toBeInTheDocument()
     expect(screen.getByTestId('matrix-apply-row-header-1')).toBeInTheDocument()
   })
 
@@ -225,7 +244,12 @@ describe('ProductMatrix', () => {
     expect(updateVulnerabilitiesMock).toHaveBeenCalledTimes(1)
 
     const payload = updateVulnerabilitiesMock.mock.calls[0][0]
-    expect(payload[0].products.some((p: any) => p.productId === 'version-2' && p.status === 'known_not_affected')).toBe(true)
+    expect(
+      payload[0].products.some(
+        (p: any) =>
+          p.productId === 'version-2' && p.status === 'known_not_affected',
+      ),
+    ).toBe(true)
   })
 
   it('applies selected cell value to the full product row', () => {
@@ -244,13 +268,14 @@ describe('ProductMatrix', () => {
     fireEvent.click(screen.getByTestId('matrix-apply-row-header-1'))
 
     const payload = updateVulnerabilitiesMock.mock.calls[0][0]
-    expect(payload.every((v: TVulnerability) =>
-      v.products.some(
-        (p) =>
-          p.productId === 'version-2' &&
-          p.status === 'under_investigation',
+    expect(
+      payload.every((v: TVulnerability) =>
+        v.products.some(
+          (p) =>
+            p.productId === 'version-2' && p.status === 'under_investigation',
+        ),
       ),
-    )).toBe(true)
+    ).toBe(true)
   })
 
   it('applies selected cell value to the full vulnerability column', () => {

@@ -3,7 +3,10 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Remediations from '../../../src/routes/vulnerabilities/Remediations'
 import { TVulnerability } from '../../../src/routes/vulnerabilities/types/tVulnerability'
-import { TRemediation, TRemediationCategory } from '../../../src/routes/vulnerabilities/types/tRemediation'
+import {
+  TRemediation,
+  TRemediationCategory,
+} from '../../../src/routes/vulnerabilities/types/tRemediation'
 import { TProductTreeBranch } from '../../../src/routes/products/types/tProductTreeBranch'
 import { TVulnerabilityProduct } from '../../../src/routes/vulnerabilities/types/tVulnerabilityProduct'
 
@@ -20,17 +23,22 @@ vi.mock('@/components/forms/ComponentList', () => ({
               {startContent({ item, index })}
             </div>
           )}
-          <div data-testid={`content-${index}`}>
-            {content(item, index)}
-          </div>
+          <div data-testid={`content-${index}`}>{content(item, index)}</div>
         </div>
       ))}
     </div>
-  )
+  ),
 }))
 
 vi.mock('@/components/forms/DatePicker', () => ({
-  default: ({ label, value, onChange, isDisabled, csafPath, isTouched }: any) => (
+  default: ({
+    label,
+    value,
+    onChange,
+    isDisabled,
+    csafPath,
+    isTouched,
+  }: any) => (
     <div data-testid="date-picker">
       <label>{label}</label>
       <input
@@ -42,17 +50,33 @@ vi.mock('@/components/forms/DatePicker', () => ({
         disabled={isDisabled}
       />
     </div>
-  )
+  ),
 }))
 
 vi.mock('@/components/forms/HSplit', () => ({
-  default: ({ children, className }: { children: React.ReactNode; className?: string }) => (
-    <div data-testid="hsplit" className={className}>{children}</div>
-  )
+  default: ({
+    children,
+    className,
+  }: {
+    children: React.ReactNode
+    className?: string
+  }) => (
+    <div data-testid="hsplit" className={className}>
+      {children}
+    </div>
+  ),
 }))
 
 vi.mock('@/components/forms/Input', () => ({
-  Input: ({ label, value, onValueChange, isDisabled, csafPath, isTouched, placeholder }: any) => (
+  Input: ({
+    label,
+    value,
+    onValueChange,
+    isDisabled,
+    csafPath,
+    isTouched,
+    placeholder,
+  }: any) => (
     <div data-testid="input">
       <label>{label}</label>
       <input
@@ -66,7 +90,16 @@ vi.mock('@/components/forms/Input', () => ({
       />
     </div>
   ),
-  Textarea: ({ label, value, onValueChange, isDisabled, csafPath, isTouched, isRequired, placeholder }: any) => (
+  Textarea: ({
+    label,
+    value,
+    onValueChange,
+    isDisabled,
+    csafPath,
+    isTouched,
+    isRequired,
+    placeholder,
+  }: any) => (
     <div data-testid="textarea">
       <label>{label}</label>
       <textarea
@@ -80,11 +113,20 @@ vi.mock('@/components/forms/Input', () => ({
         placeholder={placeholder}
       />
     </div>
-  )
+  ),
 }))
 
 vi.mock('@/components/forms/Select', () => ({
-  default: ({ label, selectedKeys, onSelectionChange, isDisabled, csafPath, isTouched, placeholder, children }: any) => (
+  default: ({
+    label,
+    selectedKeys,
+    onSelectionChange,
+    isDisabled,
+    csafPath,
+    isTouched,
+    placeholder,
+    children,
+  }: any) => (
     <div data-testid="select">
       <label>{label}</label>
       <select
@@ -92,7 +134,15 @@ vi.mock('@/components/forms/Select', () => ({
         data-csaf-path={csafPath}
         data-touched={isTouched}
         value={selectedKeys?.[0] || ''}
-        onChange={(e) => onSelectionChange?.({ anchorKey: e.target.value, has: () => true, [Symbol.iterator]: function* () { yield e.target.value } })}
+        onChange={(e) =>
+          onSelectionChange?.({
+            anchorKey: e.target.value,
+            has: () => true,
+            [Symbol.iterator]: function* () {
+              yield e.target.value
+            },
+          })
+        }
         disabled={isDisabled}
         data-placeholder={placeholder}
       >
@@ -104,58 +154,82 @@ vi.mock('@/components/forms/Select', () => ({
         <option value="workaround">Workaround</option>
       </select>
     </div>
-  )
+  ),
 }))
 
 vi.mock('@/components/forms/VSplit', () => ({
   default: ({ children }: { children: React.ReactNode }) => (
     <div data-testid="vsplit">{children}</div>
-  )
+  ),
 }))
 
 vi.mock('@/components/StatusIndicator', () => ({
-  default: ({ hasErrors, hasVisited }: { hasErrors: boolean; hasVisited: boolean }) => (
-    <div data-testid="status-indicator" data-has-errors={hasErrors} data-has-visited={hasVisited}>
+  default: ({
+    hasErrors,
+    hasVisited,
+  }: {
+    hasErrors: boolean
+    hasVisited: boolean
+  }) => (
+    <div
+      data-testid="status-indicator"
+      data-has-errors={hasErrors}
+      data-has-visited={hasVisited}
+    >
       Status Indicator
     </div>
-  )
+  ),
 }))
 
 vi.mock('@/utils/template', () => ({
   checkReadOnly: vi.fn(() => false),
-  getPlaceholder: vi.fn((obj, field) => `Placeholder for ${field}`)
+  getPlaceholder: vi.fn((obj, field) => `Placeholder for ${field}`),
 }))
 
 vi.mock('@/utils/useListState', () => ({
-  useListState: vi.fn()
+  useListState: vi.fn(),
 }))
 
 vi.mock('@/utils/useProductTreeBranch', () => ({
-  useProductTreeBranch: vi.fn()
+  useProductTreeBranch: vi.fn(),
 }))
 
 vi.mock('@/utils/validation/useFieldValidation', () => ({
-  useFieldValidation: vi.fn()
+  useFieldValidation: vi.fn(),
 }))
 
 vi.mock('@/utils/validation/useListValidation', () => ({
-  useListValidation: vi.fn()
+  useListValidation: vi.fn(),
 }))
 
 vi.mock('@/utils/validation/usePrefixValidation', () => ({
-  usePrefixValidation: vi.fn()
+  usePrefixValidation: vi.fn(),
 }))
 
 vi.mock('@heroui/chip', () => ({
   Chip: ({ children, color, variant, radius, size }: any) => (
-    <span data-testid="chip" data-color={color} data-variant={variant} data-radius={radius} data-size={size}>
+    <span
+      data-testid="chip"
+      data-color={color}
+      data-variant={variant}
+      data-radius={radius}
+      data-size={size}
+    >
       {children}
     </span>
-  )
+  ),
 }))
 
 vi.mock('@heroui/react', () => ({
-  Alert: ({ children, color, className }: { children: React.ReactNode; color: string; className?: string }) => (
+  Alert: ({
+    children,
+    color,
+    className,
+  }: {
+    children: React.ReactNode
+    color: string
+    className?: string
+  }) => (
     <div data-testid="alert" data-color={color} className={className}>
       {children}
     </div>
@@ -174,8 +248,10 @@ vi.mock('@heroui/react', () => ({
 
 vi.mock('@heroui/select', () => ({
   SelectItem: ({ children, ...props }: any) => (
-    <option value={props.key} {...props}>{children}</option>
-  )
+    <option value={props.key} {...props}>
+      {children}
+    </option>
+  ),
 }))
 
 vi.mock('react-i18next', () => ({
@@ -188,35 +264,50 @@ vi.mock('react-i18next', () => ({
         'vulnerabilities.remediation.details': 'Details',
         'vulnerabilities.remediation.url': 'URL',
         'vulnerabilities.remediation.categories.mitigation': 'Mitigation',
-        'vulnerabilities.remediation.categories.no_fix_planned': 'No Fix Planned',
-        'vulnerabilities.remediation.categories.none_available': 'None Available',
+        'vulnerabilities.remediation.categories.no_fix_planned':
+          'No Fix Planned',
+        'vulnerabilities.remediation.categories.none_available':
+          'None Available',
         'vulnerabilities.remediation.categories.vendor_fix': 'Vendor Fix',
-        'vulnerabilities.remediation.categories.workaround': 'Workaround'
+        'vulnerabilities.remediation.categories.workaround': 'Workaround',
       }
       return translations[key] || key
-    }
-  })
+    },
+  }),
 }))
 
-vi.mock('../../../src/routes/vulnerabilities/components/ProductsTagList', () => ({
-  default: ({ selected, products, onChange, error, isRequired }: any) => (
-    <div data-testid="products-tag-list" data-required={isRequired}>
-      {error && <div data-testid="products-error">{error}</div>}
-      <div data-testid="selected-products">{selected?.join(', ') || 'No products selected'}</div>
-      <div data-testid="available-products">{products?.length || 0} products available</div>
-      <button
-        data-testid="change-products"
-        onClick={() => onChange?.(['product1', 'product2'])}
-      >
-        Change Products
-      </button>
-    </div>
-  )
-}))
+vi.mock(
+  '../../../src/routes/vulnerabilities/components/ProductsTagList',
+  () => ({
+    default: ({ selected, products, onChange, error, isRequired }: any) => (
+      <div data-testid="products-tag-list" data-required={isRequired}>
+        {error && <div data-testid="products-error">{error}</div>}
+        <div data-testid="selected-products">
+          {selected?.join(', ') || 'No products selected'}
+        </div>
+        <div data-testid="available-products">
+          {products?.length || 0} products available
+        </div>
+        <button
+          data-testid="change-products"
+          onClick={() => onChange?.(['product1', 'product2'])}
+        >
+          Change Products
+        </button>
+      </div>
+    ),
+  }),
+)
 
 vi.mock('../../../src/routes/vulnerabilities/types/tRemediation', () => ({
-  remediationCategories: ['mitigation', 'no_fix_planned', 'none_available', 'vendor_fix', 'workaround'],
-  useRemediationGenerator: vi.fn()
+  remediationCategories: [
+    'mitigation',
+    'no_fix_planned',
+    'none_available',
+    'vendor_fix',
+    'workaround',
+  ],
+  useRemediationGenerator: vi.fn(),
 }))
 
 // Import mocked functions
@@ -241,7 +332,7 @@ describe('Remediations', () => {
     details: 'Apply the latest security patch',
     date: '2023-12-01',
     url: 'https://example.com/patch',
-    productIds: ['product1']
+    productIds: ['product1'],
   }
 
   const mockVulnerability: TVulnerability = {
@@ -252,12 +343,12 @@ describe('Remediations', () => {
       {
         id: 'prod-1',
         productId: 'product1',
-        status: 'known_affected'
-      }
+        status: 'known_affected',
+      },
     ],
     flags: [],
     remediations: [mockRemediation],
-    scores: []
+    scores: [],
   }
 
   const mockPTBs: TProductTreeBranch[] = [
@@ -266,15 +357,15 @@ describe('Remediations', () => {
       category: 'product_name',
       name: 'Product 1',
       description: 'Product 1 description',
-      subBranches: []
+      subBranches: [],
     },
     {
       id: 'product2',
       category: 'product_name',
       name: 'Product 2',
       description: 'Product 2 description',
-      subBranches: []
-    }
+      subBranches: [],
+    },
   ]
 
   const mockOnChange = vi.fn()
@@ -290,7 +381,7 @@ describe('Remediations', () => {
       updateDataEntry: mockUpdateDataEntry,
       addDataEntry: vi.fn(),
       removeDataEntry: vi.fn(),
-      getId: vi.fn((entry) => entry.id)
+      getId: vi.fn((entry) => entry.id),
     })
 
     mockUseListValidation.mockReturnValue({
@@ -302,7 +393,7 @@ describe('Remediations', () => {
       warningMessages: [],
       infoMessages: [],
       isTouched: false,
-      markFieldAsTouched: vi.fn()
+      markFieldAsTouched: vi.fn(),
     })
 
     mockUseProductTreeBranch.mockReturnValue({
@@ -320,16 +411,16 @@ describe('Remediations', () => {
           category: 'product_version',
           full_product_name: {
             name: 'Product 1',
-            product_id: 'product1'
-          }
+            product_id: 'product1',
+          },
         },
         {
           category: 'product_version',
           full_product_name: {
             name: 'Product 2',
-            product_id: 'product2'
-          }
-        }
+            product_id: 'product2',
+          },
+        },
       ]),
       getGroupedSelectableRefs: vi.fn(() => ({})),
       addPTB: vi.fn(),
@@ -341,7 +432,7 @@ describe('Remediations', () => {
     })
 
     mockUsePrefixValidation.mockReturnValue({
-      hasErrors: false
+      hasErrors: false,
     })
 
     mockUseFieldValidation.mockReturnValue({
@@ -353,13 +444,13 @@ describe('Remediations', () => {
       warningMessages: [],
       infoMessages: [],
       isTouched: true,
-      markFieldAsTouched: vi.fn()
+      markFieldAsTouched: vi.fn(),
     })
 
     mockUseRemediationGenerator.mockReturnValue({
       id: 'new-remediation',
       category: 'mitigation' as TRemediationCategory,
-      productIds: []
+      productIds: [],
     })
   })
 
@@ -370,7 +461,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
@@ -382,7 +473,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByTestId('list-item-0')).toBeInTheDocument()
@@ -391,7 +482,10 @@ describe('Remediations', () => {
     })
 
     it('displays error alert when validation has errors', () => {
-      const errorMessage = { path: '/vulnerabilities/0/remediations/0', message: 'Details are required' }
+      const errorMessage = {
+        path: '/vulnerabilities/0/remediations/0',
+        message: 'Details are required',
+      }
       mockUseListValidation.mockReturnValue({
         messages: [errorMessage],
         hasErrors: true,
@@ -401,7 +495,7 @@ describe('Remediations', () => {
         warningMessages: [],
         infoMessages: [],
         isTouched: true,
-        markFieldAsTouched: vi.fn()
+        markFieldAsTouched: vi.fn(),
       })
 
       render(
@@ -409,7 +503,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByTestId('alert')).toBeInTheDocument()
@@ -422,7 +516,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.queryByTestId('alert')).not.toBeInTheDocument()
@@ -436,7 +530,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByTestId('status-indicator')).toBeInTheDocument()
@@ -447,7 +541,7 @@ describe('Remediations', () => {
 
     it('shows error state in status indicator when validation has errors', () => {
       mockUsePrefixValidation.mockReturnValue({
-        hasErrors: true
+        hasErrors: true,
       })
 
       render(
@@ -455,10 +549,13 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
-      expect(screen.getByTestId('status-indicator')).toHaveAttribute('data-has-errors', 'true')
+      expect(screen.getByTestId('status-indicator')).toHaveAttribute(
+        'data-has-errors',
+        'true',
+      )
     })
   })
 
@@ -469,7 +566,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByTestId('select')).toBeInTheDocument()
@@ -485,7 +582,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByText('Category')).toBeInTheDocument()
@@ -500,13 +597,17 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByTestId('select-input')).toHaveValue('mitigation')
       expect(screen.getByTestId('date-input')).toHaveValue('2023-12-01')
-      expect(screen.getByTestId('textarea-input')).toHaveValue('Apply the latest security patch')
-      expect(screen.getByTestId('text-input')).toHaveValue('https://example.com/patch')
+      expect(screen.getByTestId('textarea-input')).toHaveValue(
+        'Apply the latest security patch',
+      )
+      expect(screen.getByTestId('text-input')).toHaveValue(
+        'https://example.com/patch',
+      )
     })
   })
 
@@ -519,7 +620,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       const select = screen.getByTestId('select-input')
@@ -536,7 +637,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       const dateInput = screen.getByTestId('date-input')
@@ -554,7 +655,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       const textarea = screen.getByTestId('textarea-input')
@@ -572,7 +673,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       const urlInput = screen.getByTestId('text-input')
@@ -590,7 +691,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       const changeProductsButton = screen.getByTestId('change-products')
@@ -602,14 +703,17 @@ describe('Remediations', () => {
 
   describe('Data Flow', () => {
     it('calls onChange with updated vulnerability when remediations change', () => {
-      const newRemediations = [...mockVulnerability.remediations, { ...mockRemediation, id: 'remediation-2' }]
+      const newRemediations = [
+        ...mockVulnerability.remediations,
+        { ...mockRemediation, id: 'remediation-2' },
+      ]
       mockUseListState.mockReturnValue({
         data: newRemediations,
         setData: mockSetData,
         updateDataEntry: mockUpdateDataEntry,
         addDataEntry: vi.fn(),
         removeDataEntry: vi.fn(),
-        getId: vi.fn((entry) => entry.id)
+        getId: vi.fn((entry) => entry.id),
       })
 
       render(
@@ -617,13 +721,13 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       // The useEffect should trigger onChange with updated remediations
       expect(mockOnChange).toHaveBeenCalledWith({
         ...mockVulnerability,
-        remediations: newRemediations
+        remediations: newRemediations,
       })
     })
 
@@ -633,12 +737,12 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(mockUseListState).toHaveBeenCalledWith({
         initialData: mockVulnerability.remediations,
-        generator: expect.any(Object)
+        generator: expect.any(Object),
       })
     })
 
@@ -648,26 +752,32 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       // Should only show products that are in known_affected status
-      expect(screen.getByTestId('available-products')).toHaveTextContent('1 products available')
+      expect(screen.getByTestId('available-products')).toHaveTextContent(
+        '1 products available',
+      )
     })
   })
 
   describe('Validation', () => {
     it('shows validation errors for product IDs', () => {
       mockUseFieldValidation.mockReturnValue({
-        messages: [{ path: '/productIds', message: 'At least one product is required' }],
+        messages: [
+          { path: '/productIds', message: 'At least one product is required' },
+        ],
         hasErrors: true,
         hasWarnings: false,
         hasInfos: false,
-        errorMessages: [{ path: '/productIds', message: 'At least one product is required' }],
+        errorMessages: [
+          { path: '/productIds', message: 'At least one product is required' },
+        ],
         warningMessages: [],
         infoMessages: [],
         isTouched: true,
-        markFieldAsTouched: vi.fn()
+        markFieldAsTouched: vi.fn(),
       })
 
       render(
@@ -675,29 +785,35 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
-      expect(screen.getByTestId('products-error')).toHaveTextContent('At least one product is required')
+      expect(screen.getByTestId('products-error')).toHaveTextContent(
+        'At least one product is required',
+      )
     })
 
     it('shows product validation error when apply-all hides product selector', () => {
       mockUseFieldValidation.mockReturnValue({
-        messages: [{ path: '/productIds', message: 'At least one product is required' }],
+        messages: [
+          { path: '/productIds', message: 'At least one product is required' },
+        ],
         hasErrors: true,
         hasWarnings: false,
         hasInfos: false,
-        errorMessages: [{ path: '/productIds', message: 'At least one product is required' }],
+        errorMessages: [
+          { path: '/productIds', message: 'At least one product is required' },
+        ],
         warningMessages: [],
         infoMessages: [],
         isTouched: true,
-        markFieldAsTouched: vi.fn()
+        markFieldAsTouched: vi.fn(),
       })
 
       const applyAllRemediation: TRemediation = {
         ...mockRemediation,
         productIds: [],
-        applyAllKnownAffectedProducts: true
+        applyAllKnownAffectedProducts: true,
       }
 
       mockUseListState.mockReturnValue({
@@ -706,19 +822,24 @@ describe('Remediations', () => {
         updateDataEntry: mockUpdateDataEntry,
         addDataEntry: vi.fn(),
         removeDataEntry: vi.fn(),
-        getId: vi.fn((entry) => entry.id)
+        getId: vi.fn((entry) => entry.id),
       })
 
       render(
         <Remediations
-          vulnerability={{ ...mockVulnerability, remediations: [applyAllRemediation] }}
+          vulnerability={{
+            ...mockVulnerability,
+            remediations: [applyAllRemediation],
+          }}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.queryByTestId('products-tag-list')).not.toBeInTheDocument()
-      expect(screen.getByTestId('products-hidden-error')).toHaveTextContent('At least one product is required')
+      expect(screen.getByTestId('products-hidden-error')).toHaveTextContent(
+        'At least one product is required',
+      )
     })
 
     it('does not show validation errors when field is valid', () => {
@@ -727,7 +848,7 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.queryByTestId('products-error')).not.toBeInTheDocument()
@@ -742,13 +863,25 @@ describe('Remediations', () => {
           vulnerabilityIndex={0}
           onChange={mockOnChange}
           isTouched={true}
-        />
+        />,
       )
 
-      expect(screen.getByTestId('select-input')).toHaveAttribute('data-touched', 'true')
-      expect(screen.getByTestId('date-input')).toHaveAttribute('data-touched', 'true')
-      expect(screen.getByTestId('textarea-input')).toHaveAttribute('data-touched', 'true')
-      expect(screen.getByTestId('text-input')).toHaveAttribute('data-touched', 'true')
+      expect(screen.getByTestId('select-input')).toHaveAttribute(
+        'data-touched',
+        'true',
+      )
+      expect(screen.getByTestId('date-input')).toHaveAttribute(
+        'data-touched',
+        'true',
+      )
+      expect(screen.getByTestId('textarea-input')).toHaveAttribute(
+        'data-touched',
+        'true',
+      )
+      expect(screen.getByTestId('text-input')).toHaveAttribute(
+        'data-touched',
+        'true',
+      )
     })
 
     it('sets correct CSAF paths for validation', () => {
@@ -757,13 +890,25 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={2}
           onChange={mockOnChange}
-        />
+        />,
       )
 
-      expect(screen.getByTestId('select-input')).toHaveAttribute('data-csaf-path', '/vulnerabilities/2/remediations/0/category')
-      expect(screen.getByTestId('date-input')).toHaveAttribute('data-csaf-path', '/vulnerabilities/2/remediations/0/date')
-      expect(screen.getByTestId('textarea-input')).toHaveAttribute('data-csaf-path', '/vulnerabilities/2/remediations/0/details')
-      expect(screen.getByTestId('text-input')).toHaveAttribute('data-csaf-path', '/vulnerabilities/2/remediations/0/url')
+      expect(screen.getByTestId('select-input')).toHaveAttribute(
+        'data-csaf-path',
+        '/vulnerabilities/2/remediations/0/category',
+      )
+      expect(screen.getByTestId('date-input')).toHaveAttribute(
+        'data-csaf-path',
+        '/vulnerabilities/2/remediations/0/date',
+      )
+      expect(screen.getByTestId('textarea-input')).toHaveAttribute(
+        'data-csaf-path',
+        '/vulnerabilities/2/remediations/0/details',
+      )
+      expect(screen.getByTestId('text-input')).toHaveAttribute(
+        'data-csaf-path',
+        '/vulnerabilities/2/remediations/0/url',
+      )
     })
 
     it('marks required fields correctly', () => {
@@ -772,11 +917,17 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
-      expect(screen.getByTestId('textarea-input')).toHaveAttribute('data-required', 'true')
-      expect(screen.getByTestId('products-tag-list')).toHaveAttribute('data-required', 'true')
+      expect(screen.getByTestId('textarea-input')).toHaveAttribute(
+        'data-required',
+        'true',
+      )
+      expect(screen.getByTestId('products-tag-list')).toHaveAttribute(
+        'data-required',
+        'true',
+      )
     })
   })
 
@@ -789,7 +940,7 @@ describe('Remediations', () => {
         updateDataEntry: mockUpdateDataEntry,
         addDataEntry: vi.fn(),
         removeDataEntry: vi.fn(),
-        getId: vi.fn((entry) => entry.id)
+        getId: vi.fn((entry) => entry.id),
       })
 
       render(
@@ -797,7 +948,7 @@ describe('Remediations', () => {
           vulnerability={emptyVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByTestId('component-list')).toBeInTheDocument()
@@ -811,9 +962,9 @@ describe('Remediations', () => {
           {
             id: 'prod-1',
             productId: 'product1',
-            status: 'known_not_affected' as const
-          }
-        ] as TVulnerabilityProduct[]
+            status: 'known_not_affected' as const,
+          },
+        ] as TVulnerabilityProduct[],
       }
 
       render(
@@ -821,17 +972,19 @@ describe('Remediations', () => {
           vulnerability={vulnWithoutAffectedProducts}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
-      expect(screen.getByTestId('available-products')).toHaveTextContent('0 products available')
+      expect(screen.getByTestId('available-products')).toHaveTextContent(
+        '0 products available',
+      )
     })
 
     it('handles missing optional fields in remediation', () => {
       const remediationWithoutOptionalFields: TRemediation = {
         id: 'remediation-2',
         category: 'workaround',
-        productIds: []
+        productIds: [],
       }
 
       mockUseListState.mockReturnValue({
@@ -840,15 +993,18 @@ describe('Remediations', () => {
         updateDataEntry: mockUpdateDataEntry,
         addDataEntry: vi.fn(),
         removeDataEntry: vi.fn(),
-        getId: vi.fn((entry) => entry.id)
+        getId: vi.fn((entry) => entry.id),
       })
 
       render(
         <Remediations
-          vulnerability={{ ...mockVulnerability, remediations: [remediationWithoutOptionalFields] }}
+          vulnerability={{
+            ...mockVulnerability,
+            remediations: [remediationWithoutOptionalFields],
+          }}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByTestId('select-input')).toHaveValue('workaround')
@@ -862,20 +1018,32 @@ describe('Remediations', () => {
     it('displays multiple validation error messages', () => {
       mockUseListValidation.mockReturnValue({
         messages: [
-          { path: '/vulnerabilities/0/remediations/0/details', message: 'Details are required' },
-          { path: '/vulnerabilities/0/remediations/0/productIds', message: 'At least one product is required' }
+          {
+            path: '/vulnerabilities/0/remediations/0/details',
+            message: 'Details are required',
+          },
+          {
+            path: '/vulnerabilities/0/remediations/0/productIds',
+            message: 'At least one product is required',
+          },
         ],
         hasErrors: true,
         hasWarnings: false,
         hasInfos: false,
         errorMessages: [
-          { path: '/vulnerabilities/0/remediations/0/details', message: 'Details are required' },
-          { path: '/vulnerabilities/0/remediations/0/productIds', message: 'At least one product is required' }
+          {
+            path: '/vulnerabilities/0/remediations/0/details',
+            message: 'Details are required',
+          },
+          {
+            path: '/vulnerabilities/0/remediations/0/productIds',
+            message: 'At least one product is required',
+          },
         ],
         warningMessages: [],
         infoMessages: [],
         isTouched: true,
-        markFieldAsTouched: vi.fn()
+        markFieldAsTouched: vi.fn(),
       })
 
       render(
@@ -883,11 +1051,13 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
       expect(screen.getByText('Details are required')).toBeInTheDocument()
-      expect(screen.getByText('At least one product is required')).toBeInTheDocument()
+      expect(
+        screen.getByText('At least one product is required'),
+      ).toBeInTheDocument()
     })
   })
 
@@ -898,12 +1068,21 @@ describe('Remediations', () => {
           vulnerability={mockVulnerability}
           vulnerabilityIndex={0}
           onChange={mockOnChange}
-        />
+        />,
       )
 
-      expect(screen.getByTestId('select-input')).toHaveAttribute('data-placeholder', 'Placeholder for category')
-      expect(screen.getByTestId('textarea-input')).toHaveAttribute('placeholder', 'Placeholder for details')
-      expect(screen.getByTestId('text-input')).toHaveAttribute('placeholder', 'Placeholder for url')
+      expect(screen.getByTestId('select-input')).toHaveAttribute(
+        'data-placeholder',
+        'Placeholder for category',
+      )
+      expect(screen.getByTestId('textarea-input')).toHaveAttribute(
+        'placeholder',
+        'Placeholder for details',
+      )
+      expect(screen.getByTestId('text-input')).toHaveAttribute(
+        'placeholder',
+        'Placeholder for url',
+      )
     })
   })
 })

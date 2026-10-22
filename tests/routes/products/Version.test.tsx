@@ -622,9 +622,8 @@ describe('Version', () => {
       await user.click(actionButton)
 
       // Check that getDefaultRelationship was called
-      const { getDefaultRelationship } = await import(
-        '../../../src/routes/products/types/tRelationship'
-      )
+      const { getDefaultRelationship } =
+        await import('../../../src/routes/products/types/tRelationship')
       expect(vi.mocked(getDefaultRelationship)).toHaveBeenCalled()
     })
 

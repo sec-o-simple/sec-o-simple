@@ -5,18 +5,20 @@ import Breadcrumbs from '../../../src/components/forms/Breadcrumbs'
 
 // Mock HeroUI Breadcrumbs component
 vi.mock('@heroui/react', () => ({
-  Breadcrumbs: vi.fn(({ children, maxItems, radius, variant, classNames, ...props }: any) => (
-    <nav 
-      data-testid="hero-breadcrumbs" 
-      data-max-items={maxItems}
-      data-radius={radius}
-      data-variant={variant}
-      data-classnames={classNames ? JSON.stringify(classNames) : ''}
-      {...props}
-    >
-      {children}
-    </nav>
-  )),
+  Breadcrumbs: vi.fn(
+    ({ children, maxItems, radius, variant, classNames, ...props }: any) => (
+      <nav
+        data-testid="hero-breadcrumbs"
+        data-max-items={maxItems}
+        data-radius={radius}
+        data-variant={variant}
+        data-classnames={classNames ? JSON.stringify(classNames) : ''}
+        {...props}
+      >
+        {children}
+      </nav>
+    ),
+  ),
 }))
 
 describe('Breadcrumbs', () => {
@@ -26,9 +28,9 @@ describe('Breadcrumbs', () => {
         <span>Home</span>
         <span>Category</span>
         <span>Product</span>
-      </Breadcrumbs>
+      </Breadcrumbs>,
     )
-    
+
     const breadcrumbs = screen.getByTestId('hero-breadcrumbs')
     expect(breadcrumbs).toBeInTheDocument()
     expect(screen.getByText('Home')).toBeInTheDocument()
@@ -40,9 +42,9 @@ describe('Breadcrumbs', () => {
     render(
       <Breadcrumbs>
         <span>Home</span>
-      </Breadcrumbs>
+      </Breadcrumbs>,
     )
-    
+
     const breadcrumbs = screen.getByTestId('hero-breadcrumbs')
     expect(breadcrumbs).toHaveAttribute('data-max-items', '10')
     expect(breadcrumbs).toHaveAttribute('data-radius', 'lg')
@@ -53,22 +55,25 @@ describe('Breadcrumbs', () => {
     render(
       <Breadcrumbs>
         <span>Home</span>
-      </Breadcrumbs>
+      </Breadcrumbs>,
     )
-    
+
     const breadcrumbs = screen.getByTestId('hero-breadcrumbs')
-    expect(breadcrumbs).toHaveAttribute('data-classnames', JSON.stringify({
-      list: 'bg-white border-1 border-default-200',
-    }))
+    expect(breadcrumbs).toHaveAttribute(
+      'data-classnames',
+      JSON.stringify({
+        list: 'bg-white border-1 border-default-200',
+      }),
+    )
   })
 
   it('should render single breadcrumb item', () => {
     render(
       <Breadcrumbs>
         <span>Home</span>
-      </Breadcrumbs>
+      </Breadcrumbs>,
     )
-    
+
     const breadcrumbs = screen.getByTestId('hero-breadcrumbs')
     expect(breadcrumbs).toBeInTheDocument()
     expect(screen.getByText('Home')).toBeInTheDocument()
@@ -82,9 +87,9 @@ describe('Breadcrumbs', () => {
         <span>Category</span>
         <span>Subcategory</span>
         <span>Item</span>
-      </Breadcrumbs>
+      </Breadcrumbs>,
     )
-    
+
     const breadcrumbs = screen.getByTestId('hero-breadcrumbs')
     expect(breadcrumbs).toBeInTheDocument()
     expect(screen.getByText('Home')).toBeInTheDocument()

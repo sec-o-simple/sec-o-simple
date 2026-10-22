@@ -18,7 +18,12 @@ const mockFamilies = [
   {
     id: 'family-2',
     name: 'Child Family',
-    parent: { id: 'family-1', name: 'Root Family', parent: null, subFamilies: [] },
+    parent: {
+      id: 'family-1',
+      name: 'Root Family',
+      parent: null,
+      subFamilies: [],
+    },
     subFamilies: [],
   },
 ]

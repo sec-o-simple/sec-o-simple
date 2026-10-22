@@ -31,28 +31,46 @@ vi.mock('@internationalized/date', () => ({
 
 // Mock HeroUI DatePicker component
 vi.mock('@heroui/date-picker', () => ({
-  DatePicker: vi.fn(({ children, errorMessage, isInvalid, classNames, value, onChange, onBlur, labelPlacement, variant, label, ...props }: any) => (
-    <input 
-      type="date" 
-      data-testid="hero-datepicker"
-      data-error-message={errorMessage || ''}
-      data-is-invalid={isInvalid?.toString() || 'false'}
-      data-classnames={typeof classNames === 'object' ? JSON.stringify(classNames) : classNames}
-      data-value={value?.toString() || ''}
-      data-label-placement={labelPlacement}
-      data-variant={variant}
-      data-label={label}
-      onChange={(e) => {
-        if (onChange) {
-          const mockDateValue = {
-            toDate: vi.fn(() => new Date(e.target.value)),
-          }
-          onChange(mockDateValue)
+  DatePicker: vi.fn(
+    ({
+      children,
+      errorMessage,
+      isInvalid,
+      classNames,
+      value,
+      onChange,
+      onBlur,
+      labelPlacement,
+      variant,
+      label,
+      ...props
+    }: any) => (
+      <input
+        type="date"
+        data-testid="hero-datepicker"
+        data-error-message={errorMessage || ''}
+        data-is-invalid={isInvalid?.toString() || 'false'}
+        data-classnames={
+          typeof classNames === 'object'
+            ? JSON.stringify(classNames)
+            : classNames
         }
-      }}
-      onBlur={onBlur}
-    />
-  )),
+        data-value={value?.toString() || ''}
+        data-label-placement={labelPlacement}
+        data-variant={variant}
+        data-label={label}
+        onChange={(e) => {
+          if (onChange) {
+            const mockDateValue = {
+              toDate: vi.fn(() => new Date(e.target.value)),
+            }
+            onChange(mockDateValue)
+          }
+        }}
+        onBlur={onBlur}
+      />
+    ),
+  ),
 }))
 
 const mockUseFieldValidation = vi.mocked(useFieldValidation)
@@ -81,7 +99,7 @@ describe('DatePicker', () => {
 
   it('should render with default props', () => {
     const { container } = render(<DatePicker />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     expect(datePicker).toBeInTheDocument()
     expect(datePicker).toHaveAttribute('data-variant', 'bordered')
@@ -95,9 +113,9 @@ describe('DatePicker', () => {
         label="Custom Date"
         variant="underlined"
         labelPlacement="inside"
-      />
+      />,
     )
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     expect(datePicker).toHaveAttribute('data-label', 'Custom Date')
     expect(datePicker).toHaveAttribute('data-variant', 'underlined')
@@ -106,11 +124,14 @@ describe('DatePicker', () => {
 
   it('should apply custom classNames for inputWrapper', () => {
     render(<DatePicker />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
-    expect(datePicker).toHaveAttribute('data-classnames', JSON.stringify({
-      inputWrapper: 'border-1 shadow-none',
-    }))
+    expect(datePicker).toHaveAttribute(
+      'data-classnames',
+      JSON.stringify({
+        inputWrapper: 'border-1 shadow-none',
+      }),
+    )
   })
 
   it('should handle value prop with ISO string', () => {
@@ -118,29 +139,32 @@ describe('DatePicker', () => {
       toDate: vi.fn(() => new Date('2023-12-25')),
     }
     mockParseAbsolute.mockReturnValue(mockDateValue)
-    
+
     render(<DatePicker value="2023-12-25T00:00:00.000Z" />)
-    
-    expect(mockParseAbsolute).toHaveBeenCalledWith('2023-12-25T00:00:00.000Z', 'UTC')
+
+    expect(mockParseAbsolute).toHaveBeenCalledWith(
+      '2023-12-25T00:00:00.000Z',
+      'UTC',
+    )
     const datePicker = screen.getByTestId('hero-datepicker')
     expect(datePicker).toHaveAttribute('data-value', mockDateValue.toString())
   })
 
   it('should handle undefined value', () => {
     render(<DatePicker />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     expect(datePicker).toHaveAttribute('data-value', '')
   })
 
   it('should handle onChange events', () => {
     const onChange = vi.fn()
-    
+
     render(<DatePicker onChange={onChange} />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     fireEvent.change(datePicker, { target: { value: '2023-12-25' } })
-    
+
     expect(onChange).toHaveBeenCalled()
   })
 
@@ -158,15 +182,15 @@ describe('DatePicker', () => {
       isTouched: false,
       markFieldAsTouched: mockMarkFieldAsTouched,
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
+
     render(<DatePicker csafPath="test.date" />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     await user.click(datePicker)
     fireEvent.blur(datePicker)
-    
+
     expect(mockMarkFieldAsTouched).toHaveBeenCalledWith('test.date')
   })
 
@@ -182,13 +206,16 @@ describe('DatePicker', () => {
       isTouched: true,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
+
     render(<DatePicker csafPath="test.date" />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
-    expect(datePicker).toHaveAttribute('data-error-message', 'Invalid date format')
+    expect(datePicker).toHaveAttribute(
+      'data-error-message',
+      'Invalid date format',
+    )
     expect(datePicker).toHaveAttribute('data-is-invalid', 'true')
   })
 
@@ -204,11 +231,11 @@ describe('DatePicker', () => {
       isTouched: false,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
+
     render(<DatePicker csafPath="test.date" isTouched />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     expect(datePicker).toHaveAttribute('data-error-message', 'Date is required')
     expect(datePicker).toHaveAttribute('data-is-invalid', 'true')
@@ -226,11 +253,11 @@ describe('DatePicker', () => {
       isTouched: false,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
+
     render(<DatePicker csafPath="test.date" value="2023-12-25T00:00:00.000Z" />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     expect(datePicker).toHaveAttribute('data-error-message', 'Invalid date')
     expect(datePicker).toHaveAttribute('data-is-invalid', 'true')
@@ -248,11 +275,11 @@ describe('DatePicker', () => {
       isTouched: false,
       markFieldAsTouched: vi.fn(),
     }
-    
+
     mockUseFieldValidation.mockReturnValue(mockValidation)
-    
+
     render(<DatePicker csafPath="test.date" />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     expect(datePicker).toHaveAttribute('data-error-message', 'Date is required')
     expect(datePicker).toHaveAttribute('data-is-invalid', 'false')
@@ -260,12 +287,12 @@ describe('DatePicker', () => {
 
   it('should work without csafPath (no validation)', () => {
     const onChange = vi.fn()
-    
+
     render(<DatePicker onChange={onChange} />)
-    
+
     const datePicker = screen.getByTestId('hero-datepicker')
     fireEvent.change(datePicker, { target: { value: '2023-12-25' } })
-    
+
     expect(onChange).toHaveBeenCalled()
     expect(datePicker).toHaveAttribute('data-error-message', '')
     expect(datePicker).toHaveAttribute('data-is-invalid', 'false')
@@ -289,15 +316,17 @@ describe('DatePicker', () => {
         isTouched: true,
         markFieldAsTouched: vi.fn(),
       }
-      
+
       mockUseFieldValidation.mockReturnValue(mockValidation)
-      
+
       const { container } = render(<DatePicker csafPath="test.date" />)
       expect(container.firstChild).toMatchSnapshot()
     })
 
     it('should render with value', () => {
-      const { container } = render(<DatePicker value="2023-12-25T00:00:00.000Z" />)
+      const { container } = render(
+        <DatePicker value="2023-12-25T00:00:00.000Z" />,
+      )
       expect(container.firstChild).toMatchSnapshot()
     })
   })

@@ -244,7 +244,9 @@ describe('usePrefixValidation', () => {
         return selector(mockState)
       })
 
-      const { result } = renderHook(() => usePrefixValidation('test-prefix_123'))
+      const { result } = renderHook(() =>
+        usePrefixValidation('test-prefix_123'),
+      )
 
       expect(result.current.hasErrors).toBe(true)
     })
@@ -360,7 +362,7 @@ describe('usePrefixValidation', () => {
   describe('store integration', () => {
     it('should call useValidationStore with correct selector', () => {
       const messages: ValidationMessage[] = []
-      
+
       mockUseValidationStore.mockImplementation((selector) => {
         const mockState = { messages }
         return selector(mockState)
@@ -374,13 +376,15 @@ describe('usePrefixValidation', () => {
 
     it('should react to changes in validation store', () => {
       let messages: ValidationMessage[] = []
-      
+
       mockUseValidationStore.mockImplementation((selector) => {
         const mockState = { messages }
         return selector(mockState)
       })
 
-      const { result, rerender } = renderHook(() => usePrefixValidation('test/prefix'))
+      const { result, rerender } = renderHook(() =>
+        usePrefixValidation('test/prefix'),
+      )
 
       expect(result.current.hasErrors).toBe(false)
 
@@ -414,7 +418,9 @@ describe('usePrefixValidation', () => {
         return selector(mockState)
       })
 
-      const { result, rerender } = renderHook(() => usePrefixValidation('test/prefix'))
+      const { result, rerender } = renderHook(() =>
+        usePrefixValidation('test/prefix'),
+      )
 
       const firstResult = result.current
 

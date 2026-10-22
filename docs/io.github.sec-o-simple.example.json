@@ -13,10 +13,7 @@
     }
   },
   "template": {
-    "required": [
-      "/document/tracking/id",
-      "/document/references/*/url"
-    ],
+    "required": ["/document/tracking/id", "/document/references/*/url"],
 
     "document-information.title": "Test Document",
     "document-information.title.readonly": true,
@@ -75,9 +72,7 @@
       }
     ],
 
-    "document-information.aliases": [
-      "example-alias"
-    ],
+    "document-information.aliases": ["example-alias"],
 
     "product_families": [
       {

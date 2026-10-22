@@ -57,9 +57,8 @@ describe('usePathValidation', () => {
     })
 
     // Import the function after mocking
-    const module = await import(
-      '../../../src/utils/validation/usePathValidation'
-    )
+    const module =
+      await import('../../../src/utils/validation/usePathValidation')
     usePathValidation = module.usePathValidation
   })
 

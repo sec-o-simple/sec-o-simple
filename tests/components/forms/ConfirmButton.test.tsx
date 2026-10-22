@@ -18,16 +18,26 @@ vi.mock('@heroui/button', () => ({
 }))
 
 vi.mock('@heroui/react', () => ({
-  Modal: vi.fn(({ children, isOpen }: any) => 
-    isOpen ? <div data-testid="modal">{children}</div> : null
+  Modal: vi.fn(({ children, isOpen }: any) =>
+    isOpen ? <div data-testid="modal">{children}</div> : null,
   ),
   ModalContent: vi.fn(({ children }: any) => {
     const mockOnClose = vi.fn()
-    return <div data-testid="modal-content">{typeof children === 'function' ? children(mockOnClose) : children}</div>
+    return (
+      <div data-testid="modal-content">
+        {typeof children === 'function' ? children(mockOnClose) : children}
+      </div>
+    )
   }),
-  ModalHeader: vi.fn(({ children }: any) => <div data-testid="modal-header">{children}</div>),
-  ModalBody: vi.fn(({ children }: any) => <div data-testid="modal-body">{children}</div>),
-  ModalFooter: vi.fn(({ children }: any) => <div data-testid="modal-footer">{children}</div>),
+  ModalHeader: vi.fn(({ children }: any) => (
+    <div data-testid="modal-header">{children}</div>
+  )),
+  ModalBody: vi.fn(({ children }: any) => (
+    <div data-testid="modal-body">{children}</div>
+  )),
+  ModalFooter: vi.fn(({ children }: any) => (
+    <div data-testid="modal-footer">{children}</div>
+  )),
   useDisclosure: vi.fn(() => ({
     isOpen: false,
     onOpen: vi.fn(),
@@ -70,7 +80,7 @@ describe('ConfirmButton', () => {
     mockOnOpen = vi.fn()
     mockOnClose = vi.fn()
     mockOnOpenChange = vi.fn()
-    
+
     mockHeroUI.useDisclosure.mockReturnValue({
       isOpen: false,
       onOpen: mockOnOpen,
@@ -84,13 +94,13 @@ describe('ConfirmButton', () => {
 
   it('should render with required props', () => {
     render(
-      <ConfirmButton 
-        confirmText="Are you sure?" 
+      <ConfirmButton
+        confirmText="Are you sure?"
         confirmTitle="Confirm Action"
-        onConfirm={() => {}} 
-      />
+        onConfirm={() => {}}
+      />,
     )
-    
+
     const button = screen.getByRole('button')
     expect(button).toBeInTheDocument()
     expect(button).toHaveTextContent('common.confirm')
@@ -98,48 +108,48 @@ describe('ConfirmButton', () => {
 
   it('should render with custom children text', () => {
     render(
-      <ConfirmButton 
-        confirmText="Are you sure?" 
+      <ConfirmButton
+        confirmText="Are you sure?"
         confirmTitle="Confirm Action"
         onConfirm={() => {}}
       >
         Custom Action
-      </ConfirmButton>
+      </ConfirmButton>,
     )
-    
+
     const button = screen.getByRole('button')
     expect(button).toHaveTextContent('Custom Action')
   })
 
   it('should open modal when clicked', () => {
     render(
-      <ConfirmButton 
-        confirmText="Are you sure?" 
+      <ConfirmButton
+        confirmText="Are you sure?"
         confirmTitle="Confirm Action"
-        onConfirm={() => {}} 
-      />
+        onConfirm={() => {}}
+      />,
     )
-    
+
     const button = screen.getByRole('button')
     fireEvent.click(button)
-    
+
     expect(mockOnOpen).toHaveBeenCalledOnce()
   })
 
   it('should skip confirmation when skipConfirm is true', () => {
     const onConfirm = vi.fn()
     render(
-      <ConfirmButton 
-        confirmText="Are you sure?" 
+      <ConfirmButton
+        confirmText="Are you sure?"
         confirmTitle="Confirm Action"
-        onConfirm={onConfirm} 
+        onConfirm={onConfirm}
         skipConfirm
-      />
+      />,
     )
-    
+
     const button = screen.getByRole('button')
     fireEvent.click(button)
-    
+
     expect(onConfirm).toHaveBeenCalledOnce()
     expect(mockOnOpen).not.toHaveBeenCalled()
   })
@@ -156,13 +166,13 @@ describe('ConfirmButton', () => {
     })
 
     render(
-      <ConfirmButton 
-        confirmText="Are you sure?" 
+      <ConfirmButton
+        confirmText="Are you sure?"
         confirmTitle="Confirm Action"
-        onConfirm={() => {}} 
-      />
+        onConfirm={() => {}}
+      />,
     )
-    
+
     expect(screen.getByTestId('modal')).toBeInTheDocument()
     expect(screen.getByTestId('modal-header')).toBeInTheDocument()
     expect(screen.getByTestId('modal-body')).toBeInTheDocument()
@@ -181,15 +191,17 @@ describe('ConfirmButton', () => {
     })
 
     render(
-      <ConfirmButton 
-        confirmText="Are you sure you want to delete this item?" 
+      <ConfirmButton
+        confirmText="Are you sure you want to delete this item?"
         confirmTitle="Delete Item"
-        onConfirm={() => {}} 
-      />
+        onConfirm={() => {}}
+      />,
     )
-    
+
     expect(screen.getByText('Delete Item')).toBeInTheDocument()
-    expect(screen.getByText('Are you sure you want to delete this item?')).toBeInTheDocument()
+    expect(
+      screen.getByText('Are you sure you want to delete this item?'),
+    ).toBeInTheDocument()
   })
 
   it('should call onConfirm and close modal when confirm button is clicked', () => {
@@ -206,16 +218,20 @@ describe('ConfirmButton', () => {
     const onConfirm = vi.fn()
 
     render(
-      <ConfirmButton 
-        confirmText="Are you sure?" 
+      <ConfirmButton
+        confirmText="Are you sure?"
         confirmTitle="Confirm Action"
-        onConfirm={onConfirm} 
-      />
+        onConfirm={onConfirm}
+      />,
     )
-    
+
     const confirmButtons = screen.getAllByText('common.confirm')
-    const modalConfirmButton = confirmButtons.find(button => button.tagName === 'BUTTON' && button.closest('[data-testid="modal-footer"]'))
-    
+    const modalConfirmButton = confirmButtons.find(
+      (button) =>
+        button.tagName === 'BUTTON' &&
+        button.closest('[data-testid="modal-footer"]'),
+    )
+
     if (modalConfirmButton) {
       fireEvent.click(modalConfirmButton)
       expect(onConfirm).toHaveBeenCalledOnce()
@@ -234,33 +250,33 @@ describe('ConfirmButton', () => {
     })
 
     render(
-      <ConfirmButton 
-        confirmText="Are you sure?" 
+      <ConfirmButton
+        confirmText="Are you sure?"
         confirmTitle="Confirm Action"
-        onConfirm={() => {}} 
-      />
+        onConfirm={() => {}}
+      />,
     )
-    
+
     const cancelButton = screen.getByText('common.cancel')
     expect(cancelButton).toBeInTheDocument()
     fireEvent.click(cancelButton)
-    
+
     // Since the onClose is mocked in ModalContent, we can't verify the exact call
     // but we can verify the button exists and is clickable
   })
 
   it('should accept custom button props', () => {
     render(
-      <ConfirmButton 
-        confirmText="Are you sure?" 
+      <ConfirmButton
+        confirmText="Are you sure?"
         confirmTitle="Confirm Action"
-        onConfirm={() => {}} 
+        onConfirm={() => {}}
         color="warning"
         variant="solid"
         className="custom-class"
-      />
+      />,
     )
-    
+
     const button = screen.getByRole('button')
     expect(button).toHaveAttribute('data-color', 'warning')
     expect(button).toHaveAttribute('data-variant', 'solid')
