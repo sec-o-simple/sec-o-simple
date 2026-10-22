@@ -33,7 +33,7 @@ exports[`ComponentList > should match snapshot 1`] = `
               title="Delete Test Item"
             >
               <button
-                class="rounded-full text-neutral-foreground"
+                class="text-neutral-foreground rounded-full"
                 data-disabled="false"
                 data-isdisabled="false"
                 data-isicononly="true"
@@ -86,7 +86,7 @@ exports[`ComponentList > should match snapshot 1`] = `
               title="Delete Test Item"
             >
               <button
-                class="rounded-full text-neutral-foreground"
+                class="text-neutral-foreground rounded-full"
                 data-disabled="false"
                 data-isdisabled="false"
                 data-isicononly="true"
@@ -117,7 +117,7 @@ exports[`ComponentList > should match snapshot 1`] = `
     </div>
   </div>
   <button
-    class="border-dashed border-primary text-primary"
+    class="border-primary text-primary border-dashed"
     data-isdisabled="false"
     data-isicononly="false"
     data-isinvalid="false"
